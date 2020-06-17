@@ -76,7 +76,7 @@ def simulate(net: Network, iters=150, verbose=True, f=2):
     return pd.DataFrame(data).T
 
 
-def resiliance_table(net: Network):
+def resilience_table(net: Network):
     for theta_two in np.linspace(0.1, 0.4):
         net[1].sampling_dist.theta_two = theta_two
 
