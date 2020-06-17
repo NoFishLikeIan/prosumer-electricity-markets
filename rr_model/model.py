@@ -97,7 +97,9 @@ class Industry:
 
     @property
     def trophic_inc(self):
-        return trophic.trophic_incoherence_parameter(self.G)
+        # FIXME: trophic.trophic_incoherence_parameter(self.G)
+
+        pass
 
     def optimal_factors(self, prod: float, tau: float) -> Tuple[float, float]:
         net_prod = (self.params["gamma"] - self.params["alpha"])
