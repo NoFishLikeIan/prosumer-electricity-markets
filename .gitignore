@@ -143,6 +143,9 @@ lib/
 env/
 data/
 networks/
+.vscode/
+
 *.mp4
 *.tsv
 *.ipynb
+*.csv
