@@ -1,10 +1,12 @@
-from ..rr_model.network import Network
+import pandas as pd
 
-def simulate(net: Network, iters=150, verbose=True, f=2):
+
+def simulate(net: 'Network', inst = False, iters=20, verbose=True, f=2):
+
     if verbose:
         print("Bringing to steady...")
 
-    net.bring_to_steady(iters=iters, verbose=verbose)
+    net.bring_to_steady(inst = inst, iters=iters, verbose=verbose)
     n = len(net)
 
     prev_wage = net[n-1].wage
@@ -47,7 +49,12 @@ def simulate(net: Network, iters=150, verbose=True, f=2):
             prod = net[i].aggregate_prod / base[i]
             data[i].append(prod)
 
+
     if verbose:
         print("...done!")
 
-    return pd.DataFrame(data).T
+    sim = pd.DataFrame(data).T
+
+    sim.columns = [f"Industry {c}" for c in sim.columns]
+
+    return sim

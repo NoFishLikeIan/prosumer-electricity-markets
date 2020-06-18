@@ -119,3 +119,17 @@ def plot_trophic(res: pd.DataFrame):
     sns.regplot(data=res, x="shock", y="incoherence", ax = ax2)
 
     return fig, (ax1, ax2)
+
+
+def plot_sim(sim: pd.DataFrame):
+
+    df = sim.rename_axis('time').reset_index()
+
+
+    fig, ax = plt.subplots()
+
+    sns.lineplot(x='time', y='value', hue='variable', 
+             data=pd.melt(df, ['time']), ax=ax)
+
+
+    return fig, ax
