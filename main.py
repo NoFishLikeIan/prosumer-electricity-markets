@@ -154,4 +154,4 @@ if __name__ == '__main__':
 
     fig, axes = plot_trophic(res)
 
-    fig.savefig("coherence_corr.png")
+    fig.savefig("plots/coherence_corr.png")
