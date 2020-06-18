@@ -61,6 +61,7 @@ class Network:
             nodes += [succ for succ in self.G.successors(idx)]
 
     def bring_to_steady(self, verbose=False, iters=150) -> NoReturn:
+        
         for i in range(iters):
             if verbose:
                 print(f'{i+1}/{iters}', end='\r')

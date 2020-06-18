@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import pandas as pd
 
 from mpl_toolkits import mplot3d
 from matplotlib import animation
@@ -108,3 +109,13 @@ def animate_cont(X, Y, convergence, lower=0, title='', labels=['', '', '']):
         fig, ims, repeat_delay=1_000)
 
     ani.save('plots/evolution.mp4', writer=FFwriter)
+
+
+def plot_trophic(res: pd.DataFrame):
+
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+
+    sns.regplot(data=res, x="time to recovery", y="coherence", ax = ax1)
+    sns.regplot(data=res, x="shock", y="coherence", ax = ax1)
+
+    return fig, (ax1, ax2)
