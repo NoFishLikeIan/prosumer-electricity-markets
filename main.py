@@ -118,7 +118,7 @@ def resilience_test(verbose = False, cache = False):
 
         df.columns = [f"Industry {i}" for i in df.columns]
         
-        s, t = resilience(df, idxs = [0, 1, 2])
+        s, t = resilience(df)
 
 
 
@@ -138,6 +138,10 @@ def resilience_test(verbose = False, cache = False):
 
 
 if __name__ == '__main__':
+
+    cache = False
+    verbose = True
+
     theta_one = 0.2
     overhead = 0.06
 
@@ -146,7 +150,7 @@ if __name__ == '__main__':
         "beta": 0.95
     }
 
-    res = resilience_test(verbose=True, cache=False)
+    res = resilience_test(verbose=verbose, cache=cache)
 
     fig, axes = plot_trophic(res)
 

@@ -115,7 +115,7 @@ def plot_trophic(res: pd.DataFrame):
 
     fig, (ax1, ax2) = plt.subplots(1, 2)
 
-    sns.regplot(data=res, x="time to recovery", y="coherence", ax = ax1)
-    sns.regplot(data=res, x="shock", y="coherence", ax = ax1)
+    sns.regplot(data=res, x="time to recovery", y="incoherence", ax = ax1)
+    sns.regplot(data=res, x="shock", y="incoherence", ax = ax2)
 
     return fig, (ax1, ax2)
