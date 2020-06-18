@@ -6,7 +6,7 @@ def simulate(net: 'Network', inst = False, iters=20, verbose=True, f=2):
     if verbose:
         print("Bringing to steady...")
 
-    net.bring_to_steady(inst = inst, iters=iters, verbose=verbose)
+    net.bring_to_steady(iters=iters, verbose=verbose)
     n = len(net)
 
     prev_wage = net[n-1].wage

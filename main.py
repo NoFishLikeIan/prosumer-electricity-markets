@@ -52,7 +52,7 @@ def main_two(cache = False, verbose = True):
 def main_one():
     net = generate_network(3)
 
-    sim = simulate(net, inst=False, iters=50, f=1.05)
+    sim = simulate(net, iters=50, f=1.05)
 
     sim.to_csv("sim.csv")
 
