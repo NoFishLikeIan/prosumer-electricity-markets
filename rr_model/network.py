@@ -4,7 +4,6 @@ import numpy as np
 from itertools import permutations
 from networkx.algorithms.centrality import trophic
 
-
 from typing import List, NoReturn, Tuple, Iterable
 
 from .model import Industry
@@ -12,8 +11,6 @@ from .model import Industry
 
 class Network:
     def __init__(self, nodes: List[Industry], d_matrix: np.array):
-
-        self.n = len(nodes)
         self.nodes = nodes
 
         for supp, to in permutations(range(self.n), 2):
@@ -33,6 +30,10 @@ class Network:
 
     def __len__(self):
         return len(self.nodes)
+
+    @property
+    def n(self):
+        return len(self)
 
     @property
     def sources_index(self) -> Iterable[int]:
