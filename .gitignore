@@ -144,6 +144,7 @@ env/
 data/
 networks/
 .vscode/
+simulations/
 
 *.mp4
 *.tsv

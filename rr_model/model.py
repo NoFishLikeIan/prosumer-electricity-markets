@@ -59,7 +59,6 @@ class Industry:
 
             costs += (1-logit(supplier.aggregate_prod, scale=5e6))*dep
 
-        # print(costs)
         return costs
 
     @property

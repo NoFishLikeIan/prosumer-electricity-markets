@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
@@ -9,18 +11,12 @@ from matplotlib import animation
 
 from rr_model.model import Industry
 from rr_model.network import Network
-from utils.resiliance_metrics import resilience
+from utils.resilience_metrics import resilience
+from utils.plotting import plot_trophic
 
 
 sns.set(rc={'figure.figsize': (12, 8)})
 np.random.seed(11148705)
-
-
-def print_costs(net: Network):
-    costs = [str(net[i].fixed_costs) for i in range(len(net))]
-
-    print(", ".join(costs))
-
 
 def simulate(net: Network, iters=150, verbose=True, f=2):
     if verbose:
@@ -74,31 +70,24 @@ def simulate(net: Network, iters=150, verbose=True, f=2):
 
     return pd.DataFrame(data).T
 
+def resilience_test(verbose = False, cache = False):
 
-def resilience_table(net: Network):
-    for theta_two in np.linspace(0.1, 0.4):
-        net[1].sampling_dist.theta_two = theta_two
+    cached_res_path = "simulations/result.csv"
 
+    if cache and os.path.isfile(cached_res_path):
+        if verbose:
+            print("Using cached file!")
 
-if __name__ == '__main__':
-    theta_one = 0.2
-    overhead = 0.06
+        df = pd.read_csv(cached_res_path)
 
-    params = {
-        "lambda": 0.3,
-        "beta": 0.95
-    }
-
-
-    # nx.draw_networkx(net.G)
-    # plt.savefig("plots/network.png")
+        return df
 
     res = []
 
     for j in range(30):
 
         theta_two = np.random.uniform(
-            0.2, 0.4, np.random.randint(3, 7)
+            0.2, 0.4, 6
         )
 
         firms = len(theta_two)
@@ -121,9 +110,9 @@ if __name__ == '__main__':
     
         net = Network(inds, d)
 
-        troph = 1 - net.trophic_inc
+        troph = net.trophic_inc
 
-        print(f"  {j+1}/30 -> coherence:", troph, end='\r')
+        if verbose: print(f"  {j+1}/30 -> incoherence:", troph, end='\r')
 
         df = simulate(net, iters=30, f=1.4, verbose=False)
 
@@ -135,11 +124,30 @@ if __name__ == '__main__':
 
         datum = {
             "shock": s.mean().tolist(),
-            "coherence": troph,
+            "incoherence": troph,
             "time to recovery":t.mean().tolist()
         }
 
         res.append(datum)
 
     res = pd.DataFrame(res)
-        
+
+    res.to_csv(cached_res_path, index=False)
+
+    return res
+
+
+if __name__ == '__main__':
+    theta_one = 0.2
+    overhead = 0.06
+
+    params = {
+        "lambda": 0.3,
+        "beta": 0.95
+    }
+
+    res = resilience_test(verbose=True, cache=False)
+
+    fig, axes = plot_trophic(res)
+
+    fig.savefig("coherence_corr.png")
