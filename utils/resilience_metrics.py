@@ -2,8 +2,6 @@ from typing import Tuple
 
 import pandas as pd
 
-from ..rr_model.network import Network
-
 def resilience(sim: pd.DataFrame, idxs = []) -> Tuple[float, float]:
     """
     Parameters
