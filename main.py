@@ -4,13 +4,12 @@ import numpy as np
 import pandas as pd
 import networkx as nx
 
-from networkx.algorithms.centrality import trophic
-
 from mpl_toolkits import mplot3d
 from matplotlib import animation
 
 from rr_model.model import Industry
 from rr_model.network import Network
+from utils.resiliance_metrics import resilience
 
 
 sns.set(rc={'figure.figsize': (12, 8)})
@@ -90,35 +89,57 @@ if __name__ == '__main__':
         "beta": 0.95
     }
 
-    theta_two = [0.2, 0.25, 0.3]
-    firms = 3
-    inds = []
-
-    for n in range(firms):
-
-        i = Industry(
-            fixed_overhead=overhead,
-            alpha=3,
-            theta_one=theta_one,
-            theta_two=theta_two[n],
-            params=params,
-        )
-
-        inds.append(i)
-
-    d = np.tril(np.random.randint(1, 10, size=(firms, firms)), -1)
-
-    net = Network(inds, d)
 
     # nx.draw_networkx(net.G)
     # plt.savefig("plots/network.png")
 
-    df = simulate(net, iters=30, f=1.2)
+    res = []
 
-    df.columns = [f"Industry {i}" for i in df.columns]
+    for j in range(30):
 
-    ax = df.plot(lw=2)
-    ax.set_xlabel("Time, t")
-    ax.set_ylabel("Production % with respect to t=0")
+        theta_two = np.random.uniform(
+            0.2, 0.4, np.random.randint(3, 7)
+        )
 
-    plt.savefig("plots/wage_shock.png")
+        firms = len(theta_two)
+
+        inds = []
+        
+        for n in range(firms):
+
+            i = Industry(
+                fixed_overhead=overhead,
+                alpha=3,
+                theta_one=theta_one,
+                theta_two=theta_two[n],
+                params=params
+            )
+
+            inds.append(i)
+
+        d = np.tril(np.random.randint(1, 10, size=(firms, firms)), -1)
+    
+        net = Network(inds, d)
+
+        troph = 1 - net.trophic_inc
+
+        print(f"  {j+1}/30 -> coherence:", troph, end='\r')
+
+        df = simulate(net, iters=30, f=1.4, verbose=False)
+
+        df.columns = [f"Industry {i}" for i in df.columns]
+        
+        s, t = resilience(df, idxs = [0, 1, 2])
+
+
+
+        datum = {
+            "shock": s.mean().tolist(),
+            "coherence": troph,
+            "time to recovery":t.mean().tolist()
+        }
+
+        res.append(datum)
+
+    res = pd.DataFrame(res)
+        
