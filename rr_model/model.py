@@ -56,8 +56,10 @@ class Industry:
         costs = 0
 
         for supplier, dep in self.suppliers:
-
-            costs += (1-logit(supplier.aggregate_prod, scale=5e6))*dep
+            
+            prod_ratio = supplier.aggregate_prod/supplier.potential_prod if supplier.potential_prod > 0 else 0
+            
+            costs += min(1-prod_ratio, 0)*dep
 
         return costs
 
@@ -67,7 +69,7 @@ class Industry:
         return (1-self.params["lambda"])/(1-R)
 
     @property
-    def steady_state(self):
+    def steady_state_mu(self):
         a, t = np.meshgrid(self.space, self.space)
 
         return self.prod_decision(a, t)*self.sampling_dist.pdf(a, t)*self.M
@@ -78,22 +80,36 @@ class Industry:
 
     @property
     def aggregate_prod(self):
-        """
-        TODO: This might be the correct form, for now I am 
-        just going to use a simple one.
-        y, _ = dblquad(
-            lambda a, t: self.production(a, t)*self.mu_at(a, t),
-            self.lower_bounds, 1,
-            lambda _: self.lower_bounds, lambda _: 1
-        )
-        """
+        
+        # TODO: This might be the correct form, for now I am 
+        # just going to use a simple one.
+        # y, _ = dblquad(
+        #     lambda a, t: self.production(a, t)*self.mu_at(a, t),
+        #     self.lower_bounds, 1,
+        #     lambda _: self.lower_bounds, lambda _: 1
+        # )
+        
         A, T = np.meshgrid(self.space, self.space)
 
         y = self.production(A, T)*self.mu
 
         return np.sum(y)
 
+    @property
+    def potential_prod(self) -> float:
+
+        only_prod = np.zeros((self.n, self.n))
+        only_prod[0, -1] = np.sum(self.steady_state_mu)
+
+        A, T = np.meshgrid(self.space, self.space)
+
+        y = self.production(A, T)*only_prod
+
+        return np.sum(y)
+
+
     def optimal_factors(self, prod: float, tau: float) -> Tuple[float, float]:
+
         net_prod = (self.params["gamma"] - self.params["alpha"])
         den = 1-self.params["gamma"]
 
@@ -120,10 +136,9 @@ class Industry:
     def costs(self, prod: float, tau: float) -> float:
         capital, labour = self.optimal_factors(prod, tau)
 
-        costs = self.wage*labour + \
-            self.params["rho"]*capital + self.fixed_costs
-
-        return costs
+        costs = self.wage*labour + self.params["rho"]*capital
+        
+        return costs - self.fixed_costs
 
     def profit(self, prod: float, tau: float) -> float:
 
@@ -153,5 +168,10 @@ class Industry:
 
         self.t += 1
 
+    def set_steady(self):
+        self.mus.append(self.steady_state_mu)
+        self.t += 1
+
     def add_supplier(self, node: 'Industry', dep: float) -> NoReturn:
         self.suppliers.append([node, dep])
+
