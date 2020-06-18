@@ -1,6 +1,9 @@
 import networkx as nx
 import numpy as np
+
 from itertools import permutations
+from networkx.algorithms.centrality import trophic
+
 
 from typing import List, NoReturn, Tuple, Iterable
 
@@ -42,6 +45,11 @@ class Network:
     @property
     def sources(self) -> Iterable[Industry]:
         return (self.nodes[i] for i in self.sources_index)
+
+    @property
+    def trophic_inc(self):
+        return trophic.trophic_incoherence_parameter(self.G)
+
 
     def step(self) -> NoReturn:
         nodes = list(self.sources_index)
