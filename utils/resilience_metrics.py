@@ -1,6 +1,7 @@
 from typing import Tuple
 
 import pandas as pd
+import numpy as np
 
 def resilience(sim: pd.DataFrame, idxs = []) -> Tuple[float, float]:
     """
