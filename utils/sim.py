@@ -17,7 +17,7 @@ def simulate_wage_shock(
 
     source = list(net.sources_index)[0]
 
-    baseline = net.production
+    baseline = net.production + 1 # FIXME: This is here to prevent np.nan
 
     simulation = np.zeros((T, n))
     simulation[0] = 1
@@ -27,7 +27,6 @@ def simulate_wage_shock(
     w_f = w_0 * f
 
     net[source].wage = w_f
-
 
     # shock
     for j in range(1, len_shock):
