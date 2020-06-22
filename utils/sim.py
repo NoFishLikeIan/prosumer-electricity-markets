@@ -1,60 +1,53 @@
 import pandas as pd
+import numpy as np
 
 
-def simulate(net: 'Network', inst = False, iters=20, verbose=True, f=2):
+def simulate_wage_shock(
+    net: 'Network',
+    f = 2,
+    len_shock = 20,
+    slow_rec = False,
+    verbose=False
+):
 
-    if verbose:
-        print("Bringing to steady...")
+    T = len_shock + 20
 
-    net.bring_to_steady(inst = inst, iters=iters, verbose=verbose)
+    net.bring_to_steady(iters = 20, verbose=verbose)
     n = len(net)
 
-    prev_wage = net[n-1].wage
-    next_wage = prev_wage*f
+    source = list(net.sources_index)[0]
 
-    net[n-1].wage = next_wage
+    baseline = net.production
 
-    if verbose:
-        print(f"Wage: {prev_wage} -> {next_wage}")
-
-    data = [[] for _ in range(n)]
-
-    base = [net[i].aggregate_prod for i in range(n)]
-
-    if verbose:
-        print("Shock...")
-
-    for _ in range(iters):
-        if verbose:
-            print(f"{_+1}/{iters}", end='\r')
-
-        for i in range(n):
-            net[i].step()
-            prod = net[i].aggregate_prod / base[i]
-            data[i].append(prod)
-
-    net[n-1].wage = prev_wage
-
-    if verbose:
-        print("...recovery...")
-
-    recovery_iters = iters*3
-
-    for _ in range(recovery_iters):
-        if verbose:
-            print(f"{_+1}/{recovery_iters}", end='\r')
-
-        for i in range(n):
-            net[i].step()
-            prod = net[i].aggregate_prod / base[i]
-            data[i].append(prod)
+    simulation = np.zeros((T, n))
+    simulation[0] = 1
 
 
-    if verbose:
-        print("...done!")
+    w_0 = net[source].wage
+    w_f = w_0 * f
 
-    sim = pd.DataFrame(data).T
+    net[source].wage = w_f
 
-    sim.columns = [f"Industry {c}" for c in sim.columns]
 
-    return sim
+    # shock
+    for j in range(1, len_shock):
+        net.step()
+        simulation[j] = net.production / baseline
+
+        if slow_rec:
+            step = j / (len_shock - 1)
+            w = step*(w_0 - w_f) + w_f
+
+            net[source].wage = w
+
+    net[source].wage = w_0
+    
+    for j in range(len_shock, T):
+        net.step()
+        simulation[j] = net.production / baseline
+
+    columns = [
+        f"Industry {i}" if i != source else "Source" for i in range(n)
+    ]
+
+    return pd.DataFrame(simulation, columns=columns)
