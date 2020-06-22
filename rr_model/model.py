@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.integrate import dblquad
+from scipy.integrate import simps
 
 from typing import NoReturn, Tuple
 
@@ -12,21 +12,15 @@ default_parameters = {
     "gamma": 0.6,
     "lambda": 0.1
 }
-
-
-def logit(x, scale=10e5):
-    m = np.exp(-x/scale)
-    return 1/(1+m)
-
-
 class Industry:
     def __init__(self,
                  wage=0.5,
                  fixed_overhead=0.5,
-                 M=10_000,
+                 M=1,
                  params={},
                  max_iter=100,
                  n=100,
+                 ind_id=None,
                  **dist_params):
 
         self.fixed_overhead = fixed_overhead
@@ -49,16 +43,23 @@ class Industry:
         self.mus = [np.zeros((n, n))]
         self.t = 0
 
+        self.ind_id = ind_id 
+
         self.suppliers = []
+
+    @property
+    def is_source(self):
+        return len(self.suppliers) == 0
 
     @property
     def fixed_costs(self):
         costs = 0
 
         for supplier, dep in self.suppliers:
+                        
+            costs += max(1-supplier.output_gap, 0)*dep
 
-            costs += (1-logit(supplier.aggregate_prod, scale=5e6))*dep
-
+            
         return costs
 
     @property
@@ -67,7 +68,7 @@ class Industry:
         return (1-self.params["lambda"])/(1-R)
 
     @property
-    def steady_state(self):
+    def steady_state_mu(self):
         a, t = np.meshgrid(self.space, self.space)
 
         return self.prod_decision(a, t)*self.sampling_dist.pdf(a, t)*self.M
@@ -78,22 +79,34 @@ class Industry:
 
     @property
     def aggregate_prod(self):
-        """
-        TODO: This might be the correct form, for now I am 
-        just going to use a simple one.
-        y, _ = dblquad(
-            lambda a, t: self.production(a, t)*self.mu_at(a, t),
-            self.lower_bounds, 1,
-            lambda _: self.lower_bounds, lambda _: 1
-        )
-        """
+        
         A, T = np.meshgrid(self.space, self.space)
 
         y = self.production(A, T)*self.mu
 
+
         return np.sum(y)
 
+    @property
+    def potential_prod(self) -> float:
+
+        only_prod = np.zeros((self.n, self.n))
+        only_prod[0, -1] = np.sum(self.mu)
+
+        A, T = np.meshgrid(self.space, self.space)
+
+        y = self.production(A, T)*only_prod
+        
+        return np.sum(y)
+
+    @property
+    def output_gap(self):
+
+        return self.aggregate_prod/10_000
+
+
     def optimal_factors(self, prod: float, tau: float) -> Tuple[float, float]:
+
         net_prod = (self.params["gamma"] - self.params["alpha"])
         den = 1-self.params["gamma"]
 
@@ -120,10 +133,10 @@ class Industry:
     def costs(self, prod: float, tau: float) -> float:
         capital, labour = self.optimal_factors(prod, tau)
 
-        costs = self.wage*labour + \
-            self.params["rho"]*capital + self.fixed_costs
+        costs = self.wage*labour + self.params["rho"]*capital
+        
 
-        return costs
+        return costs + self.fixed_costs
 
     def profit(self, prod: float, tau: float) -> float:
 
@@ -155,3 +168,4 @@ class Industry:
 
     def add_supplier(self, node: 'Industry', dep: float) -> NoReturn:
         self.suppliers.append([node, dep])
+

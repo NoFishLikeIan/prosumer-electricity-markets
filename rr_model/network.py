@@ -50,21 +50,30 @@ class Network:
     @property
     def trophic_inc(self):
         return trophic.trophic_incoherence_parameter(self.G)
-
+        
 
     def step(self) -> NoReturn:
+        """
+        Traverses the DAG once, based on in-nodes hierarchy
+        """
         nodes = list(self.sources_index)
 
         while len(nodes) > 0:
-            idx = nodes.pop(0)
-            self.nodes[idx].step()
 
+            idx = nodes.pop(0)
+
+            self.nodes[idx].step()
+            
             nodes += [succ for succ in self.G.successors(idx)]
 
-    def bring_to_steady(self, verbose=False, iters=150) -> NoReturn:
+    def bring_to_steady(self, verbose=False, iters=20) -> NoReturn:
         
         for i in range(iters):
             if verbose:
                 print(f'{i+1}/{iters}', end='\r')
 
             self.step()
+
+    @property
+    def production(self) -> List[float]:
+        return np.array([node.aggregate_prod for node in self.nodes])
