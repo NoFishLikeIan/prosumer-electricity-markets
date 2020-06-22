@@ -20,7 +20,7 @@ def generate_network(firms: int,
         theta_two = None,
         d = None, 
         theta_one = 0.2,
-        overhead = 0.06,
+        overhead = 0.,
         params = {"lambda": 0.3, "beta": 0.95}
     ) -> Network:
 
@@ -42,11 +42,10 @@ def generate_network(firms: int,
     return Network(inds, d)
 
 
-def main_two(cache = False, verbose = True, cached_res_path = "simulations/result.csv"):
-
-    theta_one = 0.2
-    overhead = 0.06
-    params = {"lambda": 0.3, "beta": 0.95}
+def main_two(
+    iters = 30, rec_th = .99,
+    cache = False, verbose = True, cached_res_path = "simulations/result.csv"
+):
 
     if cache and os.path.isfile(cached_res_path):
         if verbose:
@@ -58,43 +57,22 @@ def main_two(cache = False, verbose = True, cached_res_path = "simulations/resul
 
     res = []
 
-    for j in range(30):
+    for j in range(iters):
 
-        theta_two = np.random.uniform(
-            0.2, 0.4, 6
-        )
-
-        firms = len(theta_two)
-
-        inds = []
-        
-        for n in range(firms):
-
-            i = Industry(
-                fixed_overhead=overhead,
-                alpha=3,
-                theta_one=theta_one,
-                theta_two=theta_two[n],
-                params=params
-            )
-
-            inds.append(i)
-
-        d = np.tril(np.random.randint(1, 10, size=(firms, firms)), -1)
-    
-        net = Network(inds, d)
+        net = generate_network(6)
 
         troph = net.trophic_inc
 
-        if verbose: print(f"  {j+1}/30 -> incoherence:", troph, end='\r')
+        if verbose: print(f"  {j+1}/{iters} -> incoherence:", troph, end='\r')
 
         df = simulate_wage_shock(net, f=2, verbose=False)
 
         df.columns = [f"Industry {i}" for i in df.columns]
-        
-        s, t = resilience(df)
 
-
+        s, t = resilience(
+            df,
+            rec_th=rec_th
+        )
 
         datum = {
             "shock": s.mean().tolist(),
@@ -112,6 +90,8 @@ def main_two(cache = False, verbose = True, cached_res_path = "simulations/resul
 
     fig.savefig("plots/coherence_corr.png")
 
+    return res
+
 def main_one():
     net = generate_network(5)
 
@@ -126,4 +106,4 @@ def main_one():
 
 if __name__ == '__main__':
 
-    main_two()
+    res = main_two(cache=False, verbose=True)
