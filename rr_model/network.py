@@ -50,16 +50,6 @@ class Network:
     @property
     def trophic_inc(self):
         return trophic.trophic_incoherence_parameter(self.G)
-
-
-    def ist_steady(self) -> NoReturn:
-        """
-        Bring DAG to steady state istantenously
-        """
-
-        for node in self.nodes:
-            node.set_steady()
-
         
 
     def step(self) -> NoReturn:
@@ -76,14 +66,14 @@ class Network:
             
             nodes += [succ for succ in self.G.successors(idx)]
 
-    def bring_to_steady(self, verbose=False, iters=None, inst=True) -> NoReturn:
+    def bring_to_steady(self, verbose=False, iters=20) -> NoReturn:
         
-        if inst:
-            # FIXME: Doesn't work
-            self.ist_steady()
-        else:
-            for i in range(iters):
-                if verbose:
-                    print(f'{i+1}/{iters}', end='\r')
+        for i in range(iters):
+            if verbose:
+                print(f'{i+1}/{iters}', end='\r')
 
-                self.step()
+            self.step()
+
+    @property
+    def production(self) -> List[float]:
+        return np.array([node.aggregate_prod for node in self.nodes])
