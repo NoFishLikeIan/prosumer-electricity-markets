@@ -121,15 +121,17 @@ def plot_trophic(res: pd.DataFrame):
     return fig, (ax1, ax2)
 
 
-def plot_sim(sim: pd.DataFrame):
+def plot_sim(sim: pd.DataFrame, y_label="% of full production"):
 
     df = sim.rename_axis('time').reset_index()
-
+    n = len(sim.columns)
 
     fig, ax = plt.subplots()
 
-    sns.lineplot(x='time', y='value', hue='variable', 
-             data=pd.melt(df, ['time']), ax=ax)
-
+    sns.lineplot(
+        x="time", y=y_label, hue="variable", 
+        data=pd.melt(df, ["time"], value_name=y_label), 
+        markers=["o" for _ in range(n)], ax=ax
+    )
 
     return fig, ax

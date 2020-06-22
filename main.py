@@ -92,18 +92,23 @@ def main_two(
 
     return res
 
-def main_one():
-    net = generate_network(5)
+def main_one(n = 5, f = 2, len_shock = 20):
+    net = generate_network(n)
 
-    sim = simulate_wage_shock(net, f=2, verbose=True)
+    sim = simulate_wage_shock(net, f=2, verbose=True, len_shock=len_shock)
 
     sim.to_csv("sim.csv")
 
     fig, ax = plot_sim(sim)
+
+    pl = "s" if n > 1 else ""
+    ax.set_title(f"A {f - 1:.0%} wage shock with {n} firm{pl}")
+    
+    ax.axvline(len_shock, linestyle="--", c="r")
 
     fig.savefig("plots/wage_shock.png")
     
 
 if __name__ == '__main__':
 
-    res = main_two(cache=False, verbose=True)
+    main_one(n=5, f=2)
