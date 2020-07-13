@@ -12,7 +12,7 @@ pip install -r requirements.txt
 
 --- 
 
-> "Macroeconomic resilience has two components:  instantaneous resilience, which is the ability to limit the magnitude of immediate production losses for a given amount of asset losses, anddynamic resilience, which is the ability to reconstruct and recover" - Hallegatte, (2014)
+> "Macroeconomic resilience has two components:  instantaneous resilience, which is the ability to limit the magnitude of immediate production losses for a given amount of asset losses, and dynamic resilience, which is the ability to reconstruct and recover" - Hallegatte, (2014)
 
 ---
 
