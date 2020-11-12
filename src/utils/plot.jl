@@ -1,10 +1,10 @@
 using GraphPlot, Cairo, Compose, LightGraphs, Colors
 
-function save_graph(g, path::String, title)
+function plotgraph(g, path::String, title)
 
     nodelabel = 1:nv(g)
 
-    nodefillc = distinguishable_colors(nv(g), colorant"blue")
+    nodefillc = distinguishable_colors(nv(g), colorant"red")
     path = joinpath(path, "$title.png")
 
     
