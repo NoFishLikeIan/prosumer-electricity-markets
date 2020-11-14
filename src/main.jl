@@ -1,7 +1,7 @@
 # -- Top level includes, they should only appear here
 include("network/types.jl")
 include("network/trophic.jl")
-include("network/contagion.jl")
+include("dynamics/contagion.jl")
 
 include("utils/plot.jl")
 # --
