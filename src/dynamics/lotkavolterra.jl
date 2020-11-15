@@ -1,4 +1,4 @@
-using DynamicalSystems, StaticArrays
+using StaticArrays
 
 State = Array{Float64,1}
 Weights = Array{Float64,2}

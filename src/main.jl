@@ -1,6 +1,7 @@
 # -- Top level includes, they should only appear here
 include("network/types.jl")
 include("network/trophic.jl")
+include("network/simulate.jl")
 include("dynamics/lotkavolterra.jl")
 
 include("utils/plot.jl")
@@ -13,16 +14,14 @@ Random.seed!(seed)
 
 N, p = 10, .5
 
-
-N = nv(g)
-
-x0 = ones(N)
 r = rand(Uniform(0.5, 0.55), N)
 κ = rand(Uniform(0.5, 0.55), N)
 
-params = (r, κ)
-
-ds, g = dynamicsonerdos(lv_evolve, SVector{N}(x0), params)
+ds, g = dynamicsonerdos(
+    N, p,
+    lv_evolve,
+    (r, κ)
+)
 
 tr = trajectory(ds, 100)
 
