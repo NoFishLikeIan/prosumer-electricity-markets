@@ -15,7 +15,7 @@ function dynamicsonerdos(
     x0=nothing, seed::Int=11148705
 )
 
-    x0 = isnothing(x0) ? SVector{N}(ones(N)) : x0
+    x0 =  SVector{N}(isnothing(x0) ? ones(N) : x0)
 
     A = adjacency_matrix(erdos_renyi(N, p, is_directed=true, seed=seed))
     W = A .* rand(N, N)

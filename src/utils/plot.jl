@@ -1,13 +1,28 @@
-using GraphPlot, Cairo, Compose, LightGraphs, Colors
+using GraphPlot, Cairo, Compose
+using ColorSchemes, Colors
+using LightGraphs
 
-function plotgraph(g, path::String, title)
+function mapto01(x::Float64, a::Float64, b::Float64)::Float64
+    (x - a) / (b - a)
+end
+
+function plotgraph(g, path::String, title::String)
+
+    F0, h = computeincoherence(g)
+
+    colors = get(ColorSchemes.redblue, mapto01.(h, -1., 1.))
+    edge_colors = get(ColorSchemes.dense, [e.weight for e in edges(g)])
 
     nodelabel = 1:nv(g)
 
-    nodefillc = distinguishable_colors(nv(g), colorant"red")
     path = joinpath(path, "$title.png")
 
     
     draw(PNG(path, 16cm, 16cm), 
-        gplot(g, nodefillc=nodefillc, nodelabel=nodelabel))
+        gplot(
+            g,
+            nodefillc=colors, nodelabel=nodelabel,
+            nodesize=5, nodelabelsize=2, linetype="curve",
+            edgestrokec=edge_colors
+        ))
 end
