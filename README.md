@@ -1,6 +1,6 @@
 # Trophic resilience
 
-![mu](plots/cont_mu_steady.png)
+![mu](plots/random/lv-network.png)
 
 Exploratory code for a (hopefully) upcoming paper on trophic resilience applied to industry networks.
 
@@ -14,8 +14,4 @@ pip install -r requirements.txt
 
 > "Macroeconomic resilience has two components:  instantaneous resilience, which is the ability to limit the magnitude of immediate production losses for a given amount of asset losses, and dynamic resilience, which is the ability to reconstruct and recover" - Hallegatte, (2014)
 
----
-
-A first idea of iteration, given a shock on `wages` to the `source` industry.
-
-![shock](plots/wage_shock.png)
+![dyn](plots/random/lv-dynamics.png)
