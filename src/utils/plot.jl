@@ -18,11 +18,11 @@ function plotgraph(g, path::String, title::String)
     path = joinpath(path, "$title.png")
 
     
-    draw(PNG(path, 16cm, 16cm), 
+    draw(PNG(path, 20cm, 20cm), 
         gplot(
             g,
             nodefillc=colors, nodelabel=nodelabel,
-            nodesize=5, nodelabelsize=2, linetype="curve",
+            nodesize=3, nodelabelsize=2, linetype="curve",
             edgestrokec=edge_colors
         ))
 end
