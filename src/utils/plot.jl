@@ -8,6 +8,7 @@ end
 
 function plotgraph(
     graph, path::String, title::String;
+    withlabel=true,
     coherence=nothing)
 
     F0, h = isnothing(coherence) ? computeincoherence(graph) : coherence
@@ -15,7 +16,7 @@ function plotgraph(
     colors = get(ColorSchemes.ice, mapto01.(h, -1.5, 1.5))
     edge_colors = get(ColorSchemes.amp, [e.weight for e in edges(graph)])
 
-    nodelabel = 1:nv(graph)
+    nodelabel = withlabel ? (1:nv(graph)) : nothing
 
     path = joinpath(path, "$title.png")
 

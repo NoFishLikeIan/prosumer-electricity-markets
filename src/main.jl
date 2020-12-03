@@ -109,3 +109,8 @@ function plot_stability(graph)
 
     savefig("plots/presentations/convergence.png")
 end
+
+
+W = (rand(10, 10) .> .6) .* rand(10, 10)  
+graph = SimpleWeightedDiGraph(W)
+plotgraph(graph, "plots/presentations", "electricity", withlabel=false)
