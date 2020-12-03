@@ -7,22 +7,22 @@ function mapto01(x::Float64, a::Float64, b::Float64)::Float64
 end
 
 function plotgraph(
-    g, path::String, title::String;
-    coherence::IncoherenceLevels=nothing)
+    graph, path::String, title::String;
+    coherence=nothing)
 
-    F0, h = isnothing(coherence) ? computeincoherence(g) : coherence
+    F0, h = isnothing(coherence) ? computeincoherence(graph) : coherence
 
-    colors = get(ColorSchemes.redblue, mapto01.(h, -1., 1.))
-    edge_colors = get(ColorSchemes.dense, [e.weight for e in edges(g)])
+    colors = get(ColorSchemes.ice, mapto01.(h, -1.5, 1.5))
+    edge_colors = get(ColorSchemes.amp, [e.weight for e in edges(graph)])
 
-    nodelabel = 1:nv(g)
+    nodelabel = 1:nv(graph)
 
     path = joinpath(path, "$title.png")
 
     
     draw(PNG(path, 20cm, 20cm), 
         gplot(
-            g,
+            graph,
             nodefillc=colors, nodelabel=nodelabel,
             nodesize=3, nodelabelsize=2, linetype="curve",
             edgestrokec=edge_colors
