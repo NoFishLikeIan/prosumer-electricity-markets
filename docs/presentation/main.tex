@@ -118,9 +118,18 @@
         \lim_{t \xrightarrow{} \infty} t^{-1} \log \norm{x(t)} \approx\frac{1}{2} \cdot \left( 1 - \frac{1}{F_0}\right) + log \norm{W} - log(r)
     \end{equation*}
 
+    Hence,
 
+    \begin{equation}
+        \exp\left(\frac{1}{2} \left( 1 - \frac{1}{F_0}\right) \right) \cdot \norm{W} < r \implies \norm{x} \xrightarrow{t\xrightarrow{} \infty} 0
+    \end{equation}
+
+\end{frame}
+
+\begin{frame}
+    Back to our first example,
     \begin{figure}
-        \includegraphics[width=\linewidth,height=0.4\textheight,keepaspectratio]{../../plots/presentations/dynamics.png}
+        \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{../../plots/presentations/dynamics.png}
     \end{figure}
 \end{frame}
 
@@ -132,7 +141,7 @@
 
     \begin{columns}
         \begin{column}{.49\textwidth}
-            Electricity market that maximizes resilience, while being
+            Electricity market, with $W(x(t))$ and $F_t$, that maximizes resilience, while being
             \begin{itemize}
                 \item Diffused
                 \item With heterogenous agents
