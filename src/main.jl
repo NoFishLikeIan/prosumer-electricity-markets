@@ -64,7 +64,7 @@ function presentations_plot()
     return graph
 end
 
-function dynamical_presentation(graph; filename="dynamics")
+function dynamical_presentation(graph)
     N = nv(graph)
 
     W = adjacency_matrix(graph)
@@ -75,15 +75,15 @@ function dynamical_presentation(graph; filename="dynamics")
     
     function sim_norm(r)
         ds = DiscreteDynamicalSystem(simple_eom, x0, [r])
-        sim = trajectory(ds, 10)
+        sim = trajectory(ds, 100)
 
         return [norm(row) for row in eachrow(Matrix(sim))]
     end
 
-    plot(title="Simulation", xaxis="t", yaxis="||x(t)||", dpi=400, legend=:topleft)
-    ts = 0:10
+    plot(title="Simulation", xaxis="t", yaxis="||x(t)||", dpi=400, legend=:topright)
+    ts = 0:100
 
-    rs = range(2.2, 3., length=5)
+    rs = range(2.4, 3., length=5)
 
     for (n, r) in enumerate(rs)
         plot!(ts, sim_norm(r), label="r = $r")
@@ -114,3 +114,4 @@ end
 W = (rand(10, 10) .> .6) .* rand(10, 10)  
 graph = SimpleWeightedDiGraph(W)
 plotgraph(graph, "plots/presentations", "electricity", withlabel=false)
+
