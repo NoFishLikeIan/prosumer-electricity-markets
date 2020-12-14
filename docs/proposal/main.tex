@@ -4,6 +4,7 @@
 
     \usepackage{babel}
     \usepackage[utf8]{inputenc} 
+    \usepackage{csquotes}
     \usepackage{amsmath}
     \usepackage{graphicx}    
 
@@ -45,7 +46,7 @@ The research question will be dealt with on three dependent levels. First, the r
 
 The notion of network resilience will be mapped to three properties of dynamical systems: systemic stability, self-organized critical dynamics, and Lyapunov stability.
 
-The first arises when a network's critical points are robust to perturbations of its nodes. For example, a desirable property of an electricity market of prosumers is its ability to prevent systematic shortages after a negative shock to one of the prosumer's production capacity due to a climate shock. The second, as presented by \citeauthor{Bak1995} (\citeyear{Bak1995}), concerns the capacity of the dynamical system to display ``similar" critical points independently of time, space, and parameter space. In this context, the pricing mechanism and equilibria of the proposed market should be scale-free. The third property refers to the stability of a solution near the equilibrium. Taking again a prosumers electricity market as example, it is desirable for the price vector to be stable around the market clearing price.
+The first arises when a network's critical points are robust to perturbations of its nodes. For example, a desirable property of an electricity market of prosumers is its ability to prevent systematic shortages after a negative shock to one of the prosumer's production capacity due to a climate shock. The second, as presented by \citeauthor{Bak1995} (\citeyear{Bak1995}), concerns the capacity of the dynamical system to display ``similar" critical points independently of time and parameter space. In this context, the pricing mechanism and equilibria of the proposed market should be scale-free. The third property refers to the stability of a solution near the equilibrium. Taking again a prosumers electricity market as example, it is desirable for the price vector to be stable around the market clearing price.
 
 \subsection{Theoretical model}
 
@@ -76,9 +77,14 @@ To simplify the problem space and ease the empirical testability of the model, w
 
 The goal is to create a link between the models structure and its dynamics, analogous to \citeauthor{MacKay2020} (\citeyear[p.~19]{MacKay2020}), by deriving a formula for the trophic levels and associated trophic incoherence value ($F_0$), defining a set of shocks the network could face, and then expressing the resilience to such shocks as a function of $F_0$.
 
+Using trophic coherence as a pivot to the model's dynamics, as opposed to more traditional economic metrics such as upstreamness (\cite{Antrs2012}), offers three main advantages. First, it does not require ``source'' nodes in directed graphs hence it is defined for cycle graphs. Second, it is robust to local computation, that is, assuming we can only observe or model a subgraph, the trophic levels are constant in the inner graph and do not vary drastically around truncations (\cite[p.~19]{MacKay2020}). Third, its interpretation is fundamentally linked to that of spectral radius of a graph, which regulates the behavior of most dynamical systems on graphs, despite being much easier to measure. % FIXME: Is it clear what I mean here?
+
+These three properties allow for an empirically and theoretically consistent, robust, and easily computable metric, that acts as a window on the inner workings of the network's dynamics. % FIXME: Weird phrasing maybe?
 
 
 \subsection{Policy implications}
+
+
 
 \newpage
 
