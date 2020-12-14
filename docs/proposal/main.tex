@@ -50,15 +50,13 @@ The first arises when a network's critical points are robust to perturbations of
 
 \subsection{Theoretical model}
 
-% Heterogenous agents, strategic decision every periods, network -> difference equation -> stability via trophic analysis -> empirical measures
-
 The electricity market will be modeled as an exogenous cyclical network, where each node is a prosumer and each edge represents the possibility of trading electricity between two nodes (or of storing electricity at a cost, if the edge's source is the same as its target). The exogenous network will be based on \citeauthor{Brown2019} (\citeyear{Brown2019}).
 
 Prosumers are assumed to be heterogenous, risk adverse agents with bounded rationality, making decisions in discrete time. Heterogeneity will be modeled over two dimensions: agents will have different degrees of risk tolerance and use different price forecasting rules. The former yields a model that allows for a price system were less risk adverse users bare more risk and absorb the shock uncertainty for other users. The latter, allows for herd behavior. % FIXME: This sentence should be elaborated further 
 
 The agents behavior will be driven by a dynamic optimization problem in discrete time. In particular agents will maximize profit given current price, expected price dynamics, and an inelastic demand of energy. The two heterogeneities can be modeled in this framework by using Epstein-Zin preferences over the Bellman equation.
 
-Furthermore, two pricing mechanisms will be considered on the market. First, an exogenous centralized energy price that clears aggregate demand and supply, which will not be efficient considering the network structure of the market. Second, a vector of prices (one for each edge) that solves the bargaining problems between two nodes, derived as in \citeauthor{Bedayo2016} (\citeyear{Bedayo2016}).
+Furthermore, two pricing mechanisms will be considered on the market. First, a centralized energy price, either generated exogenously by the government under full information or endogenously via an auction mechanism. Second, a vector of prices (one for each edge) that solves the bargaining problems between two nodes, derived as in \citeauthor{Bedayo2016} (\citeyear{Bedayo2016}).
 
 Given the structure of the model, the goal is to derive a law of motion (i.e.non-linear difference equation) for electricity production and analyze its dynamical properties. In particular, the focus will be on finding the combination of parameters space, pricing mechanism, and network structure that yields the optimal resilience, as defined above.
 
@@ -82,9 +80,13 @@ Using trophic coherence as a pivot to the model's dynamics, as opposed to more t
 These three properties allow for an empirically and theoretically consistent, robust, and easily computable metric, that acts as a window on the inner workings of the network's dynamics. % FIXME: Weird phrasing maybe?
 
 
+\subsection{Empirical testability}
+
+The calibration and empirical analysis needs to estimate both agent specific characteristics, namely attitude towards risk and forecasting rule, as well as structural network characteristics, namely the amount of prosumers and the respective possibility to trade. The network structural characteristics can be estimated using existing datasets such as the \textit{Open Power System Data} (\cite{Wiese2019}). Given the latter, one can estimate the former using survey data on price expectations.
+
 \subsection{Policy implications}
 
-
+The last step of the analysis will consist on testing various potential policies on the developed model. Of particular interest are dynamic policies, such as taxation or subsidies, and structural policies, such as constructing new edges (i.e. cables between prosumers or batteries), which allow the system to converge to a more resilient system via the least disruptive path.
 
 \newpage
 
