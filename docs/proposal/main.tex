@@ -34,9 +34,12 @@
 
 \section{Introduction}
 
-These decades, the economy finds itself in the midst of a strong and vital public push towards decarbonisation of the power sector. One aspect of such process is the increased adoption by households of technology to produce electricity independently, like solar panels, batteries, and ``smart'' meters (\cite{Parag2016}).
+In recent years the economy found itself in the midst of a strong and vital public push towards decarbonisation of the energy sector. One aspect of such process is the increased adoption by households of technology to produce electricity independently, like solar panels, batteries, and ``smart'' meters (\cite{Parag2016}).
 
-In coming years, this change in the households' role in the energy market, from consumers to prosumers, presents policy makers and economists with a vast spectrum of opportunities and challenges. In particular, the transition from centralized and oligopolistic fossil fuel producers to distributed renewable energy prosumers calls for a shift in economic modelling of energy markets, both in methodology and objectives. A shift is needed in methodology because the network structure and heterogeneity of producers add fundamental non-linearities in the market clearing mechanism. With regards to objectives, questions of efficiency and resilience in complex networks cannot be addressed through a traditional homogenous policy, but require understanding of the heterogenous dynamics within the market structure.
+In coming years, this change in the households' role in the energy market, from consumers to prosumers, will present policy makers and economists with a vast spectrum of opportunities and challenges. In particular, the transition from centralized and oligopolistic fossil fuel producers to distributed renewable energy prosumers calls for a shift in economic modelling of energy markets, both in methodology and objectives. A shift is needed in methodology because the network structure and heterogeneity of producers add fundamental non-linearities in the market clearing mechanism. With regards to objectives, questions of efficiency and resilience in models with complex networks cannot be addressed through a traditional homogenous policy, and therefore require understanding of the heterogenous dynamics within the market structure.
+
+% TODO: Check opportunities and challenges for...
+% FIXME: Talk about how the non-linearities are introduced
 
 \section{Research Question}
 
@@ -58,28 +61,29 @@ Third, Lyapunov stability, which refers to the stability of a solution near the 
 
 \subsection{Theoretical model}
 
-The electricity market will be modeled as an exogenous cyclical network, where each node is a prosumer and each edge represents the possibility of trading electricity between two nodes (or of storing electricity at a cost, if the edge's source is the same as its target). The exogenous network will be based on \citeauthor{Brown2019} (\citeyear{Brown2019}).
+The electricity market will be modeled as an exogenous cyclical network, where each node is a prosumer and each edge represents the possibility of trading electricity between two nodes (e.g. a physical cable between two household) or of storing electricity at a cost, if the edge's source is the same as its target. The exogenous network will be based on \citeauthor{Brown2019} (\citeyear{Brown2019}).
 
-Prosumers are assumed to be heterogenous, risk-averse agents with bounded rationality, making decisions in discrete time. Heterogeneity will be modeled over two dimensions. First, agents will be assumed to have different degrees of risk tolerance. This yields a model that allows for a price system where less risk-averse users bear more risk and absorb the shock uncertainty for other users. Second, agents will be assumed to form expectations over the price dynamics via rules of thumbs, updated via information on neighboring agents in an evolutionary manner. This heterogeneity allows for the model to display spatial herd behavior, that is prosumers behaving similarly within network clusters. The agents' behavior will be driven by a dynamic optimization problem in discrete time. In particular, agents maximize profit given current price, expected price dynamics, and an inelastic demand for energy.
+Prosumers are assumed to be heterogenous, risk-averse agents with bounded rationality, making decisions in discrete time. Heterogeneity will be modeled over two dimensions. First, agents will be assumed to have different degrees of risk tolerance. This yields a model that allows for a price system where less risk-averse users bear more risk and absorb the shock uncertainty for other users. Second, agents will be assumed to form expectations over the price dynamics via rules of thumb, updated via information on neighboring agents in an evolutionary manner. This heterogeneity allows for the model to display spatial herd behavior, that is, prosumers behaving similarly within network clusters. The agents' behavior will be driven by a dynamic optimization problem in discrete time. In particular, agents maximize profit given current price, expected price dynamics, and an inelastic demand for energy.
 
 Furthermore, two pricing mechanisms will be considered on the market. First, a centralized energy price, either generated exogenously by the government under complete information or endogenously via an auction mechanism. Second, a vector of prices (one for each edge) that solves the bargaining problems between two nodes, derived as in \citeauthor{Bedayo2016} (\citeyear{Bedayo2016}). % FIXME: No verb
 
-Given the structure of the model, the goal is to derive a law of motion (i.e. non-linear difference equation) for electricity production and analyze its dynamical properties. In particular the focus will be on finding the combination of parameter space, pricing mechanism, and network structure that yields the optimal resilience, as defined above.
+Given the structure of the model, the goal is to derive a law of motion (i.e. non-linear difference equation) for electricity production and analyze its dynamical properties. In particular the focus will be on finding, given a network structure, the combination of parameter space and pricing mechanism that yields the optimal resilience, as defined above.
 
 \subsection{Trophic Analysis}
 
 To simplify the problem space and ease the empirical testability of the model, we will use techniques from trophic analysis.
 
-The goal is to create a link between the model's structure and its dynamics, analogous to \citeauthor{MacKay2020} (\citeyear[p.~19]{MacKay2020}), by deriving a formula for the trophic levels and associated trophic incoherence value ($F_0$), defining a set of shocks the network could face, and then expressing the resilience to such shocks as a function of $F_0$.
+% TODO: Clarify connection: model -> trophic analysis -> resilience 
+
+We will employ an analogous procedure to that of \citeauthor{MacKay2020} (\citeyear[p.~19]{MacKay2020}). The goal is to create a link between the model's structure and its dynamics by deriving a formula for the trophic levels and associated trophic incoherence value ($F_0$), defining a set of shocks the network could face, and then expressing the resilience to such shocks as a function of $F_0$.
 
 Using trophic coherence as a pivot to the model's dynamics, as opposed to more traditional economic metrics such as upstreamness (\cite{Antrs2012}), offers three main advantages. First, it does not require ``source'' nodes in directed graphs, hence it is defined for cycle graphs. Second, it is robust to local computation, that is, assuming we can only observe or model a subgraph, the trophic levels are constant in the inner graph and do not vary drastically around truncations (\cite[p.~19]{MacKay2020}). Third, its interpretation is fundamentally linked to that of the \textit{spectral radius} of a graph, which regulates the behavior of most dynamical systems on graphs, despite being simpler to measure.
 
-These three properties allow for an empirically and theoretically consistent, robust, and easily computable metric that acts as a window on the inner workings of the network's dynamics.
-
+These three properties allow for an empirically and theoretically consistent, robust, and easily computable metric that acts as map to navigate the complex network dynamics.
 
 \subsection{Empirical testability}
 
-The calibration and empirical analysis needs to estimate both agent specific characteristics, namely attitude towards risk and forecasting rule, as well as structural network characteristics, namely the number of prosumers and their respective possibility to trade.
+The calibration for the empirical analysis needs to estimate both agent specific characteristics, namely attitude towards risk and forecasting rule, as well as structural network characteristics, namely the number of prosumers and their respective possibility to trade.
 
 The network structural characteristics can be estimated using existing datasets on energy markets, such as the \textit{Open Power System Data} (\cite{Wiese2019}), and data on prosumers networks. Given the data, one can construct the underlying graph and calibrate the model's parameters through electricity trade between prosumers.
 
@@ -88,7 +92,6 @@ The agent's characteristics can be estimated in a controlled lab setting via \te
 \subsection{Policy implications}
 
 The last step of the analysis will consist of testing various potential policies on the developed model. Of particular interest are dynamic policies, such as taxation or subsidies, and structural policies, such as constructing new edges (i.e. cables between prosumers or batteries), which allow the system to converge to a more resilient system via the least disruptive path.
-
 
 \section{Conclusion}
 
