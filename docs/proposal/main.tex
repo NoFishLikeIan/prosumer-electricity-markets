@@ -38,9 +38,6 @@ In recent years the economy found itself in the midst of a strong and vital publ
 
 In coming years, this change in the households' role in the energy market, from consumers to prosumers, will present policy makers and economists with a vast spectrum of opportunities and challenges. In particular, the transition from centralized and oligopolistic fossil fuel producers to distributed renewable energy prosumers calls for a shift in economic modelling of energy markets, both in methodology and objectives. A shift is needed in methodology because the network structure and heterogeneity of producers add fundamental non-linearities in the market clearing mechanism. With regards to objectives, questions of efficiency and resilience in models with complex networks cannot be addressed through a traditional homogenous policy, and therefore require understanding of the heterogenous dynamics within the market structure.
 
-% TODO: Check opportunities and challenges for...
-% FIXME: Talk about how the non-linearities are introduced
-
 \section{Research Question}
 
 The project's main objective will be to identify the conditions under which a decentralized prosumer market for electricity displays aggregate resilience.
@@ -65,15 +62,11 @@ The electricity market will be modeled as an exogenous cyclical network, where e
 
 Prosumers are assumed to be heterogenous, risk-averse agents with bounded rationality, making decisions in discrete time. Heterogeneity will be modeled over two dimensions. First, agents will be assumed to have different degrees of risk tolerance. This yields a model that allows for a price system where less risk-averse users bear more risk and absorb the shock uncertainty for other users. Second, agents will be assumed to form expectations over the price dynamics via rules of thumb, updated via information on neighboring agents in an evolutionary manner. This heterogeneity allows for the model to display spatial herd behavior, that is, prosumers behaving similarly within network clusters. The agents' behavior will be driven by a dynamic optimization problem in discrete time. In particular, agents maximize profit given current price, expected price dynamics, and an inelastic demand for energy.
 
-Furthermore, two pricing mechanisms will be considered on the market. First, a centralized energy price, either generated exogenously by the government under complete information or endogenously via an auction mechanism. Second, a vector of prices (one for each edge) that solves the bargaining problems between two nodes, derived as in \citeauthor{Bedayo2016} (\citeyear{Bedayo2016}). % FIXME: No verb
-
-Given the structure of the model, the goal is to derive a law of motion (i.e. non-linear difference equation) for electricity production and analyze its dynamical properties. In particular the focus will be on finding, given a network structure, the combination of parameter space and pricing mechanism that yields the optimal resilience, as defined above.
+In economic models the market clears via an exogenous pricing mechanism. The first mechanism to consider is a centralized energy price, either generated exogenously by the government under complete information or endogenously via an auction mechanism. A more interesting pricing mechanism worth considering is pairwise bargaining. In particular, the market clears via a vector of prices (one for each edge) that solves the bargaining problems between two nodes, derived as in \citeauthor{Bedayo2016} (\citeyear{Bedayo2016}).
 
 \subsection{Trophic Analysis}
 
-To simplify the problem space and ease the empirical testability of the model, we will use techniques from trophic analysis.
-
-% TODO: Clarify connection: model -> trophic analysis -> resilience 
+Given the analysis' premises (i.e. the model) and objective (i.e. the dynamical properties that we associated to the concept of resilience), the focus will be on finding a concise way to map one to the other. Particular difficulties arise due to the high dimensionality of the parameter space and the non-linearities introduced by the network structure. One way to approach this problem is to rely on trophic analysis.
 
 We will employ an analogous procedure to that of \citeauthor{MacKay2020} (\citeyear[p.~19]{MacKay2020}). The goal is to create a link between the model's structure and its dynamics by deriving a formula for the trophic levels and associated trophic incoherence value ($F_0$), defining a set of shocks the network could face, and then expressing the resilience to such shocks as a function of $F_0$.
 
