@@ -1,0 +1,74 @@
+\documentclass[american]{scrartcl}
+
+    \newcommand{\lang}{en}
+
+    \usepackage{babel}
+    \usepackage[utf8]{inputenc} 
+    \usepackage{csquotes}
+    \usepackage{amsmath}
+    \usepackage{graphicx}    
+
+    \setlength{\parindent}{0em}
+    \setlength{\parskip}{0.5em}
+
+
+    \usepackage[
+        bibencoding=utf8, 
+        style=apa
+    ]{biblatex}
+
+    \bibliography{../bibliography/thesis}
+    
+    
+    \usepackage{amsmath}
+    \title{
+        Electricity market model example
+    }
+
+    \author{Andrea Titton}
+    
+\begin{document}
+
+% \nocite{*}
+\maketitle
+
+\section*{Backbone and local markets}
+
+\subsection*{Local market}
+
+\begin{itemize}
+    \item Prosumers get an electricity endowment, $e_{i, t}$ follows some Markov process
+    \item Base heterogenous demand for electricity $d_i$
+\end{itemize}
+
+The utility is given by
+
+\begin{equation}
+    u_{i, t}(x) = (d_i - x - e_{i, t})^\alpha
+\end{equation}
+
+with $\alpha$ small.
+
+The optimization problem is,
+
+\begin{equation}
+    \begin{split}
+        \pi_{i, t}(x_t) &= u_t(x_t) + E_t\left[ \pi_{i, t+1}(x_{t+2}) \right] \\
+        \text{s.t} \ \ c_{t+1} &= c_t - p_t \cdot x_t \\
+        c_t &\geq 0
+    \end{split}
+\end{equation}
+
+Expectation are adaptive over prices,
+
+\begin{equation}
+    E_t[p_{t+1}] = E_{t-1}[p_t] + w_{i, t} \cdot \left(p_t - E_{t-1}[p_t] \right).
+\end{equation}
+
+Aggregating over $X_t(p_t) = \sum_{i} x_{i, t}(p_t)$ gives the aggregate demand if positive or supply if negative.
+
+\subsection*{Backbone}
+
+Graph $(N, E)$. Every node $N$ is a firm that trades electricity with the local market and neighboring nodes. The possibility to trade is defined by $E$.
+
+\end{document}
