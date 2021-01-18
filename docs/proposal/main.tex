@@ -6,10 +6,15 @@
     \usepackage[utf8]{inputenc} 
     \usepackage{csquotes}
     \usepackage{amsmath}
-    \usepackage{graphicx}    
+    \usepackage{graphicx}
+    \usepackage{tikz} 
 
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
+
+    % Graphs
+    \usetikzlibrary{positioning}
+    \tikzset{main node/.style={circle, draw,minimum size=1cm,inner sep=3pt},}
 
 
     \usepackage[
@@ -102,5 +107,48 @@ The model will mainly be employed to ask questions around resilience and assess 
 \newpage
 \pagenumbering{gobble} % stop page numbering
 \printbibliography
+
+\appendix
+
+\section{Model}
+
+\iffalse
+    \subsection{Network structure}
+
+    \centering
+    \begin{tikzpicture}[->]
+        % Nodes
+        \node[main node] (1) {Local\\market};
+        \node[main node] (2) [right = 2cm of 1] {Firm 1};
+        \node[main node] (3) [right above = 2cm of 2] {Firm 2};
+
+    \end{tikzpicture}
+\fi
+
+\subsection{Prosumers}
+
+\begin{equation*}
+    u(x; e_{i, t}) = (e_{i, t} + x - d_i)^{\alpha}
+\end{equation*}
+
+Optimization problem is to,
+
+\begin{equation*}
+    \begin{split}
+        \pi_t(x_t; e_{i, t}) &= u(x_t; e_{i, t}) + \beta \cdot E_t \left[ \pi_{t+1}(x_{t+1}, e_{i, t+1}) \right] \\
+        s.t. \ \ c_{t+1} &= c_t - p_t \cdot x_t \\
+        c_t &\geq 0
+    \end{split}
+\end{equation*}
+
+The aggregate demand is then, $X_t = \sum_i x_{t, i}$.
+
+\subsection{Backbone firm}
+
+In a network,
+
+\begin{equation*}
+    \Pi_{j, t}(p_{t}) = \underbrace{X_t(p_t)}_{\text{buying from local}} - \underbrace{\sum_{m \in neigh(j)} M_t \cdot P_{i, m, t}}_{\text{buying from network}}
+\end{equation*}
 
 \end{document}
