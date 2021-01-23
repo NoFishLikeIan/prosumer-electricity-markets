@@ -5,7 +5,7 @@ function makereward!(R, policy, states, prosumer)
         c′ = policy[idx] # Next policy
 
         @threads for jdx in 1:n_state
-            c, e, p = states[jdx, :] # Current policy, endowment, and price
+            c, (e, p) = states[jdx, :] # Current policy, endowment, and price
             x = e + (c - c′) / p
             if x > 0 R[jdx, idx] = prosumer.u(x) end
         end
@@ -16,15 +16,18 @@ end
 
 function maketransition!(Q, states_idx, endchain)
     n, m, n′ = size(Q)
-    for idx′ in 1:n′
-        for jdx in 1:m
+    @threads for idx′ in 1:n′
+        for a in 1:m
             for idx in 1:n
-                idx_endowment = states_idx[idx, 3]
-
-                a′, p′, e′ = states_idx[idx′, :]
-
-
+                shock = states_idx[idx, 2]
+                a′, shock′ = states_idx[idx′, :]
+                
+                if a′ == a
+                    Q[idx, a′, idx′] = endchain.p[shock, shock′]
+                end
             end
         end
     end
+
+    return Q
 end
