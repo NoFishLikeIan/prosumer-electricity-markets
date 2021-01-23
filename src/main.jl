@@ -1,8 +1,9 @@
-using Plots
 using Parameters, QuantEcon
 using Base.Threads
+using Interpolations
 
-include("markets/optsetup.jl")
+using Plots, Logging, Printf
+
+include("utils.jl")
 include("markets/local.jl")
-
-results = solve(prosumer_ddp, PFI)
+include("algos/pfi.jl")
