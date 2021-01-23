@@ -22,3 +22,13 @@ function fromMtoFn(m, xs...)
 
     return fn
 end
+
+function cartesian(x, y)
+    return collect.(Iterators.product(x, y))
+end
+
+cartesianfromsize(Ns...) = collect(Iterators.product((1:N for N in Ns)...))
+
+function positive(x) 
+    isnan(x) ? Inf : max(x, 0.)
+end
