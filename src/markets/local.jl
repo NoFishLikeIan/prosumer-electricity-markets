@@ -13,6 +13,6 @@ end
 
 function solvepolicy(prosumer::Prosumer, environment::Environment, p::Float64; n_steps=100, c̄=10., kwargs...)
     gridsizes = (100, 10)
-    c′ = policyiter(gridsizes, prosumer, environment; kwargs...)
+    c′ = endgrid(gridsizes, prosumer, environment; kwargs...)
 
 end
