@@ -14,8 +14,11 @@ end
 function solvepolicy(
     gridsizes::Tuple{Int,Int},
     prosumer::Prosumer, environment::Environment; kwargs...)
+    
+    @unpack ψ₁, ψ₂ = prosumer
 
-    c′ = endgrid(gridsizes, prosumer, environment; kwargs...)
+    pessimist = endgrid(gridsizes, prosumer, environment, min(ψ₁, ψ₂); ρ0=1.,  kwargs...)
+    optimist = endgrid(gridsizes, prosumer, environment, max(ψ₁, ψ₂); ρ0=.5, kwargs...)
 
-    return c′
+    return pessimist, optimist
 end

@@ -24,3 +24,40 @@ function plotg(g, environment)
     savefig("plots/markets/policy.png")
 
 end
+
+"""
+Plot in comparison the two forecasting rules
+"""
+function plotrules(pess, opt, environment, prosumer; path="plots/markets/polcomp.png")
+    
+    @unpack ψ₁, ψ₂ = prosumer
+
+    c_grid = range(-10., 10., length=100)
+    ps = [2., 10.]
+    endowments = environment.weather.state_values
+
+    plots = []
+
+    for (p, e) in cartesian(ps, endowments)
+
+        state = e == endowments[1] ? "low" : "high"
+        price = p == ps[1] ? "low" : "high"
+
+        current = plot(
+            title="$state endowments, $price prices",
+             xaxis="c", yaxis="demand", legend=:bottomright)
+        
+        Δc = @. c_grid - pess(c_grid, p, e)
+        demand = @. Δc / p
+        plot!(current, c_grid, demand, label="ψ = $(min(ψ₁, ψ₂))")
+
+        Δc = @. c_grid - opt(c_grid, p, e)
+        demand = @. Δc / p
+        plot!(current, c_grid, demand, label="ψ = $(max(ψ₁, ψ₂))")
+
+        push!(plots, current)
+    end
+
+    plot(plots...; layour=(2, 2), dpi=400)
+    savefig(path)
+end
