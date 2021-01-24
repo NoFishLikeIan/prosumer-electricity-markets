@@ -8,6 +8,7 @@ include("utils.jl")
 include("plotting.jl")
 include("markets/local.jl")
 include("algos/endgrid.jl")
+include("markets/simulate.jl")
 
 
 prosumer = Prosumer(ψ₁=0.95, ψ₂=1.05)
@@ -18,4 +19,4 @@ pess, opt = solvepolicy(sizes, prosumer, environment; verbose=true, tol=1e-2)
 
 # plotg(g, environment)
 plotrules(pess, opt, environment, prosumer)
-plotg(pess, environment)
+plotg(pess, environment, prosumer)
