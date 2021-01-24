@@ -3,11 +3,11 @@ Compute a policy using the endogenous grid method,
 assuming exogenous forecasting rule Ψ
 """
 function endgrid(
-    gridsizes::Tuple{Int,Int}, prosumer::Prosumer, environment::Environment;
+    gridsizes::Tuple{Int,Int}, prosumer::Prosumer, environment::Environment, ψ::Float64;
     maxiter=1_000, tol=1e-3, verbose=false, gridbounds=[0., 10.], ρ0=1.
 )
     @unpack weather = environment
-    @unpack u, u′, ψ₁, ψ₂, β = prosumer
+    @unpack u, u′, β = prosumer
     invu′ = u′ # FIXME: Only works if u′ = invu′, latter should come from prosumer
 
     endowments = weather.state_values
@@ -35,7 +35,7 @@ function endgrid(
             c′, p = c_grid[i], p_grid[j]
             ϵ = endowments[k]
 
-            p′ = ψ₁ * p # Forecast of price
+            p′ = ψ * p # Forecast of price
             P = weather.p[k, :]
 
             x′ = x.(c′, p′, endowments) # Next period demand, state contingent 
