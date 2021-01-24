@@ -41,18 +41,8 @@ function endgrid(
             x′ = x.(c′, p′, endowments) # Next period demand, state contingent 
 
             rhs = β * (P'u′.(x′))
-            Δc = (invu′(rhs) - ϵ) * p # c - g(c, p, e)
-            f(x) = x - g(x, p, ϵ) - Δc # Root function of Δc
-            
-            try
-                c = find_zero(f, g(0., p, ϵ)) # Use previous c as guess
-                # print("c = $c\n")
-                inverse[i, j, k] = c
-
-            catch e
-                print("(i, j, k) = ($i, $j, $k)\n")
-                throw(e)
-            end
+            c = (invu′(rhs) - ϵ) * p + c′
+            inverse[i, j, k] = c
 
         end
         
@@ -76,8 +66,7 @@ function endgrid(
             return g
         end
 
-        ρ = ρ0 - iter / maxiter # Dynamic dumping parameter
-        policy += ρ * d # Update with dumping parameter
+        policy += ρ0 * d # Update with dumping parameter
 
     end
     
