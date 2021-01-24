@@ -10,6 +10,8 @@ end
 
 @with_kw struct Environment
     weather = MarkovChain([0.9 0.1; 0.1 0.9], [0.1; 1.0])
+    ω = .5 # Memory
+    γ = .9 # Intensity of choice
 end
 
 function solvepolicy(
