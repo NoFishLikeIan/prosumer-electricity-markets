@@ -1,24 +1,20 @@
 function plotg(g, environment)
     
-    c_grid = range(-10., 10., length=100)
-    p_grid = range(2., 10., length=4)
+    c_grid = range(0., 10., length=100)
+    ps = 1 / (1 - ψ₁) .+ [-10., 10.]
+    p_grid = range(ps..., length=4)
     colors = [:red, :orange, :green, :blue]
-    endowments = environment.weather.state_values
+    e = environment.weather.state_values[2]
 
     plot(
-        xaxis="c", yaxis="demand", 
+        xaxis="c", yaxis="c′", 
         title="Policy function", legend=:bottomright, dpi=200)
 
-    for (p, e) in cartesian(p_grid, endowments)
+    for p in p_grid
 
-        color = colors[findfirst(==(p), p_grid)]
-        alpha = e == endowments[1] ? 0.5 : 1.
 
-        Δc = @. c_grid - g(c_grid, p, e)
-        demand = @. e + Δc / p
-        plot!(c_grid, demand,
-            label="p=$(round(p; digits=2)), e=$e", 
-            c=color, alpha=alpha)
+        plot!(c_grid, g.(c_grid, p, e),
+            label="p=$(round(p; digits=2))")
     end
 
     savefig("plots/markets/policy.png")
@@ -32,8 +28,8 @@ function plotrules(pess, opt, environment, prosumer; path="plots/markets/polcomp
     
     @unpack ψ₁, ψ₂ = prosumer
 
-    c_grid = range(-10., 10., length=100)
-    ps = [2., 10.]
+    c_grid = range(0., 10., length=100)
+    ps = 1 / (1 - ψ₁) .+ [-10., 10.]
     endowments = environment.weather.state_values
 
     plots = []
@@ -47,13 +43,11 @@ function plotrules(pess, opt, environment, prosumer; path="plots/markets/polcomp
             title="$state endowments, $price prices",
              xaxis="c", yaxis="demand", legend=:bottomright)
         
-        Δc = @. c_grid - pess(c_grid, p, e)
-        demand = @. Δc / p
-        plot!(current, c_grid, demand, label="ψ = $(min(ψ₁, ψ₂))")
+        demandpess = @. (c_grid - pess(c_grid, p, e)) / p
+        plot!(current, c_grid, demandpess, label="ψ = $(min(ψ₁, ψ₂))")
 
-        Δc = @. c_grid - opt(c_grid, p, e)
-        demand = @. Δc / p
-        plot!(current, c_grid, demand, label="ψ = $(max(ψ₁, ψ₂))")
+        demandopt = @.  (c_grid - opt(c_grid, p, e) ) / p
+        plot!(current, c_grid, demandopt, label="ψ = $(max(ψ₁, ψ₂))")
 
         push!(plots, current)
     end

@@ -17,5 +17,5 @@ sizes = (400, 10)
 pess, opt = solvepolicy(sizes, prosumer, environment; verbose=true, tol=1e-2)
 
 # plotg(g, environment)
-
 plotrules(pess, opt, environment, prosumer)
+plotg(pess, environment)

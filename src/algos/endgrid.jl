@@ -7,8 +7,7 @@ function endgrid(
     maxiter=1_000, tol=1e-3, verbose=false, gridbounds=[0., 10.], ρ0=1.
 )
     @unpack weather = environment
-    @unpack u, u′, β = prosumer
-    invu′ = u′ # FIXME: Only works if u′ = invu′, latter should come from prosumer
+    @unpack u, u′, invu′,  β = prosumer
 
     endowments = weather.state_values
     D_e = length(endowments)
@@ -50,7 +49,7 @@ function endgrid(
 
         @threads for (j, k) in exogenousidx
             c = inverse[:, j, k]
-            ixs = sortperm(c) # FIXME: Maybe not necessary
+            ixs = sortperm(c)
 
             forwardpolicy = fromVtoFn(c[ixs], c_grid[ixs])
             newpolicy[:, j, k] = forwardpolicy.(c_grid)

@@ -5,6 +5,7 @@
     d = 1.
     u = x -> d * log(x)
     u′ = x -> d / x
+    invu′ = x -> d / x
 end
 
 @with_kw struct Environment
