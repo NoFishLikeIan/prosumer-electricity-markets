@@ -15,7 +15,7 @@ function endgrid(
     N_c, N_p = gridsizes
 
     c_grid = range(gridbounds..., length=N_c)
-    p_grid = range(0.01, 1.0, length=N_p) # TODO: Bounds for p?
+    p_grid = range(.1, 10., length=N_p) # TODO: Bounds for p?
 
     policy = ones(N_c, N_p, D_e)
     space = collect.(Iterators.product(c_grid, p_grid, endowments)) 
