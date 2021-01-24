@@ -11,15 +11,11 @@ end
     weather = MarkovChain([0.9 0.1; 0.1 0.9], [0.1; 1.0])
 end
 
-function solvepolicy(prosumer::Prosumer, environment::Environment; kwargs...)
-    gridsizes = (100, 10)
+function solvepolicy(
+    gridsizes::Tuple{Int,Int},
+    prosumer::Prosumer, environment::Environment; kwargs...)
+
     c′ = endgrid(gridsizes, prosumer, environment; kwargs...)
 
+    return c′
 end
-
-# Remove below
-
-prosumer = Prosumer()
-environment = Environment()
-
-solvepolicy(prosumer, environment; verbose=true)
