@@ -55,3 +55,22 @@ function plotrules(pess, opt, environment, prosumer; path="plots/markets/polcomp
     plot(plots...; layour=(2, 2), dpi=400)
     savefig(path)
 end
+
+function plotsimulation(xs, policy, es; path="plots/markets/simul.png")
+
+    endowment = plot(title="Electricity consumption over bad endowments and pessimism", xaxis="t", yaxis="x(t)", dpi=300)
+
+    plot!(endowment, 1:length(xs), xs, label="x(t)", linecolor=:black)
+    
+    for tup in findconsecutive(findall(e -> e < .5, es))
+        vspan!(endowment, tup, linecolor=:red, alpha=0.2, fillcolor=:red, legend=false)
+    end
+
+        
+    for tup in findconsecutive(findall(e -> e == 1, policy))
+        vspan!(endowment, tup, linecolor=:blue, alpha=0.5, fillcolor=:blue, legend=false)
+    end
+
+    savefig(path)
+
+end

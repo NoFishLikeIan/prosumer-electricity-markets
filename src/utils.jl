@@ -32,3 +32,27 @@ cartesianfromsize(Ns...) = collect(Iterators.product((1:N for N in Ns)...))
 function positive(x) 
     isnan(x) ? Inf : max(x, 0.)
 end
+
+"""
+Assumes as input a list [1, 2, 3, 5, 6] -> [(1, 3), (5, 6)]
+"""
+function findconsecutive(arr::Vector{Int64})
+    bounds = []
+    current = [1, -1]
+
+    N = length(arr)
+
+    for (i, e) in enumerate(arr)
+        if i == N
+            current[2] = e
+            push!(bounds, current)
+
+            return bounds
+        elseif arr[i + 1] != e + 1 
+            current[2] = e
+            push!(bounds, current)
+
+            current = [arr[i + 1], -1]
+        end
+    end
+end
