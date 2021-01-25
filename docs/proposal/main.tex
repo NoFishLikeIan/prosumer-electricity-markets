@@ -5,7 +5,7 @@
     \usepackage{babel}
     \usepackage[utf8]{inputenc} 
     \usepackage{csquotes}
-    \usepackage{amsmath}
+    \usepackage{amsmath, amssymb}
     \usepackage{graphicx}
     \usepackage{tikz} 
 
@@ -15,6 +15,9 @@
     % Graphs
     \usetikzlibrary{positioning}
     \tikzset{main node/.style={circle, draw,minimum size=1cm,inner sep=3pt},}
+
+    % Math commands
+    \newcommand{\E}{\mathbb{E}}
 
 
     \usepackage[
@@ -74,11 +77,11 @@ This heterogeneity allows for the model to display spatial herd behavior, that i
 
 In economic models the market clears via an endogenous mechanism. The first mechanism to consider is a centralized energy price, either generated exogenously by the government under complete information or endogenously via an auction mechanism. A more interesting pricing mechanism worth considering is pairwise bargaining. In particular, the market clears via a vector of prices (one for each edge) that solves the bargaining problems between two nodes, derived as in \citeauthor{Bedayo2016} (\citeyear{Bedayo2016}).
 
-\subsection{Trophic Analysis}
+\subsection{Graph properties}
 
-Given the analysis' premises (i.e. the model) and objective (i.e. the dynamical properties that we associated to the concept of resilience), the focus will be on finding a concise way to map one to the other. Particular difficulties arise due to the high dimensionality of the parameter space and the non-linearities introduced by the network structure. One way to approach this problem is to rely on trophic analysis.
+Given the analysis' premises (i.e. the model) and objective (i.e. the dynamical properties that we associated to the concept of resilience), the focus will be on finding a concise way to map one to the other. Particular difficulties arise due to the high dimensionality of the parameter space and the non-linearities introduced by the network structure. One way to approach this problem is to rely on spectral graph theory.
 
-We will employ an analogous procedure to that of \citeauthor{MacKay2020} (\citeyear[p.~19]{MacKay2020}). The goal is to create a link between the model's structure and its dynamics by deriving a formula for the trophic levels and associated trophic incoherence value ($F_0$), defining a set of shocks the network could face, and then expressing the resilience to such shocks as a function of $F_0$.
+Among the various spectral graph measures trophic analysis appears \textit{ex-ante} particularly suited for the task at hand. We will employ an analogous procedure to that of \citeauthor{MacKay2020} (\citeyear[p.~19]{MacKay2020}). The goal is to create a link between the model's structure and its dynamics by deriving a formula for the trophic levels and associated trophic incoherence value ($F_0$), defining a set of shocks the network could face, and then expressing the resilience to such shocks as a function of $F_0$.
 
 Using trophic coherence as a pivot to the model's dynamics, as opposed to more traditional economic metrics such as upstreamness (\cite{Antrs2012}), offers three main advantages. First, it does not require ``source'' nodes in directed graphs, hence it is defined for cycle graphs. Second, it is robust to local computation, that is, assuming we can only observe or model a subgraph, the trophic levels are constant in the inner graph and do not vary drastically around truncations (\cite[p.~19]{MacKay2020}). Third, its interpretation is fundamentally linked to that of the \textit{spectral radius} of a graph, which regulates the behavior of most dynamical systems on graphs, despite being simpler to measure.
 
@@ -108,6 +111,7 @@ The model will mainly be employed to ask questions around resilience and assess 
 \pagenumbering{gobble} % stop page numbering
 \printbibliography
 
+\newpage
 \appendix
 
 \section{Model}
@@ -127,28 +131,45 @@ The model will mainly be employed to ask questions around resilience and assess 
 
 \subsection{Prosumers}
 
+The prosumer instantaneous utility of electricity consumption is,
+
 \begin{equation*}
-    u(x; e_{i, t}) = (e_{i, t} + x - d_i)^{\alpha}
+    u_i(x) = d_i \cdot \ln(x),
 \end{equation*}
 
-Optimization problem is to,
+where $d_i$ is an heterogenous demand parameter.
+
+Furthermore, agents get electricity endowment $e_{i, t}$ which follows a random exogenous process and have a given stock of cash-in-hand $m_t$, starting from $m_0$. Furthermore agents can buy or sell electricity $x_t$ at price $p_t$.
+
+The dynamic optimization problem is then,
 
 \begin{equation*}
     \begin{split}
-        \pi_t(x_t; e_{i, t}) &= u(x_t; e_{i, t}) + \beta \cdot E_t \left[ \pi_{t+1}(x_{t+1}, e_{i, t+1}) \right] \\
-        s.t. \ \ c_{t+1} &= c_t - p_t \cdot x_t \\
-        c_t &\geq 0
+        \pi_t(x_t \vert e_{i, t}) &= u_i(x_t + e_{i, t}) + \beta \cdot \E_t \left[ \pi_{t+1}(x_{t+1} \vert e_{i, t+1}) \right] \\
+        s.t. \ \ m_{t+1} &= m_t - p_t \cdot x_t \text{ and } m_t \geq 0
     \end{split}
 \end{equation*}
 
-The aggregate demand is then, $X_t = \sum_i x_{t, i}$.
+Hereafter we will suppress $i$ for convenience.
 
-\subsection{Backbone firm}
+Agents are assumed to make forecasts over the price $p_{t+1}$, using a linear forecasting rule $\E_t[p_{t+1}] = \psi_{h, t} \cdot p_t$, where $\psi_h \in \Psi$ is selected in a manner similar to \citeauthor{Hommes2013} (\citeyear{Hommes2013}).
 
-In a network,
+Using the budget constraint we can redefine the problem as,
 
-\begin{equation*}
-    \Pi_{j, t}(p_{t}) = \underbrace{X_t(p_t)}_{\text{buying from local}} - \underbrace{\sum_{m \in neigh(j)} M_t \cdot P_{i, m, t}}_{\text{buying from network}}
-\end{equation*}
+\begin{equation}
+    x_t = \frac{m_t - m_{t+1}}{p_t},
+\end{equation}
+
+such that the agents control variable is the next level of cash-in-hand $m_{t+1}$. This gives the Euler equation,
+
+\begin{equation}
+    u\left( e_t + \frac{m_t - m_{t+1}}{p_t} \right) = \beta \cdot \E_t \left[ u\left(e_{t+1} \frac{m_{t+1} - m_{t+2}}{ \psi_{h, t} \cdot p_t} \right)  \right].
+\end{equation}
+
+The endogenous grid method can then be used to find a policy function
+
+\begin{equation}
+    m^\prime(m_t, p_t \ \vert \ \psi_{h, t}, e_t).
+\end{equation}
 
 \end{document}
