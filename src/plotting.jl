@@ -52,7 +52,7 @@ function plotrules(pess, opt, environment, prosumer; path="plots/markets/polcomp
         push!(plots, current)
     end
 
-    plot(plots...; layour=(2, 2), dpi=400)
+    plot(plots...; layour=(2, 2), dpi=200)
     savefig(path)
 end
 
@@ -69,6 +69,23 @@ function plotsimulation(xs, policy, es; path="plots/markets/simul.png")
         
     for tup in findconsecutive(findall(e -> e == 1, policy))
         vspan!(endowment, tup, linecolor=:blue, alpha=0.5, fillcolor=:blue, legend=false)
+    end
+
+    savefig(path)
+
+end
+
+function plotdemand(policy, environment; path="plots/markets/pricedemand.png")
+    prices = range(.05, 10., length=100)
+
+    e = environment.weather.state_values[2]
+    cs = [0., 5., 10.]
+
+    plot(title="Demand over prices", xaxis="p", yaxis="demand", dpi=200)
+
+    for c in cs
+        demand = @. (c - policy(c, prices, e)) / prices
+        plot!(prices, demand, label="c′(p | c = $c, e = $e)")
     end
 
     savefig(path)
