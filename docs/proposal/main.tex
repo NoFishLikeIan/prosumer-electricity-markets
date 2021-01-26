@@ -163,7 +163,7 @@ Using the budget constraint we can redefine the problem as,
 such that the agents control variable is the next level of cash-in-hand $m_{t+1}$. This gives the Euler equation,
 
 \begin{equation}
-    u\left( e_t + \frac{m_t - m_{t+1}}{p_t} \right) = \beta \cdot \E_t \left[ u\left(e_{t+1} \frac{m_{t+1} - m_{t+2}}{ \psi_{h, t} \cdot p_t} \right)  \right].
+    u\left( e_t + \frac{m_t - m_{t+1}}{p_t} \right) = \beta \cdot \E_t \left[ u\left(e_{t+1} + \frac{m_{t+1} - m_{t+2}}{ \psi_{h, t} \cdot p_t} \right)  \right].
 \end{equation}
 
 The endogenous grid method can then be used to find a policy function
