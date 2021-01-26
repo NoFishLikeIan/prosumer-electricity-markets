@@ -8,6 +8,7 @@ function decisionpath(
     ps::Vector{Float64}, es::Vector{Float64},
     prosumer::Prosumer, environment::Environment;
     verbose=false)
+    
     @unpack ω, γ = environment
     @unpack u = prosumer
 
@@ -28,8 +29,10 @@ function decisionpath(
 
         if t < T cs[t + 1] = c′ end
         xs[t] = x
+        
+        xc = max(x + e, .01) # FIXME: How can it be negative?
 
-        U[idx] = (1 - ω) * u(x + e) + ω * U[idx]
+        U[idx] = (1 - ω) * u(xc) + ω * U[idx]
         n = exp(γ * U[idx]) / sum(γ .* U)
         
         change = n < rand(Uniform(-1., 1.)) 
@@ -51,12 +54,9 @@ end
 
 function simulate(
     pess::Function, opt::Function,
-    prosumer::Prosumer, environment::Environment, T::Int; sizes=(400, 20), kwargs...)
+    prosumer::Prosumer, environment::Environment, T::Int; sizes=(400, 20), p̄=20., kwargs...)
 
     @unpack ψ₁, ψ₂ = prosumer
-
-    # AR(1) process for prices
-    p̄ = 1 / (1 - ψ₁)
 
     ρ = ψ₁ 
     σ = .01

@@ -1,7 +1,7 @@
-function plotg(g, environment, prosumer)
+function plotg(g, environment, prosumer; p̄=20.)
     
     c_grid = range(0., 10., length=100)
-    ps = 1 / (1 - prosumer.ψ₁) .+ [-10., 10.]
+    ps = p̄ .+ [-10., 10.]
     p_grid = range(ps..., length=4)
     colors = [:red, :orange, :green, :blue]
     e = environment.weather.state_values[2]
@@ -24,12 +24,12 @@ end
 """
 Plot in comparison the two forecasting rules
 """
-function plotrules(pess, opt, environment, prosumer; path="plots/markets/polcomp.png")
+function plotrules(pess, opt, environment, prosumer; p̄=20., path="plots/markets/polcomp.png")
     
     @unpack ψ₁, ψ₂ = prosumer
 
     c_grid = range(0., 10., length=100)
-    ps = 1 / (1 - ψ₁) .+ [-10., 10.]
+    ps = p̄ .+ [-10., 10.]
     endowments = environment.weather.state_values
 
     plots = []

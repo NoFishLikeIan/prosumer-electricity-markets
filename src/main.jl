@@ -22,7 +22,7 @@ environment = Environment(ω=0.5, γ=0.5)
 sizes = (600, 100)
 pess, opt = solvepolicy(sizes, prosumer, environment; verbose=true, tol=1e-2)
 
-T = 200
+T = 100
 cs, xs, policy, es, p = simulate(pess, opt, prosumer, environment, T; verbose=true)
 
 plotsimulation(xs, policy, es)

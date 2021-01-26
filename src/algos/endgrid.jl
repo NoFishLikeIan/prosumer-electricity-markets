@@ -4,8 +4,9 @@ assuming exogenous forecasting rule Ψ
 """
 function endgrid(
     gridsizes::Tuple{Int,Int}, prosumer::Prosumer, environment::Environment, ψ::Float64;
-    maxiter=1_000, tol=1e-3, verbose=false, gridbounds=[0., 10.], ρ0=1.
-)
+    gridbounds=[0., 30.], ρ0=1., pbounds=[0.5, 10.],
+    maxiter=1_000, tol=1e-3, verbose=false
+    )
     @unpack weather = environment
     @unpack u, u′, invu′, β = prosumer
 
@@ -14,7 +15,7 @@ function endgrid(
     N_c, N_p = gridsizes
 
     c_grid = range(gridbounds..., length=N_c)
-    p_grid = range(.1, 10., length=N_p) # TODO: Bounds for p?
+    p_grid = range(pbounds..., length=N_p) # TODO: Bounds for p?
 
     policy = ones(N_c, N_p, D_e)
     space = collect.(Iterators.product(c_grid, p_grid, endowments)) 
