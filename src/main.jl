@@ -19,16 +19,17 @@ prosumer = Prosumer(ψ₁=.99, ψ₂=1.01)
 environment = Environment(ω=0.5, γ=0.5)
 
 
+sizes = (600, 100)
+pess, opt = solvepolicy(sizes, prosumer, environment; verbose=true, tol=1e-2)
+
 T = 200
-cs, xs, policy, es, p = simulate(prosumer, environment, T; verbose=true)
+cs, xs, policy, es, p = simulate(pess, opt, prosumer, environment, T; verbose=true)
 
 plotsimulation(xs, policy, es)
-
-sizes = (400, 10)
-pess, opt = solvepolicy(sizes, prosumer, environment; verbose=true, tol=1e-2)
 
 plotrules(pess, opt, environment, prosumer)
 plotg(pess, environment, prosumer)
 plotdemand(pess, environment)
+
 
 Plots.resetfontsizes()

@@ -7,8 +7,7 @@ function decisionpath(
     policies::Tuple{Function,Function},
     ps::Vector{Float64}, es::Vector{Float64},
     prosumer::Prosumer, environment::Environment;
-    verbose=false
-)
+    verbose=false)
     @unpack ω, γ = environment
     @unpack u = prosumer
 
@@ -44,6 +43,16 @@ end
 function simulate(
     prosumer::Prosumer, environment::Environment, T::Int; sizes=(400, 20), kwargs...)
 
+    pess, opt = solvepolicy(sizes, prosumer, environment; tol=1e-2, kwargs...)
+
+    return simulate(pess, opt, prosumer, environment, T; sizes=sizes, kwargs...)
+
+end
+
+function simulate(
+    pess::Function, opt::Function,
+    prosumer::Prosumer, environment::Environment, T::Int; sizes=(400, 20), kwargs...)
+
     @unpack ψ₁, ψ₂ = prosumer
 
     # AR(1) process for prices
@@ -61,7 +70,7 @@ function simulate(
     es = QuantEcon.simulate(environment.weather, T)
 
     # TODO: This simulation uses 1 prosumer
-    pess, opt = solvepolicy(sizes, prosumer, environment; tol=1e-2, kwargs...)
+    
     cs, xs, policy = decisionpath((pess, opt), p, es, prosumer, environment; kwargs...)
 
 

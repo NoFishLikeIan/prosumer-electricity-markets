@@ -7,7 +7,7 @@ function endgrid(
     maxiter=1_000, tol=1e-3, verbose=false, gridbounds=[0., 10.], ρ0=1.
 )
     @unpack weather = environment
-    @unpack u, u′, invu′,  β = prosumer
+    @unpack u, u′, invu′, β = prosumer
 
     endowments = weather.state_values
     D_e = length(endowments)
