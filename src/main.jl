@@ -12,7 +12,7 @@ include("utils.jl")
 include("plotting.jl")
 include("markets/local.jl")
 include("algos/endgrid.jl")
-include("markets/simulate.jl")
+include("simulate.jl")
 
 
 prosumer = Prosumer(ψ₁=.99, ψ₂=1.01)
