@@ -11,6 +11,7 @@ Plots.scalefontsizes(.6)
 include("utils.jl")
 include("plotting.jl")
 include("markets/local.jl")
+include("markets/global.jl")
 include("algos/endgrid.jl")
 include("simulate.jl")
 
