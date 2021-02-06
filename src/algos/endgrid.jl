@@ -12,36 +12,36 @@ function endgrid(
 
     endowments = weather.state_values
     D_e = length(endowments)
-    N_c, N_p = gridsizes
+    N_m, N_p = gridsizes
 
-    c_grid = range(gridbounds..., length=N_c)
-    p_grid = range(pbounds..., length=N_p) # TODO: Bounds for p?
+    m_grid = range(gridbounds..., length=N_m)
+    p_grid = range(pbounds..., length=N_p)
 
-    policy = ones(N_c, N_p, D_e)
-    space = collect.(Iterators.product(c_grid, p_grid, endowments)) 
+    policy = ones(N_m, N_p, D_e)
+    space = collect.(Iterators.product(m_grid, p_grid, endowments)) 
 
-    spaceidx = cartesianfromsize(N_c, N_p, D_e)
+    spaceidx = cartesianfromsize(N_m, N_p, D_e)
     exogenousidx = cartesianfromsize(N_p, D_e)
 
     for iter in 1:maxiter
-        g = positive ∘ fromMtoFn(policy, c_grid, p_grid, endowments)
+        g = positive ∘ fromMtoFn(policy, m_grid, p_grid, endowments)
         inverse = similar(policy)
 
         x(c, p, e) = e + (c - g(c, p, e)) / p # Energy demand function
 
         @threads for (i, j, k) in spaceidx
     
-            # Endogenous grid method for each c′
-            c′, p = c_grid[i], p_grid[j]
+            # Endogenous grid method for each m′
+            m′, p = m_grid[i], p_grid[j]
             ϵ = endowments[k]
 
             p′ = ψ * p # Forecast of price
             P = weather.p[k, :]
 
-            x′ = x.(c′, p′, endowments) # Next period demand, state contingent 
+            x′ = x.(m′, p′, endowments) # Next period demand, state contingent 
 
             rhs = β * (P'u′.(x′))
-            c = (invu′(rhs) - ϵ) * p + c′
+            c = (invu′(rhs) - ϵ) * p + m′
             inverse[i, j, k] = c
 
         end
@@ -52,8 +52,8 @@ function endgrid(
             c = inverse[:, j, k]
             ixs = sortperm(c)
 
-            forwardpolicy = fromVtoFn(c[ixs], c_grid[ixs])
-            newpolicy[:, j, k] = forwardpolicy.(c_grid)
+            forwardpolicy = fromVtoFn(c[ixs], m_grid[ixs])
+            newpolicy[:, j, k] = forwardpolicy.(m_grid)
         end
 
         # Updating

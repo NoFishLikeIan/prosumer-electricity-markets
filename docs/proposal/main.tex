@@ -131,6 +131,8 @@ The model will mainly be employed to ask questions around resilience and assess 
 
 \subsection{Prosumers}
 
+\subsubsection{Normal preferences}
+
 The prosumer instantaneous utility of electricity consumption is,
 
 \begin{equation*}
@@ -163,7 +165,7 @@ Using the budget constraint we can redefine the problem as,
 such that the agents control variable is the next level of cash-in-hand $m_{t+1}$. This gives the Euler equation,
 
 \begin{equation}
-    u\left( e_t + \frac{m_t - m_{t+1}}{p_t} \right) = \beta \cdot \E_t \left[ u\left(e_{t+1} + \frac{m_{t+1} - m_{t+2}}{ \psi_{h, t} \cdot p_t} \right)  \right].
+    u^\prime\left( e_t + \frac{m_t - m_{t+1}}{p_t} \right) = \beta \cdot \E_t \left[ u^\prime\left(e_{t+1} + \frac{m_{t+1} - m_{t+2}}{ \psi_{h, t} \cdot p_t} \right)  \right].
 \end{equation}
 
 The endogenous grid method can then be used to find a policy function
@@ -172,20 +174,42 @@ The endogenous grid method can then be used to find a policy function
     m^\prime(m_t, p_t \ \vert \ \psi_{h, t}, e_t).
 \end{equation}
 
-The solution of the local problem yields the following electricity demand in a state of high endowments and different conditions $m_t$,
+The solution of the local problem yields the following electricity demand in a state of high endowments and different conditions $m_t$ (Figure \ref{fig:demand})
 
-\begin{figure}[h]
+\begin{figure}[b]
     \caption{Electricity demand curve for an agent}
     \centering
     \includegraphics[width=0.9\textwidth]{../../plots/markets/pricedemand.png}
+    \label{fig:demand}
 \end{figure}
 
-And the following simulation run,
+and the following simulation run (Figure \ref{fig:sim}).
 
-\begin{figure}[h]
+\begin{figure}[b]
     \caption{Simulation of an agent with switching forecasting rule and $AR(1)$ price process}
     \centering
     \includegraphics[width=0.9\textwidth]{../../plots/markets/simul.png}
+    \label{fig:sim}
 \end{figure}
+
+\subsubsection{Epstein-Zin preferences}
+
+A better formulation, using Epstein-Zin preferences,
+
+\begin{equation}
+    U_t = \left[ (1 - \beta) \cdot u(x_t)^{\frac{\phi - 1}{\phi}} + \beta \cdot \mu_t(U_{t+1})^{\frac{\phi - 1}{\phi}} \right]^{\frac{\phi}{\phi - 1}}
+\end{equation}
+
+where the certainty equivalent is,
+
+\begin{equation}
+    \mu_t(U) = \E_t\left[ U^{1 - \gamma} \right]^{\frac{1}{1 - \gamma}}.
+\end{equation}
+
+As Caldara, introduce,
+
+\begin{equation}
+    \theta := \frac{1 - \gamma}{1 - \frac{1}{\phi}}.
+\end{equation}
 
 \end{document}

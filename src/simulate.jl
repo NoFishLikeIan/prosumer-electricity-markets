@@ -1,3 +1,4 @@
+switch(idx) = (idx % 2) + 1 # 1 -> 2 and 2 -> 1
 
 """
 Simulate the decision path of n heterogenous prosumers
@@ -23,11 +24,11 @@ function decisionpath(
 
         policy[t] = idx
 
-        c, e = cs[t], es[t]
-        c′ = policies[idx](c, e, p)
-        x = (c - c′) / p # Energy consumption
+        m, e = cs[t], es[t]
+        m′ = policies[idx](m, e, p)
+        x = (m - m′) / p # Energy consumption
 
-        if t < T cs[t + 1] = c′ end
+        if t < T cs[t + 1] = m′ end
         xs[t] = x
         
         xc = max(x + e, .01) # FIXME: How can it be negative?
@@ -37,7 +38,7 @@ function decisionpath(
         
         change = n < rand(Uniform(-1., 1.)) 
 
-        idx = change ? (idx % 2) + 1 : idx
+        idx = change ? switch(idx) : idx
     end
 
     return cs, xs, policy
@@ -71,8 +72,8 @@ function simulate(
 
     # TODO: This simulation uses 1 prosumer
     
-    cs, xs, policy = decisionpath((pess, opt), p, es, prosumer, environment; kwargs...)
+    ms, xs, policy = decisionpath((pess, opt), p, es, prosumer, environment; kwargs...)
 
 
-    return cs, xs, policy, es, p
+    return ms, xs, policy, es, p
 end

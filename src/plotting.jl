@@ -1,6 +1,6 @@
 function plotg(g, environment, prosumer; p̄=20.)
     
-    c_grid = range(0., 10., length=100)
+    m_grid = range(0., 10., length=100)
     ps = p̄ .+ [-10., 10.]
     p_grid = range(ps..., length=4)
     colors = [:red, :orange, :green, :blue]
@@ -13,7 +13,7 @@ function plotg(g, environment, prosumer; p̄=20.)
     for p in p_grid
 
 
-        plot!(c_grid, g.(c_grid, p, e),
+        plot!(m_grid, g.(m_grid, p, e),
             label="p=$(round(p; digits=2))")
     end
 
@@ -28,7 +28,7 @@ function plotrules(pess, opt, environment, prosumer; p̄=20., path="plots/market
     
     @unpack ψ₁, ψ₂ = prosumer
 
-    c_grid = range(0., 10., length=100)
+    m_grid = range(0., 10., length=100)
     ps = p̄ .+ [-10., 10.]
     endowments = environment.weather.state_values
 
@@ -43,11 +43,11 @@ function plotrules(pess, opt, environment, prosumer; p̄=20., path="plots/market
             title="$state endowments, $price prices",
              xaxis="c", yaxis="demand", legend=:bottomright)
         
-        demandpess = @. (c_grid - pess(c_grid, p, e)) / p
-        plot!(current, c_grid, demandpess, label="ψ = $(min(ψ₁, ψ₂))")
+        demandpess = @. (m_grid - pess(m_grid, p, e)) / p
+        plot!(current, m_grid, demandpess, label="ψ = $(min(ψ₁, ψ₂))")
 
-        demandopt = @.  (c_grid - opt(c_grid, p, e) ) / p
-        plot!(current, c_grid, demandopt, label="ψ = $(max(ψ₁, ψ₂))")
+        demandopt = @.  (m_grid - opt(m_grid, p, e) ) / p
+        plot!(current, m_grid, demandopt, label="ψ = $(max(ψ₁, ψ₂))")
 
         push!(plots, current)
     end

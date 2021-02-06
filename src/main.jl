@@ -23,7 +23,7 @@ sizes = (600, 100)
 pess, opt = solvepolicy(sizes, prosumer, environment; verbose=true, tol=1e-2)
 
 T = 100
-cs, xs, policy, es, p = simulate(pess, opt, prosumer, environment, T; verbose=true)
+ms, xs, policy, es, p = simulate(pess, opt, prosumer, environment, T; verbose=true)
 
 plotsimulation(xs, policy, es)
 
