@@ -192,24 +192,73 @@ and the following simulation run (Figure \ref{fig:sim}).
     \label{fig:sim}
 \end{figure}
 
-\subsubsection{Epstein-Zin preferences}
+\iffalse
+    \subsubsection{Epstein-Zin preferences}
 
-A better formulation, using Epstein-Zin preferences,
+    A better formulation, using Epstein-Zin preferences,
+
+    \begin{equation}
+        U_t = \left[ (1 - \beta) \cdot u(x_t)^{\frac{\phi - 1}{\phi}} + \beta \cdot \mu_t(U_{t+1})^{\frac{\phi - 1}{\phi}} \right]^{\frac{\phi}{\phi - 1}}
+    \end{equation}
+
+    where the certainty equivalent is,
+
+    \begin{equation}
+        \mu_t(U) = \E_t\left[ U^{1 - \gamma} \right]^{\frac{1}{1 - \gamma}}.
+    \end{equation}
+
+    As Caldara, introduce,
+
+    \begin{equation}
+        \theta := \frac{1 - \gamma}{1 - \frac{1}{\phi}}.
+    \end{equation}
+
+\fi
+
+\subsection{Grid firms}
+
+Grid firms face the optimization problem,
 
 \begin{equation}
-    U_t = \left[ (1 - \beta) \cdot u(x_t)^{\frac{\phi - 1}{\phi}} + \beta \cdot \mu_t(U_{t+1})^{\frac{\phi - 1}{\phi}} \right]^{\frac{\phi}{\phi - 1}}
+    \begin{split}
+        \pi_i(p, \vec{y}) &= x^{(i)}_t(p) \cdot p -\sum_{j \in N(i)} y_t^{(ij)} \cdot p^{(ij)}_t \\
+        s.t. \  \underbrace{x^{(i)}_t}_{\text{local demand}} &= \underbrace{\sum_{i \in N(i)} y_t^{(ij)}}_{\text{supply from abroad}}
+    \end{split}
 \end{equation}
 
-where the certainty equivalent is,
+For now assume $p_t(ij)$ is exogenous. Then the first order conditions yields,
 
 \begin{equation}
-    \mu_t(U) = \E_t\left[ U^{1 - \gamma} \right]^{\frac{1}{1 - \gamma}}.
+    \begin{split}
+        \frac{\partial}{\partial p}\pi_i(p, \vec{y}) = &\frac{\partial x_t^{(i)}}{\partial p}(p) \cdot p + x_t^{(i)}(p) = 0 \\
+        p = &\left(\frac{x}{x^\prime}\right)_t^{(i)}(p)
+    \end{split}
 \end{equation}
 
-As Caldara, introduce,
+\subsubsection{Simple case with one prosumer}
+
+Let $g(m_t, p_t)$ be the policy function and $g^\prime = \partial g / \partial p_t$. Then,
 
 \begin{equation}
-    \theta := \frac{1 - \gamma}{1 - \frac{1}{\phi}}.
+    \begin{split}
+        x_t &= \frac{m_t - g(m_t, p_t)}{p_t} \\
+        x^\prime_t &= \frac{g(m_t, p_t) - g^\prime(m_t, p_t) - m_t}{p^2_t}
+    \end{split}
 \end{equation}
+
+This gives as an implicit definition of $p$,
+
+\begin{equation}
+    \begin{split}
+        \left(\frac{x}{x^\prime}\right)_t^{(i)}(p) = \frac{p \cdot (m_t - g(m_t, p_t))}{g(m_t, p_t) - g^\prime(m_t, p_t) - m_t} &= p\\
+        \frac{g(m_t, p_t) - g^\prime(m_t, p_t) - m_t}{- \left(  g(m_t, p_t) - m_t \right)} &= 1 \\
+        - 1 + \frac{g^\prime(m_t, p_t)}{g(m_t, p_t) - m_t} &= 1 \\
+        \frac{g^\prime(m_t, p_t)}{g(m_t, p_t) - m_t} - 2&= 0
+    \end{split}
+\end{equation}
+
+We can plot this function for the pessimistic and optimistic prosumer, measured by $\psi$.
+
+
 
 \end{document}
