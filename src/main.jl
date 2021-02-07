@@ -9,7 +9,7 @@ Random.seed!(11148705)
 Plots.scalefontsizes(.6)
 
 include("utils.jl")
-include("plotting.jl")
+include("plotting/local.jl")
 include("markets/local.jl")
 include("markets/global.jl")
 include("algos/endgrid.jl")
