@@ -14,7 +14,11 @@ include("markets/local.jl")
 include("markets/oneglobal.jl")
 
 include("algos/endgrid.jl")
-include("simulation/exsimulation.jl")
+
+include("simulation/simutils.jl")
+include("simulation/exdecision.jl")
+include("simulation/onedecision.jl")
+include("simulation/simulation.jl")
 
 include("plotting/local.jl")
 include("plotting/global.jl")
@@ -29,7 +33,9 @@ sizes = (600, 100)
 pess, opt = solvepolicy(sizes, prosumer, environment; verbose=true, tol=1e-2)
 
 T = 100
-ms, xs, policy, es, p = simulate(pess, opt, prosumer, environment, T; verbose=true)
+ms, xs, policy, es, p = simulate(
+    pess, opt, prosumer, environment, T; 
+    verbose=true, exog=false)
 
 if do_plot
 
