@@ -55,4 +55,6 @@ function findconsecutive(arr::Vector{Int64})
             current = [arr[i + 1], -1]
         end
     end
+
+    return []
 end
