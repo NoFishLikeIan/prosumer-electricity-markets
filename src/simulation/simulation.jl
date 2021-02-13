@@ -19,12 +19,12 @@ function simulate(
     @unpack ψ₁, ψ₂ = prosumer
 
     # Markov process for endowments
-    es = ones(Float64, T) # QuantEcon.simulate(environment.weather, T)
+    es = QuantEcon.simulate(environment.weather, T)
 
     if exog
         # Simulate with an exogenous price
-        ρ = ψ₁ 
-        σ = .01
+        ρ = ψ₁
+        σ = 1.
 
         ϵ = rand(Normal(0, σ), T)
         p = zeros(Float64, T)
