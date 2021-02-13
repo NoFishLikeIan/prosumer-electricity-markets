@@ -7,7 +7,7 @@ function plotg(g, environment, prosumer; p̄=20.)
     e = environment.weather.state_values[2]
 
     plot(
-        xaxis="c", yaxis="c′", 
+        xaxis="m", yaxis="m′", 
         title="Policy function", legend=:bottomright, dpi=200)
 
     for p in p_grid
@@ -37,19 +37,19 @@ function plotrules(pess, opt, environment, prosumer; p̄=20., path="plots/market
     for (p, e) in cartesian(ps, endowments)
 
         state = e == endowments[1] ? "low" : "high"
-        price = p == ps[1] ? "low" : "high"
+    price = p == ps[1] ? "low" : "high"
 
         current = plot(
             title="$state endowments, $price prices",
-             xaxis="c", yaxis="demand", legend=:bottomright)
+             xaxis="m", yaxis="demand", legend=:bottomright)
         
         demandpess = @. (m_grid - pess(m_grid, p, e)) / p
         plot!(current, m_grid, demandpess, label="ψ = $(min(ψ₁, ψ₂))")
 
         demandopt = @.  (m_grid - opt(m_grid, p, e) ) / p
         plot!(current, m_grid, demandopt, label="ψ = $(max(ψ₁, ψ₂))")
-
-        push!(plots, current)
+    
+    push!(plots, current)
     end
 
     plot(plots...; layour=(2, 2), dpi=200)
@@ -58,17 +58,13 @@ end
 
 function plotsimulation(xs, policy, es; path="plots/markets/simul.png")
 
-    endowment = plot(title="Electricity consumption over bad endowments and pessimism", xaxis="t", yaxis="x(t)", dpi=300)
+    endowment = plot(
+        title="Electricity demand over bad endowments", xaxis="t", yaxis="x(t)", ylims=(-1.5, 1.5),dpi=300)
 
     plot!(endowment, 1:length(xs), xs, label="x(t)", linecolor=:black)
-    
-    for tup in findconsecutive(findall(e -> e < .5, es))
-        vspan!(endowment, tup, linecolor=:red, alpha=0.2, fillcolor=:red, legend=false)
-    end
 
-        
-    for tup in findconsecutive(findall(e -> e == 1, policy))
-        vspan!(endowment, tup, linecolor=:blue, alpha=0.5, fillcolor=:blue, legend=false)
+    for tup in findconsecutive(findall(e -> e < .5, es))
+        vspan!(endowment, tup, linecolor=:blue, alpha=0.1, fillcolor=:blue, legend=false)
     end
 
     savefig(path)
@@ -76,18 +72,30 @@ function plotsimulation(xs, policy, es; path="plots/markets/simul.png")
 end
 
 function plotdemand(policy, environment; path="plots/markets/pricedemand.png")
-    prices = range(.05, 10., length=100)
+    prices = range(.05, 2.5, length=100)
 
     e = environment.weather.state_values[2]
-    cs = [0., 5., 10.]
+    ms = [0., 5., 10.]
 
-    plot(title="Demand over prices", xaxis="p", yaxis="demand", dpi=200)
+    plot(title="Energy demand given different cash levels", xaxis="p", yaxis="demand", dpi=200)
 
-    for c in cs
-        demand = @. (c - policy(c, prices, e)) / prices
-        plot!(prices, demand, label="c′(p | c = $c, e = $e)")
+    for m in ms
+        demand = @. (m - policy(m, prices, e)) / prices
+        plot!(prices, demand, label="m′(p | m = $m)")
     end
 
     savefig(path)
 
+end
+
+function plotpricesdemand(xs, es, p; path="plots/markets/kde.png")
+    sim = DataFrame(
+        Demand=xs, Price=p, 
+        Endowment=es)
+
+    @df sim marginalkde(
+        :Demand, :Price,
+        xlabel="Demand", ylabel="Price",fc=:plasma, dpi=300)
+    
+    savefig(path)
 end

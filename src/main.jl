@@ -5,6 +5,7 @@ using FiniteDifferences
 using Random, Distributions
 
 using Plots, Logging, Printf
+using StatsPlots, DataFrames
 
 Random.seed!(11148705)
 Plots.scalefontsizes(.6)
@@ -32,18 +33,22 @@ environment = Environment(ω=0.5, γ=0.5)
 sizes = (600, 100)
 pess, opt = solvepolicy(sizes, prosumer, environment; verbose=true, tol=1e-2)
 
-T = 100
+T = 200
 ms, xs, policy, es, p = simulate(
     pess, opt, prosumer, environment, T; 
-    verbose=true, exog=false)
+    verbose=true, exog=true)
 
 if do_plot
 
-    plotsimulation(xs, policy, es)
+    first = 1:100
+
+    plotsimulation(xs[first], policy[first], es[first])
+    plotpricesdemand(xs, es, p)
 
     plotrules(pess, opt, environment, prosumer)
     plotg(pess, environment, prosumer)
     plotdemand(pess, environment)
+
 
 end
 
