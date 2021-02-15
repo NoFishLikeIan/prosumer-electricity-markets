@@ -147,8 +147,10 @@ The dynamic optimization problem is then,
 
 \begin{equation*}
     \begin{split}
-        \pi_t(x_t \vert e_{i, t}) &= u_i(x_t + e_{i, t}) + \beta \cdot \E_t \left[ \pi_{t+1}(x_{t+1} \vert e_{i, t+1}) \right] \\
-        s.t. \ \ m_{t+1} &= m_t - p_t \cdot x_t \text{ and } m_t \geq 0
+        V(x_t \vert \ e_t) &= u(x_t + e_t) + \beta \cdot \E_t\left[ V(x_{t+1} \vert \ e_{t + 1} ) \right] \\
+        \\
+        \textit{s.t. } m_{t+1} &= m_{t} - p_{t} \cdot x_{t}\\
+        m_t  &\geq 0, \ m_0 = 0
     \end{split}
 \end{equation*}
 
@@ -177,19 +179,26 @@ The endogenous grid method can then be used to find a policy function
 The solution of the local problem yields the following electricity demand in a state of high endowments and different conditions $m_t$ (Figure \ref{fig:demand})
 
 \begin{figure}[b]
-    \caption{Electricity demand curve for an agent}
     \centering
     \includegraphics[width=0.9\textwidth]{../../plots/markets/pricedemand.png}
     \label{fig:demand}
+    \caption{Electricity demand curve for an agent}
 \end{figure}
 
 and the following simulation run (Figure \ref{fig:sim}).
 
-\begin{figure}[b]
-    \caption{Simulation of an agent with switching forecasting rule and $AR(1)$ price process}
+\begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{../../plots/markets/simul.png}
     \label{fig:sim}
+    \caption{Simulation of an agent with switching forecasting rule and $AR(1)$ price process}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{../../plots/markets/kde.png}
+    \label{fig:price}
+    \caption{Prices in the above simulation}
 \end{figure}
 
 \iffalse
@@ -220,18 +229,19 @@ and the following simulation run (Figure \ref{fig:sim}).
 Grid firms face the optimization problem,
 
 \begin{equation}
-    \begin{split}
-        \pi_i(p, \vec{y}) &= x^{(i)}_t(p) \cdot p -\sum_{j \in N(i)} y_t^{(ij)} \cdot p^{(ij)}_t \\
-        s.t. \  \underbrace{x^{(i)}_t}_{\text{local demand}} &= \underbrace{\sum_{i \in N(i)} y_t^{(ij)}}_{\text{supply from abroad}}
-    \end{split}
+    \Pi^i(p^i_t) = X^i_{t}(p^i_t\vert p^i_{t-1}, e_{t-1}) \cdot p^i_t - \sum_{j \in N(i)} Y^{(i, j)}_{t} \cdot P^{(i, j)}_t,
+\end{equation}
+subject to,
+\begin{equation}
+    X^i_t=  \sum_{j \in N(i)} Y^{(i, j)}_{t}
 \end{equation}
 
-For now assume $p_t(ij)$ is exogenous. Then the first order conditions yields,
+For now assume $P_t(ij)$ is exogenous. Then the first order conditions yields,
 
 \begin{equation}
     \begin{split}
-        \frac{\partial}{\partial p}\pi_i(p, \vec{y}) = &\frac{\partial x_t^{(i)}}{\partial p}(p) \cdot p + x_t^{(i)}(p) = 0 \\
-        p = &\left(\frac{x}{x^\prime}\right)_t^{(i)}(p)
+        \frac{\partial}{\partial p}\Pi_i(p^i_t) = &\frac{\partial X_t^{(i)}}{\partial p} \cdot p^i_t + X_t^{(i)} = 0 \\
+        p^i_t = &\left(\frac{X}{X^\prime}\right)_t^{(i)}(p^i_t)
     \end{split}
 \end{equation}
 
