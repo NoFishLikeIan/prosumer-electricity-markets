@@ -1,18 +1,20 @@
 
 function simulate(
-    prosumer::Prosumer, environment::Environment, T::Int; 
+    prosumer::Prosumer, environment::Environment, 
+    T::Int, N::Int; 
     exog=false, sizes=(400, 20), p̄=20., 
     kwargs...)
 
     pess, opt = solvepolicy(sizes, prosumer, environment; tol=1e-2, kwargs...)
 
-    return simulate(pess, opt, prosumer, environment, T; sizes=sizes, kwargs...)
+    return simulate(pess, opt, prosumer, environment, T, N; sizes=sizes, kwargs...)
 
 end
 
 function simulate(
     pess::Function, opt::Function,
-    prosumer::Prosumer, environment::Environment, T::Int; 
+    prosumer::Prosumer, environment::Environment, 
+    T::Int, N::Int; 
     exog=false, sizes=(400, 20), p̄=20., 
     kwargs...)
 
@@ -31,10 +33,10 @@ function simulate(
         p[1] = rand(Normal(p̄, σ))
         for t in 2:T p[t] = p̄ * (1 - ρ) + ρ * p[t - 1] + ϵ[t] end
 
-        ms, xs, policy = decisionpath((pess, opt), p, es, prosumer, environment; kwargs...)
+        ms, xs, policy = decisionpath((pess, opt), p, es, prosumer, environment; N=N, kwargs...)
     else
         # Simulate with an endogenous price
-        ms, xs, policy, p = decisionpath((pess, opt), findprice, es, prosumer, environment; kwargs...)
+        ms, xs, policy, p = decisionpath((pess, opt), findprice, es, prosumer, environment; N=N, kwargs...)
     end
 
 
