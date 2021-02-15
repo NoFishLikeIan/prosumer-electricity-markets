@@ -39,7 +39,12 @@
 \frame{\titlepage}
 
 \begin{frame}{Advent of prosumers}
-    Electricity \textbf{production} and \textbf{consumption} becomes prerogative of households
+    Green energy transition,
+    \begin{itemize}\setlength\itemsep{1em}
+        \item Electricity \textbf{production} becomes prerogative of households
+        \item Issues and benefits with centralized grid firms (e.g. ERCOT in Texas)
+        \item Weather shocks and uncertainty among risk averse consumers
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Research question}
@@ -103,7 +108,7 @@
 \endgroup
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Prosumers}
+\begin{frame}{Prosumers}
     Prosumer optimization problem, suppressing notation $i$,
     \begin{equation}
         \begin{split}
@@ -113,14 +118,28 @@
             \underbrace{m_t  \geq 0}_{\text{cash in hand}}&, \ m_0 = 0
         \end{split}
     \end{equation}
+\end{frame}
 
-    with a linear forecasting rule,
+\begin{frame}{Prosumers' type}
+
+    Prosumers can be either can be either fundamentalists or chartists, $h \in \{f, c\}$. This determines their price expectation,
 
     \begin{equation}
-        \E_t[p_{t+1}] = \psi_{h, t} \cdot p_t
+        \begin{split}
+            \E_t[p_{t+1}] &= \psi_h \cdot p_t \\
+            &0 < \psi_f < 1 \text{ and } \psi_c > 1
+        \end{split}
     \end{equation}
 
-    \newpage
+
+    The decision to switch between types is driven by how well that type performed.
+
+    At each time step there is a fraction of fundamentalists and chartists in local market, such that $N_c + N_f = N$.
+
+\end{frame}
+
+
+\begin{frame}{Partial equilibrium in local market}
 
     Via Euler equation, one can find policy function,
 
@@ -128,10 +147,10 @@
         m_{t+1} = g(m_t, p_t \vert e_t) \implies x_{t+1} = \frac{m_t - g(m_t, p_t \vert e_t)}{p_{t+1}}
     \end{equation}
 
-    Aggregating yields the total demand (or supply) of electricity of the grid
+    Aggregating over the two types yields the total demand (or supply) of electricity of the grid
 
     \begin{equation}
-        X_{t+1}(p_{t+1}, p_t \vert e_t) = \sum_{i} x_{i, t+1}(m_{i, t}, p_{t+1}, p_t \vert e_t)
+        X_{t+1}(p_{t+1}, p_t \vert e_t) = \sum_{i \in c} x_{i, t+1} + \sum_{j \in f} x_{j, t+1}
     \end{equation}
 
 \end{frame}
@@ -203,9 +222,9 @@
 
 \end{frame}
 
-
+\begingroup
 % TODO section
-\begingroup \setbeamercolor{background canvas}{bg=AliceBlue}
+\setbeamercolor{background canvas}{bg=AliceBlue}
 \begin{frame}{\textit{Steps forward}: Trophic analysis}
     Building on \citeauthor[]{MacKay2020}. Measure of hierarchical structure among nodes.
 
@@ -253,6 +272,7 @@
         \item Model validation on residual moments (household's energy production)
     \end{itemize}
 \end{frame}
+
 \endgroup
 
 
