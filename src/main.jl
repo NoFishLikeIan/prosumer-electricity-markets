@@ -44,16 +44,12 @@ ms, xs, policy, es, p = simulate(
     T, N; 
     verbose=true, exog=true)
 
-simulation_plots = false
+simulation_plots = true
 
 if simulation_plots
-
-    first = 1:100
-
-    plotsimulation(xs[first], policy[first], es[first])
+    plotsimulation(xs, es)
+    plottypes(policy, es)
     plotpricesdemand(xs, es, p)
-
-
 end
 
 Plots.resetfontsizes()

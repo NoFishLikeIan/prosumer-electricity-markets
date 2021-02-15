@@ -56,12 +56,20 @@ function plotrules(pess, opt, environment, prosumer; p̄=20., path="plots/market
     savefig(path)
 end
 
-function plotsimulation(xs, policy, es; path="plots/markets/simul.png")
+"""
+Plot multivariate simulation
+"""
+function plotsimulation(xs, es; path="plots/markets/simul.png")
+
+    X = sum(xs, dims=2) # Aggregate demand
+
+    peak = maximum(abs.(X))
+    ylimits = (-peak, peak) .* 1.1
 
     endowment = plot(
-        title="Electricity demand over bad endowments", xaxis="t", yaxis="x(t)", ylims=(-1.5, 1.5),dpi=300)
+        title="Electricity demand over bad endowments", xaxis="t", yaxis="X(t)", ylims=ylimits, dpi=300)
 
-    plot!(endowment, 1:length(xs), xs, label="x(t)", linecolor=:black)
+    plot!(endowment, 1:length(X), X, label="X(t)", linecolor=:black)
 
     for tup in findconsecutive(findall(e -> e < .5, es))
         vspan!(endowment, tup, linecolor=:blue, alpha=0.1, fillcolor=:blue, legend=false)
@@ -69,6 +77,22 @@ function plotsimulation(xs, policy, es; path="plots/markets/simul.png")
 
     savefig(path)
 
+end
+
+function plottypes(policy, es; path="plots/markets/types.png")
+    η = mean(policy, dims=2) .- 1
+
+    endowment = plot(
+        ylims=(0., 1.),
+        title="Fraction of optimists", xaxis="t", yaxis="η", dpi=300)
+
+    plot!(endowment, 1:length(η), η, label="η(t)", linecolor=:black)
+
+    for tup in findconsecutive(findall(e -> e < .5, es))
+        vspan!(endowment, tup, linecolor=:blue, alpha=0.1, fillcolor=:blue, legend=false)
+    end
+
+    savefig(path)
 end
 
 function plotdemand(policy, environment; path="plots/markets/pricedemand.png")
@@ -89,8 +113,11 @@ function plotdemand(policy, environment; path="plots/markets/pricedemand.png")
 end
 
 function plotpricesdemand(xs, es, p; path="plots/markets/kde.png")
+    X = sum(xs, dims=2) # Aggregate demand
+
     sim = DataFrame(
-        Demand=xs, Price=p, 
+        Demand=reshape(X, length(X)), 
+        Price=p, 
         Endowment=es)
 
     @df sim marginalkde(

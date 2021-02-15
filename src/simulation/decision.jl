@@ -26,8 +26,8 @@ function decisionpath(
 
     T = length(es)
 
-    ms, xs, policy = [zeros(T, N) for _ in 1:3] # cash level, demand, policy, and agent types
-    
+    ms, xs = zeros(T, N), zeros(T, N) # cash level and demand 
+    policy = zeros(Int, T, N) #  agent types
     ps = zeros(T) # realized prices
 
     ms[1, :] = rand(Uniform(0., 10.), N) # initial cash level
