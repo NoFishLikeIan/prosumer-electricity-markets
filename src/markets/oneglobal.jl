@@ -1,17 +1,23 @@
 """
 Make the one prosumer implicit solution of p,
-
-    f(m, p, e) = ∂g / (g - m) - 2
+    f(m, p, e) = p (2m + p⋅∂g - 2g) / (m + p⋅∂g - g)
 """
-function makesimple(policy; order=12)
+function makesimple(policy; ∂order=12)
 
-    ∂ = central_fdm(order, 1)
+    ∂ = central_fdm(∂order, 1)
 
     g(m, e) = p -> policy(m, p, e)
     gp′(m, p, e) = ∂(g(m, e), p) # ∂g(m, p, e) / ∂p
 
-    f(m, p, e) = gp′(m, p, e) / (policy(m, p, e) - m) - 2.
+    function f(m, p, e)
+        N = 2 * m + p * gp′(m, p, e) - 2 * g(m, e)(p)
 
+        D = m + p * gp′(m, p, e) - g(m, e)(p)
+
+        return p * N / D
+
+    end
+    
     return f
 end
 
