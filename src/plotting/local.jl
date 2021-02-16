@@ -59,20 +59,43 @@ end
 """
 Plot multivariate simulation
 """
-function plotsimulation(xs, es; path="plots/markets/simul.png")
-
+function plotsimulation(
+    xs, es; 
+    policy=nothing,
+    path="plots/markets/simul.png")
+    
     X = sum(xs, dims=2) # Aggregate demand
-
+    t = 1:length(X)
+    
     peak = maximum(abs.(X))
     ylimits = (-peak, peak) .* 1.1
 
-    endowment = plot(
-        title="Electricity demand over bad endowments", xaxis="t", yaxis="X(t)", ylims=ylimits, dpi=300)
+    withpolicy = !isnothing(policy)
+    titleappend = withpolicy ? "and fund." : ""
 
-    plot!(endowment, 1:length(X), X, label="X(t)", linecolor=:black)
+    plot(
+        title="Electricity demand over bad endowments $(titleappend)", 
+        xaxis="t", yaxis="X(t)", ylims=ylimits, dpi=300)
 
+    plot!(t, X, label="X(t)", linecolor=:black, legend=:topleft)
+
+    # Plot band endowments
     for tup in findconsecutive(findall(e -> e < .5, es))
-        vspan!(endowment, tup, linecolor=:blue, alpha=0.1, fillcolor=:blue, legend=false)
+        vspan!(
+            tup, linecolor=:blue, 
+            alpha=0.1, fillcolor=:blue, legend=false)
+        end
+        
+    # Plot chartist majority
+    if !isnothing(policy)
+        η = reshape(mean(policy, dims=2) .- 1, T)       
+        chart = findconsecutive(findall(e -> e < .5, η))
+
+        for tup in chart
+            vspan!(
+                tup, linecolor=:red, 
+                fillcolor=:red, alpha=.2, legend=false)
+            end
     end
 
     savefig(path)
