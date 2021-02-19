@@ -43,7 +43,7 @@
     Green energy transition,
     \begin{itemize}\setlength\itemsep{1em}
         \item Electricity \textbf{production} becomes prerogative of households
-        \item Issues and benefits with centralized grid firms (e.g. ERCOT in Texas)
+        \item Tradeoffs with centralized grid firms (e.g. ERCOT in Texas) and decentralized prosumers
         \item Weather shocks and uncertainty among risk averse consumers
     \end{itemize}
 \end{frame}
@@ -57,7 +57,7 @@
     The model should capture
     \begin{itemize}\setlength\itemsep{1em}
         \item Tension between risk aversion of electricity demand, uncertainty of endowments, and grid firms bottleneck
-        \item Given the network structure, which pricing mechanism can ``ease the pain'' ?
+        \item Given the network structure, which pricing mechanism can ``ease the pain''?
         \item Does bounded rationality (laziness of prosumers) poses a threat to stability?
     \end{itemize}
 \end{frame}
@@ -87,14 +87,14 @@
 \begingroup \fontsize{10pt}{12pt}\selectfont
 \begin{minipage}{.5\linewidth}
     \begin{itemize} \setlength\itemsep{1em}
-        \item Local \textbf{prosumers} market \begin{itemize}
+        \item Local \textbf{prosumers} market \begin{itemize}  \setlength\itemsep{0.5em}
                   \item Endowed electricity
                   \item Can trade with local \textbf{grid firm}
                   \item Heterogenous in need and price forecasting rule \nocite{Hommes2013}
                   \item Risk averse
                   \item Cash in hand constraint
               \end{itemize}
-        \item \textbf{Grid firms} \begin{itemize}
+        \item \textbf{Grid firms} \begin{itemize} \setlength\itemsep{0.5em}
                   \item Can trade within network
                   \item Profit maximizing
                   \item Rational
@@ -113,6 +113,14 @@
             \textit{s.t. } &m_{t+1} = m_{t} - \overbrace{p_{t}}^{\text{price on grid}} \cdot \underbrace{x_{t}}_{\text{electricity demand}}, \ \underbrace{m_t  \geq 0}_{\text{cash in hand}}
         \end{split}
     \end{equation*}
+
+    They can use one of two price forecasting rule,
+
+    \begin{equation*}
+        \E_t[p_{t+1}] = \psi_h \cdot p_t \ \ 0 < \psi_f < 1 \text{ and } \psi_c > 1
+    \end{equation*}
+
+
 \end{frame}
 
 \iffalse
