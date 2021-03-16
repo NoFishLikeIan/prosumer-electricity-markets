@@ -8,6 +8,8 @@
     \usepackage{amsmath, amssymb}
     \usepackage{graphicx}
     \usepackage{tikz} 
+    \usepackage{mathtools}
+    \usepackage{bm}
 
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
@@ -19,6 +21,11 @@
     % Math commands
     \newcommand{\E}{\mathbb{E}}
     \newcommand{\R}{\mathbb{R}}
+
+    \newcommand{\matr}[1]{\bm{#1}}
+
+    \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+    \DeclarePairedDelimiter\norm{\lVert}{\rVert}%
 
 
     \usepackage[
@@ -87,7 +94,7 @@ The dynamic optimization problem is then,
         V(e_t) &= \sup_{x_t \in \R} \left\{u(x_t + e_t) + \beta \cdot \E_t V( e_{t+1} ) \right\} \\
         \\
         \textit{s.t. } m_{t+1} &= m_{t} - p_{t} \cdot x_{t}\\
-        m_t  &\geq 0, \ m_0 = 0
+        m_t  &\geq 0, \ m_0
     \end{split}
 \end{equation*}
 
@@ -113,7 +120,7 @@ The endogenous grid method can then be used to find a policy function
     m^\prime(m_t, p_t \ \vert \ \psi_h, e_t).
 \end{equation}
 
-The solution of the local problem yields the following electricity demand in a state of high endowments and different conditions $m_t$ (Figure \ref{fig:demand})
+The solution of the local problem yields the electricity demand in a state of high endowments and different conditions $m_t$ in Figure \ref{fig:demand} and the simulation run in Figure \ref{fig:sim}.
 
 \begin{figure}[b]
     \centering
@@ -121,8 +128,6 @@ The solution of the local problem yields the following electricity demand in a s
     \label{fig:demand}
     \caption{Electricity demand curve for an agent}
 \end{figure}
-
-and the following simulation run (Figure \ref{fig:sim}).
 
 \begin{figure}
     \centering
@@ -201,8 +206,80 @@ which yields the system of equations, $\forall j \in N(i)$,
     P_j(Y_j) + P^\prime_j(Y_j) \cdot Y_j = p + \frac{X}{X^\prime}(p)
 \end{equation}
 
+\newpage
+\section{Bargaining model}
 
-\section{Bargaining solution}
+\subsection{Three firms}
+
+Assume there are three, fully connected firms,
+
+\begin{center}
+    \begin{tikzpicture}[-, thick]
+        % Grids
+        \node[main node] (1) {$X_1(p_1)$};
+        \node[main node] [below right = 2cm and 1cm of 1] (2) {$X_2(p_2)$};
+        \node[main node] [below left = 2cm and 1cm of 1] (3) {$X_3(p_3)$};
+        % Paths
+        \path[-, draw,thick]
+        (1) edge node [above right] {$P^{1, 2}$} (2)
+        (2) edge node [below] {$P^{2, 3}$} (3)
+        (1) edge node [above left] {$P^{1, 3}$} (3);
+    \end{tikzpicture}
+\end{center}
+
+Firm's profits are,
+
+\begin{equation}
+    \begin{split}
+        \Pi_1(P^{(1, 2)}, P^{(1, 3)}) &= X_1(p_1) \cdot p_1 - Y^{(1, 2)} \cdot P^{(1, 2)} - Y^{(1, 3)} \cdot P^{(1, 3)}\\
+        \Pi_2(P^{(1, 2)}, P^{(2, 3)}) &= X_2(p_2) \cdot p_2 + Y^{(1, 2)} \cdot P^{(1, 2)} - Y^{(2, 3)} \cdot P^{(2, 3)} \\
+        \Pi_3(P^{(1, 3)}, P^{(2, 3)}) &= X_3(p_3) \cdot p_3 + Y^{(1, 3)} \cdot P^{(1, 3)} + Y^{(2, 3)} \cdot P^{(2, 3)}
+    \end{split}
+\end{equation}
+
+Note that $Y^{(1, 2)} > 0$ means that firm $1$ is buying from firm $2$.
+
+The Nash bargaining solution is,
+
+\begin{equation*}
+    \begin{split}
+        P^{(1, 2)} &= \arg \max_P \Pi_1(P, P^{(1, 3)}) \cdot \Pi_2(P, P^{(2, 3)} ) \\
+        P^{(1, 3)} &= \arg \max_P \Pi_1(P^{(1, 2)}, P) \cdot \Pi_3(P, P^{(2, 3)} ) \\
+        P^{(2, 3)} &= \arg \max_P \Pi_2(P^{(1, 2)}, P) \cdot \Pi_3(P^{(1, 3)}, P)
+    \end{split}
+\end{equation*}
+
+The first order condition yields, $\Pi_1 = \Pi_2 = \Pi_3$
+
+\subsection{General case}
+
+Let $\matr{A} \in \R^{n\times n}$ be the adjacency matrix of the graph with associated lower triangular matrix $\matr{L_A}$. Let $\matr{G} = \matr{L_A} - \matr{L_A}^T$ with entries $g_{i, j} = -g_{j, i} \in \{-1, 0, 1\}$.
+
+Then the payoff of node $i \in N = \{1, \ldots, n\}$ is,
+
+\begin{equation}
+    \Pi_i = X_i(p_i)\cdot p_i - \sum_{j \in N} g_{i, j} \cdot Y^{(i, j)} \cdot P^{(i, j)}
+\end{equation}
+
+Then,
+
+\begin{equation}
+    P^{(i, j)} = \arg \max_{P^{(i, j)}} \left\{\Pi_i \cdot \Pi_j \right\}
+\end{equation}
+
+with first order condition,
+
+\begin{equation}
+    \begin{split}
+        \frac{\partial\Pi_i}{\partial P^{(i, j)}} \cdot \Pi_j &= - \frac{\partial\Pi_j}{\partial P^{(i, j)}} \cdot \Pi_i
+    \end{split}
+\end{equation}
+
+which yields, forall $(i, j) : \ g_{i, j} \neq 0$,
+
+\begin{equation}
+    2\cdot P^{(i, j)} = X_i(p_i)\cdot p_i - X_j(p_j)\cdot p_j - \sum_{m \in N\setminus j} g_{i, m} \cdot Y^{(i, m)} \cdot P^{(i, m)} + \sum_{l\in N\setminus i} g_{j, l} \cdot Y^{(j, l)} \cdot P^{(j, l)}
+\end{equation}
 
 \iffalse % Weighted case
 
