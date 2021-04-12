@@ -7,11 +7,15 @@ struct ElectricityMarket
     localmarkets::Vector{LocalMarket}
 end
 
+function Base.length(G::ElectricityMarket)
+    return length(G.localmarkets)
+end
+
+
+# Example
 A = [
-    0 1 1 0;
-    1 0 1 0;
-    1 1 0 1;
-    0 0 1 0
+    0 1;
+    1 0;
 ]
 
 N, N = size(A)
