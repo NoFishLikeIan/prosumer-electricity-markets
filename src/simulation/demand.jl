@@ -1,8 +1,7 @@
 """
-Construct a state function `f`, for each market, that takes a weather state `e` and returns,
+Constructs a demand function for each market based on a policy and wealth distribution
 
-    f(e) |-> f′(e)
-         |-> X(p)
+    (e | ...) -> X(p)
 """
 function initstatetransition(Grid::ElectricityMarket, ms::Matrix{Float64}, policy::Matrix{Int64}; kwargs...)
 
@@ -30,6 +29,8 @@ function initstatetransition(Grid::ElectricityMarket, ms::Matrix{Float64}, polic
 
         return Xs
     end 
+
+    return transition
 end
 
 function initstatetransition(Grid::ElectricityMarket; kwargs...)
