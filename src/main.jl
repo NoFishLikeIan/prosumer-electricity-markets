@@ -20,6 +20,7 @@ include("markets/global.jl")
 include("simulation/simutils.jl")
 include("simulation/decision.jl")
 include("simulation/simulation.jl")
+include("simulation/demand.jl")
 
 include("plotting/local.jl")
 include("plotting/global.jl")
