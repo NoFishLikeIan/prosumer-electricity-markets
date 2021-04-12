@@ -16,7 +16,8 @@ end
 
 function solvepolicy(
     gridsizes::Tuple{Int,Int},
-    prosumer::Prosumer, environment::Environment; kwargs...)
+    prosumer::Prosumer, environment::Environment; 
+    kwargs...)
     
     @unpack ψ₁, ψ₂ = prosumer
 
