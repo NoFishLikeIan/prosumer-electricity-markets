@@ -36,3 +36,23 @@ localmarkets = [(polsolve(p, e), p, e, s) for (p, e, s) in setups]
 
 Grid = ElectricityMarket(A, localmarkets)
 
+f = initstatetransition(Grid)
+
+X₁, X₂ = f([1.01, 0.99])
+
+if false
+    ps = range(0., 10., length=100)
+    plot()
+    for (n, X) in enumerate(f([1.01, 0.99]))
+        envelope = optimumlocal(X)
+        plot!(ps, envelope, label=n)
+    end
+
+    savefig("test.png")
+
+    plot(ps, X₂)
+
+    envelope = optimumlocal(X₂)
+
+    plot(ps, envelope)
+end
