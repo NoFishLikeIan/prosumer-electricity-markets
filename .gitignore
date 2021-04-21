@@ -458,3 +458,4 @@ dist/
 sectors-mackay.png
 
 plots/markets/
+theorypy/*
