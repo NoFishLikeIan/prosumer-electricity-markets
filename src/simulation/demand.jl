@@ -8,8 +8,7 @@ function initstatetransition(Grid::ElectricityMarket, ms::Matrix{Float64}, polic
     N, M = size(ms)
 
     function transition(e::Vector{Float64})
-        # FIXME: Is this inefficient?
-        Xs = Vector{Function}(undef, M) 
+        Xs = Vector{Function}(undef, M) # FIXME: Is this inefficient?
 
         for (j, market) in enumerate(Grid.localmarkets)
             policies, Pros, Env, S = market
