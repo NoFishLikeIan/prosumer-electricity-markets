@@ -434,7 +434,7 @@ Note that (\ref{neumann_matrix_solution}) defines the bargaining price as a func
 
 We can use this in equation (\ref{firm_optimization}),
 
-\begin{equation}
+\begin{equation} \label{foc_grid}
 	\begin{split}
 		P + \partial P \circ Y &= \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k (\Delta X \oslash Y) - \diag\left(\sum^\infty_{i=0} \frac{(-1)^k}{2^{k+1}} \matr{G}^k\right) (\Delta X \oslash Y^{\circ 2}) \circ Y \\
 		&= \underbrace{\left[ \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k - \diag \left( \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k \right) \right]}_{\matr{H(G)}} (\Delta X \oslash Y)
@@ -443,9 +443,13 @@ We can use this in equation (\ref{firm_optimization}),
 
 The matrix $\matr{H(G)}$ is an hollow matrix by construction (i.e. $\matr{H(G)}_{i, i} = 0 \ \forall i$).
 
+\subsection{Equilibrium}
+
 \subsection{To do}
 
 Find a way to link equation $P + \partial P \circ Y$ with the optimization problem of the grid firm. It seems like $(P + \partial P \circ Y)_j = p + \frac{X}{\partial X / \partial p}$ for all $j$ does not allow for much of a solution. Furthermore, there is a nice economic interpretation for the equation for $P$ that has to do with the cycles of the matrix $\matr{G}$ (indirect effects of having an outside edge) which I have seen in some paper that I cannot find at the moment.
+
+\newpage % FIXME: Remove new page
 
 \section{Examples}
 
@@ -506,7 +510,6 @@ and the associated line graph is,
 \vspace{0.5cm}
 
 
-
 The Nash bargaining solution is then,
 
 \begin{equation*}
@@ -522,71 +525,111 @@ The Nash bargaining solution is then,
 			2  & 1 \\
 			-1 & 2
 		\end{pmatrix}^{-1} (\Delta X \oslash Y)\\
-		&= \begin{pmatrix}
-			0.4 & -0.2 \\
-			0.2 & 0.4
+		&= \frac{1}{2 \cdot 2 - 1 \cdot (-1)} \begin{pmatrix}
+			2 & - 1 \\
+			1 & 2
+		\end{pmatrix} (\Delta X \oslash Y) \\
+		&= \frac{1}{5} \begin{pmatrix}
+			2 & - 1 \\
+			1 & 2
 		\end{pmatrix} (\Delta X \oslash Y)
 	\end{split}
 \end{equation*}
 
 In Appendix \ref{a:three_firms} I derive the matrix $(2 \matr{I} + \matr{G})^{-1}$ as a Neumann series.
 
-We can then write,
+Using then Equation (\ref{foc_grid}),
 
 \begin{equation}
 	\begin{split}
-		P + \partial P \circ Y &= \begin{pmatrix}
-			0.4 & -0.2 \\
-			0.2 & 0.4
-		\end{pmatrix} (\Delta X \oslash Y) - 0.4 (\Delta X \oslash Y^{\circ 2}) \circ Y \\
-		&=  \left[ \begin{pmatrix}
-				0.4 & -0.2 \\
-				0.2 & 0.4
-			\end{pmatrix}- 0.4 \cdot \matr{I} \right] (\Delta X \oslash Y) \\
-		&= - 0.2 \cdot  \matr{G} (\Delta X \oslash Y)
+		P + \partial P \circ Y &= \left[ (2 \matr{I} + \matr{G})^{-1} - \diag(2 \matr{I} + \matr{G})^{-1}  \right] (\Delta X \oslash Y) \\
+		&= \frac{1}{5} \left[ \begin{pmatrix}
+				2 & - 1 \\
+				1 & 2
+			\end{pmatrix} -  \begin{pmatrix}
+				2 & 0 \\
+				0 & 2
+			\end{pmatrix}\right] (\Delta X \oslash Y) \\
+		&= -\frac{1}{5} \matr{G} (\Delta X \oslash Y)
 	\end{split}
 \end{equation}
 
-In equilibrium, $Y = \begin{pmatrix}
-		X_1 \\ X_2
-	\end{pmatrix}$ hence,
+Leveraging the fact that 3 and 1 have only one neighbor to trade with, $N(3) = N(1) = \set{2}$, in equilibrium their demand needs to equal the trade with 2. Namely,
+
+\begin{equation}
+	X_3 = Y^{2, 3} \text{ and } X_1 = Y^{1, 2}
+\end{equation}
+
+hence,
 
 \begin{equation}
 	\begin{split}
-		P + \partial P \circ Y &= -0.2 \cdot
-		\begin{pmatrix}
-			0  & 1 \\
-			-1 & 0
-		\end{pmatrix}
-		\begin{pmatrix}
-			p_1 - p_2 \cdot X_2 / X_1 \\
-			p_2 - p_3 \cdot X_3 / X_2
-		\end{pmatrix} =
-		\underbrace{\begin{pmatrix}
-				p_1 + \frac{X_1}{\partial X_1 / \partial p_1} \\
-				p_2 + \frac{X_2}{\partial X_2 / \partial p_2}
-			\end{pmatrix}}_{\text{optimum}}
+		\Delta X \oslash Y &= \begin{pmatrix}
+			\frac{X_1 \cdot p_1 - X_2 \cdot p_2}{X_1} &
+			\frac{X_2 \cdot p_1 - X_3 \cdot p_2}{X_3}
+		\end{pmatrix}^{T} \\
+		&= \begin{pmatrix}
+			p_1 - \frac{X_2}{X_1} \cdot p_2 &
+			\frac{X_2}{X_3} \cdot p_2 - p_3
+		\end{pmatrix}^{T}
 	\end{split}
 \end{equation}
 
-Imposing $X_3 = - X_2$, we need to find $p_3 = X^{-1}_3(X_2)$,
+Using this we can rewrite
 
 \begin{equation}
-	-0.2 \cdot
-	\begin{pmatrix}
-		0  & 1 \\
-		-1 & 0
-	\end{pmatrix}
-	\begin{pmatrix}
-		p_1 - p_2 \cdot X_2 / X_1 \\
-		p_2 - X^{-1}_3(X_2)
-	\end{pmatrix} =
-	\begin{pmatrix}
-		p_1 + \frac{X_1}{\partial X_1 / \partial p_1} \\
-		p_2 + \frac{X_2}{\partial X_2 / \partial p_2}
+	P + \partial P \circ Y = - \frac{1}{5} \matr{G} \begin{pmatrix}
+		p_1 - \frac{X_2}{X_1} \cdot p_2 \\
+		\frac{X_2}{X_3} \cdot p_2 - p_3
+	\end{pmatrix} = \frac{1}{5} \begin{pmatrix}
+		p_3 - \frac{X_2}{X_3} \cdot p_2 \\
+		p_1 - \frac{X_2}{X_1} \cdot p_2
 	\end{pmatrix}
 \end{equation}
 
+The firms' three first order condition now be used to find $X_1, X_2, X_3$,
+
+\begin{alignat*}{3}
+	p_2 + \frac{X_2}{\partial X_2 / p_2} &  & = \frac{1}{5} \left( p_3 - \frac{X_2}{X_3} \cdot p_2  \right) &  & = p_1 + \frac{X_1}{\partial X_1 / p_1} \\
+	p_2 + \frac{X_2}{\partial X_2 / p_2} &  & = \frac{1}{5} \left( p_1 - \frac{X_2}{X_1} \cdot p_2  \right) &  & = p_3 + \frac{X_3}{\partial X_3 / p_3}
+\end{alignat*}
+
+In order to simplify, let,
+
+\begin{equation}
+	F_i := p_i +  \frac{X_i}{\partial X_i / p_i}
+\end{equation}
+
+The condition implies,
+
+\begin{equation}
+	F_1 = F_2 = F_3 = \frac{p_1}{5} + \left(- \frac{X_2 \cdot p_2}{5} \right) \cdot \frac{1}{X_1} = \frac{p_3}{5} + \left(- \frac{X_2 \cdot p_2}{5} \right) \cdot \frac{1}{X_3}
+\end{equation}
+
+We can use this equation to eliminate any dependence on $p_2$,
+
+\begin{equation}
+	\begin{split}
+		\frac{p_1}{5} + \left(- \frac{X_2 \cdot p_2}{5} \right) \cdot \frac{1}{X_1} &= F_3 \\
+		- \frac{X_2 \cdot p_2}{5} &= \left( F_3 - \frac{p_1}{5} \right) \cdot X_1
+	\end{split}
+\end{equation}
+
+which implies
+
+\begin{equation}
+	\begin{split}
+		\frac{p_3}{5} + \left(- \frac{X_2 \cdot p_2}{5} \right) \cdot \frac{1}{X_3} &= F_1 \\
+		\frac{p_3}{5} + \left( F_3 - \frac{p_1}{5} \right) \cdot \frac{X_1}{X_3} &= F_1 \\
+		\frac{1}{5} \cdot (p_3 - p_1) + \frac{X_1}{X_3} \cdot F_3 - F_1 &= 0
+	\end{split}
+\end{equation}
+
+In equilibrium, $F_3 = F_1$, hence, writing the explicit dependence on $p_i$,
+
+\begin{equation}
+	\frac{1}{5} \cdot (p_3 - p_1) + \left( \frac{X_1(p_1)}{X_3(p_3)} - 1 \right) \cdot F_1(p_1)= 0
+\end{equation}
 
 \newpage
 \subsection{Bottleneck}
