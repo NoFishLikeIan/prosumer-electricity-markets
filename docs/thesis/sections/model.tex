@@ -110,6 +110,22 @@ The endogenous grid method can then be used to numerically find a policy functio
 
 The solution of the local problem yields the electricity demand given an endowment and different levels of $m_t$. The demand is plotted in Figure \ref{fig:demand}. Furthermore, in Figure \ref{fig:sim} I plot a simulation run of electricity demanded by an agent $x_t$ given an exogenous price mechanism.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{../../plots/markets/pricedemand.png}
+    \caption{Electricity demand curve for an agent}
+    \label{fig:demand}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{../../plots/markets/simul.png}
+    \caption{Simulation of an agent with switching forecasting rule and $AR(1)$ price process}
+    \label{fig:sim}
+\end{figure}
+
+
+
 \subsubsection{Discrete aggregation}
 
 Each prosumer market is composed of a discrete number of agents indexed by $i \in \set{1, 2, \ldots n}$. Each period the demand of agent $i$ is,
@@ -358,7 +374,9 @@ Equation (\ref{solution}) can be then written as,
     \end{split}
 \end{equation}
 
-where $\circ$ and $\oslash$ denote the element-wise (Hadamard) product and division respectively. Using the Neumann expansion of $(2\matr{I} + \matr{G})^{-1}$ (see Appendix \ref{a:neumann}) we obtain,
+where $\circ$ and $\oslash$ denote the element-wise (Hadamard) product and division respectively. Using the Neumann expansion of $(2\matr{I} + \matr{G})^{-1}$ we obtain,
+
+% FIXME: see Appendix \ref{a:neumann}
 
 \begin{equation} \label{neumann_matrix_solution}
     P = \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k (\Delta X \oslash Y)

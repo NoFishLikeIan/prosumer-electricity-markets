@@ -126,7 +126,7 @@ $\frac{1}{5} \cdot (p_3 - p_1) + \left(\frac{X_1}{X_3} - 1 \right) \cdot F_1 = 0
 
 # ╔═╡ fd0a274d-edd6-4076-ad09-dfd85a936b8e
 begin
-	es = [0.99, 0.99, 1.01]
+	es = [0.99, 0.99, 1.02]
 	
 	Xs = initstatetransition(Grid)(es)
 
@@ -193,6 +193,9 @@ begin
 	sectionfig
 end
 
+# ╔═╡ ae4dac72-e1cb-4ea8-aca1-117767c27ddd
+plot(F₁)
+
 # ╔═╡ Cell order:
 # ╠═259aca87-3d8a-4b08-b134-81f5e56fd9a6
 # ╠═121d970c-88fa-4d78-81b5-c1eadb12865b
@@ -205,4 +208,5 @@ end
 # ╠═39a2e655-41b0-4943-93cd-1a337baa484c
 # ╠═eacca97f-eea2-4c75-825e-5b03c6c87e0e
 # ╠═59eb380c-e67d-470a-84b0-e7d503a3bef9
-# ╠═0b68ffb0-e00e-4202-9506-47c31acb7034
+# ╟─0b68ffb0-e00e-4202-9506-47c31acb7034
+# ╠═ae4dac72-e1cb-4ea8-aca1-117767c27ddd
