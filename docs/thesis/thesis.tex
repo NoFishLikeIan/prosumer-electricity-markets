@@ -13,6 +13,8 @@
     \usepackage{graphicx}
     \usepackage{tikz} 
 
+    \usepackage{blindtext} % FIXME: Remove for dummy text
+
     \usepackage{subfiles} % Load last
 
     % Formatting
@@ -52,23 +54,27 @@
         ../../../Desktop/bibliographies/thesis,
         ../maths}
     
-    \title{A Prosumer Electricity Market}
-
+        
+        
+        
     \author{Andrea Titton}
+    \title{A Prosumer Electricity Market}
     
 \begin{document}
 
 \maketitle
 
-\section{Introduction}
+\begin{abstract}
+    \blindtext
+\end{abstract}
+
+\newpage
 
 \subfile{sections/introduction.tex}
 
+\subfile{sections/model.tex}
+
 \iffalse
-    \section{Model}
-
-    \subfile{sections/model.tex}
-
     \section{Examples}
 
     \subfile{sections/examples.tex}
@@ -79,5 +85,12 @@
 \pagenumbering{gobble} % stop page numbering
 % \nocite{*}
 \printbibliography
+
+\iffalse
+    \newpage
+    \appendix
+
+    \subfile{sections/appendix.tex}
+\fi
 
 \end{document}

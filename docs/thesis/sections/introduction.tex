@@ -1,4 +1,5 @@
 \documentclass[../main.tex]{subfiles}
+\section{Introduction}
 
 \iffalse notes
 
@@ -12,15 +13,19 @@ In this paper I will layout a stylized model of a decentralized electricity mark
 
 In recent years the economy found itself in the midst of a strong push towards decarbonisation of the energy sector. One aspect of such process is the increased adoption by households of technology to produce electricity independently, like solar panels, batteries, and ``smart'' meters (\cite{Parag2016}). In coming years, this change in the households' role in the energy market, from consumers to prosumers, will present policy makers and economists with a vast spectrum of opportunities and challenges. In particular, the transition from centralized and oligopolistic fossil fuel producers to distributed renewable energy prosumers calls for a shift in economic modelling of energy markets, both in methodology and objectives.
 
-% Previous literature TODO: Expand the literature review
-\subsection{Literature review}
+\subsection{Literature review} % Previous literature TODO: Expand the literature review
 
 A substantial amount of work has been done already to study the technical and legislative aspects of the introduction renewable energy, in particular prosumers, in the current energy system. Consequently, a wealth of policy advice has been produced on aligning cross-border regulations and increasing connectivity of international electricity markets.
+% TODO: Add EU/US initiatives
+
 
 In this paper, I will refrain from modelling aspects of wholesale electricity markets that have been studied extensively. Such as short-term dynamics (\cite{Weidlich2008}), local grid technical aspects (\cite{Parag2016}), and TSOs regulatory framework options for renewable energy integration (\cite{Pollitt2008}). % TODO: One period per paper
 
-I will rather focus on giving a theoretical foundation to augment the vast econometric analysis that has been done on integration of international electricity markets in the wake of prosumer markets hegemony (\textbf{change work}) (\cite{Gebhardt2013, Newbery2016}). To do so, first I will improve on the commonly used constant electricity demand (\cite{Weidlich2008}) by introducing bounded rational prosumers, with adapting forecasting rules (\cite{Hommes2013}). Second, I will model cross-border trade as a result of a bargaining procedure on a network (\cite{Bedayo2016}).
+I will rather focus on giving a theoretical foundation to augment the vast econometric analysis that has been done on integration of international electricity markets in the wake of prosumer markets hegemony (\textbf{change work}) (\cite{Gebhardt2013, Newbery2016}).
+
+To do so, first I will improve on the commonly used constant electricity demand (\cite{Weidlich2008}) by introducing bounded rational prosumers, with adapting forecasting rules (\cite{Hommes2013}). Second, I will model cross-border trade as a result of a bargaining procedure on a network (\cite{Bedayo2016}).
 
 \subsection{Modelling choices}
 
-The purpose of this paper is to model the implications of introducing prosumers in the current energy production system. Without any policy intervention, the current system would be prone to price volatility, given by prosumers' consumption decisions and the intermittent electricity production of renewable sources. These aspects can generate local electricity imbalances for multiple reasons. From a technical stand point, electricity might not be able to move between backbone grids due to cables capacity or regulation asymmetries between transmission system operators (TSOs). From an economic stand point, there might be failure to trade electricity due to weak integration of international markets, market concentration among electricity providers, or asymmetries in the providers bargaining power given by different locations in the international electricity network. The model presented below deals with the latter concerns and assumes no technical friction in electricity trading but the physical presence of electricity cables between various energy markets. Another simplifying assumption is that of an energy provider monopoly per local market. This assumption can be easily relaxed, simplifies the bargaining procedure for markets that are nevertheless highly concentrated, and allows one to focus on the bottlenecks generated in the cross-border wholesale electricity market.
+The purpose of this paper is to model the implications of introducing prosumers in a cross-border market of electricity operated by monopolists providers. Without any policy intervention, the current system would be prone to price volatility, given by prosumers' consumption decisions and the intermittent electricity production of renewable sources (\textbf{citation needed}). These aspects can generate local electricity imbalances for multiple reasons. From a technical stand point, electricity might not be able to move between backbone grids due to cables capacity or regulation asymmetries between transmission system operators (TSOs). From an economic stand point, there might be failure to trade electricity due to weak integration of international markets, market concentration among electricity providers, or asymmetries in the providers bargaining power given by different locations in the international electricity network. The model presented below deals with the latter concerns and assumes no technical friction in electricity trading but the physical presence of electricity cables between various energy markets. Another simplifying assumption is that of an energy provider monopoly per local market. This assumption can be easily relaxed, simplifies the bargaining procedure for markets that are nevertheless highly concentrated, and allows one to focus on the bottlenecks generated in the cross-border wholesale electricity market.
+
