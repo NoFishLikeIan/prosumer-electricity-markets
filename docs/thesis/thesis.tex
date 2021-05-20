@@ -12,6 +12,9 @@
 
     \usepackage{graphicx}
     \usepackage{tikz} 
+    \usepackage{relsize}
+    \usepackage{makecell}
+
 
     \usepackage{blindtext} % FIXME: Remove for dummy text
 
@@ -23,14 +26,11 @@
     \setlength{\fboxsep}{1em}
 
     % Graphs
-    \usetikzlibrary{positioning, arrows.meta, calc, decorations.markings, math, matrix}
+    \usetikzlibrary{positioning, arrows.meta, calc, decorations.markings, math, matrix, calc}
 
-    \tikzset{
-        main 
-        node/.style={
-            circle, draw,minimum size=2cm,inner sep=3pt
-        },
-    }
+    \tikzset{fontscale/.style = {font=\relscale{#1}}}
+
+    \definecolor{prosumer}{cmyk}{0,0.816,0.408,0}
     
     % Math commands
     \newcommand{\E}{\mathbb{E}}
