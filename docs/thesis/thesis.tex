@@ -48,7 +48,9 @@
         style=apa
     ]{biblatex}
 
-    \bibliography{../../../Desktop/bibliographies/thesis, ../maths}
+    \bibliography{
+        ../../../Desktop/bibliographies/thesis,
+        ../maths}
     
     \title{A Prosumer Electricity Market}
 
@@ -62,17 +64,20 @@
 
 \subfile{sections/introduction.tex}
 
-\section{Model}
+\iffalse
+    \section{Model}
 
-\subfile{sections/model.tex}
+    \subfile{sections/model.tex}
 
-\section{Examples}
+    \section{Examples}
 
-\subfile{sections/examples.tex}
+    \subfile{sections/examples.tex}
+
+\fi
 
 \newpage
-\nocite{*}
 \pagenumbering{gobble} % stop page numbering
+% \nocite{*}
 \printbibliography
 
 \end{document}
