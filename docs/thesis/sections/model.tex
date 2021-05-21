@@ -1,9 +1,14 @@
 \documentclass[../main.tex]{subfiles}
 \section{Model}
 
+The model focuses on two aspects of the cross-border electricity market. First, it models explicitly the bilateral trading procedure among electricity providers in the wholesale electricity market, which is a common mechanism of price setting, particularly in cross-border daily contracts in the EU and USA (\cite{Imran2014}). Doing this requires simplifying greatly the electricity market structure, particularly the different time scales at which operators trade, the intra-border competition, and the complex financial instruments. Nevertheless, these aspects can be approximated in my model by tweaking the network structure and these simplifications allows to concentrate on the bargaining-power induced by the graph, and the instabilities these might induce.
 
-\begin{center}
-    \resizebox{0.7\textwidth}{!}{
-        \input{sections/diagrams/overview.tikz}
-    }
-\end{center}
+Providers set a \textit{local price} ($p_i$) at which they trade electricity with local market prosumers.
+
+\begin{figure}[!ht]
+    \centering
+    \input{sections/diagrams/overview.tikz}
+    \caption{A stylized model structure}
+    \label{tikz:model}
+\end{figure}
+

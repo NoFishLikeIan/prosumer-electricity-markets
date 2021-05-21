@@ -7,24 +7,23 @@ minimum size=5pt]
 
 \tikzstyle{provider} = [
 draw,circle,
-minimum size=10pt
-]
+minimum size=10pt]
 
 
 \begin{tikzpicture}[{Latex[scale=0.5]}-{Latex[scale=0.5]}, thick]
 
     % Placing providers
     \foreach \x/\y [count=\j] in {1/1, -1/1, 1/-1, -1/-1}
-        {\node [provider]  (\j) at (2*\x, 2*\y) [fontscale=0.8] {\makecell[l]{Prov. \j \\ $X(p_{{\j}})$}};
+        {\node [provider]  (\j) at (2*\x, 2*\y) [fontscale=0.8] {\makecell[l]{Prov. \j \\ $X(p_{\j})$}};
             \foreach \z/\w [count=\i] in {0/2, 1/2.1, 1.75/1.75, 2.1/1, 2/0}
                 {\node [prosumers] (\x\y\i) at (\x + 1.3*\x*\z, \y + 1.5*\y*\w) [fontscale=0.3] {$x_{\i}$};
                     \path (\j) edge [] node [fontscale = 0.1] {} (\x\y\i);}
         }
 
     \path
-    (1) edge [-{Latex}] node [above, fontscale=0.6] {$Y^{(1, 2)}$} (2)
-    (1) edge [-{Latex}] node [right, fontscale = 0.6] {$Y^{(1, 3)}$} (3)
-    (1) edge [-{Latex}] node [above left, fontscale = 0.6] {$Y^{(1, 4)}$} (4)
-    (3) edge [-{Latex}] node [above, fontscale = 0.6] {$Y^{(3, 4)}$} (4);
+    (1) edge [-{Latex}] node [above, fontscale=0.8] {$Y^{(1, 2)}$} (2)
+    (1) edge [-{Latex}] node [right, fontscale = 0.8] {$Y^{(1, 3)}$} (3)
+    (1) edge [-{Latex}] node [above left, fontscale = 0.8] {$Y^{(1, 4)}$} (4)
+    (3) edge [-{Latex}] node [above, fontscale = 0.8] {$Y^{(3, 4)}$} (4);
 
 \end{tikzpicture}
