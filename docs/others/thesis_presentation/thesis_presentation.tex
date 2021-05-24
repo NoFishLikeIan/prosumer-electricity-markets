@@ -175,19 +175,50 @@
 \end{frame}
 
 
-\begin{frame}{Providers: solution}
+\begin{frame}{Providers: local solution}
 
-    Locally,
+    For every $j$ neighboring with $i$,
 
     \begin{equation*}
-        P^{(i, j)}+ \frac{\partial P^{(i, j)}}{\partial Y^{(i, j)}} \cdot Y^{(i, j)} = p + \frac{X}{\partial X / \partial p}
+        \underbrace{P^{(i, j)}+ \frac{\partial P^{(i, j)}}{\partial Y^{(i, j)}} \cdot Y^{(i, j)}}_{\text{marginal benefit over bargaining}} = \underbrace{p + \frac{X}{\partial X / \partial p} }_{\text{marginal benefit in local market}}
     \end{equation*}
 
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Bibliography}
-    \nocite{*}
-    % \printbibliography
+\begin{frame}[allowframebreaks]{Providers: bargaining solution}
+
+
+
+    \begin{equation*}
+        \begin{split}
+            P^{(i, j)} = \frac{1}{2\cdot Y^{(i, j)}} \Biggl( &\underbrace{X_i(p_i)\cdot p_i - X_j(p_j)\cdot p_j}_{\text{revenue difference }}
+            \\  + &\underbrace{\sum_{m\in N\setminus \set{i}} a_{j, m} \cdot Y^{(j, m)} \cdot P^{(j, m)}}_{\text{outside option of } j}
+            \\ - & \underbrace{\sum_{m \in N\setminus \set{j}} a_{i, m} \cdot Y^{(i, m)} \cdot P^{(i, m)}}_{\text{outside option of } i} \Biggr).
+        \end{split}
+    \end{equation*}
+
+    \newpage
+
+    \begin{itemize}\setlength\itemsep{1.5em}
+        \item No neighbors $\implies$ $P \cdot Y = \frac{\Delta X}{2}$, dividing revenues based on contribution
+        \item If firm is buying ($\Delta X > 0$) $\implies$  the neighbor outside option increases the price
+        \item Symmetry ($\Delta X = 0$) $\implies$ no trade
+    \end{itemize}
+
+    If $\matr{G}$ is the adjacency matrix of line-graph, then the solution can be written as,
+
+    \begin{equation*}
+        P = (2\matr{I} + \matr{G})^{-1} (\Delta X \oslash Y)
+    \end{equation*}
+
 \end{frame}
+
+
+\iffalse
+    \begin{frame}[allowframebreaks]{Bibliography}
+        \nocite{*}
+        \printbibliography
+    \end{frame}
+\fi
 
 \end{document}
