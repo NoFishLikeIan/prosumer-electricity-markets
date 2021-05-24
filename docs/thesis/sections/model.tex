@@ -3,8 +3,6 @@
 
 The model focuses on two aspects of the cross-border electricity market. First, it models explicitly the bilateral trading procedure among electricity providers in the wholesale electricity market, which is a common mechanism of price setting, particularly in cross-border daily contracts in the EU and USA (\cite{Imran2014}). Doing this requires simplifying greatly the electricity market structure, particularly the different time scales at which operators trade, the intra-border competition, and the complex financial instruments. Nevertheless, these aspects can be approximated in my model by tweaking the network structure and these simplifications allows to concentrate on the bargaining-power induced by the graph, and the instabilities these might induce.
 
-Providers set a \textit{local price} ($p_i$) at which they trade electricity with local market prosumers.
-
 \begin{figure}[!ht]
     \centering
     \input{sections/diagrams/overview.tikz}
@@ -12,3 +10,58 @@ Providers set a \textit{local price} ($p_i$) at which they trade electricity wit
     \label{tikz:model}
 \end{figure}
 
+\subsection{Prosumer}
+
+\subsubsection{Problem}
+
+One instance of the model is drawn in the diagram in Figure \ref{tikz:model}. At each time step, each provider sets a \textit{local price} ($p$) at which they trade electricity with local market prosumers. Each prosumer $i$, given the endowment ($e_t$) in the local market, its cash-in-hand ($m_{i, t}$), and the current forecasting rule ($\psi_{i, t}$), consumes some electricity. The electricity consumption is given by the endowments and the demand bought from the provider, $e_t + x_{i, t}(p)$, and gains utility $u(e + x)$. If $x_{i, t}(p) < 0$, then the consumer is supplying electricity to the provider from its endowment. The endowment $e_t$ is modeled as a Markov process with a high state and a low state and transition matrix,
+
+\begin{equation*}
+    \matr{\pi}_e = \rho \cdot \matr{I}_2 + (1 - \rho)\cdot  \matr{J}_2
+\end{equation*}
+
+Suppressing $i$ for convenience, we can write the dynamic optimization problem of the prosumer as,
+
+\begin{equation} \label{eq:pros_problem}
+    \begin{split}
+        V(e_t) &= \sup_{x_t \in \R} \left\{u(x_t + e_t) + \beta \cdot \E_t V( e_{t+1} ) \right\} \\
+        \textit{s.t. } m_{t+1} &= m_{t} - p_{t} \cdot x_{t}\\
+        m_t  &\geq 0 \textit{ given } m_0
+    \end{split}
+\end{equation}
+
+
+Prosumers need to forecast two variables in order to make a consumption decision: the endowment $e_{t+1}$ and the price in the local market $p_{t+1}$. Prosumers are assumed to forecast the former perfectly by knowing $\matr{\pi}_e$. The latter is forecasted using a linear forecasting rule $\E_t[p_{t+1}] = \psi_t\cdot p_t + c$, where $c$ is a constant. The linear rule is selected from two possible options, $\psi_t \in \Psi = \set{0.99, 1.01}$ (\cite{Hommes2013}), based on which strategy yielded the best results in the past. Namely,
+
+\begin{equation} % FIXME: Find this eq on Hommes
+    P\left(\psi_t \neq \psi_{t-1}\right) = exp(\eta \cdot U).
+\end{equation}
+
+\subsubsection{Solution}
+
+At time $t$, given the decision rule $\psi_t$, the optimization problem \ref{eq:pros_problem}, requires that,
+
+\begin{equation} \label{eq:pros_euler}
+    u^\prime\left( e_t + \frac{m_t - m_{t+1}}{p_t} \right) = \beta \cdot \E_t \left[ u^\prime\left(e_{t+1} + \frac{m_{t+1} - m_{t+2}}{ \psi_h \cdot p_t + c} \right)  \right].
+\end{equation}
+
+
+The endogenous grid method can then be used to numerically find a policy function
+
+\begin{equation}
+    m^\prime(m_t \ \vert \ \psi_t, p_t, e_t).
+\end{equation}
+
+such that each period demand for each prosumer is,
+
+\begin{equation}
+    x_{i, t}(p_t \ \vert \ \psi_{i, t}, m_{i, t}, e_t) = \frac{m_{i, t} - m^\prime(m_{i, t} \ \vert \ \psi_{i, t}, e_t, p_t)}{p_t}
+\end{equation}
+
+The solution of the local problem yields the electricity demand in a local market,
+
+\begin{equation}
+    X_t (p \ \vert \ \psi_t, m_t, e_t) = \sum^n_{i = 1} x_{i, t}(p_t \ \vert \ \psi_{i, t}, m_{i, t}, e_t)
+\end{equation}
+
+\subsection{Provider}

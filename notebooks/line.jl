@@ -194,7 +194,10 @@ begin
 end
 
 # ╔═╡ ae4dac72-e1cb-4ea8-aca1-117767c27ddd
-plot(F₁)
+begin
+	pricespace = -0.5:0.01:0.5
+	plot(pricespace, F₁, label="MB(p) = p + X / X′", xlabel = "p", legend=:topleft)
+end
 
 # ╔═╡ Cell order:
 # ╠═259aca87-3d8a-4b08-b134-81f5e56fd9a6
