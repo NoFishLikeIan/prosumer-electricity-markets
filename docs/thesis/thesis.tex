@@ -54,6 +54,8 @@
         ../../../Desktop/bibliographies/thesis,
         ../maths}
         
+    \newcommand{\citein}[1]{\citeauthor{#1} (\citeyear{#1})}
+
     \author{Andrea Titton}
     \title{A Prosumer Electricity Market}
     
@@ -69,10 +71,9 @@
 
 \subfile{sections/introduction.tex}
 
-\subfile{sections/model.tex}
 
 \iffalse
-    \section{Examples}
+    \subfile{sections/model.tex}
 
     \subfile{sections/examples.tex}
 

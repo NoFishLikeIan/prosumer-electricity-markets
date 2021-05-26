@@ -121,75 +121,69 @@
 	}
 \end{minipage}
 
+\newpage
+
 \section{Prosumers}
 
-\subsection{Log utility}
-
-The prosumer instantaneous utility of electricity consumption is,
+Prosumers are endowed an electricity quantity. The endowment follows a Markov process with some persistence $\rho$, $e_t \sim \matr{\pi}_{e}$, and a low and high state $\overline{e}$ and $\underline{e}$. Prosumers have a constant electricity consumption, the rest is sold. This can be encoded by making,
 
 \begin{equation*}
-	u_i(x) = d \cdot \ln(x),
+	\overline{e} > 0 \text{ and } \underline{e} < 0
 \end{equation*}
 
-where $d$ is a scale parameter.
+\section{Producers}
 
-Each period, agents are endowed electricity, $e_{i, t}$, which follows a random exogenous process and have a given stock of cash-in-hand $m_{i, t}$. Furthermore agents can buy or sell electricity $x_{i, t}$ at price $p_t$. $x_{i, t} > 0$ implies that agents are buying electricity and $x_{i, t} < 0$ that they are selling it.
+$c$ cost of ramping up production next period, $r$
 
-Suppressing $i$ for convenience, the dynamic optimization problem is then,
-
-\begin{equation*}
+\begin{equation}
 	\begin{split}
-		V(e_t) &= \sup_{x_t \in \R} \left\{u(x_t + e_t) + \beta \cdot \E_t V( e_{t+1} ) \right\} \\
-		\\
-		\textit{s.t. } m_{t+1} &= m_{t} - p_{t} \cdot x_{t}\\
-		m_t  &\geq 0
-		\\
-		\textit{given } m_0&
+		V(x_t) &= \max_{r_t \in [0, \bar{r}]} \left\{ x_t \cdot (p_t - c \cdot r_t) + \beta \cdot \E_t V(x_{t+1}) \right\} \\
+		\text{ s.t. } x_{t+1} &= \gamma \cdot x_t + r_t \\ x_t &\geq 0 \text{ and } x_0 = 0
 	\end{split}
-\end{equation*}
-
-Agents are assumed to make forecasts over the price $p_{t+1}$, using a linear forecasting rule $\E_t[p_{t+1}] = \psi_h\cdot p_t + c$, where $c$ is a constant and $\psi_h \in \Psi$ is selected in a manner similar to \citeauthor{Hommes2013} (\citeyear{Hommes2013}).
-
-Using the evolution of $m_t$ we can express the individual electricity demanded as,
-
-\begin{equation}
-	x_t = \frac{m_t - m_{t+1}}{p_t},
 \end{equation}
 
-such that the agents' control variable is the next level of cash-in-hand $m_{t+1}$. This yields the Euler equation,
+Bounded rationality,
 
 \begin{equation}
-	u^\prime\left( e_t + \frac{m_t - m_{t+1}}{p_t} \right) = \beta \cdot \E_t \left[ u^\prime\left(e_{t+1} + \frac{m_{t+1} - m_{t+2}}{ \psi_h \cdot p_t + c} \right)  \right].
-\end{equation}
-
-The endogenous grid method can then be used to numerically find a policy function
-
-\begin{equation}
-	m^\prime(m_t \ \vert \ \psi_h, p_t, e_t).
-\end{equation}
-
-The solution of the local problem yields the electricity demand given an endowment and different levels of $m_t$. The demand is plotted in Figure \ref{fig:demand}. Furthermore, in Figure \ref{fig:sim} I plot a simulation run of electricity demanded by an agent $x_t$ given an exogenous price mechanism.
-
-\subsection{Discrete aggregation}
-
-Each prosumer market is composed of a discrete number of agents indexed by $i \in \set{1, 2, \ldots n}$. Each period the demand of agent $i$ is,
-
-\begin{equation}
-	x_{i, t}(p_t \ \vert \ e_t) = \frac{m_{i, t} - m^\prime(m_{i, t} \ \vert \ \psi_h, p_t, e_t).}{p_t}
-\end{equation}
-
-which yields aggregate demand,
-
-\begin{equation}
-	X_t(p_t) = \sum^n_{i = 1} x_{i, t}(p_t \ \vert \ e_t)
+	\E_{\psi_t}[p_{t+1}] = \psi_t \cdot p_t + k, \ \psi_t \in \Psi, k \in \R^+
 \end{equation}
 
 
-\subsection{To do}
+Given that $\E\left[p_{t+1}\right]$ is linear, we can solve as a deterministic dynamic optimization problem. Then,
 
-I would like the preferences to be Epstein-Zin, but could not find a solution to the problem at hand.
+\begin{equation}
+	\begin{split}
+		V(x) &= \max_{r \in [0, \bar{r}]} J(r, x) \\
+		&= \max_{r \in [0, \bar{r}]} \left\{ x \cdot (p - c \cdot r) + \beta \cdot V(\gamma \cdot x + r) \right\}
+	\end{split}
+\end{equation}
 
-\section{Grid firms}
+FOCs
+
+\begin{equation}
+	\frac{\partial J(r, x)}{\partial r} = 0 \implies \beta \cdot V^\prime (\gamma \cdot x + r) = c \cdot x
+\end{equation}
+
+Given $r(x, p) = \arg\max_{r \in [0, \bar{r}]} J(r, x)$ and assuming an interior solution, by the envelope theorem, \textbf{is J cont. differentiable?}
+
+\begin{equation}
+	\begin{split}
+		V^\prime (x) &= p + \beta \cdot V^\prime(\gamma \cdot x + r(x, p)) \cdot \gamma \\
+		&= p + c \cdot x\cdot \gamma
+	\end{split}
+\end{equation}
+
+By iterating forward,
+
+\begin{equation}
+	\begin{split}
+		V^\prime (\gamma \cdot x + r) &= \E[p] + c \cdot \gamma^2 \cdot x + r(x, p) \\
+		\frac{c}{\beta} \cdot x &=  \E[p] + c \cdot \gamma^2 \cdot x + r(x, p) \\
+		r(x, p) &= c \cdot \left(\frac{1}{\beta} - \gamma^2 \right) \cdot x - \E[p]
+	\end{split}
+\end{equation}
+
+\section{Providers}
 
 \subsection{Notation}
 
