@@ -12,7 +12,8 @@ Random.seed!(11148705)
 
 include("utils.jl")
 
-include("markets/local.jl")
+include("markets/prosumer.jl")
+include("markets/producer.jl")
 
 include("markets/global.jl")
 include("markets/gridfirm.jl")

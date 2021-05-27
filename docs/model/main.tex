@@ -127,17 +127,17 @@
 
 Prosumers are endowed an electricity quantity. The endowment follows a Markov process with some persistence $\rho$, $e_t \sim \matr{\pi}_{e}$, and a low and high state $\overline{e}$ and $\underline{e}$. Prosumers have a constant electricity consumption, the rest is sold. This can be encoded by making,
 
-\begin{equation*}
+\begin{equation}
 	\overline{e} > 0 \text{ and } \underline{e} < 0
-\end{equation*}
+\end{equation}
 
 \section{Producers}
 
-$c$ cost of ramping up production next period, $r$
+$c(x)$ (high $x$, higher cost) cost of ramping up production next period, $r$
 
 \begin{equation}
 	\begin{split}
-		V(x_t) &= \max_{r_t \in [0, \bar{r}]} \left\{ x_t \cdot (p_t - c \cdot r_t) + \beta \cdot \E_t V(x_{t+1}) \right\} \\
+		V(x_t) &= \max_{r_t \in [0, \bar{r}]} \left\{ x_t \cdot p_t - c(x_t) \cdot r_t + \beta \cdot \E_t V(x_{t+1}) \right\} \\
 		\text{ s.t. } x_{t+1} &= \gamma \cdot x_t + r_t \\ x_t &\geq 0 \text{ and } x_0 = 0
 	\end{split}
 \end{equation}
@@ -154,22 +154,22 @@ Given that $\E\left[p_{t+1}\right]$ is linear, we can solve as a deterministic d
 \begin{equation}
 	\begin{split}
 		V(x) &= \max_{r \in [0, \bar{r}]} J(r, x) \\
-		&= \max_{r \in [0, \bar{r}]} \left\{ x \cdot (p - c \cdot r) + \beta \cdot V(\gamma \cdot x + r) \right\}
+		&= \max_{r \in [0, \bar{r}]} \left\{ x \cdot p - c(x) \cdot r + \beta \cdot V(\gamma \cdot x + r) \right\}
 	\end{split}
 \end{equation}
 
 FOCs
 
 \begin{equation}
-	\frac{\partial J(r, x)}{\partial r} = 0 \implies \beta \cdot V^\prime (\gamma \cdot x + r) = c \cdot x
+	\frac{\partial J(r, x)}{\partial r} = 0 \implies \beta \cdot V^\prime (\gamma \cdot x + r) = c(x)
 \end{equation}
 
-Given $r(x, p) = \arg\max_{r \in [0, \bar{r}]} J(r, x)$ and assuming an interior solution, by the envelope theorem, \textbf{is J cont. differentiable?}
+Given $r = \arg\max_{r \in [0, \bar{r}]} J(r, x)$ and assuming an interior solution, by the envelope theorem, \textbf{is J cont. differentiable?}
 
 \begin{equation}
 	\begin{split}
-		V^\prime (x) &= p + \beta \cdot V^\prime(\gamma \cdot x + r(x, p)) \cdot \gamma \\
-		&= p + c \cdot x\cdot \gamma
+		V^\prime (x) &= p - c^\prime(x) \cdot r + \beta \cdot V^\prime(\gamma \cdot x + r) \cdot \gamma \\
+		&= p - c^\prime(x) \cdot r + c(x) \cdot \gamma
 	\end{split}
 \end{equation}
 
@@ -177,10 +177,50 @@ By iterating forward,
 
 \begin{equation}
 	\begin{split}
-		V^\prime (\gamma \cdot x + r) &= \E[p] + c \cdot \gamma^2 \cdot x + r(x, p) \\
-		\frac{c}{\beta} \cdot x &=  \E[p] + c \cdot \gamma^2 \cdot x + r(x, p) \\
-		r(x, p) &= c \cdot \left(\frac{1}{\beta} - \gamma^2 \right) \cdot x - \E[p]
+		V^\prime (\gamma \cdot x + r) &= \E[p] - c^\prime(\gamma \cdot x + r) \cdot r + c(\gamma \cdot x + r) \cdot \gamma \\
+		\frac{c(x)}{\beta} &= \E[p] - c^\prime(\gamma \cdot x + r) \cdot r + c(\gamma \cdot x + r) \cdot \gamma
 	\end{split}
+\end{equation}
+
+\subsection{Linear costs}
+
+If $c(x) = c \cdot x$, hence $c^\prime(x) = c$,
+
+\begin{equation}
+	\begin{split}
+		\frac{c \cdot x}{\beta} &= \E[p] - c \cdot r + c \cdot \gamma^2 \cdot x + c \cdot r \cdot \gamma \\
+		\frac{x}{\beta} &= \frac{\E[p]}{c} - r + \gamma^2 \cdot x + r \cdot \gamma \\
+		(1 - \gamma) \cdot r &= \frac{\E[p]}{c} - \frac{x}{\beta} + \gamma^2 \cdot x
+	\end{split}
+\end{equation}
+
+This yields the ramp up function,
+
+\begin{equation}
+	r(x, p; \psi) = \frac{1}{1-\gamma} \left[ \frac{\E_\psi[p]}{c} - \left( \frac{1}{\beta} - \gamma^2 \right) \cdot x \right]
+\end{equation}
+
+\subsection{Supply}
+
+A producer of type $\psi$ supplies at time $t$,
+
+\begin{equation}
+	x_t = \gamma \cdot x_{t-1} + r(x_{t-1}, p_{t-1}; \psi_t)
+\end{equation}
+
+Aggregating over $N$ producers yields,
+
+\begin{equation}
+	\begin{split}
+		S(p_{t-1}) &= \sum^N_{i = 1} \gamma \cdot x_{i, t-1} + r(x_{i, t-1}, p_{t-1}; \psi_{i, t}) \\
+		S(p_{t-1}) &= \gamma \cdot S(p_{t-2}) + \sum^N_{i = 1}  r(x_{i, t-1}, p_{t-1}; \psi_{i, t})
+	\end{split}
+\end{equation}
+
+This supply has to compensate the demand coming from prosumers. $M$ prosumers demand,
+
+\begin{equation}
+	X(p_{t-1}) = M \cdot e_t - S(p_{t-1})
 \end{equation}
 
 \section{Providers}
