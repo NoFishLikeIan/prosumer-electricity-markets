@@ -228,7 +228,7 @@ This supply has to compensate the demand coming from prosumers. $M$ prosumers de
 
 \subsection{Notation}
 
-Grid firms do not face any intertemporal optimization. Each period they set the price on the local market $p$ and induce a demand (supply) $X(p)$. They then match $X(p)$ by trading with other grid firms quantities $Y$ at a bargained price $P$. Hence, hereafter I will suppress the time index $t$.
+Grid firms are assumed to not engage in intertemporal optimization. Each period they set the price on the local market $p$ and the next period induce a demand (supply) $X(p)$. They then match $X(p)$ by trading with other grid firms quantities $Y$ at a bargained price $P$. Hence, hereafter I will suppress the time index $t$.
 
 Grid firms operate on a graph $\mathcal{A} = (V, E)$. Firms are nodes, $i \in V$, and they can trade if they share an edge, $(i, j) \in E$. I will indicate the neighbors of a node as,
 
@@ -241,55 +241,55 @@ Grid firms operate on a graph $\mathcal{A} = (V, E)$. Firms are nodes, $i \in V$
 Each period, the optimization problem of the firm is,
 
 \begin{equation}
-	\max_{p_{t+1}, p_t, Y_{t+1}} \Pi_i(p_{t+1}, p_t, Y_{t+1})
+	\max_{p, Y} \Pi_i(p, Y)
 \end{equation}
 
 where,
 
 \begin{equation}
 	\begin{split}
-		\Pi_i(\matr{p}_{0:t+1}, Y_{t+1}) = p_{t+1} \cdot X_{i, t+1}(p_t) - \sum_{j \in N_{\mathcal{A}}(i)} Y_{t+1}^{(i, j)} \cdot P^{(i, j)}
+		\Pi_i(p, Y) = p \cdot X_i(p) - \sum_{j \in N_{\mathcal{A}}(i)} Y^{(i, j)} \cdot P^{(i, j)}
 	\end{split}
 \end{equation}
 
 subject to,
 
 \begin{equation}
-	X_{i, t+1}(p_t) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_{t+1}^{(i, j)}
+	X_i(p_t) =  \sum_{j \in N_{\mathcal{A}}(i)} Y^{(i, j)}
 \end{equation}
 
 For now assume $P^{(i, j)}$ is determined by (i.e. is a function of) the vector of traded quantities $Y$, with elements $Y^{(i, j)}$ for every $(i, j) \in E$. Suppressing $i$ for convenience (i.e. $Y^{(i, j)} \mapsto Y_j$),
 
+\begin{equation}
+	\mathcal{L}\left(p, Y_j\right) = X(p) \cdot p - \sum_{j \in N_{\mathcal{A}}(i)} Y_j \cdot P_j (Y) + \lambda\cdot \left(X(p) - \sum_{j \in N_{\mathcal{A}}(i)} Y_j\right)
+\end{equation}
 
-\iffalse % FIXME: Lagrangian doesn't work for X(p)
-	the intertemporal Lagrangian is,
+with first order condition,
 
+\begin{equation}
+	\begin{split}
+		\frac{\partial \mathcal{L}}{\partial p}  &= \frac{\partial X}{\partial p}(p) \cdot p + X(p) + \lambda \cdot \frac{\partial X}{\partial p}(p) = 0 \\
+		\frac{\partial \mathcal{L}}{\partial Y^j}  &= P_j + \frac{\partial P_j}{\partial Y_j} \cdot Y_j + \lambda =0, \ \forall j \in N_{\mathcal{A}}(i)
+	\end{split}
+\end{equation}
 
-	\begin{equation}
-		\L = \sum^\infty_{t = 0} \beta^{t+1} \cdot \E_t \left[ \Pi_i(p_{t+1}, p_t, Y_{t+1}) + \lambda_t \cdot \left(X(p_t) - \sum_{j \in N_{\mathcal{A}}} Y_{t+1}^j \right) \right]
-	\end{equation}
+Isolating the multiplier $\lambda$ from the first equation yields,
 
-	The first order conditions are.
+\begin{equation}
+	- \lambda = p + \frac{X}{\partial X / \partial p}
+\end{equation}
 
-	\subsubsection{Current price $p_t$}
+which, substituting in the second one, yields the system of equations, $\forall j \in N_{\mathcal{A}}(i)$,
 
-	\begin{equation}
-		\frac{\partial}{\partial p_t} \L = \underbrace{\beta^t \cdot X_{t}(p_{t-1})}_{\text{when } p_t \text{ is next period}} + \underbrace{\beta^{t+1} \left(p_{t+1} + \lambda_t \right) \cdot X^\prime_{t+1}(p_t)}_{\text{when } p_t \text{ is current period}}
-	\end{equation}
+\begin{equation} \label{firm_optimization}
+	P_j(Y_j) + \frac{\partial P_j}{\partial Y_j} \cdot Y_j = p + \frac{X}{\partial X / \partial p}
+\end{equation}
 
-	Using,
+Note that we assume that there is no intertemporal optimization (such that $p_{t-1} \perp X_{t+1}$ in the eyes of the provider). Hence,
 
-	\begin{equation}
-		X^\prime_{t+1}(p_t) = - \sum
-	\end{equation}
-
-	\subsubsection{Next price $p_{t+1}$}
-
-	\begin{equation}
-		\frac{\partial}{\partial p_{t+1}} \L = \beta^{t+1}
-	\end{equation}
-
-\fi
+\begin{equation}
+	\frac{\partial X_{t+1}}{\partial p_t} = - \sum^N_{i = 1} \frac{\partial r(x_{i, t}, p_t; \psi_{i, t} )}{\partial p_t}
+\end{equation}
 
 \subsection{Bargaining model}
 
