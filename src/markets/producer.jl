@@ -4,7 +4,7 @@
     β::Float64 = 0.9   # Discount rate
     k::Float64 = 0.2      # Costant in forecasting rules
 
-    ψ::Float64          # Forecast rule
+    ψ::Float64          # Forecast rule / mutable
 end
 
 """
@@ -19,7 +19,7 @@ end
 """
 Producer ramp-up function
 """
-function r(x::Float64, p::Float64, producer::Producer)
+function r(s::Float64, p::Float64, producer::Producer)
     p′ = E(p, producer)
 
     @unpack c, β, γ = producer
@@ -27,13 +27,6 @@ function r(x::Float64, p::Float64, producer::Producer)
     βprod = 1 / β - γ^2 
     scale = inv(1 - γ)
 
-    return scale * (p′ / c - βprod * x)
+    return scale * (p′ / c - βprod * s)
 
 end
-
-producer = Producer(ψ=1.01)
-
-xs = 0.01:0.05:10
-coreprice = producer.k
-
-plot(xs, x -> r(x, coreprice, producer))
