@@ -121,98 +121,103 @@
 
 \begin{frame}{Model as a generalization}
     \begin{itemize}\setlength{\itemsep}{1em}
-        \item Complete graph $\equiv$ Monopolistic competition
-        \item Constant endowments and no bounded rationality $\equiv$ Traditional energy production
-        \item Zero endowments and no cash-in hand $\equiv$ Constant demand
+        \item Complete graph $\iff$ Monopolistic competition
+        \item Constant endowments and no bounded rationality $\iff$ Traditional energy production
+        \item Zero endowments and no cash-in hand $\iff$ Constant demand
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Prosumers: setup}
-    Optimization problem,
-    \begin{equation*}
-        \begin{split}
-            V(e_t) &= \sup_{x_t \in \R} \left\{u(x_t + e_t) + \beta \cdot \E_t V( e_{t+1} ) \right\} \\
-            \\
-            \text{s.t. } m_{t+1} &= m_{t} - p_{t} \cdot x_{t}\\
-            m_t  &\geq 0 \text{ given } m_0
-        \end{split}
-    \end{equation*}
-
-    gives Euler equation,
-
-    \begin{equation*}
-        u^\prime\left( e_t + \frac{m_t - m_{t+1}}{p_t} \right) = \beta \cdot \E_t \left[ u^\prime\left(e_{t+1} + \frac{m_{t+1} - m_{t+2}}{ p_{t+1} + c} \right)  \right]
-    \end{equation*}
+\begin{frame}
+    \huge{Thank you for your attention!}
 \end{frame}
 
-\begin{frame}{Prosumers: Expectations and solutions}
-    Prosumers form expectations over,
+\iffalse
+    \begin{frame}{Prosumers: setup}
+        Optimization problem,
+        \begin{equation*}
+            \begin{split}
+                V(e_t) &= \sup_{x_t \in \R} \left\{u(x_t + e_t) + \beta \cdot \E_t V( e_{t+1} ) \right\} \\
+                \\
+                \text{s.t. } m_{t+1} &= m_{t} - p_{t} \cdot x_{t}\\
+                m_t  &\geq 0 \text{ given } m_0
+            \end{split}
+        \end{equation*}
 
-    \begin{itemize} \setlength{\itemsep}{1em}
-        \item $\E_t(e_{t+1})$ via Euler equation (rational)
-        \item $\E_t(p_{t+1}) = \psi_h \cdot p_t + c$ adapting $\psi_h$ based on performance (Bounded rationality)
-    \end{itemize}
+        gives Euler equation,
 
-    Solution
+        \begin{equation*}
+            u^\prime\left( e_t + \frac{m_t - m_{t+1}}{p_t} \right) = \beta \cdot \E_t \left[ u^\prime\left(e_{t+1} + \frac{m_{t+1} - m_{t+2}}{ p_{t+1} + c} \right)  \right]
+        \end{equation*}
+    \end{frame}
 
-    \begin{itemize} \setlength{\itemsep}{1em}
-        \item \textbf{Endogenous} grid method to find $m^\prime: m_t \vert \psi_h, p_t, e_t \mapsto m_{t+1}$.
-        \item \textbf{Aggregate} $X_t(p_t) = \sum x_{i, t}(p_t \vert \ldots)$ and realize profits
-        \item \textbf{Update} forecasting rule of each prosumer $\psi_{h, i}$
-    \end{itemize}
-\end{frame}
+    \begin{frame}{Prosumers: Expectations and solutions}
+        Prosumers form expectations over,
 
-\begin{frame}{Providers: setup}
+        \begin{itemize} \setlength{\itemsep}{1em}
+            \item $\E_t(e_{t+1})$ via Euler equation (rational)
+            \item $\E_t(p_{t+1}) = \psi_h \cdot p_t + c$ adapting $\psi_h$ based on performance (Bounded rationality)
+        \end{itemize}
 
-    Choose $p$ and bargain $P^{(i, j)}$s such that,
+        Solution
 
-    \begin{equation*}
-        \begin{split}
-            \Pi_i\left(p, Y\right) &= \underbrace{X_i(p) \cdot p}_{\text{local market}} - \sum_{j \in \text{neighbours}} \underbrace{Y^{(i, j)} \cdot P^{(i, j)}}_{\text{network trade}} \\
-            \text{s.t. } X_i(p) &=\sum_{j \in \text{neighbours}} Y^{(i, j)}
-        \end{split}
-    \end{equation*}
-\end{frame}
+        \begin{itemize} \setlength{\itemsep}{1em}
+            \item \textbf{Endogenous} grid method to find $m^\prime: m_t \vert \psi_h, p_t, e_t \mapsto m_{t+1}$.
+            \item \textbf{Aggregate} $X_t(p_t) = \sum x_{i, t}(p_t \vert \ldots)$ and realize profits
+            \item \textbf{Update} forecasting rule of each prosumer $\psi_{h, i}$
+        \end{itemize}
+    \end{frame}
 
+    \begin{frame}{Providers: setup}
 
-\begin{frame}{Providers: local solution}
+        Choose $p$ and bargain $P^{(i, j)}$s such that,
 
-    For every $j$ neighboring with $i$,
-
-    \begin{equation*}
-        \underbrace{P^{(i, j)}+ \frac{\partial P^{(i, j)}}{\partial Y^{(i, j)}} \cdot Y^{(i, j)}}_{\text{marginal benefit over bargaining}} = \underbrace{p + \frac{X}{\partial X / \partial p} }_{\text{marginal benefit in local market}}
-    \end{equation*}
-
-\end{frame}
-
-\begin{frame}[allowframebreaks]{Providers: bargaining solution}
+        \begin{equation*}
+            \begin{split}
+                \Pi_i\left(p, Y\right) &= \underbrace{X_i(p) \cdot p}_{\text{local market}} - \sum_{j \in \text{neighbours}} \underbrace{Y^{(i, j)} \cdot P^{(i, j)}}_{\text{network trade}} \\
+                \text{s.t. } X_i(p) &=\sum_{j \in \text{neighbours}} Y^{(i, j)}
+            \end{split}
+        \end{equation*}
+    \end{frame}
 
 
+    \begin{frame}{Providers: local solution}
 
-    \begin{equation*}
-        \begin{split}
-            P^{(i, j)} = \frac{1}{2\cdot Y^{(i, j)}} \Biggl( &\underbrace{X_i(p_i)\cdot p_i - X_j(p_j)\cdot p_j}_{\text{revenue difference }}
-            \\  + &\underbrace{\sum_{m\in N\setminus \set{i}} a_{j, m} \cdot Y^{(j, m)} \cdot P^{(j, m)}}_{\text{outside option of } j}
-            \\ - & \underbrace{\sum_{m \in N\setminus \set{j}} a_{i, m} \cdot Y^{(i, m)} \cdot P^{(i, m)}}_{\text{outside option of } i} \Biggr).
-        \end{split}
-    \end{equation*}
+        For every $j$ neighboring with $i$,
 
-    \newpage
+        \begin{equation*}
+            \underbrace{P^{(i, j)}+ \frac{\partial P^{(i, j)}}{\partial Y^{(i, j)}} \cdot Y^{(i, j)}}_{\text{marginal benefit over bargaining}} = \underbrace{p + \frac{X}{\partial X / \partial p} }_{\text{marginal benefit in local market}}
+        \end{equation*}
 
-    \begin{itemize}\setlength\itemsep{1.5em}
-        \item No neighbors $\implies$ $P \cdot Y = \frac{\Delta X}{2}$, dividing revenues based on contribution
-        \item If firm is buying ($\Delta X > 0$) $\implies$  the neighbor outside option increases the price
-        \item Symmetry ($\Delta X = 0$) $\implies$ no trade
-    \end{itemize}
+    \end{frame}
 
-    If $\matr{G}$ is the adjacency matrix of line-graph, then the solution can be written as,
+    \begin{frame}[allowframebreaks]{Providers: bargaining solution}
 
-    \begin{equation*}
-        P = (2\matr{I} + \matr{G})^{-1} (\Delta X \oslash Y)
-    \end{equation*}
 
-\end{frame}
 
+        \begin{equation*}
+            \begin{split}
+                P^{(i, j)} = \frac{1}{2\cdot Y^{(i, j)}} \Biggl( &\underbrace{X_i(p_i)\cdot p_i - X_j(p_j)\cdot p_j}_{\text{revenue difference }}
+                \\  + &\underbrace{\sum_{m\in N\setminus \set{i}} a_{j, m} \cdot Y^{(j, m)} \cdot P^{(j, m)}}_{\text{outside option of } j}
+                \\ - & \underbrace{\sum_{m \in N\setminus \set{j}} a_{i, m} \cdot Y^{(i, m)} \cdot P^{(i, m)}}_{\text{outside option of } i} \Biggr).
+            \end{split}
+        \end{equation*}
+
+        \newpage
+
+        \begin{itemize}\setlength\itemsep{1.5em}
+            \item No neighbors $\implies$ $P \cdot Y = \frac{\Delta X}{2}$, dividing revenues based on contribution
+            \item If firm is buying ($\Delta X > 0$) $\implies$  the neighbor outside option increases the price
+            \item Symmetry ($\Delta X = 0$) $\implies$ no trade
+        \end{itemize}
+
+        If $\matr{G}$ is the adjacency matrix of line-graph, then the solution can be written as,
+
+        \begin{equation*}
+            P = (2\matr{I} + \matr{G})^{-1} (\Delta X \oslash Y)
+        \end{equation*}
+
+    \end{frame}
+\fi
 
 \iffalse
     \begin{frame}[allowframebreaks]{Bibliography}
