@@ -1,0 +1,67 @@
+\tikzstyle{var} = [
+draw,circle,
+prosumer,
+fill=prosumer,
+text=black,
+minimum size=10pt]
+
+\tikzstyle{agent} = [
+draw, circle,
+fill=yellow,
+minimum size=10pt]
+
+\tikzstyle{derived} = [
+draw, circle, dashed,
+minimum size=10pt]
+
+\tikzstyle{time} = [
+draw=gray, rectangle,
+dashed,
+thick,
+inner sep=5pt]
+
+\tikzstyle{market} = [
+draw=gray, rectangle,
+dashed,
+thick,
+inner sep=15pt]
+
+
+\begin{tikzpicture}[-{Latex[scale=1]}, thick]
+
+    \node [agent] (producer_prev) {$\text{Prod}_{t-1}$};
+    \node [var, below right = 1cm and 5cm of producer_prev] (s) {\makecell[c]{Elect. \\ $s_t$}};
+    \node [var, right = 2cm of s] (s_prime) {$s_{t+1}$};
+    \node [derived, below = 1cm of s] (demand) {\makecell[c]{Demand \\ $X_t$}};
+    \node [derived, left = 1cm of demand] (producer_payoff) {\makecell[c]{Prod. payoff \\ $\pi_t$}};
+    \node [var, below = 1cm of demand] (price) {$p_t$};
+    \node [agent, below right = 0.5cm and 1cm of price] (provider) {Prov.};
+    \node [derived, right = 1cm of demand] (provider_payoff) {\makecell[c]{Prov. payoff \\ $\Pi_t$}};
+
+
+    \path
+    (s) edge [dotted] node [above] {$\gamma$} (s_prime)
+    (producer_prev) edge [] node [var] (ramp) {$r_{t-1}$} (s)
+    (provider) edge (price)
+    (price) edge (demand)
+    (demand) edge (producer_payoff)
+    (demand) edge (provider_payoff)
+    (s) edge (demand)
+    (producer_payoff) edge [-, bend left, dashed] node [fill=white] {$\E_{\psi}$}(producer_prev)
+
+    (provider_payoff) edge [-, dashed] node [fill=white] {$\E$}(provider)
+
+    (ramp) edge [] node [below left] {$c(r)$} (producer_payoff)
+    ;
+
+    \node [time, fit = (producer_prev) (ramp), label=above:{Previous period}] (Previous) {};
+    \node [market, fit = (producer_prev) (s_prime) (s) (Previous), label=above:{Production}] (Production) {};
+    \node [market, fit = (provider) (price), label=below:{Provider}] (Provider) {};
+
+    \matrix [draw,below left, fill=white] at (current bounding box.north east) {
+    \node [agent,label=right:{Agents}] {}; \\
+    \node [derived,label=right:{Derived values}] {}; \\
+    \node [var,label=right:{Variables}] {}; \\
+    };
+
+\end{tikzpicture}

@@ -93,37 +93,6 @@
 
 \end{itemize}
 
-
-\section{Network structure}
-
-\begin{minipage}{0.45\textwidth}{
-		\resizebox{\textwidth}{!}{
-			\begin{tikzpicture}[-, thick]
-				% Grids
-				\node[main node] (1) {Grid$_1$};
-				\node[main node] [below right = 2cm and 1cm of 1] (2) {Grid$_2$};
-				\node[main node] [below left = 2cm and 1cm of 1] (3) {Grid$_3$};
-				% Local markets 
-				\node[main node] [above = 1cm of 1] (5) {Pros$_1$};
-				\node[main node] [below right = 1cm and 1cm of 2] (6) {Pros$_2$};
-				\node[main node] [below left = 1cm and 1cm of 3] (7) {Pros$_3$};
-				% Paths
-				\path[draw,thick]
-				(1) edge node [above right] {$P, Y^{(1, 2)}$} (2)
-				(2) edge node [below] {$P, Y^{(2, 3)}$} (3)
-				(3) edge node [above left] {$P, Y^{(3, 1)}$} (1)
-				(1) edge node [left] {$X(p_{1})$} (5)
-				(2) edge node [above right] {$X(p_{2})$} (6)
-				(3) edge node [above left] {$X(p_{3})$} (7);
-			\end{tikzpicture}
-		}}\end{minipage} \hfill
-\begin{minipage}{0.5\textwidth}{
-		The model is structured on two levels: local prosumer markets ($Pros_i$) and global electricity markets ($Grid_i$). The former are composed of heterogenous agents endowened with electricity and risk averse with respect to electricity consumption. The excess (defect) of energy generates a supply (demand) of electricity which is absorbed (met) by grid firms on the ``global'' energy market. These trade electricity with each other via bilateral bargaining.
-	}
-\end{minipage}
-
-\newpage
-
 \section{Prosumers}
 
 Prosumers are endowed an electricity quantity. The endowment follows a Markov process with some persistence $\rho$, $e_t \sim \matr{\pi}_{e}$, and a low and high state $\overline{e}$ and $\underline{e}$. Prosumers have a constant electricity consumption, the rest is sold. This can be encoded by making,
@@ -134,12 +103,12 @@ Prosumers are endowed an electricity quantity. The endowment follows a Markov pr
 
 \section{Producers}
 
-$c(x)$, $c^\prime(x) > 0$, cost of ramping up production next period, $r$
+Let $s$ be the electricity production and $c(s)$, $c^\prime(s) > 0$, cost of ramping up production next period by $r$
 
 \begin{equation}
 	\begin{split}
-		V(x_t) &= \max_{r_t \in [0, \bar{r}]} \left\{ x_t \cdot p_t - c(x_t) \cdot r_t + \beta \cdot \E_t V(x_{t+1}) \right\} \\
-		\text{ s.t. } x_{t+1} &= \gamma \cdot x_t + r_t \\ x_t &\geq 0 \text{ and } x_0 = 0
+		V(s_t) &= \max_{r_t \in [0, \bar{r}]} \left\{ s_t \cdot p_t - c(s_t) \cdot r_t + \beta \cdot \E_t V(s_{t+1}) \right\} \\
+		\text{ s.t. } s_{t+1} &= \gamma \cdot s_t + r_t \\ s_t &\geq 0 \text{ and } s_0 = 0
 	\end{split}
 \end{equation}
 
@@ -154,23 +123,23 @@ Given that $\E\left[p_{t+1}\right]$ is linear, we can solve as a deterministic d
 
 \begin{equation}
 	\begin{split}
-		V(x) &= \max_{r \in [0, \bar{r}]} J(r, x) \\
-		&= \max_{r \in [0, \bar{r}]} \left\{ x \cdot p - c(x) \cdot r + \beta \cdot V(\gamma \cdot x + r) \right\}
+		V(s) &= \max_{r \in [0, \bar{r}]} J(r, s) \\
+		&= \max_{r \in [0, \bar{r}]} \left\{ s \cdot p - c(s) \cdot r + \beta \cdot V(\gamma \cdot s + r) \right\}
 	\end{split}
 \end{equation}
 
 FOCs
 
 \begin{equation}
-	\frac{\partial J(r, x)}{\partial r} = 0 \implies \beta \cdot V^\prime (\gamma \cdot x + r) = c(x)
+	\frac{\partial J(r, s)}{\partial r} = 0 \implies \beta \cdot V^\prime (\gamma \cdot s + r) = c(s)
 \end{equation}
 
-Given $r = \arg\max_{r \in [0, \bar{r}]} J(r, x)$ and assuming an interior solution, by the envelope theorem, \textbf{is J cont. differentiable?}
+Given $r = \arg\max_{r \in [0, \bar{r}]} J(r, s)$ and assuming an interior solution, by the envelope theorem, \textbf{is J cont. differentiable?}
 
 \begin{equation}
 	\begin{split}
-		V^\prime (x) &= p - c^\prime(x) \cdot r + \beta \cdot V^\prime(\gamma \cdot x + r) \cdot \gamma \\
-		&= p - c^\prime(x) \cdot r + c(x) \cdot \gamma
+		V^\prime (s) &= p - c^\prime(s) \cdot r + \beta \cdot V^\prime(\gamma \cdot s + r) \cdot \gamma \\
+		&= p - c^\prime(s) \cdot r + c(s) \cdot \gamma
 	\end{split}
 \end{equation}
 
@@ -178,57 +147,79 @@ By iterating forward,
 
 \begin{equation}
 	\begin{split}
-		V^\prime (\gamma \cdot x + r) &= \E[p] - c^\prime(\gamma \cdot x + r) \cdot r + c(\gamma \cdot x + r) \cdot \gamma \\
-		\frac{c(x)}{\beta} &= \E[p] - c^\prime(\gamma \cdot x + r) \cdot r + c(\gamma \cdot x + r) \cdot \gamma
+		V^\prime (\gamma \cdot s + r) &= \E[p] - c^\prime(\gamma \cdot s + r) \cdot r + c(\gamma \cdot s + r) \cdot \gamma \\
+		\frac{c(s)}{\beta} &= \E[p] - c^\prime(\gamma \cdot s + r) \cdot r + c(\gamma \cdot s + r) \cdot \gamma
 	\end{split}
 \end{equation}
 
 \subsection{Linear costs}
 
-If $c(x) = c \cdot x$, hence $c^\prime(x) = c$,
+If $c(s) = c \cdot s$, hence $c^\prime(s) = c$,
 
 \begin{equation}
 	\begin{split}
-		\frac{c \cdot x}{\beta} &= \E[p] - c \cdot r + c \cdot \gamma^2 \cdot x + c \cdot r \cdot \gamma \\
-		\frac{x}{\beta} &= \frac{\E[p]}{c} - r + \gamma^2 \cdot x + r \cdot \gamma \\
-		(1 - \gamma) \cdot r &= \frac{\E[p]}{c} - \frac{x}{\beta} + \gamma^2 \cdot x
+		\frac{c \cdot s}{\beta} &= \E[p] - c \cdot r + c \cdot \gamma^2 \cdot s + c \cdot r \cdot \gamma \\
+		\frac{s}{\beta} &= \frac{\E[p]}{c} - r + \gamma^2 \cdot s + r \cdot \gamma \\
+		(1 - \gamma) \cdot r &= \frac{\E[p]}{c} - \frac{s}{\beta} + \gamma^2 \cdot x
 	\end{split}
 \end{equation}
 
 This yields the ramp up function,
 
 \begin{equation}
-	r(x, p; \psi) = \frac{1}{1-\gamma} \left[ \frac{\E_\psi[p]}{c} - \left( \frac{1}{\beta} - \gamma^2 \right) \cdot x \right]
+	r(s, p; \psi) = \frac{1}{1-\gamma} \left[ \frac{\E_\psi[p]}{c} - \left( \frac{1}{\beta} - \gamma^2 \right) \cdot s \right]
 \end{equation}
 
-\subsection{Supply}
+Hence,
+
+\begin{equation} \label{foc_rp}
+	\frac{\partial}{\partial p} r(s, p; \psi) = \frac{\psi}{(1-\gamma) \cdot c}
+\end{equation}
+
+\subsection{Local market demand and supply}
 
 A producer of type $\psi$ supplies at time $t$,
 
 \begin{equation}
-	x_t = \gamma \cdot x_{t-1} + r(x_{t-1}, p_{t-1}; \psi_t)
+	s_t = \gamma \cdot s_{t-1} + r(s_{t-1}, p_{t-1}; \psi_t)
 \end{equation}
 
 Aggregating over $N$ producers yields,
 
-\begin{equation}
+\begin{equation} \label{supply_motion}
 	\begin{split}
-		S(p_{t-1}) &= \sum^N_{i = 1} \gamma \cdot x_{i, t-1} + r(x_{i, t-1}, p_{t-1}; \psi_{i, t}) \\
-		S(p_{t-1}) &= \gamma \cdot S(p_{t-2}) + \sum^N_{i = 1}  r(x_{i, t-1}, p_{t-1}; \psi_{i, t})
+		S_t(p_{t-1}) &= \sum^N_{i = 1} \left[ \gamma \cdot s_{i, t-1} + r(s_{i, t-1}, p_{t-1}; \psi_{i, t}) \right] \\
+		S_t(p_{t-1}) &= \gamma \cdot S_{t-1}(p_{t-2}) + \sum^N_{i = 1}  r(s_{i, t-1}, p_{t-1}; \psi_{i, t})
 	\end{split}
 \end{equation}
 
-This supply has to compensate the demand coming from prosumers. $M$ prosumers demand,
+This supply has to compensate the demand coming from prosumers. A local market with $M$ prosumers has aggregate demand at time $t$,
 
 \begin{equation}
-	X(p_{t-1}) = M \cdot e_t - S(p_{t-1})
+	X_t(p_{t-1}) = M \cdot e_t - S_t(p_{t-1})
+\end{equation}
+
+Iterating backwards we obtain,
+
+\begin{equation}
+	S_{t-1}(p_{t-2}) = M \cdot e_{t-1} - X_{t-1}(p_{t-2})
+\end{equation}
+
+which we ca use to rewrite Equation (\ref{supply_motion}),
+
+\begin{equation}
+	S_t(p_{t-1}) = \gamma \cdot \left[ M \cdot e_{t-1} - X_{t-1}(p_{t-2}) \right] + \sum^N_{i = 1}  r(s_{i, t-1}, p_{t-1}; \psi_{i, t}).
+\end{equation}
+
+Hence we obtain a law of motion of demand $X_t$ as,
+
+\begin{equation}
+	X_t(p_{t-1}) = \gamma \cdot X_{t-1}(p_{t-2}) + M \cdot \left( e_t - \gamma \cdot e_{t-1} \right) - \sum^N_{i = 1}  r(s_{i, t-1}, p_{t-1}; \psi_{i, t})
 \end{equation}
 
 \section{Providers}
 
 \subsection{Notation}
-
-Grid firms are assumed to not engage in intertemporal optimization. Each period they set the price on the local market $p$ and the next period induce a demand (supply) $X(p)$. They then match $X(p)$ by trading with other grid firms quantities $Y$ at a bargained price $P$. Hence, hereafter I will suppress the time index $t$.
 
 Grid firms operate on a graph $\mathcal{A} = (V, E)$. Firms are nodes, $i \in V$, and they can trade if they share an edge, $(i, j) \in E$. I will indicate the neighbors of a node as,
 
@@ -241,55 +232,89 @@ Grid firms operate on a graph $\mathcal{A} = (V, E)$. Firms are nodes, $i \in V$
 Each period, the optimization problem of the firm is,
 
 \begin{equation}
-	\max_{p, Y} \Pi_i(p, Y)
+	\max_{p_{i, t}, Y_{i, t}} \Pi_i(p_{i, t}, Y_{i, t})
 \end{equation}
 
-where,
+where $p_{i, t} \in \R_{+}$ and $Y_{i, t} \in \R^{\abs{N_{\mathcal{A}}(i)}}$. More precisely,
 
 \begin{equation}
 	\begin{split}
-		\Pi_i(p, Y) = p \cdot X_i(p) - \sum_{j \in N_{\mathcal{A}}(i)} Y^{(i, j)} \cdot P^{(i, j)}
+		\Pi_i(p_{i, t}, Y_{i, t}) &= p_{i, t} \cdot X_{i, t}(p_{i, t-1}) - \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)} \cdot P_t^{(i, j)} \\
+		\text{ subject to } X_{i, t}(p_{i, t-1}) &=  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}
 	\end{split}
 \end{equation}
 
-subject to,
-
-\begin{equation}
-	X_i(p_t) =  \sum_{j \in N_{\mathcal{A}}(i)} Y^{(i, j)}
-\end{equation}
-
-For now assume $P^{(i, j)}$ is determined by (i.e. is a function of) the vector of traded quantities $Y$, with elements $Y^{(i, j)}$ for every $(i, j) \in E$. Suppressing $i$ for convenience (i.e. $Y^{(i, j)} \mapsto Y_j$),
-
-\begin{equation}
-	\mathcal{L}\left(p, Y_j\right) = X(p) \cdot p - \sum_{j \in N_{\mathcal{A}}(i)} Y_j \cdot P_j (Y) + \lambda\cdot \left(X(p) - \sum_{j \in N_{\mathcal{A}}(i)} Y_j\right)
-\end{equation}
-
-with first order condition,
+For now assume $P^{(i, j)}$ is determined by (i.e. is a function of) the vector of traded quantities $Y$, with elements $Y^{(i, j)}$ for every $(i, j) \in E$. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$), the Bellman equation is,
 
 \begin{equation}
 	\begin{split}
-		\frac{\partial \mathcal{L}}{\partial p}  &= \frac{\partial X}{\partial p}(p) \cdot p + X(p) + \lambda \cdot \frac{\partial X}{\partial p}(p) = 0 \\
-		\frac{\partial \mathcal{L}}{\partial Y^j}  &= P_j + \frac{\partial P_j}{\partial Y_j} \cdot Y_j + \lambda =0, \ \forall j \in N_{\mathcal{A}}(i)
+		V(X_t) &= \max_{p_t, Y_t} \left\{ p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P(Y^j_t) + \beta \cdot \E \ V(X_{t+1}) \right\} \\
+		&\text{subject to} \\
+		X_{t+1} &= \gamma \cdot X_t + M \cdot \left( \E[e_{t+1}] - \gamma \cdot e_t \right) - \sum^N_{i = 1}  r(s_{i, t}, p_{t}; \psi_{i, t+1}) \\
+		X_t &=  \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t
 	\end{split}
 \end{equation}
 
-Isolating the multiplier $\lambda$ from the first equation yields,
+\subsection{Provider's optimization}
+
+\subsubsection{Euler equation}
+
+Let,
 
 \begin{equation}
-	- \lambda = p + \frac{X}{\partial X / \partial p}
+	\begin{split}
+		L(p_t, Y_t) \coloneqq \ &p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P(Y^j_t) + \\
+		&\beta \cdot \E \ V\left(\gamma \cdot X_t + M \cdot \left( e_{t+1} - \gamma \cdot e_t \right) - \sum^N_{i = 1}  r(s_{i, t}, p_{t}; \psi_{i, t+1}) \right)
+	\end{split}
 \end{equation}
 
-which, substituting in the second one, yields the system of equations, $\forall j \in N_{\mathcal{A}}(i)$,
-
-\begin{equation} \label{firm_optimization}
-	P_j(Y_j) + \frac{\partial P_j}{\partial Y_j} \cdot Y_j = p + \frac{X}{\partial X / \partial p}
-\end{equation}
-
-Note that we assume that there is no intertemporal optimization (such that $p_{t-1} \perp X_{t+1}$ in the eyes of the provider). Hence,
+such that $V(X_t) = \max_{p_t, Y_t} L(p_t, Y_t)$. Maximization of $L$ requires,
 
 \begin{equation}
-	\frac{\partial X_{t+1}}{\partial p_t} = - \sum^N_{i = 1} \frac{\partial r(x_{i, t}, p_t; \psi_{i, t} )}{\partial p_t}
+	\frac{\partial}{\partial p_t} L = X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \left[ \sum^N_{i = 1}  \frac{\partial}{\partial p_t} r(s_{i, t}, p_{t}; \psi_{i, t+1}) \right] = 0
 \end{equation}
+
+If $c(x)$ is linear, we can use Equation (\ref{foc_rp}),
+
+\begin{equation}
+	\begin{split}
+		\frac{\partial}{\partial p_t} L &= X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \left[ \sum^N_{i = 1}  \frac{\partial}{\partial p_t} r(s_{i, t}, p_{t}; \psi_{i, t+1}) \right] \\
+		&= X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \sum^N_{i = 1} \frac{\psi_{i, t+1}}{(1-\gamma) \cdot c} \\
+		&= X_t - \frac{N \cdot \beta}{(1-\gamma) \cdot c} \cdot \left(\sum^N_{i = 1} \psi_{i, t+1} \right) \cdot \E \ V^\prime (X_{t+1}) = 0 \\
+		\implies \beta \cdot \E \ V^\prime (X_{t+1}) &= \frac{X_t \cdot (1-\gamma) \cdot c}{N}\cdot \left(\sum^N_{i = 1} \psi_{i, t+1} \right)^{-1}
+	\end{split}
+\end{equation}
+
+The other first order condition requires, for all $j$,
+
+\begin{equation}
+	\frac{\partial}{\partial Y^j_t} L = 0 \implies Y^j_t = - \frac{P^\prime(Y^j_t)}{ P(Y^j_t)}
+\end{equation}
+
+\subsubsection{Envelope}
+
+Assuming we are in the optimum,
+
+\begin{equation}
+	\begin{split}
+		V^\prime(X_t) &= p_t + \beta \cdot \E \ V^\prime(X_{t+1}) \cdot \gamma \\
+		&= p_t + X_t \cdot \frac{\gamma \cdot  (1-\gamma) \cdot c}{N}\cdot \left(\sum^N_{i = 1} \psi_{i, t+1} \right)^{-1}
+	\end{split}
+\end{equation}
+
+Iterating forward,
+
+\begin{equation}
+	\begin{split}
+		V^\prime(X_{t+1}) &= p_{t+1} + X_{t+1} \cdot \frac{\gamma \cdot  (1-\gamma) \cdot c}{N}\cdot \left(\sum^N_{i = 1} \psi_{i, t+2} \right)^{-1} \\
+		&= p_{t+1} + \left( \gamma \cdot X_t + M \cdot \left( \E[e_{t+1}] - \gamma \cdot e_t \right) - \sum^N_{i = 1}  r(s_{i, t}, p_{t}; \psi_{i, t+1}) \right) \cdot \\
+		&\cdot \frac{\gamma \cdot  (1-\gamma) \cdot c}{N}\cdot \left(\sum^N_{i = 1} \psi_{i, t+2} \right)^{-1}
+	\end{split}
+\end{equation}
+
+
+
+\newpage
 
 \subsection{Bargaining model}
 
@@ -298,7 +323,7 @@ To solve the bargaining model we need to impose a ``direction'' of trade, namely
 To encode the asymmetry of trade hereafter I will work with the bi-directed graph with adjacency matrix,
 
 \begin{equation}
-	\matr{A} := \matr{A}_{d} - \matr{A}_{d}^T,  \ \matr{A} \in\R^{n\times n}.
+	\matr{A} \coloneqq \matr{A}_{d} - \matr{A}_{d}^T,  \ \matr{A} \in\R^{n\times n}.
 \end{equation}
 
 This matrix has entries $a_{i, j} \in \set{-1, 0, 1}$ with $a_{i, j} = - a_{j, i}$ and $a_{i, i} = 0$. For example, the graph of Section 1 would then be represented by,
@@ -640,7 +665,7 @@ The firms' three first order condition now be used to find $X_1, X_2, X_3$,
 In order to simplify, let,
 
 \begin{equation}
-	F_i := p_i +  \frac{X_i}{\partial X_i / p_i}
+	F_i \coloneqq p_i +  \frac{X_i}{\partial X_i / p_i}
 \end{equation}
 
 The condition implies,
@@ -927,7 +952,7 @@ where the certainty equivalent is,
 As Caldara, introduce,
 
 \begin{equation}
-	\theta := \frac{1 - \gamma}{1 - \frac{1}{\phi}}.
+	\theta \coloneqq \frac{1 - \gamma}{1 - \frac{1}{\phi}}.
 \end{equation}
 
 
