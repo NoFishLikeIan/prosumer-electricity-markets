@@ -39,7 +39,8 @@
     \newcommand{\matr}[1]{\bm{#1}}
 	\newcommand{\set}[1]{\left\{#1\right\}}
 	\newcommand{\diag}{\text{diag}}
-
+    
+    \DeclareMathOperator{\sign}{sign}
     \DeclareMathOperator{\Tr}{Tr}
 
     \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
@@ -74,10 +75,7 @@
 
 \subfile{sections/model.tex}
 
-\iffalse
-    \subfile{sections/examples.tex}
-
-\fi
+\subfile{sections/examples.tex}
 
 \newpage
 \pagenumbering{gobble} % stop page numbering
