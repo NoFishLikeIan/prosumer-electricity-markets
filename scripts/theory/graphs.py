@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 sns.set()
+doplot = False
 
 
 def pmatrix(a):
@@ -30,23 +31,19 @@ A[3, 4] = 1
 A[4, 5] = 1
 A[4, 6] = 1
 
-
-A = np.array(A)
-
-Ag = nx.convert_matrix.from_numpy_array(A, create_using=nx.DiGraph)
+Ag = nx.convert_matrix.from_numpy_array(A)
 
 Lg = nx.generators.line_graph(Ag)
 
 nx.draw(Ag, with_labels=True)
-plt.savefig("plots/original.png")
+plt.savefig("original.png")
 plt.close()
 
 nx.draw(Lg, with_labels=True)
-plt.savefig("plots/linegraph.png")
+plt.savefig("linegraph.png")
 plt.close()
 
 G = nx.to_numpy_array(Lg)
-G = G - G.T
 I = np.identity(G.shape[0])
 
 inverse = np.linalg.inv(2*I + G)
@@ -57,20 +54,21 @@ def notdiag(A): return A - np.diag(np.diag(A))
 
 effect = notdiag(inverse)
 
-matrices = [(G, "Adjacency"), (inverse, "Effect")]
+if doplot:
+    matrices = [(G, "Adjacency"), (inverse, "Effect")]
 
-for M, name in matrices:
-    M = notdiag(M)
+    for M, name in matrices:
+        M = notdiag(M)
 
-    fig, ax = plt.subplots()
+        fig, ax = plt.subplots()
 
-    sns.heatmap(M, ax=ax, cmap="coolwarm")
-    ax.set_title(f"{name} matrix")
+        sns.heatmap(M, ax=ax, cmap="coolwarm")
+        ax.set_title(f"{name} matrix")
 
-    ax.set_xticks([])
-    ax.set_yticks([])
+        ax.set_xticks([])
+        ax.set_yticks([])
 
-    fig.savefig(f"plots/{name}.png")
+        fig.savefig(f"plots/{name}.png")
 
 convergence = False
 if convergence:
