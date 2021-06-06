@@ -105,15 +105,15 @@ Hence,
 A producer of type $\psi$ supplies at time $t$,
 
 \begin{equation}
-    s_t = \gamma \cdot s_{t-1} + r(s_{t-1}, p_{t-1}; \psi_t)
+    s_t = \gamma \cdot s_{t-1} + r(s_{t-1}, p_{t-1}; \psi_{t-1})
 \end{equation}
 
 Aggregating over $N$ producers yields,
 
 \begin{equation} \label{supply_motion}
     \begin{split}
-        S_t(p_{t-1}) &= \sum^N_{i = 1} \left[ \gamma \cdot s_{i, t-1} + r(s_{i, t-1}, p_{t-1}; \psi_{i, t}) \right] \\
-        S_t(p_{t-1}) &= \gamma \cdot S_{t-1}(p_{t-2}) + \sum^N_{i = 1}  r(s_{i, t-1}, p_{t-1}; \psi_{i, t})
+        S_t(p_{t-1}) &= \sum^N_{i = 1} \left[ \gamma \cdot s_{i, t-1} + r(s_{i, t-1}, p_{t-1}; \psi_{i, t-1}) \right] \\
+        S_t(p_{t-1}) &= \gamma \cdot S_{t-1}(p_{t-2}) + \sum^N_{i = 1}  r(s_{i, t-1}, p_{t-1}; \psi_{i, t-1})
     \end{split}
 \end{equation}
 
@@ -132,13 +132,13 @@ Iterating backwards we obtain,
 which we ca use to rewrite Equation (\ref{supply_motion}),
 
 \begin{equation}
-    S_t(p_{t-1}) = \gamma \cdot \left[ M \cdot e_{t-1} - X_{t-1}(p_{t-2}) \right] + \sum^N_{i = 1}  r(s_{i, t-1}, p_{t-1}; \psi_{i, t}).
+    S_t(p_{t-1}) = \gamma \cdot \left[ M \cdot e_{t-1} - X_{t-1}(p_{t-2}) \right] + \sum^N_{i = 1}  r(s_{i, t-1}, p_{t-1}; \psi_{i, t-1}).
 \end{equation}
 
 Hence we obtain a law of motion of demand $X_t$ as,
 
 \begin{equation}
-    X_t(p_{t-1}) = \gamma \cdot X_{t-1}(p_{t-2}) + M \cdot \left( e_t - \gamma \cdot e_{t-1} \right) - \sum^N_{i = 1}  r(s_{i, t-1}, p_{t-1}; \psi_{i, t})
+    X_t(p_{t-1}) = \gamma \cdot X_{t-1}(p_{t-2}) + M \cdot \left( e_t - \gamma \cdot e_{t-1} \right) - \sum^N_{i = 1}  r(s_{i, t-1}, p_{t-1}; \psi_{i, t-1})
 \end{equation}
 
 \subsection{Providers}
@@ -174,7 +174,7 @@ For now assume $P^{(i, j)}$ is determined by (i.e. is a function of) the vector 
     \begin{split}
         V(X_t) &= \max_{p_t, Y_t} \left\{ p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P(Y^j_t) + \beta \cdot \E \ V(X_{t+1}) \right\} \\
         &\text{subject to} \\
-        X_{t+1} &= \gamma \cdot X_t + M \cdot \left( \E[e_{t+1}] - \gamma \cdot e_t \right) - \sum^N_{i = 1}  r(s_{i, t}, p_{t}; \psi_{i, t+1}) \\
+        X_{t+1} &= \gamma \cdot X_t + M \cdot \left( \E[e_{t+1}] - \gamma \cdot e_t \right) - \sum^N_{i = 1}  r(s_{i, t}, p_{t}; \psi_{i, t}) \\
         X_t &=  \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t
     \end{split}
 \end{equation}
@@ -183,33 +183,43 @@ For now assume $P^{(i, j)}$ is determined by (i.e. is a function of) the vector 
 
 Let,
 
-\begin{equation}
+\begin{equation*}
     \begin{split}
-        L(p_t, Y_t) \coloneqq \ &p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P(Y^j_t) + \\
-        &\beta \cdot \E \ V\left(\gamma \cdot X_t + M \cdot \left( e_{t+1} - \gamma \cdot e_t \right) - \sum^N_{i = 1}  r(s_{i, t}, p_{t}; \psi_{i, t+1}) \right)
+        L(p_t, Y_t) &\coloneqq p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P(Y^j_t) + \\
+        &+ \beta \cdot \E \ V\left(\gamma \cdot X_t + M \cdot \left( e_{t+1} - \gamma \cdot e_t \right) - \sum^N_{i = 1}  r_{i, t} \right) \\
+        \text{where } r_{i, t} &\coloneqq r(s_{i, t}, p_{t}; \psi_{i, t}) \\
     \end{split}
-\end{equation}
+\end{equation*}
 
-such that $V(X_t) = \max_{p_t, Y_t} L(p_t, Y_t)$. Maximization of $L$ requires,
+such that $V(X_t) = \max_{p_t, Y_t} L(p_t, Y_t)$. The first order condition of $L$ requires that,
 
 \begin{equation}
-    \frac{\partial}{\partial p_t} L = X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \left[ \sum^N_{i = 1}  \frac{\partial}{\partial p_t} r(s_{i, t}, p_{t}; \psi_{i, t+1}) \right] = 0
+    \frac{\partial}{\partial p_t} L = X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \sum^N_{i = 1}  \frac{\partial}{\partial p_t} r_{i, t} = 0
 \end{equation}
+
+where I used $\frac{\partial}{\partial p_t} X_t = 0$ and the linearity of the expectation $\E_\psi$ such that \begin{equation*}
+    \E \left[V^\prime (X_{t+1}) \cdot \sum^N_{i = 1}  \frac{\partial}{\partial p_t} r_{i, t} \right] = \E \left[V^\prime (X_{t+1}) \right] \cdot \sum^N_{i = 1}  \frac{\partial}{\partial p_t} r_{i, t}.
+\end{equation*}
 
 If $c(x)$ is linear, we can use Equation (\ref{foc_rp}),
 
 \begin{equation}
     \begin{split}
-        \frac{\partial}{\partial p_t} L &= X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \left[ \sum^N_{i = 1}  \frac{\partial}{\partial p_t} r(s_{i, t}, p_{t}; \psi_{i, t+1}) \right] \\
-        &= X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \sum^N_{i = 1} \frac{\psi_{i, t+1}}{(1-\gamma) \cdot c} \\
-        &= X_t - \frac{N \cdot \beta}{(1-\gamma) \cdot c} \cdot \left(\sum^N_{i = 1} \psi_{i, t+1} \right) \cdot \E \ V^\prime (X_{t+1}) = 0 \\
-        \implies \beta \cdot \E \ V^\prime (X_{t+1}) &= \frac{X_t \cdot (1-\gamma) \cdot c}{N}\cdot \left(\sum^N_{i = 1} \psi_{i, t+1} \right)^{-1}
+        \frac{\partial}{\partial p_t} L &= X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \sum^N_{i = 1}  \frac{\partial}{\partial p_t} r_{i, t} \\
+        &= X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \sum^N_{i = 1} \frac{\psi_{i, t}}{(1-\gamma) \cdot c} \\
+        &= X_t - \frac{N}{(1-\gamma) \cdot c} \cdot \left(\sum^N_{i = 1} \psi_{i, t} \right) \cdot \beta \cdot \E \ V^\prime (X_{t+1}) = 0
     \end{split}
+\end{equation}
+
+Letting $\Psi_t \coloneqq \sum^N_{i = 1} \psi_{i, t}$, we obtain,
+
+\begin{equation} \label{foc_p}
+    \beta \cdot \E \ V^\prime (X_{t+1}) = \frac{(1-\gamma) \cdot c}{N} \cdot \frac{X_t}{\Psi_t}
 \end{equation}
 
 The other first order condition requires, for all $j$,
 
-\begin{equation}
+\begin{equation} \label{foc_Y}
     \frac{\partial}{\partial Y^j_t} L = 0 \implies Y^j_t = - \frac{P^\prime(Y^j_t)}{ P(Y^j_t)}
 \end{equation}
 
@@ -217,21 +227,33 @@ The other first order condition requires, for all $j$,
 
 Assuming we are in the optimum,
 
+\begin{equation} \label{env}
+    V^\prime(X_t) = p_t + \gamma  \cdot \beta \cdot \E \ V^\prime(X_{t+1})
+\end{equation}
+
+Combining Equations (\ref{env}) and (\ref{foc_p}), we obtain
+
 \begin{equation}
-    \begin{split}
-        V^\prime(X_t) &= p_t + \beta \cdot \E \ V^\prime(X_{t+1}) \cdot \gamma \\
-        &= p_t + X_t \cdot \frac{\gamma \cdot  (1-\gamma) \cdot c}{N}\cdot \left(\sum^N_{i = 1} \psi_{i, t+1} \right)^{-1}
-    \end{split}
+    V^\prime(X_t) = p_t + \frac{\gamma \cdot (1-\gamma) \cdot c}{N} \cdot \frac{X_t}{\Psi_t}
 \end{equation}
 
 Iterating forward,
 
 \begin{equation}
     \begin{split}
-        V^\prime(X_{t+1}) &= p_{t+1} + X_{t+1} \cdot \frac{\gamma \cdot  (1-\gamma) \cdot c}{N}\cdot \left(\sum^N_{i = 1} \psi_{i, t+2} \right)^{-1} \\
-        &= p_{t+1} + \left( \gamma \cdot X_t + M \cdot \left( \E[e_{t+1}] - \gamma \cdot e_t \right) - \sum^N_{i = 1}  r(s_{i, t}, p_{t}; \psi_{i, t+1}) \right) \cdot \\
-        &\cdot \frac{\gamma \cdot  (1-\gamma) \cdot c}{N}\cdot \left(\sum^N_{i = 1} \psi_{i, t+2} \right)^{-1}
+        V^\prime(X_{t+1}) &= p_{t+1} + \frac{\gamma \cdot  (1-\gamma) \cdot c}{N} \cdot \frac{X_{t+1}}{\Psi_{t+1}} \\
+        \E \ V^\prime(X_{t+1}) &= p_{t+1} + \frac{\gamma \cdot  (1-\gamma) \cdot c}{N} \cdot \E \left[\frac{X_{t+1}}{\Psi_{t+1}} \right]
     \end{split}
 \end{equation}
 
+Using (\ref{foc_p}),
 
+\begin{equation}
+    \frac{(1-\gamma) \cdot c}{\beta \cdot N} \cdot \frac{X_t}{\Psi_t} = p_{t+1} + \frac{\gamma \cdot  (1-\gamma) \cdot c}{N} \cdot \E \left[\frac{X_{t+1}}{\Psi_{t+1}} \right]
+\end{equation}
+
+hence we obtain the policy function,
+
+\begin{equation}
+    p_{t+1} = \frac{c \cdot (1 - \gamma)}{N} \cdot \left( \beta^{-1} \cdot \frac{X_t(p_{t-1})}{\Psi_t} - \gamma \cdot \E\left[ \frac{X_{t+1}(p_t)}{\Psi_{t+1}} \right] \right)
+\end{equation}

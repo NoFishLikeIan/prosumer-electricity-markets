@@ -15,6 +15,7 @@ include("utils.jl")
 include("markets/prosumer.jl")
 include("markets/producer.jl")
 include("markets/supply.jl")
+include("markets/simulate.jl")
 
 include("markets/global.jl")
 include("markets/gridfirm.jl")
