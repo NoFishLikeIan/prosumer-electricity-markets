@@ -23,13 +23,9 @@ def pmatrix(a):
     return '\n'.join(rv)
 
 
-A = np.zeros((7, 7), dtype=int)
-A[0, 2] = 1
-A[1, 2] = 1
-A[2, 3] = 1
-A[3, 4] = 1
-A[4, 5] = 1
-A[4, 6] = 1
+A = np.zeros((4, 4), dtype=int)
+A[0, 1:] = 1
+A = A + A.T
 
 Ag = nx.convert_matrix.from_numpy_array(A)
 
