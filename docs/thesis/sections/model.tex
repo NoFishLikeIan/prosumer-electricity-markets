@@ -221,13 +221,13 @@ such that $V(X_t) = \max_{p_t, \matr{Y}_t} L(p_t, \matr{Y}_t)$. The first order 
 Furthermore, the second first order condition requires that, for all $j$,
 
 \begin{equation} \label{foc_Y}
-    \frac{\partial}{\partial Y^j_t} L =  P^j(\matr{Y}_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^j_t} (\matr{Y}_t) - \lambda_t = 0
+    \frac{\partial}{\partial Y^j_t} L =  P^j(\matr{Y}_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^j_t} (\matr{Y}_t) + \lambda_t = 0
 \end{equation}
 
 This implies that, $\forall j, l \in N_{\mathcal{A}}(i)$,
 
 \begin{equation} \label{lambda_before}
-    \lambda_t = P^j(\matr{Y}_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^j_t} (\matr{Y}_t) = P^l(\matr{Y}_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^l_t} (\matr{Y}_t)
+    -\lambda_t = P^j(\matr{Y}_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^j_t} (\matr{Y}_t) = P^l(\matr{Y}_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^l_t} (\matr{Y}_t)
 \end{equation}
 
 \subsubsection{Envelope}
@@ -310,7 +310,7 @@ which yields, for every edge $(i, j)$ with $ a_{i, j} \neq 0$,
 
 \begin{equation} \label{bargaining_solution}
     \begin{split}
-        P_t^{(i, j)} = \frac{1}{2\cdot Y_t^{(i, j)}} \Biggl( &\underbrace{X_{i, t} \cdot p_{i, t-1} - X_{j, t} \cdot p_{j, t-1}}_{\text{revenue difference }}
+        P_t^{(i, j)} = \frac{1}{2\cdot Y_t^{(i, j)}} \Biggl( &\underbrace{X_{i, t} \cdot p_{i, t} - X_{j, t} \cdot p_{j, t}}_{\text{revenue difference }}
         \\  + &\underbrace{\sum_{m\in N\setminus \set{i}} a_{j, m} \cdot Y_t^{(j, m)} \cdot P_t^{(j, m)}}_{\text{outside option of } j}
         \\ - & \underbrace{\sum_{m \in N\setminus \set{j}} a_{i, m} \cdot Y_t^{(i, m)} \cdot P_t^{(i, m)}}_{\text{outside option of } i} \Biggr).
     \end{split}
@@ -322,7 +322,7 @@ which yields, for every edge $(i, j)$ with $ a_{i, j} \neq 0$,
 In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. We can therefore simplify the solution by appealing to the associated line graph of our original graph, with adjacency matrix $\matr{G} \in \R^{\abs{E}\times \abs{E}}$. First, let $\Delta X_t$ in $\R^{\abs{E}}$ be the vector of revenue difference with entries,
 
 \begin{equation}
-    \Delta X^{(i, j)}_t \coloneqq X_{i, t} \cdot p_{i, t-1} - X_{j, t} \cdot p_{j, t-1}
+    \Delta X^{(i, j)}_t \coloneqq X_{i, t} \cdot p_{i, t} - X_{j, t} \cdot p_{j, t}
 \end{equation}
 
 At each time $t$, equation (\ref{bargaining_solution}) can be then written as,
@@ -350,15 +350,32 @@ The bargaining solution tells us that the price formation follows,
     P(\matr{Y}_t) = (2\matr{I} + \matr{G})^{-1} (\Delta X_t \oslash \matr{Y}_t)
 \end{equation}
 
-We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. First, we can get rid of the Hadamard division by letting, $\matr{D}_{Y} \coloneqq \diag(\matr{Y}_t)$ and $\matr{D}_{Y} \coloneqq \diag(\matr{\Delta X})$, such that,
+We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. First, we can get rid of the Hadamard division by letting, $\matr{D}_{Y} \coloneqq \diag(\matr{Y}_t)$ and $\matr{D}_{X} \coloneqq \diag(\matr{\Delta X})$, such that,
 
 \begin{equation}
     P = (2\matr{I} + \matr{G})^{-1} \matr{D}_{X} \matr{D}_{Y}^{-1} \ \iota \\
 \end{equation}
 
+Using the commutative property of diagonal matrices we can compute
+
 \begin{equation}
     \begin{split}
-        \mathbb{J}\{P\}(\matr{Y}_t) &=
+        dP &= (2\matr{I} + \matr{G})^{-1} \matr{D}_X d\matr{D}_Y^{-1} \iota \\
+        &= - (2\matr{I} + \matr{G})^{-1} \matr{D}_X \matr{D}_Y^{-2} d \matr{Y}_t
     \end{split}
 \end{equation}
 
+Hence,
+
+\begin{equation}
+    \begin{split}
+        \mathbb{J}\{P\}(\matr{Y}_t) &= - (2\matr{I} + \matr{G})^{-1} \matr{D}_X \matr{D}_Y^{-2} \\
+        &= - (2\matr{I} + \matr{G})^{-1} \diag (\Delta X_t \oslash \matr{Y}^2_t)
+    \end{split}
+\end{equation}
+
+Given this Jacobian, we can rewrite the shadow price of the bargaining procedure (\ref{lambda_before}) as,
+
+\begin{equation}
+    -\lambda_{i, t} = P^{(i, j)} + \sum_{k \in N \setminus \set{i}} a_{i, k} \cdot Y^{(i, k)} \cdot \mathbb{J}\{P\}^{(i, k)}_{(i, j)}
+\end{equation}
