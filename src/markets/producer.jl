@@ -1,8 +1,7 @@
-@with_kw mutable struct Producer
-    γ::Float64 = 0.5    # Decay of production
-    c::Float64 = 1      # Cost of production ramp up
-    β::Float64 = 0.9   # Discount rate
-    k::Float64 = 0.2      # Costant in forecasting rules
+@with_kw struct Producer
+    β::Float64 = 0.9 # Discount rate
+    c::Function = s -> s^3 # Cost of production ramp up
+    c′::Function = s -> 3s^2
 
     ψ::Float64          # Forecast rule / mutable
 end
@@ -11,22 +10,19 @@ end
 Expectations over price
 """
 function E(p::Float64, producer::Producer)
-    @unpack k, ψ = producer
-
-    return p * ψ + k
+    p * producer.ψ
 end
 
 """
 Producer ramp-up function
 """
 function r(s::Float64, p::Float64, producer::Producer)
+    @unpack c, c′, β = producer
+
     p′ = E(p, producer)
 
-    @unpack c, β, γ = producer
+    foc(r) = c′(s + r) * r - c(s + r) - p′ - c(s) / β 
 
-    βprod = 1 / β - γ^2 
-    scale = inv(1 - γ)
-
-    return scale * (p′ / c - βprod * s)
+    return find_zero(foc, 0.)
 
 end

@@ -3,6 +3,7 @@ using Base.Threads
 using FiniteDifferences
 using Random, Distributions
 using LinearAlgebra
+using Roots
 
 using Plots, Logging, Printf
 using LightGraphs, GraphPlot
