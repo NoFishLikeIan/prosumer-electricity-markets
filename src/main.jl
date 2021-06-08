@@ -16,19 +16,29 @@ include("utils.jl")
 include("markets/prosumer.jl")
 include("markets/producer.jl")
 include("markets/supply.jl")
-include("markets/simulate.jl")
 
 include("markets/global.jl")
 include("markets/gridfirm.jl")
 
 include("simulation/simutils.jl")
+include("simulation/simulate.jl")
 
 
 M = 10 # Number of prosumers
 N = 10 # Number of producers
 
-Ψ = [1.01, 0.99]
+Ψ = [0.8]
 
-prosumers = (M, makeprosumer(0.9, 10.), 1)
-producers = [Producer(ψ=sample(Ψ)) for n in 1:N]
+N = M = 10
+
+producers = [Producer(ψ=0.8) for _ in 1:N]
+prosumers = (M, makeprosumer(0.9, 5.), 1)  
+
 market = LocalMarket(producers, prosumers)
+
+T = 100
+S, X, ε = simulatelocal(T, market)
+prod = sum(S, dims=2)
+
+plot(1:T, X, c="red")
+plot!(twinx(), 1:T, M .* ε, c="blue", alpha=0.5)

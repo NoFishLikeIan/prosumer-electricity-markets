@@ -21,7 +21,7 @@ function r(s::Float64, p::Float64, producer::Producer)
 
     p′ = E(p, producer)
 
-    foc(r) = c′(s + r) * r - c(s + r) - p′ - c(s) / β 
+    foc(r) = c′(s + r) * r - c(s + r) - p′ + c(s) / β 
 
     return find_zero(foc, 0.)
 

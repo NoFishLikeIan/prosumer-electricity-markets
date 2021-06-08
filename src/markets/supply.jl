@@ -1,26 +1,37 @@
 mutable struct LocalMarket
     producers::Vector{Producer}
-    prosumers::Tuple{Int,QuantEcon.MarkovChain,Int} # Size, Chain, State
+    prosumers::Tuple{Int,QuantEcon.MarkovChain} # Size, Chain, State
+end
+
+function endowmentstep(endowments::QuantEcon.MarkovChain, current) 
+    
+    currentstate = findfirst(==(current), endowments.state_values)
+
+    nextε =  simulate(endowments, 2, init=currentstate)[end]
+
+    return convert(Int64, nextε)
 end
 
 """
-Compute supply of a local market
+Compute vectors of r(s, p; ψ)
 """
-function S′(p::Real, S::Vector{Float64}, producers::Vector{Producer})
-    γ = producers[end].γ
+function producerstep(p::Float64, S::Vector{Float64}, market::LocalMarket)
 
-    R = sum(r(S[i], p, prod) for (i, prod) in enumerate(producers))
+    R = zeros(size(S))
 
-    return γ * sum(S) + R
+    for (j, producer) in enumerate(market.producers)
+        s = S[j]
+        R[j] = r(s, p, producer)
+    end 
 
+    return R
 end
 
+function prosumerstep(market::LocalMarket)
 
-function X(p::Float64, S::Vector{Float64}, market::LocalMarket)
-    @unpack producers, prosumers = market
+    M, endowments, currentε = market.prosumers
 
-    M, endowments, εₒ = prosumers
-    ε = simulate(endowments, 1, init=εₒ)[1]
+    nextε = endowmentstep(endowments, currentε)
 
-    return M * ε - S′(p, S, producers)
+    return currentε, nextε, M
 end
