@@ -196,7 +196,7 @@ For now assume every pairwise price on the network, $P^{(i, j)}$, is determined 
 \begin{equation}
     \begin{split}
         V(X_t) &= \max_{p_t, \matr{Y}_t} \left\{ p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P^j(\matr{Y}_t) + \lambda_t \cdot \left( X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \right) + \beta \cdot \E \ V(X_{t+1}) \right\} \\
-        X_{t+1} &= X_t + M \cdot \left(e_{t+1} - e_t \right) -  \sum^N_{i = 1} r(s_{i, t}, p_t; \psi_{i, t}))
+        X_{t+1} &= X_t + M \cdot \left(e_{t+1} - e_t \right) -  \sum^N_{i = 1} r(s_{i, t}, p_t; \psi_{i, t})
     \end{split}
 \end{equation}
 
@@ -374,7 +374,7 @@ Hence,
     \end{split}
 \end{equation}
 
-Given this Jacobian, we can rewrite the shadow price of the bargaining procedure (\ref{lambda_before}) as,
+Given this Jacobian, we can rewrite the shadow price of the bargaining procedure (\ref{lambda_before}).
 
 \begin{equation}
     -\lambda_{i, t} = P^{(i, j)} + \sum_{k \in N \setminus \set{i}} a_{i, k} \cdot Y^{(i, k)} \cdot \mathbb{J}\{P\}^{(i, k)}_{(i, j)}

@@ -109,13 +109,13 @@ hence the price vector and its Jacobian are,
     \end{split}
 \end{equation}
 
-Let $z_t^{(i, j)} \coloneqq \frac{\Delta X^{i, j}_t}{(Y^{(i, j)}_t)^2}$ expanding $\mathbb{J}\{P\}$, then
+Let $\partial z_t^{(i, j)} \coloneqq \frac{\Delta X^{i, j}_t}{(Y^{(i, j)}_t)^2}$ expanding $\mathbb{J}\{P\}$, then
 
 \begin{equation}
     \mathbb{J}\{P\} = \frac{1}{4} \begin{pmatrix}
-        -3 z_t^{(1, 2)} & z_t^{(1, 3)}    & z_t^{(1, 4)}    \\
-        z_t^{(1, 2)}    & -3 z_t^{(1, 3)} & z_t^{(1, 4)}    \\
-        z_t^{(1, 2)}    & z_t^{(1, 3)}    & -3 z_t^{(1, 4)}
+        -3 \partial z_t^{(1, 2)} & \partial z_t^{(1, 3)}    & \partial z_t^{(1, 4)}    \\
+        \partial z_t^{(1, 2)}    & -3 \partial z_t^{(1, 3)} & \partial z_t^{(1, 4)}    \\
+        \partial z_t^{(1, 2)}    & \partial z_t^{(1, 3)}    & -3 \partial z_t^{(1, 4)}
     \end{pmatrix}
 \end{equation}
 
@@ -159,4 +159,70 @@ Hence,
 
 \begin{equation}
     \frac{Y^{(1, 2)}}{Y^{(1, 3)}} = \frac{(1 + p_1) \cdot X_1 + X_2 \cdot p_2}{(1 + p_1) \cdot X_1 + X_3 \cdot p_3}
+\end{equation}
+
+\subsection{Star + Path}
+
+
+\vspace{5mm}
+\begin{minipage}{.5\textwidth}
+    \resizebox{\textwidth}{!}{\input{sections/diagrams/starpath.tikz}}
+\end{minipage}
+\begin{minipage}{.5\textwidth}
+    \begin{equation*}
+        \begin{split}
+            \matr{A} &= \begin{pmatrix}
+                0 & 1 & 1 & 1 \\
+                1 & 0 & 1 & 0 \\
+                1 & 1 & 0 & 0 \\
+                1 & 0 & 0 & 0
+            \end{pmatrix} \\
+            E &= \set{(1, 2), (1, 3), (1, 4), (2, 3)} \\
+            \matr{G} &= \begin{pmatrix}
+                0 & 1 & 1 & 1 \\
+                1 & 0 & 1 & 1 \\
+                1 & 1 & 0 & 0 \\
+                1 & 1 & 0 & 0
+            \end{pmatrix}
+        \end{split}
+    \end{equation*}
+\end{minipage}
+\vspace{5mm}
+
+
+\begin{equation}
+    (2\matr{I} + \matr{G})^{-1} =\matr{I} + \frac{1}{2} \begin{pmatrix}
+        0  & 0  & -1 & -1 \\
+        0  & 0  & -1 & -1 \\
+        -1 & -1 & 0  & 1  \\
+        -1 & -1 & 1  & 0
+    \end{pmatrix}
+\end{equation}
+
+such that, letting $z^{(i, j)}_t \coloneqq \frac{\Delta X}{Y}^{(i, j)}_t$ and $\partial z_t^{(i, j)} \coloneqq \frac{\Delta X}{Y^2}^{(i, j)}_t$
+
+\begin{equation}
+    P(\matr{Y}_t) = \Delta X_t \oslash \matr{Y}_t - \frac{1}{2}
+    \begin{pmatrix}
+        - z_t^{(1, 4)} - z_t^{(2, 3)}                \\
+        - z_t^{(1, 4)} - z_t^{(2, 3)}                \\
+        - z_t^{(1, 2)} - z_t^{(1, 3)} + z_t^{(2, 3)} \\
+        - z_t^{(1, 2)} - z_t^{(1, 3)} + z_t^{(1, 4)}
+    \end{pmatrix} = \begin{pmatrix}
+        z_t^{(1, 2)} - \frac{z_t^{(1, 4)} + z_t^{(2, 3)}}{2}                \\
+        z_t^{(1, 3)} - \frac{z_t^{(1, 4)} + z_t^{(2, 3)}}{2}                \\
+        z_t^{(1, 4)} + \frac{z_t^{(2, 3)} - z_t^{(1, 2)} - z_t^{(1, 3)}}{2} \\
+        z_t^{(2, 3)} + \frac{z_t^{(1, 4)} - z_t^{(1, 2)} - z_t^{(1, 3)}}{2}
+    \end{pmatrix}
+\end{equation}
+
+\begin{equation}
+    \begin{split}
+        \mathbb{J}\{P\}(\matr{Y}_t) &= \left[\matr{I} + \frac{1}{2} \begin{pmatrix}
+                0  & 0  & -1 & -1 \\
+                0  & 0  & -1 & -1 \\
+                -1 & -1 & 0  & 1  \\
+                -1 & -1 & 1  & 0
+            \end{pmatrix} \right] \diag (\Delta X_t \oslash \matr{Y}^2_t) \\
+    \end{split}
 \end{equation}

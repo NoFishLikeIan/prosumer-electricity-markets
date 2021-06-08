@@ -25,9 +25,14 @@ def pmatrix(a):
 
 A = np.zeros((4, 4), dtype=int)
 A[0, 1:] = 1
+A[1, 2] = 1
 A = A + A.T
 
+label_mapping = dict(zip(range(4), range(1, 5)))
+
 Ag = nx.convert_matrix.from_numpy_array(A)
+
+Ag = nx.relabel_nodes(Ag, label_mapping)
 
 Lg = nx.generators.line_graph(Ag)
 
