@@ -174,7 +174,7 @@ which yields, for every edge $(i, j)$ with $ a_{i, j} \neq 0$,
 \end{equation}
 
 
-In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. One can therefore simplify the solution by using the line graph associated with the original graph, with adjacency matrix $\matr{G} \in \R^{\abs{E}\times \abs{E}}$. First, let $\Delta_t$ in $\R^{\abs{E}}$ be the vector of revenue difference in the respective local markets with entries,
+In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. One can therefore simplify the solution by using the directed line graph associated with the original graph, with adjacency matrix $\matr{G} \in \R^{\abs{E}\times \abs{E}}$. First, let $\Delta_t$ in $\R^{\abs{E}}$ be the vector of revenue difference in the respective local markets with entries,
 
 \begin{equation}
     \Delta^{(i, j)}_t \coloneqq X_{i, t} \cdot p_{i, t} - X_{j, t} \cdot p_{j, t}
@@ -184,29 +184,30 @@ At each time $t$, equation (\ref{bargaining_solution}) can be then written as,
 
 \begin{equation} \label{matrix_bargaining_solution}
     \begin{split}
-        2(P \circ Y) &= \Delta  - \matr{G} \left( P \circ Y \right) \\
-        (2\matr{I} + \matr{G}) (P \circ Y) &= \Delta  \\
-        (P \circ Y) &= (2\matr{I} + \matr{G})^{-1} \Delta  \\
-        P &= (2\matr{I} + \matr{G})^{-1} (\Delta  \oslash Y)
+        2(P \circ \Y) &= \Delta  - \matr{G} \left( P \circ \Y \right) \\
+        (2\matr{I} + \matr{G}) (P \circ \Y) &= \Delta  \\
+        (P \circ \Y) &= (2\matr{I} + \matr{G})^{-1} \Delta \\
+        \diag(\Y) P &=  (2\matr{I} + \matr{G})^{-1} \Delta \\
+        P &= \diag(\Y)^{-1} (2\matr{I} + \matr{G})^{-1} \Delta
     \end{split}
 \end{equation}
 
-where $\circ$ and $\oslash$ denote the element-wise (Hadamard) product and division respectively. To get a better intuition for this result, we can use the Neumann expansion of $(2\matr{I} + \matr{G})^{-1}$,
+where $\circ$ denotes the element-wise (Hadamard) product. To get a better intuition for this result, we can use the Neumann expansion of $(2\matr{I} + \matr{G})^{-1}$,
 
 \begin{equation}
-    P = \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k (\Delta  \oslash Y)
+    P = \diag(\Y)^{-1} \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k \Delta
 \end{equation}
 
 Hence, the bargaining solution gives the price following price formation,
 
 \begin{equation}
-    P(\Y_t) = (2\matr{I} + \matr{G})^{-1} (\Delta _t \oslash \Y_t)
+    P(\Y_t) = \diag(\Y_t)^{-1} (2\matr{I} + \matr{G})^{-1} \Delta
 \end{equation}
 
 with associated Jacobian (see \ref{a:jacobian_p}),
 
 \begin{equation}
-    \mathbb{J}\{P\}(\Y_t) = - (2\matr{I} + \matr{G})^{-1} \diag (\Delta _t \oslash \Y^2_t)
+    \mathbb{J}\{P\}(\Y_t) = -\diag(\Y)^{-1} \diag(P)
 \end{equation}
 
 We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. The shadow price (\ref{lambda_before}) of the bargaining procedure is then,
@@ -215,14 +216,21 @@ We can use this, combined with the local optimization $\lambda_t$, to obtain an 
     -\lambda_{i, t} = P^{(i, j)} + \sum_{k \in N \setminus \set{i}} a_{i, k} \cdot Y^{(i, k)} \cdot \mathbb{J}\{P\}^{(i, k)}_{(i, j)}
 \end{equation}
 
-The write hand side can be written as a vector over the edges by (see appendix \ref{a:shadow_vector})
+Stacking the right hand side over edges (see appendix \ref{a:shadow_vector}),
 
 \begin{equation}
-    \begin{split}
-        &P + \mathbb{J}\{P\} ( \matr{I} + \matr{G} ) \Y \\
-        &(2\matr{I} + \matr{G})^{-1} \diag(\Delta  \oslash \Y) \iota - (2\matr{I} + \matr{G})^{-1} \diag (\Delta  \oslash \Y^2) ( \matr{I} + \matr{G} ) \Y \\
-        &(2\matr{I} + \matr{G})^{-1} \diag(\Delta  \oslash \Y) \left(\iota - \diag(\Y)^{-1} ( \matr{I} + \matr{G} ) \Y \right) \\
-        &(2\matr{I} + \matr{G})^{-1} \diag(\Delta  \oslash \Y) \left( \iota - (\matr{I} + \matr{G}) \iota \right) \\
-        &(2\matr{I} + \matr{G})^{-1} \diag(\Delta  \oslash \Y) \matr{G} \iota
-    \end{split}
+    P + \mathbb{J}\{P\} \Y = 0 \ \implies \lambda_{i, t} = 0 \ \forall i
+\end{equation}
+
+This result yields the property that the surplus revenue $\Delta$ is allocated entirely based on the network structure,
+
+\begin{equation}
+    (2 \matr{I} + \matr{G})^{-1} = \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k
+\end{equation}
+
+\subsection{Policy}
+
+
+\begin{equation}
+    p_{t+1} = \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{N \cdot a} - \frac{b}{a} -  p_t
 \end{equation}

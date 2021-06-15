@@ -8,7 +8,7 @@ sns.set()
 doplot = False
 
 
-def pmatrix(a):
+def pmatrix(a, digits = -1):
     """Returns a LaTeX pmatrix
 
     :a: numpy array
@@ -16,6 +16,9 @@ def pmatrix(a):
     """
     if len(a.shape) > 2:
         raise ValueError('pmatrix can at most display two dimensions')
+
+    a = np.round(a, digits) if digits > 0 else digits
+
     lines = str(a).replace('[', '').replace(']', '').splitlines()
     rv = [r'\begin{pmatrix}']
     rv += ['  ' + ' & '.join(l.split()) + r'\\' for l in lines]
@@ -23,10 +26,12 @@ def pmatrix(a):
     return '\n'.join(rv)
 
 
-A = np.zeros((4, 4), dtype=int)
-A[0, 1:] = 1
-# A[1, 2] = 1
-A = A + A.T
+A = np.array([
+    [0, 1, 1, 1],
+    [1, 0, 0, 0],
+    [1, 0, 0, 0],
+    [1, 0, 0, 0]
+])
 
 label_mapping = dict(zip(range(4), range(1, 5)))
 
@@ -45,6 +50,9 @@ plt.savefig("linegraph.png")
 plt.close()
 
 G = nx.to_numpy_array(Lg)
+
+G = np.triu(G) - np.triu(G).T
+
 I = np.identity(G.shape[0])
 
 inverse = np.linalg.inv(2*I + G)

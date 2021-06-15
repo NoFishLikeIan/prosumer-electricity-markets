@@ -145,52 +145,29 @@ Using $\tilde{R}^\prime(p) = a$,
 
 \subsection{Jacobian of bargaining price} \label{a:jacobian_p}
 
-First, we can get rid of the Hadamard division by letting, $\matr{D}_{Y} \coloneqq \diag(\Y_t)$ and $\matr{D}_{X} \coloneqq \diag(\matr{\Delta })$, such that,
+I will use the fact that,
 
 \begin{equation}
-    P = (2\matr{I} + \matr{G})^{-1} \matr{D}_{X} \matr{D}_{Y}^{-1} \ \iota \\
+    \diag(\Y) P = \diag(P) \Y = \Y \circ P \implies d \ \diag(\Y) P = \diag(P) \ d \Y
 \end{equation}
 
-Using the commutative property of diagonal matrices we can compute
+First let $\matr{D} \coloneqq \diag(\Y)$ and $\matr{A} \coloneqq (2\matr{I} + \matr{G})^{-1} \Delta$. Noting that $\frac{d \matr{A}}{d \Y} = 0$,
 
 \begin{equation}
     \begin{split}
-        dP &= (2\matr{I} + \matr{G})^{-1} \matr{D}_X d\matr{D}_Y^{-1} \iota \\
-        &= - (2\matr{I} + \matr{G})^{-1} \matr{D}_X \matr{D}_Y^{-2} d \Y_t
-    \end{split}
-\end{equation}
-
-Hence,
-
-\begin{equation}
-    \begin{split}
-        \mathbb{J}\{P\}(\Y_t) &= - (2\matr{I} + \matr{G})^{-1} \matr{D}_X \matr{D}_Y^{-2} \\
-        &= - (2\matr{I} + \matr{G})^{-1} \diag (\Delta _t \oslash \Y^2_t)
+        P &= \matr{D}^{-1} \matr{A} \\
+        dP &= d\matr{D}^{-1} \matr{A} \\
+        &= -\matr{D}^{-1} d \matr{D} \underbrace{\matr{D}^{-1} \matr{A}}_{P} \\
+        &= -\matr{D}^{-1} \diag(P) \ d \Y \\
+        \mathbb{J}\{P\} &= -\diag(\Y)^{-1} \diag(P) = - (P \oslash \Y) \iota
     \end{split}
 \end{equation}
 
 \subsection{Shadow price in vector form} \label{a:shadow_vector}
 
-
 \begin{equation}
     \begin{split}
-        P &+ \mathbb{J}\{P\} ( \matr{I} + \matr{G} ) \Y \\
-        \begin{pmatrix}
-            P^{(1, 2)} \\
-            P^{(1, 3)} \\
-            \vdots
-        \end{pmatrix} &+\begin{pmatrix}
-            \mathbb{J}\{P\}^{(1, 2)}_{(1, 2)} & \mathbb{J}\{P\}^{(1, 3)}_{(1, 2)} & \ldots \\
-            \mathbb{J}\{P\}^{(1, 2)}_{(1, 3)} & \ddots                            &        \\
-            \vdots                            &                                   &        \\
-        \end{pmatrix} \begin{pmatrix}
-            1      & 0 & \ldots \\
-            1      & 1 &        \\
-            \vdots &   & \ddots \\
-        \end{pmatrix} \begin{pmatrix}
-            Y^{(1, 2)} \\
-            Y^{(1, 3)} \\
-            \vdots
-        \end{pmatrix}
+        &P + \left( \matr{G} \circ \mathbb{J}\{P\} \right)  \Y \\
+        &P - \left( \matr{G} \circ \diag(\Y)^{-1} \diag(P) \right) \Y = 0
     \end{split}
 \end{equation}

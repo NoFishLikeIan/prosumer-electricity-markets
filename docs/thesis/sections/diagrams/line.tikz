@@ -1,0 +1,23 @@
+\tikzstyle{var} = [
+draw,circle,
+minimum size=10pt]
+
+\tikzstyle{agent} = [
+draw, circle,
+fill=yellow,
+minimum size=10pt]
+
+\begin{tikzpicture}[-{Latex[scale=1]}, thick]
+
+    \node [agent] (one) {Prov. $1$};
+    \node [agent, right = 3cm of one] (two) {Prov. $2$};
+    \node [agent, right = 3cm of two] (three) {Prov. $3$};
+    \node [agent, right = 3cm of three] (four) {Prov. $4$};
+
+
+    \path
+    (one) edge [] node [above] {$Y^{(1, 2)}$} (two)
+    (two) edge [] node [above] {$Y^{(2, 3)}$} (three)
+    (three) edge [] node [above] {$Y^{(3, 4)}$} (four);
+
+\end{tikzpicture}
