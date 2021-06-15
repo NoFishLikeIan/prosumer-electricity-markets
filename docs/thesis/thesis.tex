@@ -14,7 +14,8 @@
     \usepackage{tikz} 
     \usepackage{relsize}
     \usepackage{makecell}
-
+    \usepackage{booktabs}
+    
 
     \usepackage{blindtext} % FIXME: Remove for dummy text
 
@@ -24,6 +25,7 @@
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
     \setlength{\fboxsep}{1em}
+    \newcommand\headercell[1]{\smash[b]{\begin{tabular}[t]{@{}c@{}} #1 \end{tabular}}}
 
     % Graphs
     \usetikzlibrary{positioning, arrows.meta, calc, decorations.markings, math, matrix, fit, backgrounds}
@@ -39,6 +41,8 @@
     \newcommand{\matr}[1]{\bm{#1}}
 	\newcommand{\set}[1]{\left\{#1\right\}}
 	\newcommand{\diag}{\text{diag}}
+
+    \newcommand{\Y}{\matr{Y}}
     
     \DeclareMathOperator{\sign}{sign}
     \DeclareMathOperator{\Tr}{Tr}
@@ -83,11 +87,10 @@
 % \nocite{*}
 \printbibliography
 
-\iffalse
-    \newpage
-    \appendix
+\newpage
+\appendix
 
-    \subfile{sections/appendix.tex}
-\fi
+\subfile{sections/appendix.tex}
+
 
 \end{document}

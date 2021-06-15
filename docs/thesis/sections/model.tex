@@ -3,19 +3,21 @@
 
 The model focuses on two aspects of the cross-border electricity market. First, it models explicitly the bilateral trading procedure among electricity providers in the wholesale electricity market, which is a common mechanism of price setting, particularly in cross-border daily contracts in the EU and USA (\cite{Imran2014}). Doing this requires simplifying greatly the electricity market structure, particularly the different time scales at which operators trade, the intra-border competition, and the complex financial instruments. Nevertheless, these aspects can be approximated in my model by tweaking the network structure and these simplifications allows to concentrate on the bargaining-power induced by the graph, and the instabilities these might induce.
 
-\begin{figure}[!ht]
-    \centering
-    \input{sections/diagrams/overview.tikz}
-    \caption{A stylized model structure}
-    \label{tikz:model}
-\end{figure}
+\iffalse
+    \begin{figure}[!ht]
+        \centering
+        \input{sections/diagrams/overview.tikz}
+        \caption{A stylized model structure}
+        \label{tikz:model}
+    \end{figure}
 
-\begin{figure}[!ht]
-    \centering
-    \input{sections/diagrams/timing.tikz}
-    \caption{Model timing}
-    \label{tikz:timing}
-\end{figure}
+    \begin{figure}[!ht]
+        \centering
+        \input{sections/diagrams/timing.tikz}
+        \caption{Model timing}
+        \label{tikz:timing}
+    \end{figure}
+\fi
 
 \subsection{Prosumers}
 
@@ -25,155 +27,82 @@ Prosumers are endowed an electricity quantity. The endowment follows a Markov pr
     \overline{e} > 0 \text{ and } \underline{e} < 0
 \end{equation}
 
+\begin{table}
+    \centering
+    \input{sections/tables/perception.tex}
+    \caption{Assumptions made by agents on other's processes}
+    \label{table:perception}
+\end{table}
+
 \subsection{Producers}
 
-Let $s$ be the electricity production and $c(s)$, $c^\prime(s) > 0$ the cost of ramping up or turning down production next period by $r$. Producers are assumed to be naive over the price they face in the market, namely, $\E_{\psi}[p_{t+1}] = \psi \cdot p_{t}$. The Bellman equation is,
+Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} = \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s)$, with $c^\prime(s) > 0$, the cost of ramping up or turning down production next period by $r$. This setup leads to the following optimization problem.
 
 \begin{equation} \label{bellman_prod}
     \begin{split}
         V(s_t, p_t) &= \max_{r_t \in [\underline{r}, \bar{r}]} \left\{ s_t \cdot p_t - c(s_t) \cdot r_t + \beta \cdot V(s_{t+1}, p_{t+1}) \right\} \\
         \text{ s.t. } s_{t+1} &= s_t + r_t \text{ with } s_t \geq 0, s_0 \\
-        p_{t+1} &= \psi_t \cdot p_t \\
-        \underline{r} &< 0 < \bar{r}
+        p_{t+1} &= \psi \cdot p_t
     \end{split}
 \end{equation}
 
-Let,
+This optimization problem gives (see \ref{a:producer_optimization}) an implicit definition for $r$ as a function of $s$ and $p$ given $\psi$,
 
 \begin{equation}
-    J_{\psi}(s, p, r) = s \cdot p - c(s) \cdot r + \beta \cdot V(s + r, \psi \cdot p)
-\end{equation}
-
-such that, for a given $\psi$, Equation (\ref{bellman_prod}) can be written as,
-
-\begin{equation}
-    V(s, p) = \max_{r_t \in [\underline{r}, \bar{r}]} J_{\psi}(s, p, r).
-\end{equation}
-
-Maximization of $J_\psi$ requires (first order condition),
-
-\begin{equation} \label{J_foc_r}
-    \frac{\partial J_{\psi}}{\partial r}(s, p, r)  = -c(s) + \beta \cdot   \frac{\partial V}{\partial s}(s+r, \psi \cdot p)  = 0
-\end{equation}
-
-Assuming maximization in $r$, by the envelope theorem,
-
-\begin{equation}
-    \begin{split}
-        \frac{\partial V}{\partial s}(s, p) &= p - c^\prime(s) \cdot r + \beta \cdot  \frac{\partial V}{\partial s}(s+r, \psi \cdot p)
-    \end{split}
-\end{equation}
-
-Using Equation (\ref{J_foc_r}) on the first condition yields,
-
-\begin{equation}
-    \begin{split}
-        &\frac{\partial V}{\partial s}(s, p) = p - c^\prime(s) \cdot r + c(s) \\
-        \implies &\frac{\partial V}{\partial s}(s + r, \psi \cdot p) = \psi \cdot p - c^\prime(s + r) \cdot r +  c(s + r)
-    \end{split}
-\end{equation}
-
-Using (\ref{J_foc_r}),
-
-\begin{equation}
-    c^\prime(s + r) \cdot r - c(s+r) = \psi \cdot p - \frac{c(s)}{\beta}
-\end{equation}
-
-
-\subsubsection{Polynomial costs}
-
-If costs are $c(x) = \sum^d_{k=0} c_k \cdot x^k$, for some odd $d > 1$ ($d = 1 \implies r = 0$), then $c^\prime(x) = \sum^d_{k=1} k \cdot c_k \cdot x^{k-1}$.
-
-\begin{equation}
-    \begin{split}
-        c^\prime(s + r) \cdot r - c(s+r) &= r \cdot \sum^d_{k=1} k \cdot c_k \cdot (s+r)^{k-1} - \sum^d_{k=0} c_k \cdot (s+r)^k \\
-        &= \sum^d_{k=1} r \cdot k \cdot c_k \cdot (s+r)^{k-1} - \sum^d_{k=1} c_{k-1} \cdot (s+r)^{k-1} \\
-        &= \sum^d_{k=1} (r \cdot k \cdot c_k - c_{k-1}) \cdot (s+r)^{k-1}
-    \end{split}
-\end{equation}
-
-Then,
-
-\begin{equation*}
-    \begin{split}
-        \frac{\partial}{\partial p} \left( c^\prime(s + r) \cdot r - c(s+r) \right) &=\frac{\partial r}{\partial p} \cdot \sum^d_{k=1} k \cdot (s + r)^{k-1} + (k-1) \cdot  (r \cdot k \cdot c_k - c_{k-1}) \cdot (s+r)^{k-2}  \\
-        &= \frac{\partial r}{\partial p} \cdot \sum^d_{k=1} \left( k + (k-1) \cdot  \frac{r \cdot k \cdot c_k - c_{k-1}}{s+r}\right) \cdot (s+r)^{k-1}
-    \end{split}
-\end{equation*}
-
-which implies,
-
-\begin{equation}
-    \frac{\partial r}{\partial p} = \frac{\psi}{\sum^d_{k=1} \left( k + (k-1) \cdot  \frac{r \cdot k \cdot c_k - c_{k-1}}{s+r}\right) \cdot (s+r)^{k-1}}
-\end{equation}
-
-\subsubsection{Quadratic costs}
-
-Assume $c(x) = c\cdot x^2$, $c^\prime(x) = 2c \cdot x$,
-
-\begin{equation}
-    \begin{split}
-        2c \cdot (s + r) \cdot r - c \cdot (s + r)^2 &= \psi \cdot p - \frac{c \cdot s^2}{\beta} \\
-        r^2 = \frac{\psi \cdot p}{c} - \left(\frac{1 - \beta}{\beta}\right) \cdot s^2
-    \end{split}
-\end{equation}
-
-Maybe,
-
-\begin{equation}
-    r(s, p; \psi) =  \sqrt{\frac{\psi \cdot p}{c} - \left(\frac{1 - \beta}{\beta}\right) \cdot s^2}
-\end{equation}
-
-hence,
-
-\begin{equation}
-    \frac{\partial}{\partial p} r =\frac{\psi}{2 \cdot r(s, p; \psi)}
+    r = r(s, p; \psi) : \ c^\prime(s + r) \cdot r - c(s + r) = \psi \cdot p - \frac{c(s)}{\beta}
 \end{equation}
 
 \subsubsection{Local demand}
+Given the ramp-up policy function $r(s, p; \psi)$, it is possible to find the \textit{excess} demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers.
 
-The total electricity supplied by $N$ producers is,
+Assume that the local market is composed of $N$ producers and $M$ prosumers. First, let $R_t$ be the aggregated ramp-up function,
 
 \begin{equation}
-    S_{t+1} = S_t + \sum^N_{i = 1} r(s_{i, t}, p_t; \psi_{i, t})
+    R_{t}(p_t) \coloneqq \sum^N_{i = 1} r(s_{i, t}, p_t; \psi_{i, t})
 \end{equation}
 
-$M$ prosumers demand $M \cdot e_t$, hence the supply is,
+Then, the aggregate supply of electricity at time $t$, can be written as,
 
 \begin{equation}
-    X_{t+1} = M \cdot e_{t+1} - S_{t+1}
+    \begin{split}
+        \sum^N_{i = 1} s_{i, t+1} &= \sum^N_{i = 1} \left( s_{i, t} +  r(s_{i, t}, p_t; \psi_{i, t}) \right)\\
+        S_{t+1} &= S_t + R_{t}(p_t)
+    \end{split}
 \end{equation}
 
-which yields the evolution of demand,
+The electricity demanded by $M$ prosumers is fully determined by the Markov chain of electricity endowments $e_t$. Furthermore, I assume that this demand is completely inelastic, namely prosumers will buy electricity at any price from providers or directly from producers. Hence the excess electricity demand at time $t$ is simply the difference between the demand and the supply,
 
-\begin{equation}
-    X_{t+1}  = X_t + M \cdot \left(e_{t+1} - e_t \right) -  \sum^N_{i = 1} r(s_{i, t}, p_t; \psi_{i, t})
+\begin{equation} \label{x_inst}
+    X_{t} = M \cdot e_{t} - S_{t}
+\end{equation}
+
+Note that if $S_t > M \cdot e_t$, there is an excess supply ($X_t < 0$) of electricity in the local market that the local provider can use to sell abroad. This happens in the case of a good endowment of electricity $e_t < 0$. Given equation (\ref{x_inst}), we obtain the evolution of the process $X_t$ (see \ref{a:ev_demand}),
+
+\begin{equation} \label{x_true}
+    X_{t+1} = X_t + M \cdot \left(e_{t+1} - e_t \right) -  R_t
 \end{equation}
 
 \subsection{Providers}
 
-\subsubsection{Notation}
-
-Grid firms operate on a graph $\mathcal{A} = (V, E)$. Firms are nodes, $i \in V$, and they can trade if they share an edge, $(i, j) \in E$. I will indicate the neighbors of a node as,
-
-\begin{equation}
-    N_{\mathcal{A}}(i) = \set{ \ j \in V: \ (i, j) \in E \ }
-\end{equation}
-
 \subsubsection{Setup}
 
-Each period, the optimization problem of the firm is,
+Electricity providers are monopolist in their own local market and are indexed, as is their local market, by $i$. They set the local price $p_{i, t}$ at which the sell (purchase) the excess demand (supply) of electricity in the local market $X_{i, t}$. They do so by trading electricity $Y^{(i, j)}$, at a bargained price $P^{(i, j)}$, with neighboring providers. Providers operate on a graph $\mathcal{A} = (V, E)$ and can trade if they share an edge, $(i, j) \in E$. Let the neighbors of a node be the set,
 
 \begin{equation}
-    \max_{p_{i, t}, Y_{i, t}} \Pi_i(p_{i, t}, \matr{Y}_{i, t})
+    N_{\mathcal{A}}(i) \coloneqq \set{ \ j \in V: \ (i, j) \in E \ }
+\end{equation}
+
+Given this, each period, the optimization problem of the firm is,
+
+\begin{equation}
+    \max_{p_{i, t}, Y_{i, t}} \Pi_i(p_{i, t}, \Y_{i, t})
 \end{equation}
 
 where $p_{i, t} \in \R_{+}$ and
 
 \begin{equation}
     \begin{split}
-        \matr{Y}_{i, t} &\in \R^{\abs{N_{\mathcal{A}}(i)}} \\
-        \matr{Y}_{i, t} &= \begin{pmatrix}
+        \Y_{i, t} &\in \R^{\abs{N_{\mathcal{A}}(i)}}, \hspace{5mm}\Y_{i, t} = \begin{pmatrix}
             Y^{(i, 1)}_t \\
             Y^{(i, 2)}_t \\
             \vdots       \\
@@ -182,115 +111,43 @@ where $p_{i, t} \in \R_{+}$ and
     \end{split}
 \end{equation}
 
-is a vector of traded quantities with the provider's neighbors. More precisely,
+is a vector of traded quantities with the provider's neighbors. Expanding the provider's payoff,
 
 \begin{equation}
     \begin{split}
-        \Pi_i(p_{i, t}, \matr{Y}_{i, t}) &= p_{i, t} \cdot X_{i, t}(p_{i, t-1}) - \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)} \cdot P_t^{(i, j)} \\
-        \text{ subject to } X_{i, t}(p_{i, t-1}) &=  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}
+        \Pi_i(p_{i, t}, \Y_{i, t}) &= p_{i, t} \cdot X_{i, t}(p_{i, t-1}) - \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)} \cdot P_t^{(i, j)} \\
+        \text{ s.t. } X_{i, t}(p_{i, t-1}) &=  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}
     \end{split}
 \end{equation}
 
-For now assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\matr{Y}$ with elements $Y^{(i, j)}$. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$), the Bellman equation is,
+The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. For no, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$.
 
-\begin{equation}
-    \begin{split}
-        V(X_t) &= \max_{p_t, \matr{Y}_t} \left\{ p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P^j(\matr{Y}_t) + \lambda_t \cdot \left( X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \right) + \beta \cdot \E \ V(X_{t+1}) \right\} \\
-        X_{t+1} &= X_t + M \cdot \left(e_{t+1} - e_t \right) -  \sum^N_{i = 1} r(s_{i, t}, p_t; \psi_{i, t})
-    \end{split}
-\end{equation}
+The provider's optimization is an intertemporal optimization problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, it perceived $M \cdot (\E[e_{t+1}] - e_{t})$ to be approximately $0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. $\matr{\pi}_e \approx \matr{I}$). Second, not knowing each individual production state $s_{i, t}$ in the local market, it approximates the ramp-up function by a linear adaptive rule, proportional to the number of producers and the price, namely $R_t(p) \approx N \cdot( b + a\cdot p)$ with $b < 0$ and $a > 0$.
 
-\subsubsection{Euler equation}
-
-Let,
+Given this setup we can specify the optimization problem of the provider. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$), the Bellman equation can be written as,
 
 \begin{equation*}
     \begin{split}
-        L(p_t, \matr{Y}_t) &\coloneqq p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P^j(\matr{Y}_t) + \lambda_t \cdot \left( X_t -  \sum_{j} Y_t^j \right) \\
-        &+ \beta \cdot \E \ V\left(X_t + M \cdot \left(e_{t+1} - e_t \right) -  \sum^N_{i = 1} r_{i, t} \right) \\
-        \text{where } r_{i, t} &\coloneqq r(s_{i, t}, p_{t}; \psi_{i, t}) \\
+        V(X_t) &= \max_{p_t, \Y_t} \left\{ p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P^j(\Y_t) + \lambda_t \cdot \left( X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \right) + \beta \cdot  V(X_{t+1}) \right\} \\
+        X_{t+1} &= X_t- N \cdot( b + a\cdot p_t)
     \end{split}
 \end{equation*}
 
-such that $V(X_t) = \max_{p_t, \matr{Y}_t} L(p_t, \matr{Y}_t)$. The first order condition of $L$ requires that,
+The optimization yields the policy function for local prices (\ref{a:provider_optimization}),
 
-\begin{equation} \label{foc_p}
-    \frac{\partial}{\partial p_t} L = X_t - \beta \cdot \E \left[V^\prime (X_{t+1}) \right] \cdot \sum^N_{i = 1}  \frac{\partial}{\partial p_t} r_{i, t} = 0
+\begin{equation} \label{local_p}
+    p_{t+1} = \lambda_{t+1} + \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{N \cdot a} - \frac{b +  a \cdot p_{t}}{a}
 \end{equation}
-
-Furthermore, the second first order condition requires that, for all $j$,
-
-\begin{equation} \label{foc_Y}
-    \frac{\partial}{\partial Y^j_t} L =  P^j(\matr{Y}_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^j_t} (\matr{Y}_t) + \lambda_t = 0
-\end{equation}
-
-This implies that, $\forall j, l \in N_{\mathcal{A}}(i)$,
-
-\begin{equation} \label{lambda_before}
-    -\lambda_t = P^j(\matr{Y}_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^j_t} (\matr{Y}_t) = P^l(\matr{Y}_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^l_t} (\matr{Y}_t)
-\end{equation}
-
-\subsubsection{Envelope}
-
-Assuming we are in the optimum, given $\partial X_{t+1} / \partial X_t = 1$,
-
-\begin{equation} \label{env}
-    V^\prime(X_t) = p_t + \lambda_t + \beta \cdot \E \ V^\prime(X_{t+1})
-\end{equation}
-
-
-Let,
-
-\begin{equation}
-    \begin{split}
-        R_t(p, s) &\coloneqq \sum^N_{i = 1} r_{i, t} \\
-        \nabla R_t(p, s) &\coloneqq \sum^N_{i = 1} \frac{\partial r_{i, t}}{\partial p_t}
-    \end{split}
-\end{equation}
-
-then combining Equations (\ref{env}) and (\ref{foc_p}), we obtain
-
-\begin{equation}
-    V^\prime(X_t) = p_t + \lambda_t + \frac{X_t}{\nabla R_t}
-\end{equation}
-
-Iterating forward,
-
-\begin{equation}
-    \begin{split}
-        V^\prime(X_{t+1}) &= p_{t+1} + \lambda_{t+1} + \frac{X_{t+1}}{\nabla R_{t+1}} \\
-        \E \ V^\prime(X_{t+1}) &= p_{t+1} + \E[\lambda_{t+1}] + \frac{\E[X_{t+1}]}{\nabla R_{t+1}}
-    \end{split}
-\end{equation}
-
-Using (\ref{foc_p}),
-
-\begin{equation}
-    \frac{X_t}{\beta \cdot \nabla R_t} = p_{t+1} + \E[\lambda_{t+1}] + \frac{\E[X_{t+1}]}{\nabla R_{t+1}}
-\end{equation}
-
-hence we obtain the policy function,
-
-\begin{equation}
-    p_{t+1} =  \frac{1}{\beta} \cdot \frac{X_t}{\nabla R_t} - \frac{\E[X_{t+1}]}{\nabla R_{t+1}} - \E[\lambda_{t+1}]
-\end{equation}
-
-where
-
-\begin{equation}
-    \E[X_{t+1}] = X_t + M \cdot \left(\E[e_{t+1}] - e_t \right) - R_t
-\end{equation}
-
 
 \subsection{Bargaining model}
 
-To solve the bargaining model we need to impose a ``direction'' of trade, namely a traded quantity $Y^{(i, j)}$ enters positively in $j$ and negatively in $i$, such that
+Given the evolution of the local price (\ref{local_p}), it is necessary to solve the bargaining model between providers (which determines the shadow price of acquiring outside electricity $\lambda_{t+1}$). To do so I first impose a ``direction'' of trade, namely a traded quantity $Y^{(i, j)}$ enters positively in $j$ and negatively in $i$, such that
 
 \begin{equation}
     Y^{(i, j)} = -Y^{(j, i)}
 \end{equation}
 
-Furthermore we can rewrite the summation over the neighbors using the adjacency matrix of the graph $\mathcal{A}$, such that the payoff of provider $i$ can be written as,
+Furthermore we can rewrite the summation over the neighbors using $\matr{A}$, the adjacency matrix of the graph $\mathcal{A}$, with entries $a_{i, j}$, such that the instantaneous payoff of provider $i$ can be written as,
 
 \begin{equation}
     \begin{split}
@@ -299,7 +156,7 @@ Furthermore we can rewrite the summation over the neighbors using the adjacency 
     \end{split}
 \end{equation}
 
-I assume that the bargaining does not take into account individual market expectations and that it happens after the local demand generation, such that $P$ is a function of $p$ only via $Y$. The Nash bargaining solution is such that,
+I assume that the bargaining does not take into account individual market expectations and that it happens after the demand is already determined, such that $P$ is a function of $p$ only via $Y$. The Nash bargaining solution is such that,
 
 \begin{equation}
     P_t^{(i, j)} = \arg \max_{P_t^{(i, j)}} \left\{\Pi_{i, t} \cdot \Pi_{j, t} \right\}.
@@ -317,65 +174,55 @@ which yields, for every edge $(i, j)$ with $ a_{i, j} \neq 0$,
 \end{equation}
 
 
-\subsection{Line graph and bargaining solution}
-
-In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. We can therefore simplify the solution by appealing to the associated line graph of our original graph, with adjacency matrix $\matr{G} \in \R^{\abs{E}\times \abs{E}}$. First, let $\Delta X_t$ in $\R^{\abs{E}}$ be the vector of revenue difference with entries,
+In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. One can therefore simplify the solution by using the line graph associated with the original graph, with adjacency matrix $\matr{G} \in \R^{\abs{E}\times \abs{E}}$. First, let $\Delta_t$ in $\R^{\abs{E}}$ be the vector of revenue difference in the respective local markets with entries,
 
 \begin{equation}
-    \Delta X^{(i, j)}_t \coloneqq X_{i, t} \cdot p_{i, t} - X_{j, t} \cdot p_{j, t}
+    \Delta^{(i, j)}_t \coloneqq X_{i, t} \cdot p_{i, t} - X_{j, t} \cdot p_{j, t}
 \end{equation}
 
 At each time $t$, equation (\ref{bargaining_solution}) can be then written as,
 
 \begin{equation} \label{matrix_bargaining_solution}
     \begin{split}
-        2(P \circ Y) &= \Delta X - \matr{G} \left( P \circ Y \right) \\
-        (2\matr{I} + \matr{G}) (P \circ Y) &= \Delta X \\
-        (P \circ Y) &= (2\matr{I} + \matr{G})^{-1} \Delta X \\
-        P &= (2\matr{I} + \matr{G})^{-1} (\Delta X \oslash Y)
+        2(P \circ Y) &= \Delta  - \matr{G} \left( P \circ Y \right) \\
+        (2\matr{I} + \matr{G}) (P \circ Y) &= \Delta  \\
+        (P \circ Y) &= (2\matr{I} + \matr{G})^{-1} \Delta  \\
+        P &= (2\matr{I} + \matr{G})^{-1} (\Delta  \oslash Y)
     \end{split}
 \end{equation}
 
-where $\circ$ and $\oslash$ denote the element-wise (Hadamard) product and division respectively. Using the Neumann expansion of $(2\matr{I} + \matr{G})^{-1}$,
+where $\circ$ and $\oslash$ denote the element-wise (Hadamard) product and division respectively. To get a better intuition for this result, we can use the Neumann expansion of $(2\matr{I} + \matr{G})^{-1}$,
 
 \begin{equation}
-    P = \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k (\Delta X \oslash Y)
+    P = \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k (\Delta  \oslash Y)
 \end{equation}
 
-\subsection{Putting it all together}
-
-The bargaining solution tells us that the price formation follows,
+Hence, the bargaining solution gives the price following price formation,
 
 \begin{equation}
-    P(\matr{Y}_t) = (2\matr{I} + \matr{G})^{-1} (\Delta X_t \oslash \matr{Y}_t)
+    P(\Y_t) = (2\matr{I} + \matr{G})^{-1} (\Delta _t \oslash \Y_t)
 \end{equation}
 
-We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. First, we can get rid of the Hadamard division by letting, $\matr{D}_{Y} \coloneqq \diag(\matr{Y}_t)$ and $\matr{D}_{X} \coloneqq \diag(\matr{\Delta X})$, such that,
+with associated Jacobian (see \ref{a:jacobian_p}),
 
 \begin{equation}
-    P = (2\matr{I} + \matr{G})^{-1} \matr{D}_{X} \matr{D}_{Y}^{-1} \ \iota \\
+    \mathbb{J}\{P\}(\Y_t) = - (2\matr{I} + \matr{G})^{-1} \diag (\Delta _t \oslash \Y^2_t)
 \end{equation}
 
-Using the commutative property of diagonal matrices we can compute
-
-\begin{equation}
-    \begin{split}
-        dP &= (2\matr{I} + \matr{G})^{-1} \matr{D}_X d\matr{D}_Y^{-1} \iota \\
-        &= - (2\matr{I} + \matr{G})^{-1} \matr{D}_X \matr{D}_Y^{-2} d \matr{Y}_t
-    \end{split}
-\end{equation}
-
-Hence,
-
-\begin{equation}
-    \begin{split}
-        \mathbb{J}\{P\}(\matr{Y}_t) &= - (2\matr{I} + \matr{G})^{-1} \matr{D}_X \matr{D}_Y^{-2} \\
-        &= - (2\matr{I} + \matr{G})^{-1} \diag (\Delta X_t \oslash \matr{Y}^2_t)
-    \end{split}
-\end{equation}
-
-Given this Jacobian, we can rewrite the shadow price of the bargaining procedure (\ref{lambda_before}).
+We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. The shadow price (\ref{lambda_before}) of the bargaining procedure is then,
 
 \begin{equation}
     -\lambda_{i, t} = P^{(i, j)} + \sum_{k \in N \setminus \set{i}} a_{i, k} \cdot Y^{(i, k)} \cdot \mathbb{J}\{P\}^{(i, k)}_{(i, j)}
+\end{equation}
+
+The write hand side can be written as a vector over the edges by (see appendix \ref{a:shadow_vector})
+
+\begin{equation}
+    \begin{split}
+        &P + \mathbb{J}\{P\} ( \matr{I} + \matr{G} ) \Y \\
+        &(2\matr{I} + \matr{G})^{-1} \diag(\Delta  \oslash \Y) \iota - (2\matr{I} + \matr{G})^{-1} \diag (\Delta  \oslash \Y^2) ( \matr{I} + \matr{G} ) \Y \\
+        &(2\matr{I} + \matr{G})^{-1} \diag(\Delta  \oslash \Y) \left(\iota - \diag(\Y)^{-1} ( \matr{I} + \matr{G} ) \Y \right) \\
+        &(2\matr{I} + \matr{G})^{-1} \diag(\Delta  \oslash \Y) \left( \iota - (\matr{I} + \matr{G}) \iota \right) \\
+        &(2\matr{I} + \matr{G})^{-1} \diag(\Delta  \oslash \Y) \matr{G} \iota
+    \end{split}
 \end{equation}
