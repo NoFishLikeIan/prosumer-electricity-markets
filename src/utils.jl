@@ -54,11 +54,19 @@ function findconsecutive(arr::Vector{Int64})
 
             current = [arr[i + 1], -1]
         end
-    end
+end
 
-    return []
+return []
 end
 
 function collectfirst(itr)
     collect(Base.Iterators.take(itr, 1))[1]
+end
+
+function safe_find_zero(f, x₀; fallback=0.0)
+    try
+        find_zero(f, x₀)
+    catch
+        fallback
+    end
 end
