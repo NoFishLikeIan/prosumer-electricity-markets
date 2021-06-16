@@ -28,7 +28,7 @@ function initializemodel(
         provider.p = p₀
 
         for n in 1:N
-            add_agent!(node, Producer, model, s₀, ψ₀)
+            add_agent!(node, Producer, model, s₀, 0.0, ψ₀)
         end
         
 

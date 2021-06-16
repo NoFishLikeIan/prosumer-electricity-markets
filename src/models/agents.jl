@@ -3,6 +3,8 @@ mutable struct Producer <: AbstractAgent
     pos::Int64
 
     s::Float64 # Current production
+    r::Float64 # Current ramp-up
+    
     ψ::Float64 # Forecasting rule
 end
 

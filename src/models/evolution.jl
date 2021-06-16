@@ -35,6 +35,7 @@ function agent_step!(producer::Producer, model)
     
     for producer in producers
         r′ = r(provider.p, producer, model)
+        producer.r = r′
         producer.s = producer.s + r′
     end
 

@@ -8,7 +8,6 @@ using Random
 Random.seed!(11148705)
 
 include("utils.jl")
-include("models/network.jl")
 include("models/agents.jl")
 
 include("models/policies/provider.jl")
