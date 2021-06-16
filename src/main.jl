@@ -1,9 +1,9 @@
 using LightGraphs, GraphPlot
 using Agents
 
-using Roots
+using Random, Distributions
 
-using Random
+using Roots
 
 Random.seed!(11148705)
 

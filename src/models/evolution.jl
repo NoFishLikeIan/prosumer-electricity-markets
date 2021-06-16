@@ -28,7 +28,7 @@ end
 
 function agent_step!(producer::Producer, model)
     others = agents_in_position(producer, model)
-    prosumer, provider = others
+    _, provider = others
 
     r′ = r(provider.p, producer, model)
     producer.r = r′
@@ -37,14 +37,4 @@ end
 
 function model_step!(model)
 
-    # Update price and ramp-up function
-    for node in 1:length(model.space.s)
-        prosumers, provider = agents_in_position(node, model)
-
-        producers = getlocalproducers(node, model)
-        R = sum(p.r for p in producers)
-        
-        push!(model.R[node], R)
-        push!(model.p[node], provider.p)
-    end
 end

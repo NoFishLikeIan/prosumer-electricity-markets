@@ -6,6 +6,7 @@ mutable struct Producer <: AbstractAgent
     r::Float64 # Current ramp-up
     
     ψ::Float64 # Forecasting rule
+    Ep::Float64 # Price expectation
 end
 
 mutable struct Provider <: AbstractAgent

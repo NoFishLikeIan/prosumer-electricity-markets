@@ -1,4 +1,5 @@
 using Plots
+using DataFrames
 
 include("src/main.jl")
 
@@ -19,8 +20,13 @@ c′(x) = 2x^2
 
 parameters = Dict(
     :c => c, :c′ => c′,
+    :Ψ => [0.9, 1.1],
     :M => 10, :ε => ε,
     :N => 10, :β => 0.9
 )
 
 model = initializemodel(A, parameters)
+
+adata = [:pos, :p, :r]
+mdata = []
+dfagent, dfmodel = run!(model, agent_step!, model_step!, 5; adata, mdata)
