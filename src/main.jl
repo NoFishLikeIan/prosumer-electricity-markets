@@ -16,3 +16,5 @@ include("models/policies/producer.jl")
 
 include("models/evolution.jl")
 include("models/init.jl")
+
+include("get.jl")

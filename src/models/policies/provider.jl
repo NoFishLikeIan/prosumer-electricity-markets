@@ -8,5 +8,5 @@ function p′(X, provider::Provider, model)
 
     ∂x = (1 - β) / (β * N * a)
 
-    return ∂x * X - b / a - provider.p
+    return max(∂x * X - b / a - provider.p, 0.)
 end
