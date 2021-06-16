@@ -1,3 +1,5 @@
+using Plots
+
 include("src/main.jl")
 
 A = [
