@@ -28,5 +28,14 @@ function agent_step!(provider::Provider, model)
 end
 
 function agent_step!(producer::Producer, model)
+    others = agents_in_position(producer, model)
+    prosumer, provider = others
+
+    producers = (agent for agent in others if agent isa Producer)
+    
+    for producer in producers
+        r′ = r(provider.p, producer, model)
+        producer.s = producer.s + r′
+    end
 
 end
