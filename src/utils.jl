@@ -58,3 +58,7 @@ function findconsecutive(arr::Vector{Int64})
 
     return []
 end
+
+function collectfirst(itr)
+    collect(Base.Iterators.take(itr, 1))[1]
+end
