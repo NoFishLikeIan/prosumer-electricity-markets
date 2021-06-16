@@ -7,6 +7,8 @@ mutable struct Producer <: AbstractAgent
     
     ψ::Float64 # Forecasting rule
     Ep::Float64 # Price expectation
+
+    U::Vector{Float64} # Payoffs of strategies
 end
 
 mutable struct Provider <: AbstractAgent

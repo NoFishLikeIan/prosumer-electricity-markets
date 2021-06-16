@@ -21,8 +21,8 @@ c′(x) = 2x^2
 parameters = Dict(
     :c => c, :c′ => c′,
     :Ψ => [0.9, 1.1],
-    :M => 10, :ε => ε,
-    :N => 10, :β => 0.9
+    :M => 100, :ε => ε,
+    :N => 5, :β => 0.99
 )
 
 model = initializemodel(A, parameters)
@@ -30,6 +30,6 @@ model = initializemodel(A, parameters)
 adata = [:pos, :p, :r, :Ep, :ε, :ψ]
 mdata = []
 
-dfagent, dfmodel = run!(model, agent_step!, model_step!, 100; adata, mdata)
+dfagent, dfmodel = run!(model, agent_step!, model_step!, 5; adata, mdata)
 
 dfprosumer, dfprovider, dfproducer = groupby(dfagent, :agent_type)

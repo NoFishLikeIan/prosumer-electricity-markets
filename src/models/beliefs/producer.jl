@@ -3,10 +3,24 @@ function update_belief!(producer::Producer, model)
 
     _, provider = agents_in_position(producer, model)
 
+    currentsupply, ramp, ψ = producer.s, producer.r, producer.ψ
+    p = provider.p
+
     # FIXME: Better updating with payoff
-    ψₗ, ψᵤ = model.Ψ
-    producer.ψ = provider.p - producer.Ep > 0 ? ψᵤ : ψₗ
+    currentstrategy = findfirst(==(ψ), model.Ψ) 
 
-    producer.Ep =  producer.ψ *  provider.p
+    u = currentsupply * p - model.c(currentsupply) * ramp
 
+    producer.U[currentstrategy] += u
+
+    probstay = exp(producer.U[currentstrategy]) / sum(exp.(producer.U))
+
+    # FIXME: Add rng
+    if rand() > probstay
+        strategy′ = flip12(currentstrategy)
+        producer.ψ = model.Ψ[strategy′]
+    end
+    
+    producer.Ep = producer.ψ * provider.p
+    
 end

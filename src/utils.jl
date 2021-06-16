@@ -70,3 +70,7 @@ function safe_find_zero(f, x₀; fallback=0.0)
         fallback
     end
 end
+
+function flip12(idx)
+    3 - idx
+end
