@@ -12,6 +12,8 @@ include("models/agents.jl")
 
 include("models/policies/provider.jl")
 include("models/policies/producer.jl")
+include("models/beliefs/provider.jl")
+include("models/beliefs/producer.jl")
 
 include("models/evolution.jl")
 include("models/init.jl")
