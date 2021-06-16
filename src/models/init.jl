@@ -24,7 +24,7 @@ function initializemodel(
 
         provider = add_agent!(node, Provider, model, a₀, b₀, 0.)
         
-        p₀ = p′(0., demand - supply, provider, model)
+        p₀ = p′(demand - supply, provider, model)
         provider.p = p₀
 
         for n in 1:N
