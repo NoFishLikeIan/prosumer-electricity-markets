@@ -32,9 +32,13 @@ function agent_step!(producer::Producer, model)
 
     r′ = r(provider.p, producer, model)
     producer.r = r′
-    producer.s = producer.s + r′
+    producer.s = max(producer.s + r′, 0.)
 end
 
 function model_step!(model)
+
+    for node in 1:length(model.space.s), producer in getlocalproducers(node, model)
+        update_belief!(producer, model)
+    end
 
 end

@@ -27,6 +27,9 @@ parameters = Dict(
 
 model = initializemodel(A, parameters)
 
-adata = [:pos, :p, :r]
+adata = [:pos, :p, :r, :Ep, :ε, :ψ]
 mdata = []
-dfagent, dfmodel = run!(model, agent_step!, model_step!, 5; adata, mdata)
+
+dfagent, dfmodel = run!(model, agent_step!, model_step!, 100; adata, mdata)
+
+dfprosumer, dfprovider, dfproducer = groupby(dfagent, :agent_type)

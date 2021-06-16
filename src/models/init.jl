@@ -24,16 +24,21 @@ function initializemodel(
         add_agent!(node, Prosumer, model, ε₀)
 
         provider = add_agent!(
-            node, Provider, model, a₀, b₀, 0.)
+            node, Provider, model, 
+            a₀, b₀, 0.
+        )
         
         p₀ = p′(demand - supply, provider, model)
         provider.p = p₀
 
         for n in 1:N
             ψ₀ = sample(parameters[:Ψ])
+
             add_agent!(
-                    node, Producer, 
-                    model, s₀, 0.0, ψ₀, p₀)
+                node, Producer, model, 
+                s₀, 0.0, ψ₀, p₀
+            )
+
         end
         
 
