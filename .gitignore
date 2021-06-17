@@ -459,6 +459,7 @@ sectors-mackay.png
 
 plots/markets/
 plots/explore/
+plots/energy/
 theorypy/*
 
 src/junk.jl

@@ -19,3 +19,4 @@ include("models/evolution.jl")
 include("models/init.jl")
 
 include("get.jl")
+include("plot.jl")

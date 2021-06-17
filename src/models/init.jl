@@ -33,8 +33,6 @@ function initializemodel(
         p₀ = p′(demand - supply, provider, model)
         provider.p = p₀
 
-        println(node, " -> ", p₀)
-
         for _ in 1:N
             ψ₀ = sample(parameters[:Ψ])
 
