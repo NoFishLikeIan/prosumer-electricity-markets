@@ -27,12 +27,6 @@ Prosumers are endowed an electricity quantity. The endowment follows a Markov pr
     \overline{e} > 0 \text{ and } \underline{e} < 0
 \end{equation}
 
-\begin{table}
-    \centering
-    \input{sections/tables/perception.tex}
-    \caption{Assumptions made by agents on other's processes}
-    \label{table:perception}
-\end{table}
 
 \subsection{Producers}
 
@@ -82,6 +76,24 @@ Note that if $S_t > M \cdot e_t$, there is an excess supply ($X_t < 0$) of elect
     X_{t+1} = X_t + M \cdot \left(e_{t+1} - e_t \right) -  R_t
 \end{equation}
 
+\subsubsection{Belief update}
+
+Producers approximate the price evolution by assuming prices will change by a factor $\psi$ each period. I assume that this factor is picked from a set $\Psi$. Let $\psi_{t}$ be the ``forecasting factor'' currently employed by a producer. Next period, the producer obtains an instantenous payoff,
+
+\begin{equation}
+    \begin{split}
+        s_{t+1} &= s_t + r(s_{i, t}, p_t; \psi_{t}) \\
+        u_{t+1} &= s_{t+1} \cdot p_{t+1} - c(s_{t+1}) \cdot r(s_{t+1}, p_{t+1}; \psi_{t})
+    \end{split}
+\end{equation}
+
+Further, let $U_{\psi_h} = \sum^t_{\tau = 0} \mathbbm{1} \{\psi_{\tau} = \psi_h\} \cdot u_{\tau}$, that is, the cumulative sum of instantenous payoffs obtained while using factor $\psi_h$. Then producers update their forecasting rule by chossing the all time best performing factor, namely,
+
+\begin{equation}
+    \psi_{t+1} = \arg\max_{\psi_h} \frac{\exp(U_{\psi_h})}{\sum_{\psi \in \Psi} \exp(U_{\psi})}
+\end{equation}
+
+
 \subsection{Providers}
 
 \subsubsection{Setup}
@@ -120,7 +132,7 @@ is a vector of traded quantities with the provider's neighbors. Expanding the pr
     \end{split}
 \end{equation}
 
-The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. For no, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$.
+The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. For now, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$.
 
 The provider's optimization is an intertemporal optimization problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, it perceived $M \cdot (\E[e_{t+1}] - e_{t})$ to be approximately $0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. $\matr{\pi}_e \approx \matr{I}$). Second, not knowing each individual production state $s_{i, t}$ in the local market, it approximates the ramp-up function by a linear adaptive rule, proportional to the number of producers and the price, namely $R_t(p) \approx N \cdot( b + a\cdot p)$ with $b < 0$ and $a > 0$.
 
@@ -216,7 +228,7 @@ We can use this, combined with the local optimization $\lambda_t$, to obtain an 
     -\lambda_{i, t} = P^{(i, j)} + \sum_{k \in N \setminus \set{i}} a_{i, k} \cdot Y^{(i, k)} \cdot \mathbb{J}\{P\}^{(i, k)}_{(i, j)}
 \end{equation}
 
-Stacking the right hand side over edges (see appendix \ref{a:shadow_vector}),
+Stacking the right hand side over edges,
 
 \begin{equation}
     P + \mathbb{J}\{P\} \Y = 0 \ \implies \lambda_{i, t} = 0 \ \forall i
@@ -228,9 +240,43 @@ This result yields the property that the surplus revenue $\Delta$ is allocated e
     (2 \matr{I} + \matr{G})^{-1} = \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k
 \end{equation}
 
-\subsection{Policy}
+\subsubsection{Belief update}
 
+Providers approximate the ramp-up production function of the local producers using a linear rule,
 
 \begin{equation}
-    p_{t+1} = \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{N \cdot a} - \frac{b}{a} -  p_t
+    R_{t+1}(p_t) \approx b_t + a_t \cdot p_t
 \end{equation}
+
+I assume that each period providers observe the realization $R_{t+1}(p_t)$ and pick the coefficients $a_{t+1}$ and $b_{t+1}$ via ordinary least squares, more precisely
+
+\begin{equation}
+    \begin{pmatrix}
+        b_{t+1} \\
+        a_{t+1}
+    \end{pmatrix} = (\matr{R}_{t+1}^T \matr{R}_{t+1})^{-1} (\matr{R}_{t+1}^T \matr{p}_t)
+\end{equation}
+
+where,
+\begin{equation}
+    \matr{R}_{t+1} = \begin{pmatrix}
+        1      & R_{1}   \\
+        1      & R_{2}   \\
+        \vdots & \vdots  \\
+        1      & R_{t+1}
+    \end{pmatrix} \text{ and } \matr{p}_t = \begin{pmatrix}
+        p_{0}  \\
+        p_{1}  \\
+        \vdots \\
+        p_{t}
+    \end{pmatrix}
+\end{equation}
+
+To recap the belief structure of the model,
+
+\begin{table}[h!]
+    \centering
+    \input{sections/tables/perception.tex}
+    \caption{Assumptions made by agents on other's processes}
+    \label{table:perception}
+\end{table}

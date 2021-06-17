@@ -7,7 +7,7 @@
 
     \usepackage{csquotes}
 
-    \usepackage{amsmath, amssymb, mathtools}
+    \usepackage{amsmath, amssymb, mathtools, bbm}
     \usepackage{bm}
 
     \usepackage{graphicx}
@@ -74,23 +74,22 @@
 
 \newpage
 
-\subfile{sections/introduction.tex}
-
+\iffalse
+    \subfile{sections/introduction.tex}
+\fi
 
 \subfile{sections/model.tex}
 
-\newpage
 \subfile{sections/examples.tex}
 
+\iffalse
 \newpage
 \pagenumbering{gobble} % stop page numbering
 % \nocite{*}
 \printbibliography
+\fi
 
-\newpage
-\appendix
-
-\subfile{sections/appendix.tex}
+\newpage \appendix \subfile{sections/appendix.tex}
 
 
 \end{document}
