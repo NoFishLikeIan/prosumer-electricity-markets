@@ -28,8 +28,8 @@ begin
 		1 0 0 0;
 	]
 	
-	c(x) = x^3
-	c′(x) = 2x^2
+	c(x) = x + x^2
+	c′(x) = 1 + 2x
 	
 	ε = (
 		[0.99 0.01; 0.01 0.99],
@@ -56,6 +56,41 @@ begin
 
 	dfagent, dfmodel = run!(model, agent_step!, model_step!, T; adata, mdata)
 	println("Done!")
+end
+
+# ╔═╡ a0549a1c-f195-4004-ad36-97fcab690f3e
+function makefoc(ψ, s, p, cost, ∂cost)
+	
+	mb = ψ * p - c(s) / model.β 
+
+    f(r) = r * ∂cost(s + r) - cost(s + r) - mb
+	
+	return f
+end
+
+# ╔═╡ 810770db-d3ff-420f-99be-ff09136ada66
+begin
+	ψ = 1.1
+	s = 2.
+	
+	rs = range(-s*2, s*2, length = 100)
+	
+	figure = hline([0.],
+		c = :red, linestyle=:dash, label=false,
+		title = "First order condition with ψ=$ψ and s=$s")
+	
+	for p ∈ [1,  5., 10.]
+		f = makefoc(
+			ψ, s, p, 
+			(x) -> x^2, (x) -> 2x
+		)
+		
+		plot!(figure, rs, f, label = "p = $p")
+		
+	end
+	
+	figure
+	
 end
 
 # ╔═╡ b7b4cb91-4467-4598-b6c7-20637a6ae395
@@ -85,7 +120,7 @@ end
 # ╔═╡ 22b7e3ff-9de9-4aea-b4e0-777266f63624
 begin
 	prices = 0.01:0.01:5.0
-	supplies = range(0.0, 3.0, length = 1000)
+	supplies = range(0.0, 5.0, length = 1000)
 	
 	
 	
@@ -93,7 +128,7 @@ begin
 	
 	joint = plot(figures..., layout = (1, 2))
 	
-	savefig(joint, joinpath(plotpath, "r.pdf"))
+	# savefig(joint, joinpath(plotpath, "r.pdf"))
 	
 	joint
 	
@@ -108,5 +143,7 @@ end
 # ╠═56518671-93c3-4b12-9089-1859cfe6cb01
 # ╠═248bddf9-bfc1-42df-b35d-43035bf64e84
 # ╠═59da17f2-caef-45ad-8696-35608bc327d2
+# ╠═a0549a1c-f195-4004-ad36-97fcab690f3e
+# ╠═810770db-d3ff-420f-99be-ff09136ada66
 # ╠═b7b4cb91-4467-4598-b6c7-20637a6ae395
 # ╠═22b7e3ff-9de9-4aea-b4e0-777266f63624

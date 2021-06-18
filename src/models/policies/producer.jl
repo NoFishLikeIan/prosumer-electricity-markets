@@ -7,7 +7,7 @@ function r(p, producer::Producer, model)
 
     mb = ψ * p - c(s) / β 
 
-    f(r) = r * c′(s + r) + c(s + r) - mb
+    f(r) = r * c′(s + r) - c(s + r) - mb
 
     return safe_find_zero(f, 0.0)
 end

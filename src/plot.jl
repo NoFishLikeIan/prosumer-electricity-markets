@@ -7,7 +7,7 @@ end
 
 function lowendowmentperiods(dfpros)
     ε = collect(Float64, dfpros[!, :ε])
-    return findconsecutive(findall(.==(minimum(ε)), ε))
+    return findconsecutive(findall(.==(maximum(ε)), ε))
 end
 
 function getsquare(n::Int64)
@@ -46,7 +46,7 @@ function priceplot(dfagent; savepath=nothing)
         εperiods = lowendowmentperiods(dfpros)
         pricet = dfprov[!, :p]
 
-        fig = plot(time, pricet, title="Node $node", label="p", color=:blue)
+        fig = plot(time, pricet, title="Node $node", label="p", color=:blue, legend=:topleft)
             
         vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
             
@@ -67,12 +67,12 @@ function supplyplot(dfagent; savepath=nothing)
         dfagent, 
         (time, nodedata) -> begin
             dfpros, _, dfprod = nodedata
-            node = dfpros[1, :pos]
+        node = dfpros[1, :pos]
             
             εperiods = lowendowmentperiods(dfpros)
             supply = combine(groupby(dfprod, [:step]), :s => sum)[!, :s_sum]
 
-            fig = plot(time, supply, label="s", color=:green, title="Node $node")
+            fig = plot(time, supply, label="s", color=:green, title="Node $node", legend=:topleft)
 
             
             vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
@@ -103,7 +103,7 @@ function correlationplot(dfagent; savepath=nothing)
             
             vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
             
-            return fig   
+        return fig   
         end)
     
     if !isnothing(savepath)
