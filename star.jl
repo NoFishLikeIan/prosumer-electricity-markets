@@ -3,6 +3,8 @@ using DataFrames
 
 include("src/main.jl")
 
+doplot = false
+
 A = [
     0 1 1 1;
     1 0 0 0;
@@ -10,8 +12,8 @@ A = [
     1 0 0 0;
 ]
 
-c(x) = x^2
-c′(x) = 2x
+c(x) = c₀ * exp(c₀ * x)
+c′(x) = c₀^2 * exp(c₀ * x)
 
 ρₗ = 0.9
 ρᵤ = 0.8
@@ -31,26 +33,33 @@ parameters = Dict(
     :N => 15, :β => 0.99
 )
 
+s₀ = 20.0
+
 model = initializemodel(
     A, parameters;
-    s₀=5.0, b₀=0.
+    s₀=s₀, b₀=0.
 )
 
 adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s]
 mdata = []
 
-T = 500
+T = 100
 
 dfagent, dfmodel = run!(
     model, agent_step!, model_step!, T; 
     adata, mdata)
 
-dfprosumer, dfprovider, dfproducer = groupby(dfagent, :agent_type)
+provider = model[2]
+producer = model[3]
 
-Plots.scalefontsizes(0.6)
+if doplot
 
-figrp = priceplot(dfagent; savepath="plots/energy/price.pdf")
-figsp = supplyplot(dfagent; savepath="plots/energy/supply.pdf")
-println("Done!")
+    Plots.scalefontsizes(0.6)
 
-Plots.resetfontsizes()
+    figrp = priceplot(dfagent; savepath="plots/energy/price.pdf")
+    figsp = supplyplot(dfagent; savepath="plots/energy/supply.pdf")
+    println("Done!")
+
+    Plots.resetfontsizes()
+
+end

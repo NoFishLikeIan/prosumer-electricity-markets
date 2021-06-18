@@ -10,14 +10,23 @@ using Plots, DataFrames, InteractiveDynamics
 # ╔═╡ c0cf7f69-a656-4bc0-9c24-ad3dc0f31f36
 using Agents
 
-# ╔═╡ ed781afc-5fa5-4817-bd68-382cc99af097
-include("../src/main.jl")
-
 # ╔═╡ 40dc6db5-7b14-4150-89cc-ca27992a4b7c
 Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
 
 # ╔═╡ 3e067f0a-f882-421a-bdb0-bc4915aa5b35
 plotpath = "../plots/energy"
+
+# ╔═╡ 849288c9-0b47-4fda-b8a6-1fe7e93c3c67
+begin
+	c₀, c₁ = 2.0, 0.8
+	
+	c(s, r) = log(1 + exp(c₁*s*r - c₀))
+	
+	∇c(s, r) = c₁ * inv(1 + exp(c₀ - s*r))
+	
+	∂c∂s(s, r) = ∇c(s, r) * r
+	∂c∂r(s, r) = ∇c(s, r) * s
+end
 
 # ╔═╡ 56518671-93c3-4b12-9089-1859cfe6cb01
 begin
@@ -28,16 +37,13 @@ begin
 		1 0 0 0;
 	]
 	
-	c(x) = x + x^2
-	c′(x) = 1 + 2x
-	
 	ε = (
 		[0.99 0.01; 0.01 0.99],
 		[-10.0, 10.0]
 	)
 
 	parameters = Dict(
-		:c => c, :c′ => c′,
+		:c => c, :c′ => (∂c∂s, ∂c∂r),
 		:Ψ => [0.9, 1.1],
 		:M => 100, :ε => ε,
 		:N => 5, :β => 0.99
@@ -45,11 +51,35 @@ begin
 	b₀ = -1
 end
 
+# ╔═╡ b389c106-600b-44dc-a861-d1abcefa6353
+begin
+	fixeds = 4.0
+	r = range(-fixeds, fixeds, length = 100)
+	
+	fnfig = plot(r, x -> c(fixeds, x),
+		ylims = (0., 10.), xlabel = "r", ylabel="c",
+		c = :red,
+		title = "costs with s = $fixeds; c₀ = $c₀, c₁ = $c₁", label = false)
+	
+	derfig = plot(
+		r, x -> ∂c∂r(fixeds, x),
+		ylims = (0., 10.),xlabel = "r",ylabel="∂c/∂r",
+		c = :red,
+		title = "derivative of marginal costs with s = $fixeds; c₀ = $c₀, c₁ = $c₁", label = false)
+	
+	jointcosts = plot(fnfig, derfig, size = (1200, 400))
+	
+	savefig(jointcosts, joinpath(plotpath, "cost.pdf"))
+	
+	jointcosts
+	
+end
+
 # ╔═╡ 248bddf9-bfc1-42df-b35d-43035bf64e84
 model = initializemodel(A, parameters; b₀ = b₀)
 
 # ╔═╡ 59da17f2-caef-45ad-8696-35608bc327d2
-begin
+if false
 	T = 100
 	adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s]
 	mdata = []
@@ -58,92 +88,13 @@ begin
 	println("Done!")
 end
 
-# ╔═╡ a0549a1c-f195-4004-ad36-97fcab690f3e
-function makefoc(ψ, s, p, cost, ∂cost)
-	
-	mb = ψ * p - c(s) / model.β 
-
-    f(r) = r * ∂cost(s + r) - cost(s + r) - mb
-	
-	return f
-end
-
-# ╔═╡ 810770db-d3ff-420f-99be-ff09136ada66
-begin
-	ψ = 1.1
-	s = 2.
-	
-	rs = range(-s*2, s*2, length = 100)
-	
-	figure = hline([0.],
-		c = :red, linestyle=:dash, label=false,
-		title = "First order condition with ψ=$ψ and s=$s")
-	
-	for p ∈ [1,  5., 10.]
-		f = makefoc(
-			ψ, s, p, 
-			(x) -> x^2, (x) -> 2x
-		)
-		
-		plot!(figure, rs, f, label = "p = $p")
-		
-	end
-	
-	figure
-	
-end
-
-# ╔═╡ b7b4cb91-4467-4598-b6c7-20637a6ae395
-function plotrampup(ψ, supplies, prices)
-		
-	mins, maxs = extrema(supplies)
-	
-	sticks = range(mins, maxs, length = length(supplies) ÷ 100)
-
-	producer(s) = Producer(1, 1, s, 0., ψ, 0., [0., 0.])
-		
-	title = "r(p, s, ψ = $ψ)"
-		
-	figure = heatmap(
-		supplies, prices, 
-		(s, p) -> r(p, producer(s), model), 
-		xticks = round.(sticks, digits = 2),
-		c = :coolwarm,
-		clims = (-maxs, maxs),
-		title=title, xlabel = "s", ylabel="p",
-		size=(1200, 400)
-	)
-	
-	return figure
-end
-
-# ╔═╡ 22b7e3ff-9de9-4aea-b4e0-777266f63624
-begin
-	prices = 0.01:0.01:5.0
-	supplies = range(0.0, 5.0, length = 1000)
-	
-	
-	
-	figures = [plotrampup(ψ, supplies, prices) for ψ ∈ model.Ψ]
-	
-	joint = plot(figures..., layout = (1, 2))
-	
-	# savefig(joint, joinpath(plotpath, "r.pdf"))
-	
-	joint
-	
-end
-
 # ╔═╡ Cell order:
 # ╠═41809916-cea7-11eb-2af5-8b37c6dbd767
 # ╠═40dc6db5-7b14-4150-89cc-ca27992a4b7c
 # ╠═c0cf7f69-a656-4bc0-9c24-ad3dc0f31f36
-# ╠═ed781afc-5fa5-4817-bd68-382cc99af097
-# ╠═3e067f0a-f882-421a-bdb0-bc4915aa5b35
-# ╠═56518671-93c3-4b12-9089-1859cfe6cb01
+# ╟─3e067f0a-f882-421a-bdb0-bc4915aa5b35
+# ╠═849288c9-0b47-4fda-b8a6-1fe7e93c3c67
+# ╟─56518671-93c3-4b12-9089-1859cfe6cb01
+# ╟─b389c106-600b-44dc-a861-d1abcefa6353
 # ╠═248bddf9-bfc1-42df-b35d-43035bf64e84
 # ╠═59da17f2-caef-45ad-8696-35608bc327d2
-# ╠═a0549a1c-f195-4004-ad36-97fcab690f3e
-# ╠═810770db-d3ff-420f-99be-ff09136ada66
-# ╠═b7b4cb91-4467-4598-b6c7-20637a6ae395
-# ╠═22b7e3ff-9de9-4aea-b4e0-777266f63624
