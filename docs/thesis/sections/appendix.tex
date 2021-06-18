@@ -7,7 +7,7 @@
 Let,
 
 \begin{equation}
-    J_{\psi}(s, p, r) = s \cdot p - c(s) \cdot r + \beta \cdot V(s + r, \psi \cdot p)
+    J_{\psi}(s, p, r) = s \cdot p - c(s, r) \cdot r + \beta \cdot V(s + r, \psi \cdot p)
 \end{equation}
 
 such that, for a given $\psi$, Equation (\ref{bellman_prod}) can be written as,
@@ -19,14 +19,14 @@ such that, for a given $\psi$, Equation (\ref{bellman_prod}) can be written as,
 Maximization of $J_\psi$ requires (first order condition),
 
 \begin{equation} \label{J_foc_r}
-    \frac{\partial J_{\psi}}{\partial r}(s, p, r)  = -c(s) + \beta \cdot   \frac{\partial V}{\partial s}(s+r, \psi \cdot p)  = 0
+    \frac{\partial J_{\psi}}{\partial r}(s, p, r)  = -\frac{\partial c}{\partial r}(s, r) \cdot r - c(s, r) + \beta \cdot \frac{\partial V}{\partial s}(s + r, \psi \cdot p) = 0
 \end{equation}
 
 Assuming maximization in $r$, by the envelope theorem,
 
 \begin{equation}
     \begin{split}
-        \frac{\partial V}{\partial s}(s, p) &= p - c^\prime(s) \cdot r + \beta \cdot  \frac{\partial V}{\partial s}(s+r, \psi \cdot p)
+        \frac{\partial V}{\partial s}(s, p) &= p - \frac{\partial c}{\partial s}(s, r) \cdot r + \beta \cdot \frac{\partial V}{\partial s}(s + r, \psi \cdot p)
     \end{split}
 \end{equation}
 
@@ -34,16 +34,33 @@ Using Equation (\ref{J_foc_r}) on the first condition yields,
 
 \begin{equation}
     \begin{split}
-        \frac{\partial V}{\partial s}(s, p) &= p - c^\prime(s) \cdot r + c(s) \\
-        \frac{\partial V}{\partial s}(s + r, \psi \cdot p) &= \psi \cdot p - c^\prime(s + r) \cdot r +  c(s + r)
+        \frac{\partial V}{\partial s}(s, p) &= p - \frac{\partial c}{\partial s}(s, r) \cdot r + \frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r) \\
+        &= p + \left[\frac{\partial c}{\partial r}(s, r) - \frac{\partial c}{\partial s}(s, r)\right] \cdot r + c(s, r)
     \end{split}
+\end{equation}
+
+Iterating forward yields,
+
+\begin{equation}
+    \frac{\partial V}{\partial s}(s + r, \psi \cdot p)  = \psi \cdot p + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
 \end{equation}
 
 Using (\ref{J_foc_r}),
 
 \begin{equation}
-    c^\prime(s + r) \cdot r - c(s+r) = \psi \cdot p - \frac{c(s)}{\beta}
+    \frac{\frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r)}{\beta} =  \psi \cdot p + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
 \end{equation}
+
+\subsection{Softplus function}
+
+Let the cost function be $c(s, r) = \log(1 + \exp(c_1 \cdot s\cdot r + c_0))$, then Equation (\ref{raw_policy_producer}) can be rewritten as,
+
+\begin{equation*}
+    \begin{split}
+        \frac{\mathcal{S}_c(s, r) \cdot s \cdot r + c(s, r)}{\beta} &= \psi \cdot p + \left[ \mathcal{S}_c(s + r, r) \cdot (s + r)  - \mathcal{S}_c(s + r, r) \cdot r \right] \cdot r + c(s + r, r) \\
+        \frac{\mathcal{S}_c(s, r) \cdot s \cdot r + c(s, r)}{\beta} &= \psi \cdot p +\mathcal{S}_c(s + r, r) \cdot s \cdot r + c(s + r, r)
+    \end{split}
+\end{equation*}
 
 \subsection{Evolution of excess demand} \label{a:ev_demand}
 

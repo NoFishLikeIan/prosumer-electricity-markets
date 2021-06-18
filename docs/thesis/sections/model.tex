@@ -30,7 +30,7 @@ Prosumers are endowed an electricity quantity. The endowment follows a Markov pr
 
 \subsection{Producers}
 
-Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} = \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s)$, with $c^\prime(s) > 0$, the cost of ramping up or turning down production next period by $r$. This setup leads to the following optimization problem.
+Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} = \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s, r)$, with $c^\prime(s) > 0$, the cost of ramping up or turning down production next period by $r$. This setup leads to the following optimization problem.
 
 \begin{equation} \label{bellman_prod}
     \begin{split}
@@ -42,9 +42,37 @@ Electricity producers operate power plants and can generate electricity by rampi
 
 This optimization problem gives (see \ref{a:producer_optimization}) an implicit definition for $r$ as a function of $s$ and $p$ given $\psi$,
 
-\begin{equation}
-    r = r(s, p; \psi) : \ c^\prime(s + r) \cdot r - c(s + r) = \psi \cdot p - \frac{c(s)}{\beta}
+\begin{equation} \label{raw_policy_producer}
+    \begin{split}
+        r = r(s, p; \psi) &: \\
+        &\frac{\frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r)}{\beta} =  \psi \cdot p + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
+    \end{split}
 \end{equation}
+
+
+\subsubsection{Softplus costs}
+
+Ramping down should have no costs (i.e. $c(s, r) = 0$ if $r < 0$) and should be increasing both in scale of supply $s$ and in ramp-up level $r$. A differentiable function with (almost) this feature is the softplus function (see Figure \ref{fig:costs}), which I will parametrize in steepness by $c_0$ and $c_1$,
+
+\begin{equation}
+    c(s, r) = \log \left( 1 + \exp(c_1 \cdot s \cdot r - c_0) \right)
+\end{equation}
+
+with derivative,
+
+\begin{equation}
+    \frac{\partial c}{\partial s} = \overbrace{\frac{c_1}{1 + \exp(c_0 - s \cdot r)}}^{\text{let } \mathcal{S}_c(s, r)} \cdot r, \hspace{5mm} \frac{\partial c}{\partial r} = \mathcal{S}_c(s, r) \cdot s
+\end{equation}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{\plotpath/cost.pdf}
+    \caption{Softplus cost function for different $r$ and fixed $s = 4$ and $c_0 = 2$}
+    \label{fig:costs}
+\end{figure}
+
+
+
 
 One instance of such function is plotted in Figure (\ref{fig:r}),
 
