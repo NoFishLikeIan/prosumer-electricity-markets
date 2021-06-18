@@ -148,7 +148,7 @@ Given this setup we can specify the optimization problem of the provider. Suppre
 The optimization yields the policy function for local prices (\ref{a:provider_optimization}),
 
 \begin{equation} \label{local_p}
-    p_{t+1} = \lambda_{t+1} + \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{N \cdot a} - \frac{b +  a \cdot p_{t}}{a}
+    p_{t+1} = p_t + \frac{b}{a} +  \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{N \cdot a} - \lambda_{t+1}
 \end{equation}
 
 \subsection{Bargaining model}
