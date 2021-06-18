@@ -21,6 +21,10 @@
 
     \usepackage{subfiles} % Load last
 
+    % Paths
+
+    \newcommand{\plotpath}{../../plots/energy}
+
     % Formatting
     \setlength{\parindent}{0em}
     \setlength{\parskip}{0.5em}
@@ -83,10 +87,10 @@
 \subfile{sections/examples.tex}
 
 \iffalse
-\newpage
-\pagenumbering{gobble} % stop page numbering
-% \nocite{*}
-\printbibliography
+    \newpage
+    \pagenumbering{gobble} % stop page numbering
+    % \nocite{*}
+    \printbibliography
 \fi
 
 \newpage \appendix \subfile{sections/appendix.tex}

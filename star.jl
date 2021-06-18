@@ -32,7 +32,7 @@ model = initializemodel(A, parameters)
 adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s]
 mdata = []
 
-T = 100
+T = 5
 
 dfagent, dfmodel = run!(model, agent_step!, model_step!, T; adata, mdata)
 

@@ -60,7 +60,10 @@ end
 
 # ╔═╡ b7b4cb91-4467-4598-b6c7-20637a6ae395
 function plotrampup(ψ, supplies, prices)
+		
+	mins, maxs = extrema(supplies)
 	
+	sticks = range(mins, maxs, length = length(supplies) ÷ 100)
 
 	producer(s) = Producer(1, 1, s, 0., ψ, 0., [0., 0.])
 		
@@ -69,8 +72,11 @@ function plotrampup(ψ, supplies, prices)
 	figure = heatmap(
 		supplies, prices, 
 		(s, p) -> r(p, producer(s), model), 
+		xticks = round.(sticks, digits = 2),
+		c = :coolwarm,
+		clims = (-maxs, maxs),
 		title=title, xlabel = "s", ylabel="p",
-		size=(800, 400)
+		size=(1200, 400)
 	)
 	
 	return figure
@@ -79,38 +85,19 @@ end
 # ╔═╡ 22b7e3ff-9de9-4aea-b4e0-777266f63624
 begin
 	prices = 0.01:0.01:5.0
-	supplies = range(0.0, 5.0, length = 1000)
+	supplies = range(0.0, 3.0, length = 1000)
 	
 	
 	
 	figures = [plotrampup(ψ, supplies, prices) for ψ ∈ model.Ψ]
 	
-	joint = plot(figures...)
+	joint = plot(figures..., layout = (1, 2))
 	
-	savefig(joint, joinpath(plotpath, "r.png"))
+	savefig(joint, joinpath(plotpath, "r.pdf"))
 	
 	joint
 	
 end
-
-# ╔═╡ 510a3f3b-64fd-47dc-afba-3420ad6c1ca6
-begin
-	a = 1.
-	p = 5.0
-	Xs = range(-500.0, 500.0, length = 1000)
-	
-	Δp(X) = p′(X, Provider(1, 1, a, b₀, p), model) - p
-	
-	fig = plot(
-		Xs, Δp, xlabel = "X", ylabel = "Δp"
-	) 
-	savefig(fig, joinpath(plotpath, "pricechange.png"))
-
-	fig
-end
-
-# ╔═╡ 08766e88-f198-4f15-adee-18eee3900d49
-fn = (X, p) -> p′(X, Provider(1, 1, a, b₀, p), model)
 
 # ╔═╡ Cell order:
 # ╠═41809916-cea7-11eb-2af5-8b37c6dbd767
@@ -123,5 +110,3 @@ fn = (X, p) -> p′(X, Provider(1, 1, a, b₀, p), model)
 # ╠═59da17f2-caef-45ad-8696-35608bc327d2
 # ╠═b7b4cb91-4467-4598-b6c7-20637a6ae395
 # ╠═22b7e3ff-9de9-4aea-b4e0-777266f63624
-# ╠═510a3f3b-64fd-47dc-afba-3420ad6c1ca6
-# ╠═08766e88-f198-4f15-adee-18eee3900d49

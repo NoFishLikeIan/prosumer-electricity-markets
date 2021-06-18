@@ -46,6 +46,15 @@ This optimization problem gives (see \ref{a:producer_optimization}) an implicit 
     r = r(s, p; \psi) : \ c^\prime(s + r) \cdot r - c(s + r) = \psi \cdot p - \frac{c(s)}{\beta}
 \end{equation}
 
+One instance of such function is plotted in Figure (\ref{fig:r}),
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{\plotpath/r.pdf}
+    \caption{$r$ for $c(x) = x^3$ and $\beta = 0.99$}
+    \label{fig:r}
+\end{figure}
+
 \subsubsection{Local demand}
 Given the ramp-up policy function $r(s, p; \psi)$, it is possible to find the \textit{excess} demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers.
 
