@@ -7,7 +7,9 @@ end
 
 function lowendowmentperiods(dfpros)
     ε = collect(Float64, dfpros[!, :ε])
-    return findconsecutive(findall(.==(maximum(ε)), ε))
+    cons = findconsecutive(findall(.==(maximum(ε)), ε))
+
+    return [(l, u + 1) for (l, u) in cons]
 end
 
 function getsquare(n::Int64)
@@ -37,6 +39,9 @@ end
 Plot the ramp up of agents and the price in all markets
 """
 function priceplot(dfagent; savepath=nothing)
+
+    allprices = filter(!ismissing, dfagent[!, :p])
+
     jointfigure = plotnodes(
         dfagent,
         (time, nodedata) -> begin
@@ -46,7 +51,10 @@ function priceplot(dfagent; savepath=nothing)
         εperiods = lowendowmentperiods(dfpros)
         pricet = dfprov[!, :p]
 
-        fig = plot(time, pricet, title="Node $node", label="p", color=:blue, legend=:topleft)
+        fig = plot(
+            time, pricet, 
+            ylims=extrema(allprices),
+            title="Node $node", label="p", color=:blue, legend=:topleft)
             
         vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
             
@@ -67,12 +75,15 @@ function supplyplot(dfagent; savepath=nothing)
         dfagent, 
         (time, nodedata) -> begin
             dfpros, _, dfprod = nodedata
-        node = dfpros[1, :pos]
+        
+            node = dfpros[1, :pos]
             
             εperiods = lowendowmentperiods(dfpros)
             supply = combine(groupby(dfprod, [:step]), :s => sum)[!, :s_sum]
 
-            fig = plot(time, supply, label="s", color=:green, title="Node $node", legend=:topleft)
+            fig = plot(
+                time, supply, 
+                label="s", color=:green, title="Node $node", legend=:topleft)
 
             
             vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)

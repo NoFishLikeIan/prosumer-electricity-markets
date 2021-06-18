@@ -9,5 +9,5 @@ function r(p, producer::Producer, model)
 
     f(r) = r * c′(s + r) - c(s + r) - mb
 
-    return safe_find_zero(f, 0.0)
+    return safe_find_zero(f)
 end

@@ -63,12 +63,16 @@ function collectfirst(itr)
     collect(Base.Iterators.take(itr, 1))[1]
 end
 
-function safe_find_zero(f, x₀; fallback=0.0)
-    try
+function safe_find_zero(f; x₀=0., extrema=(-100., 100.))
+
+    lower, upper = extrema
+
+    if sign(f(lower)) * sign(f(upper)) < 0
+        find_zero(f, lower, upper)
+    else
         find_zero(f, x₀)
-    catch
-        fallback
     end
+    
 end
 
 function flip12(idx)
