@@ -9,7 +9,8 @@ function initializemodel(
     
     model = AgentBasedModel(
         AllAgents, space,
-        properties=parameters
+        properties=parameters,
+        warn=false
     )
 
     Nnodes = length(model.space.s)

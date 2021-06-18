@@ -67,7 +67,7 @@ function supplyplot(dfagent; savepath=nothing)
         dfagent, 
         (time, nodedata) -> begin
             dfpros, _, dfprod = nodedata
-        node = dfpros[1, :pos]
+            node = dfpros[1, :pos]
             
             εperiods = lowendowmentperiods(dfpros)
             supply = combine(groupby(dfprod, [:step]), :s => sum)[!, :s_sum]
@@ -92,8 +92,19 @@ function correlationplot(dfagent; savepath=nothing)
     jointfigure = plotnodes(
         dfagent,
         (time, nodedata) -> begin
+            dfpros, _, dfprod = nodedata
+            node = dfpros[1, :pos]
             
-        end )
+            εperiods = lowendowmentperiods(dfpros)
+            supply = combine(groupby(dfprod, [:step]), :s => sum)[!, :s_sum]
+
+            fig = plot(time, supply, label="s", color=:green, title="Node $node")
+
+            
+            vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
+            
+            return fig   
+        end)
     
     if !isnothing(savepath)
         savefig(jointfigure, savepath)
