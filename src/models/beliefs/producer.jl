@@ -6,10 +6,12 @@ function update_belief!(producer::Producer, model)
     currentsupply, ramp, ψ = producer.s, producer.r, producer.ψ
     p = provider.p
 
+    c = model.c[1]
+
     # FIXME: Better updating with payoff
     currentstrategy = findfirst(==(ψ), model.Ψ) 
 
-    u = currentsupply * p - model.c(currentsupply) * ramp
+    u = currentsupply * p - c(currentsupply, ramp) * ramp
 
     producer.U[currentstrategy] += u
 

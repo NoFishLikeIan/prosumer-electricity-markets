@@ -12,8 +12,13 @@ A = [
     1 0 0 0;
 ]
 
-c(x) = c₀ * exp(c₀ * x)
-c′(x) = c₀^2 * exp(c₀ * x)
+c₁ = 1.0
+
+c(s, r) = log(1 + exp(c₁ * s * r))
+∇c(s, r) = c₁ * inv(1 + exp(-c₁ * s * r))
+
+∂c∂s(s, r) = ∇c(s, r) * r
+∂c∂r(s, r) = ∇c(s, r) * s
 
 ρₗ = 0.9
 ρᵤ = 0.8
@@ -27,10 +32,11 @@ c′(x) = c₀^2 * exp(c₀ * x)
 )
 
 parameters = Dict(
-    :c => c, :c′ => c′,
+    :c => (c, ∂c∂s, ∂c∂r),
     :Ψ => [0.9, 1.1],
     :M => 500, :ε => ε,
-    :N => 15, :β => 0.99
+    :N => 15, :β => 0.99,
+    :βprod => 0.5
 )
 
 s₀ = 20.0
@@ -43,7 +49,7 @@ model = initializemodel(
 adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s]
 mdata = []
 
-T = 100
+T = 5
 
 dfagent, dfmodel = run!(
     model, agent_step!, model_step!, T; 
