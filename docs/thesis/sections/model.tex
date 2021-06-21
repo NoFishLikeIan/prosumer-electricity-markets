@@ -55,19 +55,19 @@ This optimization problem gives (see \ref{a:producer_optimization}) an implicit 
 Ramping down should have no costs (i.e. $c(s, r) = 0$ if $r < 0$) and should be increasing both in scale of supply $s$ and in ramp-up level $r$. A differentiable function with (almost) this feature is the softplus function (see Figure \ref{fig:costs}), which I will parametrize in steepness by $c_0$ and $c_1$,
 
 \begin{equation}
-    c(s, r) = \log \left( 1 + \exp(c_1 \cdot s \cdot r - c_0) \right)
+    c(s, r) = \log \left( 1 + \exp(c_1 \cdot s \cdot r) \right)
 \end{equation}
 
 with derivative,
 
 \begin{equation}
-    \frac{\partial c}{\partial s} = \overbrace{\frac{c_1}{1 + \exp(c_0 - s \cdot r)}}^{\text{let } \mathcal{S}_c(s, r)} \cdot r, \hspace{5mm} \frac{\partial c}{\partial r} = \mathcal{S}_c(s, r) \cdot s
+    \frac{\partial c}{\partial s} = \overbrace{\frac{c_1}{1 + \exp( - s \cdot r)}}^{\text{let } \mathcal{S}_c(s, r)} \cdot r, \hspace{5mm} \frac{\partial c}{\partial r} = \mathcal{S}_c(s, r) \cdot s
 \end{equation}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{\plotpath/cost.pdf}
-    \caption{Softplus cost function for different $r$ and fixed $s = 4$ and $c_0 = 2$}
+    \caption{Softplus cost function for different $r$ and fixed $s = 4$ and $c_1 = 1$}
     \label{fig:costs}
 \end{figure}
 
@@ -76,7 +76,7 @@ with derivative,
 
 One instance of such function is plotted in Figure (\ref{fig:r}),
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{\plotpath/r.pdf}
     \caption{$r$ for $c(x) = x^3$ and $\beta = 0.99$}
