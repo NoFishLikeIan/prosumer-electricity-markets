@@ -3,7 +3,7 @@ using DataFrames
 
 include("src/main.jl")
 
-doplot = false
+doplot = true
 
 A = [
     0 1 1 1;
@@ -49,7 +49,7 @@ model = initializemodel(
 adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s]
 mdata = []
 
-T = 5
+T = 100
 
 dfagent, dfmodel = run!(
     model, agent_step!, model_step!, T; 

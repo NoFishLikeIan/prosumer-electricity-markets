@@ -3,7 +3,7 @@ using Agents
 
 using Random, Distributions
 
-using Roots
+using Roots, Optim
 
 Random.seed!(11148705)
 
