@@ -36,9 +36,9 @@ function plotnodes(dfagent, fn)
 end
 
 """
-Plot the ramp up of agents and the price in all markets
+Plot the supply and the price in all markets
 """
-function priceplot(dfagent; savepath=nothing)
+function pricesupplyplot(dfagent; savepath=nothing)
 
     allprices = filter(!ismissing, dfagent[!, :p])
 
@@ -51,12 +51,21 @@ function priceplot(dfagent; savepath=nothing)
         εperiods = lowendowmentperiods(dfpros)
         pricet = dfprov[!, :p]
 
+        supply = combine(
+            groupby(dfprod, [:step]), :s => sum
+        )[!, :s_sum]
+
         fig = plot(
             time, pricet, 
             ylims=extrema(allprices),
-            title="Node $node", label="p", color=:blue, legend=:topleft)
+            title="Node $node", label="p", color=:blue, 
+            ylabel="p", legend=:topleft)
             
         vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
+
+        plot!(
+            twinx(fig), time, supply, ylabel="s",
+            label="s", color=:green, legend=:bottomright)
             
         return fig
 
@@ -69,58 +78,71 @@ function priceplot(dfagent; savepath=nothing)
     return jointfigure
 end
 
-function supplyplot(dfagent; savepath=nothing)
-
-    jointfigure = plotnodes(
-        dfagent, 
-        (time, nodedata) -> begin
-            dfpros, _, dfprod = nodedata
-        
-            node = dfpros[1, :pos]
-            
-            εperiods = lowendowmentperiods(dfpros)
-            supply = combine(groupby(dfprod, [:step]), :s => sum)[!, :s_sum]
-
-            fig = plot(
-                time, supply, 
-                label="s", color=:green, title="Node $node", legend=:topleft)
-
-            
-            vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
-            
-            return fig        
-    end)
-    
-    if !isnothing(savepath)
-        savefig(jointfigure, savepath)
-    end
-
-    return jointfigure
-end
-
-function correlationplot(dfagent; savepath=nothing)
+"""
+Plot the proportion of optimistic producers
+"""
+function plotproducerbeliefs(dfagent; savepath=nothing)
 
     jointfigure = plotnodes(
         dfagent,
         (time, nodedata) -> begin
-            dfpros, _, dfprod = nodedata
-            node = dfpros[1, :pos]
+        dfpros, dfprov, dfprod = nodedata
+        node = dfpros[1, :pos]
             
-            εperiods = lowendowmentperiods(dfpros)
-            supply = combine(groupby(dfprod, [:step]), :s => sum)[!, :s_sum]
+        εperiods = lowendowmentperiods(dfpros)
 
-            fig = plot(time, supply, label="s", color=:green, title="Node $node")
+        optψ = maximum(model.Ψ)
 
+        optimistic = combine(
+            groupby(dfprod, [:step]),
+            :ψ => col -> count(col .== optψ) / length(col)
+        )[!, :ψ_function]
+
+        fig = plot(
+            time, optimistic, 
+            ylims=(0, 1),
+            title="Node $node", label="% of optimistic", color=:blue, legend=:topleft)
             
-            vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
+        vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
             
-        return fig   
-        end)
-    
+        return fig
+
+    end)
+
     if !isnothing(savepath)
         savefig(jointfigure, savepath)
     end
 
     return jointfigure
 
+end
+
+function plotproviderbeliefs(dfagent; savepath=nothing)
+    jointfigure = plotnodes(
+        dfagent,
+        (time, nodedata) -> begin
+        dfpros, dfprov, dfprod = nodedata
+        node = dfpros[1, :pos]
+            
+        εperiods = lowendowmentperiods(dfpros)
+
+        as, bs = eachcol(dfprov[!, [:a, :b]])
+
+        fig = plot(
+            time, bs, 
+            title="Node $node", label="slope", color=:blue, legend=:topleft)
+            
+        vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
+
+        plot!(twinx(fig), time, as, label="intercept", color=:red, legend=:bottomright)
+            
+        return fig
+
+    end)
+
+    if !isnothing(savepath)
+        savefig(jointfigure, savepath)
+    end
+
+    return jointfigure
 end
