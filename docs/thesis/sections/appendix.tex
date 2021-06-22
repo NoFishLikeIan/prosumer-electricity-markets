@@ -89,7 +89,7 @@ hence,
 Let the approximated ramp-up function be,
 
 \begin{equation}
-    \tilde{R}(p) \coloneqq a \cdot p + b
+    \tilde{R}(p) \coloneqq a + b \cdot p
 \end{equation}
 
 and the Bellman maximization,
@@ -154,12 +154,12 @@ Using (\ref{foc_p}),
     \end{split}
 \end{equation}
 
-Using $\tilde{R}^\prime(p) = a$,
+Using $\tilde{R}^\prime(p) = b$,
 
 \begin{equation}
     \begin{split}
-        \frac{X_t}{\beta \cdot N \cdot a} - \lambda_{t+1} &= p_{t+1} + \frac{X_t}{N\cdot a} - \frac{b +  a \cdot p_{t}}{a} \\
-        p_{t+1} &= p_t + \frac{b}{a} +  \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{N \cdot a} - \lambda_{t+1}
+        \frac{X_t}{\beta \cdot N \cdot b} - \lambda_{t+1} &= p_{t+1} + \frac{X_t}{N\cdot b} - \frac{a +  b \cdot p_{t}}{b} \\
+        p_{t+1} &= p_t + \frac{a}{b} +  \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{N \cdot b} - \lambda_{t+1}
     \end{split}
 \end{equation}
 
