@@ -20,50 +20,48 @@ c(s, r) = log(1 + exp(c₁ * s * r))
 ∂c∂s(s, r) = ∇c(s, r) * r
 ∂c∂r(s, r) = ∇c(s, r) * s
 
-ρₗ = 0.9
-ρᵤ = 0.8
+ρₗ = ρᵤ = 0.9
 
-ε = (
-    [
+ε = ([
         ρₗ 1 - ρₗ; 
         1 - ρᵤ ρᵤ
     ],
-    [0.0, 10.0]
-)
+    [0.0, 10.0])
 
 parameters = Dict(
     :c => (c, ∂c∂s, ∂c∂r),
     :Ψ => [0.9, 1.1],
     :M => 500, :ε => ε,
-    :N => 15, :β => 0.99,
-    :βprod => 0.5
-)
+    :N => 3, :β => 0.99,
+    :βprod => 0.5)
 
-s₀ = 20.0
+necessarys = parameters[:M] * 10. / parameters[:N]
+s₀ = necessarys * 0.9
 
 model = initializemodel(
     A, parameters;
     s₀=s₀, b₀=0.
 )
 
-adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s]
-mdata = []
-
-T = 100
-
-dfagent, dfmodel = run!(
-    model, agent_step!, model_step!, T; 
-    adata, mdata)
-
-provider = model[2]
-producer = model[3]
-
 if doplot
+
+    adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s, :b, :a]
+    mdata = [:X, :R]
+
+    T = 100
+
+    dfagent, dfmodel = run!(
+        model, agent_step!, model_step!, T; 
+        adata, mdata)
 
     Plots.scalefontsizes(0.6)
 
-    figrp = priceplot(dfagent; savepath="plots/energy/price.pdf")
-    figsp = supplyplot(dfagent; savepath="plots/energy/supply.pdf")
+    figrp = pricesupplyplot(dfagent; savepath="plots/energy/pricesupply.pdf")
+
+    plotproducerbeliefs(dfagent; savepath="plots/energy/optimistics.pdf")
+
+    plotproviderbeliefs(dfagent; savepath="plots/energy/ols.pdf")
+
     println("Done!")
 
     Plots.resetfontsizes()

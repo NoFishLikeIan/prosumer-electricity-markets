@@ -3,8 +3,7 @@ function agent_step!(prosumer::Prosumer, model)
 
     state = findfirst(==(prosumer.ε), S)
 
-    # FIXME: Add rng
-    if rand() > Γ[state, state] 
+    if rand(model.rng) > Γ[state, state] 
         prosumer.ε = S[flip12(state)]
     end
 

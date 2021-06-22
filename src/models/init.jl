@@ -11,6 +11,7 @@ function initializemodel(
     parameters[:R] = repeat([0.0], Nnodes)
     parameters[:p] = repeat([0.0], Nnodes)
     parameters[:X] = repeat([0.0], Nnodes)
+    parameters[:rng] = rng
 
     function byids(model::ABM)
         return sort(collect(allids(model)))
@@ -21,6 +22,7 @@ function initializemodel(
         properties=parameters,
         warn=false, scheduler=byids
     )
+
 
     N = parameters[:N]
     M = parameters[:M]
@@ -43,11 +45,11 @@ function initializemodel(
         provider.p = p₀
 
         for _ in 1:N
-            ψ₀ = sample(parameters[:Ψ])
+            ψ₀ = sample(model.rng, parameters[:Ψ])
 
             add_agent!(
                 node, Producer, model, 
-                s₀ * (rand() + 0.5), 0.0, ψ₀, p₀, U₀
+                s₀, 0.0, ψ₀, p₀, U₀
             )
 
         end

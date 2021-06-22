@@ -5,7 +5,7 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 41809916-cea7-11eb-2af5-8b37c6dbd767
-using Plots, DataFrames, InteractiveDynamics
+using Plots, DataFrames, CSV
 
 # ╔═╡ c0cf7f69-a656-4bc0-9c24-ad3dc0f31f36
 using Agents
@@ -19,9 +19,8 @@ Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
 # ╔═╡ 3e067f0a-f882-421a-bdb0-bc4915aa5b35
 plotpath = "../plots/energy"
 
-# ╔═╡ 56518671-93c3-4b12-9089-1859cfe6cb01
+# ╔═╡ 658106ec-f84a-43c6-96ec-ec90e271a552
 begin
-
 	A = [
 		0 1 1 1;
 		1 0 0 0;
@@ -37,8 +36,7 @@ begin
 	∂c∂s(s, r) = ∇c(s, r) * r
 	∂c∂r(s, r) = ∇c(s, r) * s
 
-	ρₗ = 0.9
-	ρᵤ = 0.8
+	ρₗ = ρᵤ = 0.9
 
 	ε = (
 		[
@@ -53,10 +51,15 @@ begin
 		:Ψ => [0.9, 1.1],
 		:M => 500, :ε => ε,
 		:N => 15, :β => 0.99,
-		:βprod => 0.3
+		:βprod => 0.5
 	)
 
 	s₀ = 20.0
+
+	model = initializemodel(
+		A, parameters;
+		s₀=s₀, b₀=0.
+	)
 end
 
 # ╔═╡ b389c106-600b-44dc-a861-d1abcefa6353
@@ -85,17 +88,13 @@ begin
 	
 end
 
-# ╔═╡ 248bddf9-bfc1-42df-b35d-43035bf64e84
-model = initializemodel(A, parameters; s₀ = s₀, b₀ = 0.)
-
 # ╔═╡ ad90abb5-2e74-49f2-ab24-76265904afb8
 function makeproducer(ψ)
 	s -> Producer(1, 1, s, 1.0, ψ, 1.0, [1., 1.])
 end
 
 # ╔═╡ c60d5bdf-4052-4bb2-9628-bc4f2be3579f
-function drawrampup(ψ)
-	supplies = range(0., 20., length = 1000)
+function drawrampup(ψ, supplies)
 	prices = range(0., 20., length = 1000)
 	
 	producer = makeproducer(ψ)
@@ -111,31 +110,21 @@ function drawrampup(ψ)
 
 	end
 		
-	figure = heatmap(
-		supplies, prices, safer,
-		xlabel = "s", ylabel="p",
-		clims = (-10., 10.)
-	)
+	figure = plot(xlabel = "p", ylabel="r")
+	
+	for s ∈ supplies
+		plot!(figure, p -> r(p, producer(s), model), label="s = $s")
+	end
 	
 	
 	return figure
 end
 
 # ╔═╡ b20e801b-515b-4142-b278-df4a46201659
-drawrampup(0.9)
+drawrampup(2.5, [2.])
 
 # ╔═╡ f9e927f1-dbf0-497a-a539-f4897687536d
-
-
-# ╔═╡ 59da17f2-caef-45ad-8696-35608bc327d2
-if false
-	T = 5
-	adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s]
-	mdata = []
-
-	dfagent, dfmodel = run!(model, agent_step!, model_step!, T; adata, mdata)
-	println("Done!")
-end
+dfagent = CSV.read("../data/out/star_sim.csv", DataFrame)
 
 # ╔═╡ Cell order:
 # ╠═41809916-cea7-11eb-2af5-8b37c6dbd767
@@ -143,11 +132,9 @@ end
 # ╠═c0cf7f69-a656-4bc0-9c24-ad3dc0f31f36
 # ╠═848401cf-5016-4753-ba92-2e9e2350723b
 # ╟─3e067f0a-f882-421a-bdb0-bc4915aa5b35
-# ╠═56518671-93c3-4b12-9089-1859cfe6cb01
+# ╟─658106ec-f84a-43c6-96ec-ec90e271a552
 # ╟─b389c106-600b-44dc-a861-d1abcefa6353
-# ╠═248bddf9-bfc1-42df-b35d-43035bf64e84
 # ╠═ad90abb5-2e74-49f2-ab24-76265904afb8
 # ╠═c60d5bdf-4052-4bb2-9628-bc4f2be3579f
 # ╠═b20e801b-515b-4142-b278-df4a46201659
-# ╠═f9e927f1-dbf0-497a-a539-f4897687536d
-# ╟─59da17f2-caef-45ad-8696-35608bc327d2
+# ╟─f9e927f1-dbf0-497a-a539-f4897687536d
