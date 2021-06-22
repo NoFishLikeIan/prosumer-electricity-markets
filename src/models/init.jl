@@ -1,5 +1,5 @@
 function initializemodel(
-    A::Matrix{Int64}, parameters::Dict;
+    A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict;
     ε₀=10., a₀=1., b₀=-2, s₀=10.,
     seed=1148705
 )
@@ -12,6 +12,7 @@ function initializemodel(
     parameters[:p] = repeat([0.0], Nnodes)
     parameters[:X] = repeat([0.0], Nnodes)
     parameters[:rng] = rng
+    parameters[:G] = G
 
     function byids(model::ABM)
         return sort(collect(allids(model)))

@@ -1,6 +1,7 @@
 using LightGraphs, GraphPlot
-using Agents
+using LightGraphs.LinAlg, LinearAlgebra
 
+using Agents
 using Random, Distributions
 
 using Roots, Optim
@@ -19,3 +20,4 @@ include("models/evolution.jl")
 include("models/init.jl")
 
 include("plot.jl")
+include("network.jl")
