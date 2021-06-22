@@ -1,5 +1,4 @@
 function agent_step!(prosumer::Prosumer, model)
-
     Γ, S = model.properties[:ε]
 
     state = findfirst(==(prosumer.ε), S)
@@ -42,10 +41,28 @@ end
 
 function model_step!(model)
 
-    # println("\n--- Updating model")
+    for node in 1:length(model.space.s)
 
-    for node in 1:length(model.space.s), producer in getlocalproducers(node, model)
-        update_belief!(producer, model)
+        others = agents_in_position(node, model)
+        prosumer, provider = others
+
+        R = 0.0
+        S = 0.0
+        
+        for producer in getlocalproducers(node, model)
+            update_belief!(producer, model)
+            R += producer.r
+            S += producer.s
+        end
+
+        X = model.M * prosumer.ε - S
+
+        push!(model.p, provider.p)
+        push!(model.R, R)
+        push!(model.X, X)
+
+        update_belief!(provider, model, node)
+
     end
 
 end

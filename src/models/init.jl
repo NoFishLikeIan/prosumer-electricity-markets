@@ -6,14 +6,21 @@ function initializemodel(
     rng = MersenneTwister(seed)
 
     space = GraphSpace(SimpleGraph(A))
+    Nnodes = length(space.s)
+
+    parameters[:R] = repeat([0.0], Nnodes)
+    parameters[:p] = repeat([0.0], Nnodes)
+    parameters[:X] = repeat([0.0], Nnodes)
+
+    function byids(model::ABM)
+        return sort(collect(allids(model)))
+    end
     
     model = AgentBasedModel(
         AllAgents, space,
         properties=parameters,
-        warn=false
+        warn=false, scheduler=byids
     )
-
-    Nnodes = length(model.space.s)
 
     N = parameters[:N]
     M = parameters[:M]
@@ -24,6 +31,7 @@ function initializemodel(
     U₀ = zeros(size(parameters[:Ψ]))
 
     for node in 1:Nnodes
+
         add_agent!(node, Prosumer, model, ε₀)
 
         provider = add_agent!(
@@ -39,7 +47,7 @@ function initializemodel(
 
             add_agent!(
                 node, Producer, model, 
-                s₀, 0.0, ψ₀, p₀, U₀
+                s₀ * (rand() + 0.5), 0.0, ψ₀, p₀, U₀
             )
 
         end
