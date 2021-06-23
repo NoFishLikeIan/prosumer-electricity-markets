@@ -8,7 +8,9 @@ function p′(X, provider::Provider, model)
 
     ∂x = (1 - β) / (β * N * b)
 
-    newprice = max(∂x * X + a / b + provider.p, 0.)
+    Δp = ∂x * X + a / b
+
+    newprice = max(provider.p + Δp, 0.1)
 
     return newprice
 end

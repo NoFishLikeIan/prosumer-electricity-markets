@@ -1,6 +1,6 @@
 function initializemodel(
     A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict;
-    ε₀=10., a₀=1., b₀=-2, s₀=10.,
+    ε₀=10., a₀=-15., b₀=1.0, s₀=10.,
     seed=1148705
 )
     rng = MersenneTwister(seed)
@@ -13,6 +13,7 @@ function initializemodel(
     parameters[:X] = repeat([0.0], Nnodes)
     parameters[:rng] = rng
     parameters[:G] = G
+    parameters[:step] = 1
 
     function byids(model::ABM)
         return sort(collect(allids(model)))
@@ -42,8 +43,11 @@ function initializemodel(
             a₀, b₀, 0.
         )
         
-        p₀ = p′(demand - supply, provider, model)
+        p₀ =  rand(rng) * 10.
+        # p′(demand - supply, provider, model)
         provider.p = p₀
+  
+        println("$node -> $p₀")
 
         for _ in 1:N
             ψ₀ = sample(model.rng, parameters[:Ψ])

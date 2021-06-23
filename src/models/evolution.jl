@@ -21,8 +21,6 @@ function agent_step!(provider::Provider, model)
 
     nextprice = p′(X, provider, model)
 
-    # println("Updating provider at $(provider.pos): X = $demand - $supply, $(provider.p) -> $nextprice")
-
     provider.p = nextprice
 
 end
@@ -60,8 +58,12 @@ function model_step!(model)
         push!(model.R, R)
         push!(model.X, X)
 
-        update_belief!(provider, model, node)
+        if model.step > 10
+            update_belief!(provider, model)
+        end
 
     end
 
+
+    model.step += 1
 end
