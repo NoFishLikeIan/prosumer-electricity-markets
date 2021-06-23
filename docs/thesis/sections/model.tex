@@ -30,11 +30,11 @@ Prosumers are endowed an electricity quantity. The endowment follows a Markov pr
 
 \subsection{Producers}
 
-Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} = \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s, r)$, with $c^\prime(s) > 0$, the cost of ramping up or turning down production next period by $r$. This setup leads to the following optimization problem.
+Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} = \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s, r)$ the cost of ramping up or turning down production next period by $r$. This setup leads to the following optimization problem.
 
 \begin{equation} \label{bellman_prod}
     \begin{split}
-        V(s_t, p_t) &= \max_{r_t \in [\underline{r}, \bar{r}]} \left\{ s_t \cdot p_t - c(s_t) \cdot r_t + \beta \cdot V(s_{t+1}, p_{t+1}) \right\} \\
+        V(s_t, p_t) &= \max_{r_t \in [-s_t, \infty)} \left\{ s_t \cdot p_t - c(s_t, r_t) \cdot r_t + \beta \cdot V(s_{t+1}, p_{t+1}) \right\} \\
         \text{ s.t. } s_{t+1} &= s_t + r_t \text{ with } s_t \geq 0, s_0 \\
         p_{t+1} &= \psi \cdot p_t
     \end{split}
@@ -44,24 +44,50 @@ This optimization problem gives (see \ref{a:producer_optimization}) an implicit 
 
 \begin{equation} \label{raw_policy_producer}
     \begin{split}
-        r = r(s, p; \psi) &: \\
-        &\frac{\frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r)}{\beta} =  \psi \cdot p + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
+        &r(s_t, p_t; \psi): \\
+        \frac{\partial c}{\partial r}(s_t, r) \cdot r + c(s_t, r) &= \beta \cdot \left\{  \psi \cdot p_t + \left[\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right] \cdot r + c(s_t + r, r) \right\} \\
+        mc(r; s_t, p_t, \psi) &= \beta \cdot \{ mb(r; s_t, p_t, \psi) \}
     \end{split}
 \end{equation}
 
+The left hand side ($mc$) is the marginal cost today of ramping up production today. The producer by ramping up production pays $c(s_t, r)$ and increases the costs of ramping up by $\frac{\partial c}{\partial r}(s_t, r) \cdot r$. The right hand side ($mb$) is the marginal benefit tomorrow of ramping up production today. It can be broken up into the price the prosumer believes they can get for the new production, $\psi \cdot p_t$, the avoided marginal cost tomorrow of having increased production today instead, $\frac{\partial c}{\partial r}(s_t + r, r)  \cdot r + c(s_t + r, r)$, and finally the increased marginal cost brought about by a higher level of production $\frac{\partial c}{\partial s_t}(s_t + r, r)$.
+
+\subsubsection{Quadratic costs}
+
+For illustration purposes, consider the quadratic cost function $c(s, r) = r$ (see Figure \ref{fig:quadcosts}). This function allows us to explicitly derive,
+
+\begin{equation}
+    \begin{split}
+        mc(r; s_t, p_t, \psi) &= 2r \\
+        mb(r; s_t, p_t, \psi) &= \psi \cdot p_t + 2r
+    \end{split}
+\end{equation}
+
+such that,
+
+\begin{equation}
+    r(s_t, p_t; \psi) = \frac{\beta}{1 - \beta} \cdot \frac{\psi}{2} \cdot p_t
+\end{equation}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{\plotpath/quadcosts.pdf}
+    \caption{Quadratic cost function}
+    \label{fig:quadcosts}
+\end{figure}
 
 \subsubsection{Softplus costs}
 
-Ramping down should have no costs (i.e. $c(s, r) = 0$ if $r < 0$) and should be increasing both in scale of supply $s$ and in ramp-up level $r$. A differentiable function with (almost) this feature is the softplus function (see Figure \ref{fig:costs}), which I will parametrize in steepness by $c_0$ and $c_1$,
+More realistically, ramping down should have no costs, namely $c(s, r) = 0$ if $r < 0$, and should be increasing both in scale of supply $s$ and in ramp-up level $r$. A differentiable function with (asymptotically) this feature is the softplus function (see Figure \ref{fig:costs}),
 
 \begin{equation}
-    c(s, r) = \log \left( 1 + \exp(c_1 \cdot s \cdot r) \right)
+    c(s, r) = \frac{1}{c_1} \cdot \log \left( 1 + \exp(c_1 \cdot s \cdot r) \right)
 \end{equation}
 
-with derivative,
+with partial derivatives,
 
 \begin{equation}
-    \frac{\partial c}{\partial s} = \overbrace{\frac{c_1}{1 + \exp( - s \cdot r)}}^{\text{let } \mathcal{S}_c(s, r)} \cdot r, \hspace{5mm} \frac{\partial c}{\partial r} = \mathcal{S}_c(s, r) \cdot s
+    \frac{\partial c}{\partial s} = \frac{r}{1 + \exp( - c_1 \cdot s \cdot r)}  \hspace{5mm} \frac{\partial c}{\partial r} = \frac{s}{1 + \exp( - c_1 \cdot s \cdot r)}
 \end{equation}
 
 \begin{figure}[!ht]
@@ -71,17 +97,11 @@ with derivative,
     \label{fig:costs}
 \end{figure}
 
+The softplus function has the property that,
 
-
-
-One instance of such function is plotted in Figure (\ref{fig:r}),
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=\textwidth]{\plotpath/r.pdf}
-    \caption{$r$ for $c(x) = x^3$ and $\beta = 0.99$}
-    \label{fig:r}
-\end{figure}
+\begin{equation}
+    \lim_{c_1 \xrightarrow{}\infty} c(s, r) = \max \{ 0, s \cdot r \}
+\end{equation}
 
 \subsubsection{Local demand}
 Given the ramp-up policy function $r(s, p; \psi)$, it is possible to find the \textit{excess} demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers.
@@ -120,7 +140,7 @@ Producers approximate the price evolution by assuming prices will change by a fa
 \begin{equation}
     \begin{split}
         s_{t+1} &= s_t + r(s_{i, t}, p_t; \psi_{t}) \\
-        u_{t+1} &= s_{t+1} \cdot p_{t+1} - c(s_{t+1}) \cdot r(s_{t+1}, p_{t+1}; \psi_{t})
+        u_{t+1} &= s_{t+1} \cdot p_{t+1} - c(s_{t+1}, r_{t+1}) \cdot r(s_{t+1}, p_{t+1}; \psi_{t})
     \end{split}
 \end{equation}
 
@@ -171,21 +191,21 @@ is a vector of traded quantities with the provider's neighbors. Expanding the pr
 
 The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. For now, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$.
 
-The provider's optimization is an intertemporal optimization problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, it perceived $M \cdot (\E[e_{t+1}] - e_{t})$ to be approximately $0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. $\matr{\pi}_e \approx \matr{I}$). Second, not knowing each individual production state $s_{i, t}$ in the local market, it approximates the ramp-up function by a linear adaptive rule, proportional to the number of producers and the price, namely $R_t(p) \approx N \cdot(a + b \cdot p)$ with $a < 0$ and $b > 0$.
+The provider's optimization is an intertemporal optimization problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, it perceived $M \cdot (\E[e_{t+1}] - e_{t})$ to be approximately $0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. $\matr{\pi}_e \approx \matr{I}$). Second, not knowing each individual production state $s_{i, t}$ in the local market, it approximates the ramp-up function by a linear adaptive rule, proportional to the price, namely $R_t(p) \approx a_t + b_t \cdot p$ with $a < 0$ and $b > 0$.
 
 Given this setup we can specify the optimization problem of the provider. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$), the Bellman equation can be written as,
 
 \begin{equation*}
     \begin{split}
         V(X_t) &= \max_{p_t, \Y_t} \left\{ p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P^j(\Y_t) + \lambda_t \cdot \left( X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \right) + \beta \cdot  V(X_{t+1}) \right\} \\
-        X_{t+1} &= X_t - N \cdot( a + b \cdot p_t)
+        X_{t+1} &= X_t - \left( a_t + b_t \cdot p_t \right)
     \end{split}
 \end{equation*}
 
 The optimization yields the policy function for local prices (\ref{a:provider_optimization}),
 
 \begin{equation} \label{local_p}
-    p_{t+1} = p_t + \frac{a}{b} +  \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{N \cdot b} - \lambda_{t+1}
+    p_{t+1} = p_t + \frac{a_t}{b_t} +  \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{b_t} - \lambda_{t+1}
 \end{equation}
 
 \subsection{Bargaining model}
@@ -282,31 +302,37 @@ This result yields the property that the surplus revenue $\Delta$ is allocated e
 Providers approximate the ramp-up production function of the local producers using a linear rule,
 
 \begin{equation}
-    R_{t+1}(p_t) \approx b_t + a_t \cdot p_t
+    R_{t+1}(p_t) \approx a_t + b_t \cdot p_t
 \end{equation}
 
-I assume that each period providers observe the realization $R_{t+1}(p_t)$ and pick the coefficients $a_{t+1}$ and $b_{t+1}$ via ordinary least squares, more precisely
+I assume that each period providers observe the realization $R_{t+1}(p_t)$ and pick the coefficients $a_{t+1}$ and $b_{t+1}$ via weighted least squares, more precisely
 
 \begin{equation}
     \begin{pmatrix}
-        b_{t+1} \\
-        a_{t+1}
-    \end{pmatrix} = (\matr{R}_{t+1}^T \matr{R}_{t+1})^{-1} (\matr{R}_{t+1}^T \matr{p}_t)
+        a_{t+1} \\
+        b_{t+1}
+    \end{pmatrix} = (\matr{p}_{t}^T \matr{W} \matr{p}_{t})^{-1} (\matr{p}_{t}^T \matr{W} \matr{R}_{t+1})
 \end{equation}
 
 where,
 \begin{equation}
-    \matr{R}_{t+1} = \begin{pmatrix}
-        1      & R_{1}   \\
-        1      & R_{2}   \\
-        \vdots & \vdots  \\
-        1      & R_{t+1}
+    \matr{p}_{t} = \begin{pmatrix}
+        1      & p_0    \\
+        1      & p_1    \\
+        \vdots & \vdots \\
+        1      & p_{t}
     \end{pmatrix} \text{ and } \matr{p}_t = \begin{pmatrix}
-        p_{0}  \\
-        p_{1}  \\
+        R_{1}  \\
+        R_{2}  \\
         \vdots \\
-        p_{t}
+        R_{t + 1}
     \end{pmatrix}
+\end{equation}
+
+and $\matr{W}$ is a weighting matrix of time exponential decay with entries,
+
+\begin{equation}
+    \matr{W}_{t_1, t_2} = \exp(-\alpha \cdot \abs{t_1 - t_2})
 \end{equation}
 
 To recap the belief structure of the model,
