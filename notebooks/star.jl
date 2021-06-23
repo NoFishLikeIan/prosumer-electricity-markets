@@ -62,32 +62,6 @@ begin
 	)
 end
 
-# ╔═╡ b389c106-600b-44dc-a861-d1abcefa6353
-begin
-	fixeds = 4.0
-	rs = range(-fixeds, fixeds, length = 100)
-	
-	fnfig = plot(rs, x -> c(fixeds, x),
-		ylims = (0., 10.), xlabel = "r", ylabel="c",
-		c = :red,
-		title = "costs with s = $fixeds; c₁ = $c₁",
-		label = false)
-	
-	derfig = plot(
-		rs, x -> ∂c∂r(fixeds, x),
-		ylims = (0., 10.),xlabel = "r", ylabel="∂c/∂r",
-		c = :red,
-		title = "derivative of marginal costs with s = $fixeds; c₁ = $c₁",
-		label = false)
-	
-	jointcosts = plot(fnfig, derfig, size = (1200, 400))
-	
-	savefig(jointcosts, joinpath(plotpath, "cost.pdf"))
-	
-	jointcosts
-	
-end
-
 # ╔═╡ ad90abb5-2e74-49f2-ab24-76265904afb8
 function makeproducer(ψ)
 	s -> Producer(1, 1, s, 1.0, ψ, 1.0, [1., 1.])
@@ -131,9 +105,8 @@ dfagent = CSV.read("../data/out/star_sim.csv", DataFrame)
 # ╠═40dc6db5-7b14-4150-89cc-ca27992a4b7c
 # ╠═c0cf7f69-a656-4bc0-9c24-ad3dc0f31f36
 # ╠═848401cf-5016-4753-ba92-2e9e2350723b
-# ╟─3e067f0a-f882-421a-bdb0-bc4915aa5b35
+# ╠═3e067f0a-f882-421a-bdb0-bc4915aa5b35
 # ╟─658106ec-f84a-43c6-96ec-ec90e271a552
-# ╟─b389c106-600b-44dc-a861-d1abcefa6353
 # ╠═ad90abb5-2e74-49f2-ab24-76265904afb8
 # ╠═c60d5bdf-4052-4bb2-9628-bc4f2be3579f
 # ╠═b20e801b-515b-4142-b278-df4a46201659
