@@ -31,7 +31,13 @@ function rootr(mc, mb, s,  β)
         try
             return find_zero(f, 0.0)
         catch
-            return minimize(r -> -f(r), s)
+            if mc(0.) > mb(0.)
+                println("Slow decay...")
+                return -0.2 * s
+            else
+                println("Slow ramp-up...")
+                return 0.2 * s
+            end
         end
     end
 end
@@ -41,12 +47,12 @@ Producer ramp-up function
 """
 function r(p, producer::Producer, model)
     s, ψ = producer.s, producer.ψ
-    β = model.βprod
+    β, k = model.βprod, model.k
     c, ∂c∂s, ∂c∂r = model.c
 
     mc(r) = ∂c∂r(s, r) * r + c(s, r)
 
-    mb(r) = (∂c∂r(s + r, r) - ∂c∂s(s + r, r)) * r + c(s + r, r) + ψ * p
+    mb(r) = (∂c∂r(s + r, r) - ∂c∂s(s + r, r)) * r + c(s + r, r) + ψ * (p - k)
 
 
     return rootr(mc, mb, s, β)

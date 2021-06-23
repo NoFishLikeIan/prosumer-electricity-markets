@@ -7,7 +7,7 @@
 Let,
 
 \begin{equation}
-    J_{\psi}(s, p, r) = s \cdot p - c(s, r) \cdot r + \beta \cdot V(s + r, \psi \cdot p)
+    J_{\psi}(s, p, r) = s \cdot (p - k) - c(s, r) \cdot r + \beta \cdot V(s + r, \psi \cdot p)
 \end{equation}
 
 such that, for a given $\psi$, Equation (\ref{bellman_prod}) can be written as,
@@ -26,7 +26,7 @@ Assuming maximization in $r$, by the envelope theorem,
 
 \begin{equation}
     \begin{split}
-        \frac{\partial V}{\partial s}(s, p) &= p - \frac{\partial c}{\partial s}(s, r) \cdot r + \beta \cdot \frac{\partial V}{\partial s}(s + r, \psi \cdot p)
+        \frac{\partial V}{\partial s}(s, p) &= (p - k) - \frac{\partial c}{\partial s}(s, r) \cdot r + \beta \cdot \frac{\partial V}{\partial s}(s + r, \psi \cdot p)
     \end{split}
 \end{equation}
 
@@ -34,21 +34,21 @@ Using Equation (\ref{J_foc_r}) on the first condition yields,
 
 \begin{equation}
     \begin{split}
-        \frac{\partial V}{\partial s}(s, p) &= p - \frac{\partial c}{\partial s}(s, r) \cdot r + \frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r) \\
-        &= p + \left[\frac{\partial c}{\partial r}(s, r) - \frac{\partial c}{\partial s}(s, r)\right] \cdot r + c(s, r)
+        \frac{\partial V}{\partial s}(s, p) &= (p - k) - \frac{\partial c}{\partial s}(s, r) \cdot r + \frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r) \\
+        &= (p - k) + \left[\frac{\partial c}{\partial r}(s, r) - \frac{\partial c}{\partial s}(s, r)\right] \cdot r + c(s, r)
     \end{split}
 \end{equation}
 
 Iterating forward yields,
 
 \begin{equation}
-    \frac{\partial V}{\partial s}(s + r, \psi \cdot p)  = \psi \cdot p + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
+    \frac{\partial V}{\partial s}(s + r, \psi \cdot p)  = \psi \cdot p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
 \end{equation}
 
 Using (\ref{J_foc_r}),
 
 \begin{equation}
-    \frac{\frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r)}{\beta} =  \psi \cdot p + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
+    \frac{\frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r)}{\beta} =  \psi \cdot p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
 \end{equation}
 
 \subsection{Softplus function}

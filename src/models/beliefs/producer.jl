@@ -7,12 +7,13 @@ function update_belief!(producer::Producer, model; γ=0.1)
     p = provider.p
 
     β = model.βprod
+    k = model.k
 
     c = first(model.c)
 
     currentstrategy = findfirst(==(ψ), model.Ψ) 
 
-    u = currentsupply * p - c(currentsupply, ramp) * ramp
+    u = currentsupply * (p - k) - c(currentsupply, ramp) * ramp
 
     producer.U[currentstrategy] = γ * producer.U[currentstrategy] + (1 - γ) * u
 

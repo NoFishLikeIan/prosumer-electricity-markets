@@ -40,8 +40,6 @@ Plot the supply and the price in all markets
 """
 function pricesupplyplot(dfagent; savepath=nothing)
 
-    allprices = filter(!ismissing, dfagent[!, :p])
-
     jointfigure = plotnodes(
         dfagent,
         (time, nodedata) -> begin
@@ -57,7 +55,6 @@ function pricesupplyplot(dfagent; savepath=nothing)
 
         fig = plot(
             time, pricet, 
-            ylims=extrema(allprices),
             title="Node $node", label="p", color=:blue, 
             ylabel="p", legend=:topleft)
             

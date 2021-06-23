@@ -3,7 +3,7 @@ using DataFrames
 
 include("src/main.jl")
 
-doplot = false
+doplot = true
 
 A = [
     0 1 1 1;
@@ -18,16 +18,16 @@ G = [
     -1 -1 0
 ]
 
-c₁ = 0.01
+c₁ = 1.0
 
-c(s, r) = log(1 + exp(c₁ * s * r))
-∇c(s, r) = c₁ * inv(1 + exp(-c₁ * s * r))
+c(s, r) = log(1 + exp(c₁ * s * r)) / c₁
+∇c(s, r) = inv(1 + exp(-c₁ * s * r))
 
 ∂c∂s(s, r) = ∇c(s, r) * r
 ∂c∂r(s, r) = ∇c(s, r) * s
 
 ρₗ = 0
-ρᵤ = 1.
+ρᵤ = 1
 
 ε = ([
         ρₗ 1 - ρₗ; 
@@ -36,18 +36,16 @@ c(s, r) = log(1 + exp(c₁ * s * r))
     [-10., 10.])
 
 parameters = Dict(
-    :c => (c, ∂c∂s, ∂c∂r),
+    :c => (c, ∂c∂s, ∂c∂r), :k => 2.,
     :Ψ => [0.9, 1.1],
-    :M => 1_000, :ε => ε,
-    :N => 3, :β => 0.99,
-    :βprod => 0.5)
+    :β => 0.99, :βprod => 0.8,
+    :M => 1_000, :N => 3,
+    :ε => ε)
 
 necessarys = parameters[:M] * 10. / parameters[:N]
 s₀ = necessarys * .1
 
-model = initializemodel(
-    A, G, parameters; s₀=s₀
-)
+model = initializemodel(A, G, parameters; s₀=s₀)
 
 if doplot
 

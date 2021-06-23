@@ -30,11 +30,11 @@ Prosumers are endowed an electricity quantity. The endowment follows a Markov pr
 
 \subsection{Producers}
 
-Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} = \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s, r)$ the cost of ramping up or turning down production next period by $r$. This setup leads to the following optimization problem.
+Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers and costs $k$ to maintain. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} = \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s, r)$ the cost of ramping up or turning down production next period by $r$. This setup leads to the following optimization problem.
 
 \begin{equation} \label{bellman_prod}
     \begin{split}
-        V(s_t, p_t) &= \max_{r_t \in [-s_t, \infty)} \left\{ s_t \cdot p_t - c(s_t, r_t) \cdot r_t + \beta \cdot V(s_{t+1}, p_{t+1}) \right\} \\
+        V(s_t, p_t) &= \max_{r_t \in [-s_t, \infty)} \left\{ s_t \cdot (p_t - k) - c(s_t, r_t) \cdot r_t + \beta \cdot V(s_{t+1}, p_{t+1}) \right\} \\
         \text{ s.t. } s_{t+1} &= s_t + r_t \text{ with } s_t \geq 0, s_0 \\
         p_{t+1} &= \psi \cdot p_t
     \end{split}
@@ -45,7 +45,7 @@ This optimization problem gives (see \ref{a:producer_optimization}) an implicit 
 \begin{equation} \label{raw_policy_producer}
     \begin{split}
         &r(s_t, p_t; \psi): \\
-        \frac{\partial c}{\partial r}(s_t, r) \cdot r + c(s_t, r) &= \beta \cdot \left\{  \psi \cdot p_t + \left[\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right] \cdot r + c(s_t + r, r) \right\} \\
+        \frac{\partial c}{\partial r}(s_t, r) \cdot r + c(s_t, r) &= \beta \cdot \left\{  \psi \cdot p_t - k + \left[\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right] \cdot r + c(s_t + r, r) \right\} \\
         mc(r; s_t, p_t, \psi) &= \beta \cdot \{ mb(r; s_t, p_t, \psi) \}
     \end{split}
 \end{equation}
@@ -59,14 +59,14 @@ For illustration purposes, consider the quadratic cost function $c(s, r) = r$ (s
 \begin{equation}
     \begin{split}
         mc(r; s_t, p_t, \psi) &= 2r \\
-        mb(r; s_t, p_t, \psi) &= \psi \cdot p_t + 2r
+        mb(r; s_t, p_t, \psi) &= \psi \cdot p_t - k + 2r
     \end{split}
 \end{equation}
 
 such that,
 
 \begin{equation}
-    r(s_t, p_t; \psi) = \frac{\beta}{1 - \beta} \cdot \frac{\psi}{2} \cdot p_t
+    r(s_t, p_t; \psi) = \frac{\beta}{2 (1 - \beta)}  \left(\psi \cdot p_t - k \right)
 \end{equation}
 
 \begin{figure}[!ht]
@@ -140,7 +140,7 @@ Producers approximate the price evolution by assuming prices will change by a fa
 \begin{equation}
     \begin{split}
         s_{t+1} &= s_t + r(s_{i, t}, p_t; \psi_{t}) \\
-        u_{t+1} &= s_{t+1} \cdot p_{t+1} - c(s_{t+1}, r_{t+1}) \cdot r(s_{t+1}, p_{t+1}; \psi_{t})
+        u_{t+1} &= s_{t+1} \cdot (p_{t+1} - k) - c(s_{t+1}, r_{t+1}) \cdot r(s_{t+1}, p_{t+1}; \psi_{t})
     \end{split}
 \end{equation}
 

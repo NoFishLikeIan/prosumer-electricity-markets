@@ -4,6 +4,7 @@ using LightGraphs.LinAlg, LinearAlgebra
 using Agents
 using Random, Distributions
 
+using Base.Threads
 using Roots, Optim
 
 Random.seed!(11148705)
