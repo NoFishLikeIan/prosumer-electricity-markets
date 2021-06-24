@@ -61,8 +61,110 @@ The first order condition for $r$ requires that,
 
 Any cost function with the trivial property that not ramping up is free, $c(s, 0) = 0$, is stable, $r = 0$, if and only if,
 
+
 \begin{equation}
     \psi \cdot p = k
+\end{equation}
+
+\subsection{Limiting behaviour as $c_1 \xrightarrow{} \infty$}\label{a:limiting}
+\newcommand{\limc}{\lim_{c_1 \xrightarrow{} \infty}}
+
+Assume a softplus cost function and notice that, letting
+
+\begin{equation*}
+    \sigm_{c_1}(x) = \frac{1}{1 + \exp(-c_1 \cdot x)},
+\end{equation*}
+
+we can write,
+
+\begin{equation}
+    \frac{\partial c}{\partial s}(s, r) = \sigm_{c_1}(s \cdot r) \cdot r \ \text{ and } \ \frac{\partial c}{\partial r}(s, r) = \sigm_{c_1}(s \cdot r) \cdot s
+\end{equation}
+
+
+Hence the two function that regulate the first order condition of the prosumer can be rewritten as,
+
+\begin{equation}
+    \begin{split}
+        mc(r) &= \frac{\partial c}{\partial r}(s_t, r) \cdot r + c(s_t, r) \\
+        &= \sigm_{c_1}(s_t \cdot r) \cdot s_t \cdot r_t + c(s_t, r)
+    \end{split}
+\end{equation}
+
+and
+
+\begin{equation}
+    \begin{split}
+        mb(r) &= \psi \cdot p_t - k + \left[\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right] \cdot r + c(s_t + r, r)\\
+        &= \psi \cdot p_t - k + \left[\sigm_{c_1}(.) \cdot (s_t + r) - \sigm_{c_1}(.) \cdot r \right] \cdot r + c(s_t + r, r) \\
+        &=\psi \cdot p_t - k + \sigm_{c_1}((s_t + r) \cdot r) \cdot s_t \cdot r + c(s_t + r, r)
+    \end{split}
+\end{equation}
+
+We can then study the behaviour of the two functions as $c_1 \xrightarrow{} \infty$. Given our model we can assume $s_t \geq 0$. First, notice that,
+
+\begin{equation}
+    \limc \sigm_{c_1}(x) = \begin{cases}
+        1 & \text{if } x \geq 0 \\
+        0 & \text{if } x < 0
+    \end{cases}
+\end{equation}
+
+We can use this and the fact that $\limc c(s, r) = \max\{0, s \cdot r\}$, to evaluate,
+
+\begin{equation}
+    \limc mc(r) = \max \{0, 2s_t \cdot r\}
+\end{equation}
+
+and,
+
+\begin{equation*}
+    \limc mb(r) = \psi \cdot p_t - k + \max\{0, (s_t + r) \cdot r\} + \begin{cases}
+        s_t \cdot r &\text{if } r \in (-\infty, -s_t] \cup [0, \infty) \\
+        0 &\text{if } r \in (-s_t, 0)
+    \end{cases}
+\end{equation*}
+
+Using the optimization constraint, $r \in [-s_t, \infty)$, we obtain,
+
+\begin{equation}
+    \limc mb(r) = \psi \cdot p_t - k + \begin{cases}
+        2 s_t \cdot r + r^2 &\text{if } r > 0 \\
+        0 &\text{if } r \in [-s_t, 0]
+    \end{cases}
+\end{equation}
+
+Then, in the limit, we can rewrite the first order condition as,
+
+\begin{equation*}
+    \begin{split}
+        \limc mc(r) &= \beta \limc mb(r) \\
+        \frac{1}{\beta} \begin{cases}
+            2 s_t \cdot r  &\text{if } r > 0 \\
+            0 &\text{if } r \in [-s_t, 0]
+        \end{cases} &= \psi \cdot p_t - k  + \begin{cases}
+            2 s_t \cdot r + r^2 &\text{if } r > 0 \\
+            0 &\text{if } r \in [-s_t, 0]
+        \end{cases}
+    \end{split}
+\end{equation*}
+
+This allows us to find an approximate policy function. Namely, assuming producing is profitable, $\psi \cdot p_t - k > 0$ and $s_t  > \frac{\beta}{1-\beta} \sqrt{\psi \cdot p_t - k}$, we have the interior solution,
+
+\begin{equation}
+    r(s_t, p_t; \psi) = \frac{1}{2} \cdot \left[  \left(\frac{1 - \beta}{\beta} \cdot 2 s_t \right) - \sqrt{\left(\frac{1 - \beta}{\beta} \cdot 2 s_t \right)^2 - 4 \cdot \left(\psi \cdot p_t - k\right)} \right].
+\end{equation}
+
+If, on the other hand, $s_t \leq \frac{\beta}{1-\beta} \sqrt{\psi \cdot p_t - k}$, then $\beta \cdot mb(r) > mc(r)$, hence,
+
+\begin{equation}
+    r(s_t, p_t; \psi) = \frac{\beta}{1-\beta} \sqrt{\psi \cdot p_t - k} - s_t
+\end{equation}
+
+Finally, if $\psi \cdot p_t - k < 0$
+
+\begin{equation}
+    r(s_t, p_t; \psi) = -\gamma \cdot s
 \end{equation}
 
 \subsection{Evolution of excess demand} \label{a:ev_demand}
