@@ -43,18 +43,21 @@ function initializemodel(
             a₀, b₀, 0.
         )
         
-        p₀ =  rand(rng) * 10.
-        # p′(demand - supply, provider, model)
+        p₀ = 0.0 # (rand(rng) + 0.5) * 10.
         provider.p = p₀
   
-        println("$node -> $p₀")
+        println("$node -> p = $p₀")
 
         for _ in 1:N
             ψ₀ = sample(model.rng, parameters[:Ψ])
 
+            randoms = 0.0 # (rand(rng) + 0.5) * s₀
+
+            println("   -> s₀ = $randoms")
+
             add_agent!(
                 node, Producer, model, 
-                s₀, 0.0, ψ₀, p₀, U₀
+                randoms, 0.0, ψ₀, p₀, U₀
             )
 
         end

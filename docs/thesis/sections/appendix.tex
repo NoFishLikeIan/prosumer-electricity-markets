@@ -51,16 +51,19 @@ Using (\ref{J_foc_r}),
     \frac{\frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r)}{\beta} =  \psi \cdot p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
 \end{equation}
 
-\subsection{Softplus function}
+\subsection{Stability of different cost functions}
 
-Let the cost function be $c(s, r) = \log(1 + \exp(c_1 \cdot s\cdot r + c_0))$, then Equation (\ref{raw_policy_producer}) can be rewritten as,
+The first order condition for $r$ requires that,
 
-\begin{equation*}
-    \begin{split}
-        \frac{\mathcal{S}_c(s, r) \cdot s \cdot r + c(s, r)}{\beta} &= \psi \cdot p + \left[ \mathcal{S}_c(s + r, r) \cdot (s + r)  - \mathcal{S}_c(s + r, r) \cdot r \right] \cdot r + c(s + r, r) \\
-        \frac{\mathcal{S}_c(s, r) \cdot s \cdot r + c(s, r)}{\beta} &= \psi \cdot p +\mathcal{S}_c(s + r, r) \cdot s \cdot r + c(s + r, r)
-    \end{split}
-\end{equation*}
+\begin{equation}
+    \frac{\frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r)}{\beta} =  \psi \cdot p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
+\end{equation}
+
+Any cost function with the trivial property that not ramping up is free, $c(s, 0) = 0$, is stable, $r = 0$, if and only if,
+
+\begin{equation}
+    \psi \cdot p = k
+\end{equation}
 
 \subsection{Evolution of excess demand} \label{a:ev_demand}
 

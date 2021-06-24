@@ -1,16 +1,24 @@
-function minimize(fn, s; verbose=true)
-
-    result = optimize(fn, -s, s)
-
-    if verbose && result.minimum > 1e-5
-        println("Non-zero result $(result.minimum)")
-    end
-
-    return result.minimizer
+function isbracketing(f, a, b)
+    sign(f(a)) * sign(f(b)) < 0
 end
+isbracketing(f, x) = isbracketing(f, -x, x)
 
-function isbracketing(f, x)
-    sign(f(x)) * sign(f(-x)) < 0
+function bracketingroots(f, a; δ=100)
+
+    Δa = abs(2 * a)
+
+    for i = 0:δ
+        u = a - i * Δa / δ
+        if isbracketing(f, u, a)
+            return find_zero(f, (u, a))
+        end
+        if isbracketing(f, -a, -u)
+            return find_zero(f, (-a, -u))
+        end
+    end
+    
+    throw("Not found")
+
 end
 
 function rootr(mc, mb, s,  β)
@@ -18,28 +26,22 @@ function rootr(mc, mb, s,  β)
         benefit = mb(r)
         cost = mc(r) 
 
-        if !isfinite(cost) & !isfinite(benefit)
-            return cost
-        else
-            return cost - benefit * β
+        if !isfinite(cost)
+            cost = sign(cost) * 10e5
         end
+        if !isfinite(benefit)
+            benefit = sign(benefit) * 10e5
+        end
+
+        return cost - benefit * β
     end
 
-    if isbracketing(f, s)
-        return find_zero(f, (-s, s))
-    else
-        try
-            return find_zero(f, 0.0)
-        catch
-            if mc(0.) > mb(0.)
-                println("Slow decay...")
-                return -0.2 * s
-            else
-                println("Slow ramp-up...")
-                return 0.2 * s
-            end
-        end
+    try
+        return fzero(f, 0.0)
+    catch
+        return bracketingroots(f, 100.)
     end
+
 end
 
 """
@@ -52,8 +54,18 @@ function r(p, producer::Producer, model)
 
     mc(r) = ∂c∂r(s, r) * r + c(s, r)
 
-    mb(r) = (∂c∂r(s + r, r) - ∂c∂s(s + r, r)) * r + c(s + r, r) + ψ * (p - k)
+    indirect(r) = (∂c∂r(s + r, r) - ∂c∂s(s + r, r)) * r
+    mb(r) = indirect(r) + c(s + r, r) + ψ * (p - k)
 
 
-    return rootr(mc, mb, s, β)
+    try 
+        root = rootr(mc, mb, s, β)
+
+        println("   Producer $(producer.pos)-$(producer.id) -> p=$p -> r=$(root) + s=$s")
+
+        return max(-s, root)
+    catch error
+        print("β = $β; k = $k; ψ = $ψ; p = $p; s = $s")
+        throw(error)
+    end
 end

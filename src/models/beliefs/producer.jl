@@ -21,7 +21,6 @@ function update_belief!(producer::Producer, model; γ=0.1)
 
     probstay = exp(β * producer.U[currentstrategy]) / sum(Z)
 
-    # FIXME: Add rng
     if rand(model.rng) > probstay
         strategy′ = flip12(currentstrategy)
         producer.ψ = model.Ψ[strategy′]
