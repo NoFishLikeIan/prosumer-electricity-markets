@@ -78,3 +78,23 @@ end
 function flip12(idx)
     3 - idx
 end
+
+"""
+Find a vector of n quantities xᵢ given their sum ∑xᵢ and a vector of n ratios with respect to one of them xᵢ / xₙ (note that xₙ / xₙ = 1 so one entry of the ratios ought to be 1)
+"""
+function xs_by_sum_ratio(sumX::Float64, ratios::Vector{Float64})
+    xₙ = sumX / sum(ratios)
+    return xₙ .* ratios
+end
+
+function edgetotuple(edge)
+    (edge.src, edge.dst)
+end
+
+function sortededge(i, j)
+    i < j ? (i, j) : (j, i)
+end
+
+function δ(i, j)
+    i < j ? 1 : -1
+end
