@@ -191,45 +191,52 @@ hence,
 
 \subsubsection{Euler equation}
 
-Let the approximated ramp-up function be,
+First assume that $X_t > 0$. The case for $X_t < 0$ is perfectly symmetric. Let the approximated ramp-up function be,
 
 \begin{equation}
-    \tilde{R}(p) \coloneqq a + b \cdot p
+    \tilde{R}(p) \coloneqq a + b \cdot p \cong R(p)
 \end{equation}
 
-and the Bellman maximization,
+Each period the provider faces the problem,
 
 \begin{equation*}
     \begin{split}
-        L(p_t, \Y_t) &\coloneqq p_t \cdot X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P^j(\Y_t) + \lambda_t \cdot \left( X_t -  \sum_{j} Y_t^j \right) \\
-        &+ \beta \cdot  V\left(X_t - N \cdot \tilde{R} (p_t) \right)
+        \mathcal{L}(p, \Y, X) &= p \cdot X - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P^j(\Y) \\
+        &+ \lambda_t \cdot \left( X -  \sum_{j} Y_t^j \right) \\
+        &+ \beta \cdot  V\left(X - \tilde{R} (p) \right)
     \end{split}
 \end{equation*}
 
-such that $V(X_t) = \max_{p_t, \Y_t} L(p_t, \Y_t)$. The first order condition of $L$ requires that,
+such that $V(X) = \max_{p, \Y} \mathcal{L}(p, \Y, X)$. The first order condition of $\mathcal{L}$ requires that,
 
 \begin{equation} \label{foc_p}
     \begin{split}
-        \frac{\partial}{\partial p_t} L = X_t - \beta \cdot V^\prime (X_{t+1}) \cdot N \cdot \tilde{R}^\prime(p_t) &= 0 \\
-        \beta \cdot V^\prime (X_{t+1}) = \frac{X_t}{N \cdot \tilde{R}^\prime}
+        \frac{\partial}{\partial p} \mathcal{L} &= X - \beta \cdot V^\prime \left(X - \tilde{R}(p) \right) \cdot \tilde{R}^\prime(p) = 0 \\
+        X &= \beta \cdot V^\prime \left(X - \tilde{R}(p) \right) \cdot \frac{\partial \tilde{R}}{\partial p}(p)
     \end{split}
 \end{equation}
 
-Furthermore, the second first order condition requires that, for all $j$,
+This first order condition implies that the benefit of charging a higher price today, which is today's demand $X$, should be equal to the cost of reducing the demand tomorrow, $\beta \cdot V^\prime \left(X - \tilde{R}(p) \right) \cdot \frac{\partial \tilde{R}}{\partial p}(p)$. The second first order condition requires that, for each neighbor $m$, 
 
 \begin{equation} \label{foc_Y}
-    \frac{\partial}{\partial Y^j_t} L =  P^j(\Y_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^j_t} (\Y_t) + \lambda_t = 0
+    \begin{split}
+        \frac{\partial}{\partial Y^m} \mathcal{L} &= \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y^j \cdot P^j(\Y))}{\partial Y^m} + \lambda = 0
+    \end{split}
 \end{equation}
 
-This implies that, $\forall j, l \in N_{\mathcal{A}}(i)$,
+We can distribute the partial derivative by noting that for each entry in the sum, $j$ not equal to $m$, we take the partial derivative of $P^j$ with respect to $Y^m$, and for the entry $m$ in the sum we need to use the chain rule. 
 
-\begin{equation} \label{lambda_before}
-    -\lambda_t = P^j(\Y_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^j_t} (\Y_t) = P^l(\Y_t) + \sum_{k \in N_{\mathcal{A}}(i)} Y^k_t \cdot \frac{\partial P^k}{\partial Y^l_t} (\Y_t)
-\end{equation}
+\begin{equation} \label{lambda}
+    \begin{split}
+        -\lambda &= \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y^j \cdot P^j(\Y))}{\partial Y^m} \\
+        &= Y^1 \cdot \frac{\partial P^1(\Y)}{\partial Y^m} + \ldots + \underbrace{\frac{\partial Y^m}{\partial Y^m} P^m(\Y) + Y^m \cdot \frac{\partial P^m(\Y)}{\partial Y^m} }_{\text{by the chain rule}} + Y^{m+1} \cdot \frac{\partial P^{m+1}(\Y)}{\partial Y^m} \ldots \\
+        &= P^m(\Y) + \sum_{j \in N_{\mathcal{A}}(i)} Y^j \cdot \frac{\partial P^j(\Y)}{\partial Y^m}
+    \end{split}
+\end{equation} 
 
 \subsubsection{Envelope}
 
-Assuming we are in the optimum,
+By the envelope theorem,
 
 \begin{equation} \label{env}
     V^\prime(X_t) = p_t + \lambda_t + \beta \cdot V^\prime(X_{t+1})
@@ -239,33 +246,207 @@ Assuming we are in the optimum,
 Then combining Equations (\ref{env}) and (\ref{foc_p}), we obtain
 
 \begin{equation}
-    V^\prime(X_t) = p_t + \lambda_t + \frac{X_t}{N\cdot \tilde{R}^\prime(p_t)}
+    V^\prime(X_t) = p_t + \lambda_t + \frac{X_t}{\frac{\partial \tilde{R}}{\partial p}(p_t)}
 \end{equation}
 
 Iterating forward,
 
 \begin{equation}
-    \begin{split}
-        V^\prime(X_{t+1}) &= p_{t+1} + \lambda_{t+1} + \frac{X_{t+1}}{N\cdot \tilde{R}^\prime(p_{t+1})}
-    \end{split}
+    V^\prime(X_{t+1}) = p_{t+1} + \lambda_{t+1} + \frac{X_{t+1}}{\frac{\partial \tilde{R}}{\partial p}(p_{t+1})}
 \end{equation}
 
 Using (\ref{foc_p}),
 
 \begin{equation}
-    \begin{split}
-        \frac{X_t}{\beta \cdot N \cdot \tilde{R}^\prime(p_t)} &= p_{t+1} + \lambda_{t+1} + \frac{X_{t+1}}{N\cdot \tilde{R}^\prime(p_{t+1})} \\
-        \frac{X_t}{\beta \cdot N \cdot \tilde{R}^\prime(p_t)} - \lambda_{t+1} &= p_{t+1} + \frac{X_t - N \cdot \tilde{R} (p_t)}{N\cdot \tilde{R}^\prime(p_{t+1})}
-    \end{split}
+    \frac{X_t}{\beta \cdot \frac{\partial \tilde{R}}{\partial p}(p_t)} = p_{t+1} + \lambda_{t+1} + \frac{X_{t} - \tilde{R}(p_t)}{\frac{\partial \tilde{R}}{\partial p}(p_{t+1})}
 \end{equation}
 
-Using $\tilde{R}^\prime(p) = b$,
+Finally, using the linearity of $\tilde{R}$, $\frac{\partial \tilde{R}}{\partial p} = b$,
 
 \begin{equation}
     \begin{split}
-        \frac{X_t}{\beta \cdot N \cdot b} - \lambda_{t+1} &= p_{t+1} + \frac{X_t}{N\cdot b} - \frac{a +  b \cdot p_{t}}{b} \\
-        p_{t+1} &= p_t + \frac{a}{b} +  \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{N \cdot b} - \lambda_{t+1}
+        \frac{X_t}{\beta \cdot b} &=  \lambda_{t+1} + p_{t+1} + \frac{X_t}{b} - \frac{a +  b \cdot p_{t}}{b} \\
+        p_{t+1} &= p_t + \frac{a}{b} +  \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{b} - \lambda_{t+1}
     \end{split}
+\end{equation}
+
+\subsubsection{Bargaining solution} \label{a:barsol}
+
+The Nash bargaining solution is such that
+
+\begin{equation*}
+    P^{(i, j)} = \arg \max_{P^{(i, j)}} \left\{\Pi_i \cdot \Pi_j \right\}.
+\end{equation*}
+
+The first order condition is such that,
+
+\begin{equation*}
+    \frac{\partial}{\partial P^{(i, j)}} \left( \Pi_i \cdot \Pi_j \right) = \frac{\partial \Pi_i}{\partial  P^{(i, j)}} \cdot \Pi_j + \Pi_i \cdot \frac{\partial \Pi_j}{\partial  P^{(i, j)}} = 0
+\end{equation*}
+
+Then, by symmetry, $\frac{\partial \Pi_j}{\partial  P^{(i, j)}} = - \frac{\partial \Pi_i}{\partial  P^{(i, j)}}$,
+
+\begin{equation}
+    \Pi_j = \Pi_i 
+\end{equation}
+
+Note that an equal division of the pie is consistent with the network bargaining model of \citein{Corominas-Bosch2004} with infinitely patient traders.
+
+\subsection{Illustrative examples}
+\subsubsection{Complete graph}
+Consider the simplest non-trivial example, namely the complete graph with three nodes (Figure \ref{tikz:complete}). The optimization of prosumer one can be written as,
+
+\begin{equation*}
+    V(X_{1, t}) = \max_{p_{1, t}, Y_t^{(1, 2)}, Y_t^{(1, 3)}} \left\{ \mathcal{L}\left( p_{1, t}, Y_t^{(1, 2)}, Y_t^{(1, 3)}, X_{1, t} \right) \right\}
+\end{equation*}
+
+\begin{figure}[!ht]
+    \centering
+    \input{sections/diagrams/complete.tikz}
+    \caption{Complete graph}
+    \label{tikz:complete}
+\end{figure}
+
+The Lagrangian multiplier can then be written as,
+
+\begin{equation*}
+    -\lambda_1 = P^{(1, 2)} + Y^{(1, 2)} \cdot \frac{\partial P^{(1, 2)}}{\partial Y^{(1, 2)}} + Y^{(1, 3)} \cdot \frac{\partial P^{(1, 3)}}{\partial Y^{(1, 2)}}
+\end{equation*}
+
+The optimization of prosumers two and three is equivalent. Using $Y^{(2, 1)} = - Y^{(1, 2)}$, the multipler of two becomes,
+
+\begin{equation*}
+    -\lambda_2 = P^{(2, 3)} + Y^{(2, 3)} \cdot \frac{\partial P^{(2, 3)}}{\partial Y^{(2, 3)}} - Y^{(1, 2)} \cdot \frac{\partial P^{(1, 2)}}{\partial Y^{(2, 3)}}
+\end{equation*}
+
+Finally, the multiplier of three, noting that $\frac{\partial Y^{(1, 3)}}{\partial Y^{(3, 1)}} = -1$,
+
+\begin{equation*}
+    -\lambda_3 = -P^{(1, 3)} - Y^{(1, 3)} \cdot \frac{\partial P^{(1, 3)}}{\partial Y^{(1, 3)}} - Y^{(2, 3)} \cdot \frac{\partial P^{(2, 3)}}{\partial Y^{(1, 3)}}
+\end{equation*}
+
+We can then use the Nash bargaining price (\ref{bargaining_solution}) to define $P$,
+
+\begin{equation*}
+    P^{(1, 2)} = \underbrace{\Delta^{(1, 2)}}_{\text{revenue difference}} - \underbrace{Y^{(1, 3)} \cdot P^{(1, 3)}}_{\text{outside option of } 1} + \underbrace{Y^{(2, 3)} \cdot P^{(2, 3)}}_{\text{outside option of } 2}  \Bigg/ 2 Y^{(1, 2)}
+\end{equation*}
+
+To get an intuition for the formula, note that if we were to cut the ties between one and three (setting $Y^{(1, 3)}$ to 0), thereby removing one's outside option, we would obtain a higher price $P^{(1, 2)}$.
+
+By stacking the price over every edge in a vector we obtain,
+
+\begin{equation*}
+    2 \cdot \underbrace{\begin{pmatrix}
+        Y^{(1, 2)} P^{(1, 2)} \\
+        Y^{(1, 3)} P^{(1, 3)} \\
+        Y^{(2, 3)} P^{(2, 3)}
+    \end{pmatrix}}_{\Y \circ P} = 
+    \underbrace{\begin{pmatrix}
+        \Delta^{(1, 2)} \\
+        \Delta^{(1, 3)} \\
+        \Delta^{(2, 3)}
+    \end{pmatrix}}_{\Delta} - \underbrace{\begin{pmatrix}
+        0 & 1 & -1 \\
+        -1 & 0 & 1 \\
+        1 & -1 & 0
+    \end{pmatrix}}_{\matr{G}} \underbrace{\begin{pmatrix}
+        Y^{(1, 2)} P^{(1, 2)} \\
+        Y^{(1, 3)} P^{(1, 3)} \\
+        Y^{(2, 3)} P^{(2, 3)}
+    \end{pmatrix}}_{\Y \circ P} 
+\end{equation*}
+
+This can be rewritten as,
+
+\begin{equation*}
+    \begin{split}
+        \left( \begin{pmatrix}
+            2 & 0 & 0 \\
+            0 & 2 & 0 \\
+            0 & 0 & 2
+        \end{pmatrix} + \begin{pmatrix}
+            0 & 1 & -1 \\
+            -1 & 0 & 1 \\
+            1 & -1 & 0
+        \end{pmatrix} \right) (\Y \circ P) &= \Delta \\
+        \begin{pmatrix}
+            2 & 1 & -1 \\
+            -1 & 2 & 1 \\
+            1 & -1 & 2
+        \end{pmatrix} (\Y \circ P) &= \Delta \\
+        \begin{pmatrix}
+            Y^{(1, 2)} & 0 & 0 \\
+            0 & Y^{(1, 3)} & 0 \\
+            0 & 0 & Y^{(2, 3)}
+        \end{pmatrix}
+        P
+         &= \begin{pmatrix}
+            2 & 1 & -1 \\
+            -1 & 2 & 1 \\
+            1 & -1 & 2
+        \end{pmatrix}^{-1} \Delta \\
+        P
+         = \underbrace{\begin{pmatrix}
+            1 / Y^{(1, 2)} & 0 & 0 \\
+            0 & 1 / Y^{(1, 3)} & 0 \\
+            0 & 0 & 1 / Y^{(2, 3)}
+        \end{pmatrix}}_{\diag(\Y)^{-1}} &\begin{pmatrix}
+            0.36 & -0.07 & 0.21\\
+            0.21 & 0.36 & -0.07\\
+            -0.07 & 0.21 & 0.36\\
+        \end{pmatrix} \Delta \\
+    \end{split}
+\end{equation*}
+
+Letting $D_{\Y} \coloneqq \frac{\der}{\der \Y}$ be the derivative with respect to the vector $\Y$. Then taking the derivative in the above expression yields,
+
+\begin{equation}
+    \begin{split}
+        \der P &= \der \diag(\Y)^{-1} \begin{pmatrix}
+            0.36 & -0.07 & 0.21\\
+            0.21 & 0.36 & -0.07\\
+            -0.07 & 0.21 & 0.36\\
+        \end{pmatrix} \Delta \\
+        \der P &= -\diag(\Y)^{-1} \der \diag(\Y) \underbrace{\diag(\Y)^{-1} \begin{pmatrix}
+            0.36 & -0.07 & 0.21\\
+            0.21 & 0.36 & -0.07\\
+            -0.07 & 0.21 & 0.36\\
+        \end{pmatrix} \Delta}_{P} \\
+        \der P &= -\diag(\Y)^{-1} \der \diag(\Y) P \\
+        \der P &= -\diag(\Y)^{-1} \diag(P) \der \Y
+    \end{split}
+\end{equation}
+
+Hence we can write the jacobian of the price vector as,
+
+\begin{equation}
+    D_{\Y} P = -\begin{pmatrix}
+        P^{(1, 2)} / Y^{(1, 2)} & 0 & 0 \\
+        0 & P^{(1, 3)} / Y^{(1, 3)} & 0 \\
+        0 & 0 & P^{(2, 3)} / Y^{(2, 3)}
+    \end{pmatrix}
+\end{equation}
+
+Using the multiplier's definition this allows as to rewrite,
+
+\begin{equation}
+    \begin{split}
+        -\lambda_1 &= 2P^{(1, 2)} \\
+        -\lambda_2 &= 2P^{(2, 3)} \\
+        -\lambda_3 &= -2P^{(1, 3)}
+    \end{split}
+\end{equation}
+
+This yields the evolution of local prices $\matr{p}_{t+1} = \begin{pmatrix}
+    p_{1, t+1} \\ p_{2, t+1} \\ p_{3, t+1}   
+\end{pmatrix}_t$
+
+\begin{equation}
+    \matr{p}_{t+1} = \matr{p}_t + \left( \matr{a} + \frac{1 -\beta}{\beta} \matr{X}_t \right) \oslash \matr{b} - \begin{pmatrix}
+        1 & 0 & 0 \\
+        0 & 1 & 0 \\
+        0 & 0 & -1
+    \end{pmatrix} P_t 
 \end{equation}
 
 \subsection{Jacobian of bargaining price} \label{a:jacobian_p}
@@ -283,7 +464,6 @@ First let $\matr{D} \coloneqq \diag(\Y)$ and $\matr{A} \coloneqq (2\matr{I} + \m
         P &= \matr{D}^{-1} \matr{A} \\
         dP &= d\matr{D}^{-1} \matr{A} \\
         &= -\matr{D}^{-1} d \matr{D} \underbrace{\matr{D}^{-1} \matr{A}}_{P} \\
-        &= -\matr{D}^{-1} \diag(P) \ d \Y \\
-        \mathbb{J}\{P\} &= -\diag(\Y)^{-1} \diag(P) = - (P \oslash \Y) \iota
+        &= -\matr{D}^{-1} \diag(P) \ d \Y
     \end{split}
 \end{equation}

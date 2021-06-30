@@ -30,7 +30,7 @@ Prosumers are endowed an electricity quantity. The endowment follows a Markov pr
 
 \subsection{Producers}
 
-Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers and costs $k$ to maintain. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} = \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s, r)$ the cost of ramping up or turning down production next period by $r$. I assume only a portion $\gamma$ of the electricity production can be freely reduced each period.This setup leads to the following optimization problem.
+Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers and costs $k$ to maintain. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} \cong \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s, r)$ the cost of ramping up or turning down production next period by $r$. I assume only a portion $\gamma$ of the electricity production can be freely reduced each period.This setup leads to the following optimization problem.
 
 \begin{equation} \label{bellman_prod}
     \begin{split}
@@ -168,7 +168,7 @@ Producers approximate the price evolution by assuming prices will change by a fa
     \end{split}
 \end{equation}
 
-Further, let $U_{\psi_h} = \sum^t_{\tau = 0} \mathbbm{1} \{\psi_{\tau} = \psi_h\} \cdot u_{\tau}$, that is, the cumulative sum of instantenous payoffs obtained while using factor $\psi_h$. Then producers update their forecasting rule by chossing the all time best performing factor, namely,
+Furthermore, let $U_{\psi_h} \coloneqq \sum^t_{\tau = 0} \mathbbm{1} \{\psi_{\tau} = \psi_h\} \cdot u_{\tau}$, that is the cumulative sum of instantenous payoffs obtained while using factor $\psi_h$. Then producers update their forecasting rule by chossing the all time best performing factor, namely,
 
 \begin{equation}
     \psi_{t+1} = \arg\max_{\psi_h} \frac{\exp(U_{\psi_h})}{\sum_{\psi \in \Psi} \exp(U_{\psi})}
@@ -179,7 +179,9 @@ Further, let $U_{\psi_h} = \sum^t_{\tau = 0} \mathbbm{1} \{\psi_{\tau} = \psi_h\
 
 \subsubsection{Setup}
 
-Electricity providers are monopolist in their own local market and are indexed, as is their local market, by $i$. They set the local price $p_{i, t}$ at which the sell (purchase) the excess demand (supply) of electricity in the local market $X_{i, t}$. They do so by trading electricity $Y^{(i, j)}$, at a bargained price $P^{(i, j)}$, with neighboring providers. Providers operate on a graph $\mathcal{A} = (V, E)$ and can trade if they share an edge, $(i, j) \in E$. Let the neighbors of a node be the set,
+% FIXME: This paragraph
+
+Electricity providers are monopolist in their own local market and are indexed, as is their local market, by $i$. They set the local price $p_{i, t}$ at which they sell (purchase) the excess demand (supply) of electricity in the local market $X_{i, t}$. On the one hand, if there is excess demand in the market, $X_{i, t} > 0$, providers sell electricity to prosumers at price $p_{i, t}$. On the other hand, if there is excess supply, $X_{i, t} < 0$, they buy electricity off of prosumers and producers at price $p_{i, t}$. The excess demand (supply) is satisfied (sold) by trading with other providers in the network. Hence, providers trade electricity $Y^{(i, j)}$, at a bargained price $P^{(i, j)}$, with neighboring providers. $Y^{(i, j)} > 0$ if $i$ is buying from $j$ and viceversa for $Y^{(i, j)} < 0$. This also implies that $Y^{(i, j)} = -Y^{(j, i)}$.Providers operate on a graph $\mathcal{A} = (V, E)$ and can trade only if they share an edge, $(i, j) \in E$. Let the neighbors of a node be the set,
 
 \begin{equation}
     N_{\mathcal{A}}(i) \coloneqq \set{ \ j \in V: \ (i, j) \in E \ }
@@ -188,7 +190,7 @@ Electricity providers are monopolist in their own local market and are indexed, 
 Given this, each period, the optimization problem of the firm is,
 
 \begin{equation}
-    \max_{p_{i, t}, Y_{i, t}} \Pi_i(p_{i, t}, \Y_{i, t})
+    \max_{p_{i, t}, \Y_{i, t}} \Pi_i(p_{i, t}, \Y_{i, t})
 \end{equation}
 
 where $p_{i, t} \in \R_{+}$ and
@@ -198,8 +200,7 @@ where $p_{i, t} \in \R_{+}$ and
         \Y_{i, t} &\in \R^{\abs{N_{\mathcal{A}}(i)}}, \hspace{5mm}\Y_{i, t} = \begin{pmatrix}
             Y^{(i, 1)}_t \\
             Y^{(i, 2)}_t \\
-            \vdots       \\
-            Y^{\left(i, \abs{N_{\mathcal{A}}(i)} \right)}_t
+            \vdots
         \end{pmatrix}
     \end{split}
 \end{equation}
@@ -213,9 +214,7 @@ is a vector of traded quantities with the provider's neighbors. Expanding the pr
     \end{split}
 \end{equation}
 
-The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. For now, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$.
-
-The provider's optimization is an intertemporal optimization problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, it perceived $M \cdot (\E[e_{t+1}] - e_{t})$ to be approximately $0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. $\matr{\pi}_e \approx \matr{I}$). Second, not knowing each individual production state $s_{i, t}$ in the local market, it approximates the ramp-up function by a linear adaptive rule, proportional to the price, namely $R_t(p) \approx a_t + b_t \cdot p$ with $a < 0$ and $b > 0$.
+The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. For now, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$. The provider's optimization is an intertemporal problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, at time $t$, it assumes $M \cdot (\E[e_{t+1}] - e_{t}) \cong 0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. if $\matr{\pi}_e \approx \matr{I}$). Second, we assume the provider does not know the ramp-up function of producers in the local market, $r(s_t, p_t; \psi_t)$, hence they approximate the aggregate ramp-up function by a linear adaptive rule, proportional to the price, namely $R_t(p) \cong a_t + b_t \cdot p$ with $a < 0$ and $b > 0$.
 
 Given this setup we can specify the optimization problem of the provider. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$), the Bellman equation can be written as,
 
@@ -256,7 +255,7 @@ I assume that the bargaining does not take into account individual market expect
 \end{equation}
 
 
-which yields, for every edge $(i, j)$ with $ a_{i, j} \neq 0$,
+which yields (see \ref{a:barsol}), for every edge $(i, j)$ with $a_{i, j} \neq 0$,
 
 \begin{equation} \label{bargaining_solution}
     \begin{split}
@@ -300,26 +299,36 @@ Hence, the bargaining solution gives the price following price formation,
 with associated Jacobian (see \ref{a:jacobian_p}),
 
 \begin{equation}
-    \mathbb{J}\{P\}(\Y_t) = -\diag(\Y)^{-1} \diag(P)
+    D_{\Y} P(\Y_t) = -\diag(P(\Y_t) \oslash \Y_t)
 \end{equation}
 
-We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. The shadow price (\ref{lambda_before}) of the bargaining procedure is then,
+We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. Using the fact that $D_{\Y} P(\Y_t)_{i, j} = 0$ if $i \neq j$, shadow price of the bargaining procedure is then (Equation \ref{lambda}),
+
+letting,
 
 \begin{equation}
-    -\lambda_{i, t} = P^{(i, j)} + \sum_{k \in N \setminus \set{i}} a_{i, k} \cdot Y^{(i, k)} \cdot \mathbb{J}\{P\}^{(i, k)}_{(i, j)}
+    \delta(m) =\begin{cases}
+        1  & \text{if } i > m \\
+        -1 & \text{if } m < i
+    \end{cases}
 \end{equation}
-
-Stacking the right hand side over edges,
 
 \begin{equation}
-    P + \mathbb{J}\{P\} \Y = 0 \ \implies \lambda_{i, t} = 0 \ \forall i
+    \begin{split}
+        -\lambda_t &= P^m(\Y_t) + \sum_{j \in N_{\mathcal{A}}(i)} Y_t^j \cdot D_{\Y} P(\Y_t)_{j, m} \\
+        &= \delta(m) \cdot 2 P^m(\Y_t)
+    \end{split}
 \end{equation}
 
-This result yields the property that the surplus revenue $\Delta$ is allocated entirely based on the network structure,
+Note that $\lambda_t$ needs to be the same for every neighbour, such that, for two neighbours $m$ and $n$
 
 \begin{equation}
-    (2 \matr{I} + \matr{G})^{-1} = \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k
+    \begin{split}
+        \delta(m) \cdot 2 P^m(\Y_t) &= \delta(n) \cdot 2 P^n(\Y_t) \\
+        \frac{P^n(\Y_t)}{P^m(\Y_t)} &= \frac{\delta(n)}{\delta(m)}
+    \end{split}
 \end{equation}
+
 
 \subsubsection{Belief update}
 

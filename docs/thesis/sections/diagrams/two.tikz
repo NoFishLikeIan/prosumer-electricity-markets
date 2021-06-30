@@ -17,7 +17,7 @@ minimum size=10pt]
 
 
     \path
-    (one) edge [] node [above] {$Y^{(1, 2)}$} (two)
+    (one) edge [-] node [above] {$Y^{(1, 2)}$} (two)
     (local_one) edge [] node [right] {$X(p_1)$} (one)
     (local_two) edge [] node [left] {$X(p_2)$} (two);
 
