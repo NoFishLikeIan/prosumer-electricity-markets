@@ -8,7 +8,7 @@ sns.set()
 doplot = False
 
 
-def pmatrix(a, digits = -1):
+def pmatrix(a, digits=-1):
     """Returns a LaTeX pmatrix
 
     :a: numpy array
@@ -27,19 +27,35 @@ def pmatrix(a, digits = -1):
 
 
 A = np.array([
-    [0, 1, 1, 1],
-    [1, 0, 0, 0],
-    [1, 0, 0, 0],
-    [1, 0, 0, 0]
+    [0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
 ])
 
-label_mapping = dict(zip(range(4), range(1, 5)))
+A = A + A.T
+
+N = A.shape[0]
+
+label_mapping = dict(zip(range(N), range(1, N + 1)))
 
 Ag = nx.convert_matrix.from_numpy_array(A)
 
 Ag = nx.relabel_nodes(Ag, label_mapping)
 
-Lg = nx.generators.line_graph(Ag)
+
+def makeline(Ag):
+    unG = nx.generators.line_graph(Ag)
+
+    H = nx.Graph()
+    H.add_nodes_from(sorted(unG.nodes(data=True)))
+    H.add_edges_from(unG.edges(data=True))
+
+    return H
+
+
+Lg = makeline(Ag)
 
 nx.draw(Ag, with_labels=True)
 plt.savefig("original.png")
@@ -50,8 +66,6 @@ plt.savefig("linegraph.png")
 plt.close()
 
 G = nx.to_numpy_array(Lg)
-
-G = np.triu(G) - np.triu(G).T
 
 I = np.identity(G.shape[0])
 
