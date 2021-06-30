@@ -3,7 +3,7 @@ using DataFrames
 
 include("src/main.jl")
 
-doplot = false
+doplot = true
 
 A = [
     0 1 1 1;
@@ -50,6 +50,8 @@ model = initializemodel(A, G, parameters; s₀=s₀)
 
 if doplot
 
+    Plots.scalefontsizes(0.6)
+
     adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s, :b, :a]
     mdata = [:X, :R]
 
@@ -59,16 +61,13 @@ if doplot
         model, agent_step!, model_step!, T; 
         adata, mdata)
 
-    Plots.scalefontsizes(0.6)
-
     figrp = pricesupplyplot(dfagent; savepath="plots/energy/pricesupply.pdf")
 
     plotproducerbeliefs(dfagent; savepath="plots/energy/optimistics.pdf")
 
     plotproviderbeliefs(dfagent; savepath="plots/energy/ols.pdf")
 
-    println("Done!")
-
     Plots.resetfontsizes()
+    println("Done!")
 
 end

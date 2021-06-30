@@ -1,7 +1,7 @@
 """
 Producer ramp-up function assuming softplus costs
 """
-function r(s, p, ψ, k, β)
+function r(s, p, ψ, k, β; γ=0.2)
     unitπ = ψ * p - k
 
     if unitπ < 0 return -γ * s end
