@@ -2,16 +2,14 @@
 Provider's local price setting
 """
 function p′(X, provider::Provider, model)
+    λ = -2 * first(values(model.P))
+
     β, k = model.β, model.k
     a, b = provider.a, provider.b
 
     ∂x = (1 - β) / (β * b)
 
-    Δp = ∂x * X + a / b
+    Δp = ∂x * X + a / b - λ
 
-    newprice = 10. * cos(model.step / 100) # max(provider.p + Δp * 0.05, 0.)
-
-    println("Prov $(provider.pos): X=$X -> p=$Δp + $(provider.p)")
-
-    return newprice
+    return max(provider.p + Δp, 0.)
 end

@@ -1,5 +1,3 @@
-getjumpindex(arr, start, N) = arr[start:N:length(arr)]
-
 """
 Make time exponential decay weighting matrix 
 """
@@ -31,11 +29,7 @@ function update_belief!(provider::Provider, model)
 
         a, b = inv(X'W * X) * (X'W * R)
 
-        if b == 0.
-            throw("Zero b with \n $X \n $p")
-        end
-
-        provider.a = a # FIXME: Why is it negative?
+        provider.a = a 
         provider.b = b
 
     end

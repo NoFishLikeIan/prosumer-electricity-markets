@@ -64,6 +64,10 @@ function model_step!(model)
 
     end
 
+    Y, P = computebargaining(model)
+
+    model.P = P 
+    model.Y = Y 
 
     model.step += 1
 end

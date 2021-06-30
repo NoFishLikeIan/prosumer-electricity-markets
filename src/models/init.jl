@@ -7,10 +7,15 @@ function initializemodel(
 
     space = GraphSpace(SimpleGraph(A))
     Nnodes = length(space.s)
+    E = map(edgetotuple, edges(space.graph))
 
     parameters[:R] = repeat([0.0], Nnodes)
     parameters[:p] = repeat([0.0], Nnodes)
     parameters[:X] = repeat([0.0], Nnodes)
+
+    parameters[:P] = Dict(E .=> zeros(length(E)))
+    parameters[:Y] = copy(parameters[:P])
+
     parameters[:rng] = rng
     parameters[:G] = G
     parameters[:step] = 1
@@ -43,7 +48,7 @@ function initializemodel(
             a₀, b₀, 0.
         )
         
-        p₀ = 0.0 # (rand(rng) + 0.5) * 10.
+        p₀ = (rand(rng) + 0.5) * 10.
         provider.p = p₀
   
         println("$node -> p = $p₀")
@@ -51,7 +56,7 @@ function initializemodel(
         for _ in 1:N
             ψ₀ = sample(model.rng, parameters[:Ψ])
 
-            randoms = 0.0 # (rand(rng) + 0.5) * s₀
+            randoms = (rand(rng) + 0.5) * s₀
 
             println("   -> s₀ = $randoms")
 

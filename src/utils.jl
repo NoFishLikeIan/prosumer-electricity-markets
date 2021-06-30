@@ -98,3 +98,7 @@ end
 function δ(i, j)
     i < j ? 1 : -1
 end
+
+function getjumpindex(arr, start, N) 
+    return arr[start:N:length(arr)]
+end
