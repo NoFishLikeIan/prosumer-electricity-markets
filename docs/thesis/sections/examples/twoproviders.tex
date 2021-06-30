@@ -1,0 +1,32 @@
+\subsection{Two providers}
+
+Consider now the case of two providers drawn below.
+
+\vspace{5mm}
+\begin{minipage}{.5\textwidth}
+    \resizebox{\textwidth}{!}{\input{sections/diagrams/two.tikz}}
+\end{minipage}
+\begin{minipage}{.45\textwidth}
+    \begin{equation*}
+        \matr{A} = \begin{pmatrix}
+            0 & 1 \\
+            1 & 0
+        \end{pmatrix}
+    \end{equation*}
+\end{minipage}
+\vspace{5mm}
+
+Using equation the bargaining solution (\ref{bargaining_solution}) we obtain the trading price,
+
+\begin{equation}
+    P^{(1, 2)}_t = \frac{X_{1, t} \cdot p_{1, t} - X_{2, t} \cdot p_{2, t}}{2 \cdot Y^{(1, 2)}_t}
+\end{equation}
+
+To satisfy the constraint providers need to set prices such that, for every $t$,
+
+\begin{equation}
+    \begin{split}
+        X_{1, t+1} &= - X_{2, t+1} \\
+        N_1 \cdot \left( b_1 + a_1 \cdot p_{1, t} \right) &= - N_2 \cdot \left( b_2 + a_2 \cdot p_{2, t} \right)
+    \end{split}
+\end{equation}
