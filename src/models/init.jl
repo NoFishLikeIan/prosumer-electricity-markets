@@ -3,6 +3,11 @@ function initializemodel(
     ε₀=10., a₀=-15., b₀=1.0, s₀=10.,
     seed=1148705
 )
+
+    if :c ∉ keys(parameters) 
+        parameters[:c] = (c, ∂c∂s, ∂c∂r)
+    end
+
     rng = MersenneTwister(seed)
 
     space = GraphSpace(SimpleGraph(A))

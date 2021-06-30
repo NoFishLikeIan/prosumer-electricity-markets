@@ -21,4 +21,5 @@ include("models/bargaining.jl")
 include("models/evolution.jl")
 include("models/init.jl")
 
+include("softpluscosts.jl")
 include("plot.jl")
