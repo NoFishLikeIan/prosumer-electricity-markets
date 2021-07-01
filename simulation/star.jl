@@ -2,23 +2,13 @@ using Plots
 using DataFrames
 
 include("src/main.jl")
+include("simulate.jl")
 
 plotpath = "../plots/energy/star/"
 
 doplot = true
 
-A = [
-    0 1 1 1;
-    1 0 0 0;
-    1 0 0 0;
-    1 0 0 0;
-]
-
-G = [
-    0 1 1;
-    1 0 1;
-    1 1 0
-]
+A, G = makestar(15)
 
 println("Simulating stable...")
 

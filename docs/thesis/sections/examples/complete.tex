@@ -55,7 +55,7 @@ By stacking the price over every edge in a vector we obtain,
             \Delta^{(2, 3)}
         \end{pmatrix}}_{\Delta} - \underbrace{\begin{pmatrix}
             0  & 1  & -1 \\
-            -1 & 0  & 1  \\
+            1 & 0  & -1  \\
             1  & -1 & 0
         \end{pmatrix}}_{\matr{G}} \underbrace{\begin{pmatrix}
             Y^{(1, 2)} P^{(1, 2)} \\
@@ -74,12 +74,12 @@ This can be rewritten as,
                 0 & 0 & 2
             \end{pmatrix} + \begin{pmatrix}
                 0  & 1  & -1 \\
-                -1 & 0  & 1  \\
+                1 & 0  & -1  \\
                 1  & -1 & 0
             \end{pmatrix} \right) (\Y \circ P) &= \Delta \\
         \begin{pmatrix}
             2  & 1  & -1 \\
-            -1 & 2  & 1  \\
+            1 & 2  & -1  \\
             1  & -1 & 2
         \end{pmatrix} (\Y \circ P) &= \Delta \\
         \begin{pmatrix}
@@ -90,7 +90,7 @@ This can be rewritten as,
         P
         &= \begin{pmatrix}
             2  & 1  & -1 \\
-            -1 & 2  & 1  \\
+            1 & 2  & -1  \\
             1  & -1 & 2
         \end{pmatrix}^{-1} \Delta \\
         P
@@ -99,9 +99,9 @@ This can be rewritten as,
                 0              & 1 / Y^{(1, 3)} & 0              \\
                 0              & 0              & 1 / Y^{(2, 3)}
             \end{pmatrix}}_{\diag(\Y)^{-1}} &\begin{pmatrix}
-            0.36  & -0.07 & 0.21  \\
-            0.21  & 0.36  & -0.07 \\
-            -0.07 & 0.21  & 0.36  \\
+                0.5 & -0.167 & 0.167 \\
+                -0.5 &  0.833 &  0.167 \\
+                -0.5 &  0.5   &   0. 5
         \end{pmatrix} \Delta \\
     \end{split}
 \end{equation*}

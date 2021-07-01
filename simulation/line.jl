@@ -1,52 +1,72 @@
-using Plots
-using DataFrames
-
 include("src/main.jl")
+include("simulate.jl")
 
-plotpath = "../plots/energy/line"
+plotpath = "../plots/energy/line/"
 
-function makeline(n)
-    A = zeros(Int64, n, n)
-    A[diagind(A, 1)] .= 1
-    A[diagind(A, -1)] .= 1
+doplot = true
 
-    G = zeros(Int64, n - 1, n - 1)
-    G[diagind(G, 1)] .= 1
-    G[diagind(G, -1)] .= -1
+A, G = makeline(15)
 
+println("Simulating stable...")
 
-    return A, G
-end
+ρₗ, ρᵤ = 0., 1.
 
-ρₗ = 0.99
-ρᵤ = 0.99
-
-ε = ([
-        ρₗ 1 - ρₗ; 
-        1 - ρᵤ ρᵤ
-    ],
-    [5., 10.])
+ε = ([ρₗ 1 - ρₗ; 1 - ρᵤ ρᵤ], [2.0, 10.0])
 
 parameters = Dict(
     :k => 2.0,
-    :Ψ => [0.9, 0.9],
     :β => 0.99, :βprod => 0.8,
     :M => 1_000, :N => 3,
     :ε => ε)
 
-
-A, G = makeline(100)
 model = initializemodel(A, G, parameters)
+dfagent, dfmodel = simulatemarket(model; T=1_000)
+
+Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
+default(size=(1200, 800), margin=5Plots.mm)
+
+if doplot
+
+    dfagentstable = dfagent[dfagent.step .> 100, :]
+    dfmodelstable = dfmodel[dfmodel.step .> 100, :]
+    pricesupplyplot(dfagentstable; savepath=joinpath(plotpath, "pricesupply.pdf"))
+
+    plotproviderbeliefs(dfagentstable; savepath=joinpath(plotpath, "ols.pdf"))
+
+    plotexcessdemand(dfagentstable, dfmodelstable; savepath=joinpath(plotpath, "demand.pdf"))
+
+    
+    plotpricevariance(dfagentstable, model; savepath=joinpath(plotpath, "pvar.pdf"))
+
+end
+
+println("Simulating unstable...")
+
+ρₗ, ρᵤ = 0.99, 0.99
+
+ε = ([ρₗ 1 - ρₗ; 1 - ρᵤ ρᵤ], [2.0, 10.0])
+parameters[:ε] = ε
+
+model = initializemodel(A, G, parameters)
+dfagent, dfmodel = simulatemarket(model; T=1_000)
+
+if doplot
+
+    dfagentunstable = dfagent[dfagent.step .> 100, :]
+    dfmodelunstable = dfmodel[dfmodel.step .> 100, :]
+
+    pricesupplyplot(dfagentunstable; savepath=joinpath(plotpath, "unstable_pricesupply.pdf"))
+
+    plotproviderbeliefs(dfagentunstable; savepath=joinpath(plotpath, "unstable_ols.pdf"))
+
+    plotexcessdemand(dfagentunstable, dfmodelunstable; savepath=joinpath(plotpath, "unstable_demand.pdf"))
+
+    
+    plotpricevariance(dfagentunstable, model; savepath=joinpath(plotpath, "unstable_pvar.pdf"))
 
 
-adata = [:pos, :p, :r, :Ep, :ε, :ψ, :s, :b, :a]
-mdata = [:X, :R]
+end
 
-T = 100
+println("...done!")
 
-dfagent, dfmodel = run!(model, agent_step!, model_step!, T;adata, mdata)
-
-
-pricesupplyplot(dfagent; savepath=joinpath(plotpath, "pricesupply.pdf"))
-
-plotproviderbeliefs(dfagent; savepath=joinpath(plotpath, "ols.pdf"))
+Plots.resetfontsizes()
