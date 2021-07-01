@@ -12,7 +12,7 @@ function lowendowmentperiods(dfpros)
     return [(l, u + 1) for (l, u) in cons]
 end
 
-function getsquare(n::Int64)
+function getlayout(n::Int64)
 
     biggersquare = ceil(Int64, √(n))
 
@@ -22,15 +22,18 @@ end
 """
 Pass a function that takes the nodedata and time and returns a figure
 """
-function plotnodes(dfagent, fn)
+function plotnodes(dfagent, fn; maxnode=4)
     nodes = unique(dfagent[!, :pos])
+
+    nodes = length(nodes) > maxnode ? nodes[1:maxnode] : nodes
+
     T = maximum(dfagent[!, :step])
     time = 0:T
 
     nodedata = (getnodedata(dfagent, node) for node in nodes)
     figures = map(data -> fn(time, data), nodedata)
 
-    allfigures = plot(figures..., layout=getsquare(length(nodes)))
+    allfigures = plot(figures..., layout=length(figures))
 
     return allfigures
 end
@@ -89,7 +92,7 @@ function plotproducerbeliefs(dfagent; savepath=nothing)
         εperiods = lowendowmentperiods(dfpros)
 
         optψ = maximum(model.Ψ)
-
+        
         optimistic = combine(
             groupby(dfprod, [:step]),
             :ψ => col -> count(col .== optψ) / length(col)
@@ -106,7 +109,7 @@ function plotproducerbeliefs(dfagent; savepath=nothing)
 
     end)
 
-    if !isnothing(savepath)
+        if !isnothing(savepath)
         savefig(jointfigure, savepath)
     end
 

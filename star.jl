@@ -3,7 +3,7 @@ using DataFrames
 
 include("src/main.jl")
 
-doplot = true
+doplot = false
 
 A = [
     0 1 1 1;
@@ -17,14 +17,6 @@ G = [
     1 0 1;
     1 1 0
 ]
-
-c₁ = 100
-
-c(s, r) = log(1 + exp(c₁ * s * r)) / c₁
-S(s, r) = inv(1 + exp(-c₁ * s * r))
-
-∂c∂s(s, r) = S(s, r) * r
-∂c∂r(s, r) = S(s, r) * s
 
 
 ρₗ = 0.99
