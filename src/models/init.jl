@@ -1,29 +1,25 @@
-function initializemodel(
-    A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict;
-    ε₀=10., a₀=-15., b₀=1.0, s₀=10.,
-    seed=1148705
-)
+function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; seed=1148705, verbose=false)
 
     if :c ∉ keys(parameters) 
         parameters[:c] = (c, ∂c∂s, ∂c∂r)
     end
 
-    rng = MersenneTwister(seed)
+    parameters[:rng] = MersenneTwister(seed)
+    parameters[:step] = 1
 
     space = GraphSpace(SimpleGraph(A))
     Nnodes = length(space.s)
     E = map(edgetotuple, edges(space.graph))
 
+    # Bargaining data
+    parameters[:P] = Dict(E .=> zeros(length(E)))
+    parameters[:Y] = copy(parameters[:P])
+    parameters[:G] = G
+
+    # Production data
     parameters[:R] = repeat([0.0], Nnodes)
     parameters[:p] = repeat([0.0], Nnodes)
     parameters[:X] = repeat([0.0], Nnodes)
-
-    parameters[:P] = Dict(E .=> zeros(length(E)))
-    parameters[:Y] = copy(parameters[:P])
-
-    parameters[:rng] = rng
-    parameters[:G] = G
-    parameters[:step] = 1
 
     function byids(model::ABM)
         return sort(collect(allids(model)))
@@ -35,41 +31,28 @@ function initializemodel(
         warn=false, scheduler=byids
     )
 
+    a₀, b₀ = 0., 1. # FIXME: Is this stable?
+
 
     N = parameters[:N]
     M = parameters[:M]
-    
-    demand = M * ε₀
-    supply = N * s₀ 
 
-    U₀ = zeros(size(parameters[:Ψ]))
+
+    ε₀ = maximum(parameters[:ε][2]) # Biggest value of possible demand
 
     for node in 1:Nnodes
 
         add_agent!(node, Prosumer, model, ε₀)
 
-        provider = add_agent!(
-            node, Provider, model, 
-            a₀, b₀, 0.
-        )
-        
-        p₀ = (rand(rng) + 0.5) * 10.
-        provider.p = p₀
+        p₀ = parameters[:k] # Start at stable value pₜ = k
+
+        add_agent!(node, Provider, model, a₀, b₀, p₀)
   
-        println("$node -> p = $p₀")
+        r₀ = 0.
+        s₀ = demand / N # Supply that fixes demand
 
         for _ in 1:N
-            ψ₀ = sample(model.rng, parameters[:Ψ])
-
-            randoms = (rand(rng) + 0.5) * s₀
-
-            println("   -> s₀ = $randoms")
-
-            add_agent!(
-                node, Producer, model, 
-                randoms, 0.0, ψ₀, p₀, U₀
-            )
-
+            add_agent!(node, Producer, model, r₀, s₀)
         end
         
 

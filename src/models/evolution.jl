@@ -43,14 +43,8 @@ function model_step!(model)
         others = agents_in_position(node, model)
         prosumer, provider = others
 
-        R = 0.0
-        S = 0.0
-        
-        for producer in getlocalproducers(node, model)
-            update_belief!(producer, model)
-            R += producer.r
-            S += producer.s
-        end
+        R = sum(p.r for p in getlocalproducers(node, model))
+        S = sum(p.s for p in getlocalproducers(node, model))
 
         X = model.M * prosumer.ε - S
 
