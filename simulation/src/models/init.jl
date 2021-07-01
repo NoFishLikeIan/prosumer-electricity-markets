@@ -1,4 +1,4 @@
-function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; seed=1148705, verbose=false)
+function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; seed=1148705)
 
     if :c ∉ keys(parameters) 
         parameters[:c] = (c, ∂c∂s, ∂c∂r)
@@ -31,7 +31,7 @@ function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; s
         warn=false, scheduler=byids
     )
 
-    a₀, b₀ = 0., 1. # FIXME: Is this stable?
+    a₀, b₀ = -1., 1. # FIXME: Is this stable?
 
 
     N = parameters[:N]
@@ -40,6 +40,9 @@ function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; s
 
     ε₀ = maximum(parameters[:ε][2]) # Biggest value of possible demand
 
+    r₀ = 0.
+    s₀ = M * ε₀ / N # Supply that fixes demand
+
     for node in 1:Nnodes
 
         add_agent!(node, Prosumer, model, ε₀)
@@ -47,9 +50,6 @@ function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; s
         p₀ = parameters[:k] # Start at stable value pₜ = k
 
         add_agent!(node, Provider, model, a₀, b₀, p₀)
-  
-        r₀ = 0.
-        s₀ = demand / N # Supply that fixes demand
 
         for _ in 1:N
             add_agent!(node, Producer, model, r₀, s₀)

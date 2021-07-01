@@ -4,7 +4,7 @@ Provider's local price setting
 function p′(X, provider::Provider, model)
     λ = -2 * first(values(model.P))
 
-    β, k = model.β, model.k
+    β = model.β
     a, b = provider.a, provider.b
 
     ∂x = (1 - β) / (β * b)
