@@ -10,8 +10,35 @@ Assume that there is only one provider, such that $N_{\mathcal{A}}(1) = \emptyse
 This implies that the providers needs to set $p_t$ such that,
 
 \begin{equation}
-    N \cdot( b + a\cdot p_t) = 0
+    p_t = -\frac{a_t}{b_t}
 \end{equation}
 
+This yields the demand evolution,
 
-This intuitively implies that, given no outside option for the provider, the supply needs to be put constant at the prosumers' demand. If $e_t > 0$, the prosumers' endowment is not sufficient to cover the demand, then the production $S_t > 0$. Otherwise, if $e_t < 0$, $S_t = 0$ (i.e. there will be excess electricity which will be thrown away).
+\begin{equation}
+    X_{t+1} = X_t + M \cdot \left(e_{t+1} - e_t \right) - \sum^N_{i = 1} r(s_{i, t}, - a_t / b_t; \psi_{i, t})
+\end{equation}
+
+Electricity is therefore stable only if,
+
+\begin{equation}
+    M \cdot \left(e_{t+1} - e_t \right) = \sum^N_{i = 1} r(s_{i, t}, - a_t / b_t; \psi_{i, t})
+\end{equation}
+
+Assume that $e_t \in \set{10, 100}$ and that the electricity supply is such that the electricity at time $t$ is fully satisfied, $s_{i, t} = \frac{M}{N} \cdot e_t$. Furthermore, assume that every producer has the same belief, $\psi_{i, t} = 1$. Then,
+
+\begin{equation}
+    \begin{split}
+        r(s_{i, t}, -a_t / b_t; 1) &= \frac{1 - \beta}{\beta} \cdot \frac{M}{N} \cdot e_t - \frac{1}{2} \sqrt{\left(\frac{1 - \beta}{\beta} \cdot \frac{M}{N} \cdot e_t \right)^2 - 4 \cdot \left(- \frac{a_t}{b_t} - k \right)} \\
+        \sum r(s_{i, t}, -a_t / b_t; 1) &= \frac{1 - \beta}{\beta} \cdot M e_t - \frac{1}{2} \sqrt{ \left(\frac{1 - \beta}{\beta} \cdot M e_t \right)^2 - 4N \cdot  \left(- \frac{a_t}{b_t} - k \right)}
+    \end{split}
+\end{equation}
+
+Then,
+
+\begin{equation}
+    \begin{split}
+        M e_{t+1} - M e_t &= \frac{1 - \beta}{\beta} \cdot M e_t - \frac{1}{2} \sqrt{ \left(\frac{1 - \beta}{\beta} \cdot M e_t \right)^2 - 4N \cdot  \left(- \frac{a_t}{b_t} - k \right)} \\
+        4M^2 \cdot \left(\frac{1}{\beta} e_t - e_{t+1} \right)^2 &= \left(\frac{1 - \beta}{\beta} \cdot M e_t \right)^2 - 4N \cdot  \left(- \frac{a_t}{b_t} - k \right)
+    \end{split}
+\end{equation}

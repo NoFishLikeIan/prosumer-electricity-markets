@@ -1,0 +1,87 @@
+\documentclass[../main.tex]{subfiles}
+\subsection{Line}
+
+Consider the case in which the network is line graph with $v$ nodes. Then $A$ is a $\R^{v \times v}$ matrix and $\matr{G}
+$
+
+\begin{equation}
+    \begin{split}
+        A_{i, j} = A_{j, i} &= \begin{cases}
+            1 & \text{if } i = j - 1 \\
+            0 & \text{otherwise}
+        \end{cases} \\
+        \matr{G}_{i, j} &= \begin{cases}
+            1  & \text{if } i = j - 1 \\
+            -1 & \text{if } i = j + 1 \\
+            0  & \text{otherwise}
+        \end{cases}
+    \end{split}
+\end{equation}
+
+Note that this implies that,
+
+\begin{equation}
+    \matr{2I + G} =
+    \begin{pmatrix}
+        {2}  & {1}  & {}       & {}       & {}  \\
+        {-1} & {2}  & {1}      & {}       & {}  \\
+        {}   & {-1} & {\ddots} & {\ddots} & {}  \\
+        {}   & {}   & {\ddots} & {\ddots} & {1} \\
+        {}   & {}   & {}       & {-1}     & {2}
+    \end{pmatrix}
+\end{equation}
+
+is a tridiagonal Toeplitz matrix. This can be inverted using \citein{Huang1997},
+
+\begin{equation}
+    (\matr{2I + G})^{-1}_{i, j} = \begin{cases}
+        (-1)^{i + j} \phi_{j + 1} \frac{\theta_{i - 1}}{\theta_n} & \text{if } i \leq j \\
+        (-1)^{2i } \phi_{i + 1} \frac{\theta_{j - 1}}{\theta_n}   & \text{if } i > j
+    \end{cases}
+\end{equation}
+
+Where,
+
+\begin{equation}
+    \begin{split}
+        \phi_i &= 2\phi_{i + 1} + \phi_{i + 2} \ \text{ with } \ \phi_{n+1} = 1, \phi_n = 2 \\
+        \theta_i &= 2\theta_{i - 1} + \theta_{i - 2} \ \text{ with } \ \theta_{0} = 1, \theta_1 = 2
+    \end{split}
+\end{equation}
+
+
+$\theta_i$ is the sequence of shifted Pell numbers $P_{i+1}$ that have a closed form solution. Likewise, $\phi_i$ is the sequence of shifted Penn number $P_{n - i + 2}$. Hence we can rewrite,
+
+\begin{equation}
+    (\matr{2I + G})^{-1}_{i, j} = \begin{cases}
+        (-1)^{i + j} \cdot P_{n + 1- j} \cdot P_i / P_{n+1} & \text{if } i \leq j \\
+        (-1)^{2i } \cdot P_{n + 1- i} \cdot P_j / P_{n+1}   & \text{if } i > j
+    \end{cases}
+\end{equation}
+
+Using the definition of Penn number
+
+\begin{equation}
+    P_m = \frac{(1 + \sqrt{2})^m - (1 - \sqrt{2})^m}{2\sqrt{2}}
+\end{equation}
+
+we can rewrite,
+
+\begin{equation*}
+    H(i, j, n) \coloneqq \frac{P_{n + 1 - j} \cdot P_i}{P_{n+1}}
+\end{equation*}
+
+Using some manipulation $P_{-a} = (-1)^{a+1} P_a$ and $P_{a+b} = P_{a} P_{b+1} + P_{a-1} P_b$,
+
+\begin{equation}
+    \lim_{n \xrightarrow{} \infty} H(i, j, n) = (-1)^{j + 1}  \left(P_j \cdot \gamma - P_{j+1} \right) P_i
+\end{equation}
+
+such that,
+
+\begin{equation}
+    (\matr{2I + G})^{-1}_{i, j} = \begin{cases}
+        (-1)^{i + j} H(i, j, n) & \text{if } i \leq j \\
+        (-1)^{2i } H(j, i, n)   & \text{if } i > j
+    \end{cases}
+\end{equation}

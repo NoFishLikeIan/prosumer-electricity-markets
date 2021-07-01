@@ -16,17 +16,23 @@ Consider now the case of two providers drawn below.
 \end{minipage}
 \vspace{5mm}
 
-Using equation the bargaining solution (\ref{bargaining_solution}) we obtain the trading price,
+Using equation the bargaining solution we obtain the trading price,
 
 \begin{equation}
-    P^{(1, 2)}_t = \frac{X_{1, t} \cdot p_{1, t} - X_{2, t} \cdot p_{2, t}}{2 \cdot Y^{(1, 2)}_t}
+    P^{(1, 2)}_t = \frac{X_{1, t} \cdot p_{1, t} - X_{2, t} \cdot p_{2, t}}{2 Y^{(1, 2)}_t}
 \end{equation}
 
-To satisfy the constraint providers need to set prices such that, for every $t$,
+If the constraint is satisfied, $X_{1, t} = - X_{2, t} = Y^{(1, 2)}_t$, hence,
 
 \begin{equation}
     \begin{split}
-        X_{1, t+1} &= - X_{2, t+1} \\
-        N_1 \cdot \left( b_1 + a_1 \cdot p_{1, t} \right) &= - N_2 \cdot \left( b_2 + a_2 \cdot p_{2, t} \right)
+        P^{(1, 2)}_t &= \frac{Y^{(1, 2)}_t \cdot \left( p_{1, t} + p_{2, t} \right)}{2  Y^{(1, 2)}_t} \\
+        &= \frac{p_{1, t} + p_{2, t}}{2}
     \end{split}
+\end{equation}
+
+The constraint is satisfied only if,
+
+\begin{equation}
+    a_{1, t} + b_{1, t} \cdot p_{1, t} = a_{2, t} + b_{2, t} \cdot p_{2, t}
 \end{equation}
