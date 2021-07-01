@@ -315,7 +315,7 @@ To get a better understanding of the policy rule (Equation \ref{local_p}), assum
     \tilde{R}(p_t) = 0 \iff p_t = -\frac{a_t}{b_t}
 \end{equation}
 
-Then $p_{t+1} = \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{b_t} + P^m(\matr{Y}_{t+1})$.
+Then $p_{t+1} = \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{b_t} + 2P^m(\matr{Y}_{t+1})$.
 
 First, a clear relationship is that between $X_t$ and $p_{t+1}$. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality $X_t > 0$. If the cost of acquiring electricity from abroad is expected to increase ($P^m(\matr{Y}_{t+1}) \uparrow$), the producer will increase the price in the local market, $p_{t+1}$, in order to increase local production.
 
@@ -379,5 +379,5 @@ Assume the demand is locally satisfied,
 Furthermore, assume we are in a constant price equilibrium, $p_t = p_{t+1} = k$. The local price policy function implies that stability is sustained only if
 
 \begin{equation}
-    \frac{a_t}{b_t} = P^m(\Y_{t+1}),
+    \frac{a_t}{b_t} = 2P^m(\Y_{t+1}),
 \end{equation}
