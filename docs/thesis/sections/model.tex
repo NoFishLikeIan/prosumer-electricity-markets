@@ -30,27 +30,27 @@ Prosumers are endowed an electricity quantity. The endowment follows a Markov pr
 
 \subsection{Producers}
 
-Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers and costs $k$ to maintain. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a linear adapting forecasting rule, $p_{\psi, t+1} \cong \psi \cdot p_{t}$. Let $s$ be the electricity production and $c(s, r)$ the cost of ramping up or turning down production next period by $r$. I assume only a portion $\gamma$ of the electricity production can be freely reduced each period.This setup leads to the following optimization problem.
+Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost. This electricity is sold on the local market at a price $p$ given by electricity providers and costs $k$ to maintain. Furthermore, they assume the price formation mechanism to be independent of their production decisions and approximate it by a constant forecasting rule, $p_{t+1} \cong p_{t}$. Let $s$ be the electricity production and $c(s, r)$ the cost of ramping up or turning down production next period by $r$. I assume only a portion $\gamma$ of the electricity production can be freely reduced each period. This setup leads to the following optimization problem.
 
 \begin{equation} \label{bellman_prod}
     \begin{split}
         V(s_t, p_t) &= \max_{r_t \in [-\gamma \cdot s_t, \infty)} \left\{ s_t \cdot (p_t - k) - c(s_t, r_t) \cdot r_t + \beta \cdot V(s_{t+1}, p_{t+1}) \right\} \\
         \text{ s.t. } s_{t+1} &= s_t + r_t \text{ with } s_t \geq 0, s_0 \\
-        p_{t+1} &= \psi \cdot p_t
+        p_{t+1} &= p_t
     \end{split}
 \end{equation}
 
-This optimization problem gives (see \ref{a:producer_optimization}) an implicit definition for $r$ as a function of $s$ and $p$ given $\psi$,
+This optimization problem gives (see \ref{a:producer_optimization}) an implicit definition for $r$ as a function of $s$ and $p$,
 
 \begin{equation} \label{raw_policy_producer}
     \begin{split}
-        r(s_t, p_t; \psi):& \\
-        \frac{\partial c}{\partial r}(s_t, r) \cdot r + c(s_t, r) &= \beta \cdot \left\{  \psi \cdot p_t - k + \left[\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right] \cdot r + c(s_t + r, r) \right\} \\
-        mc(r; s_t, p_t, \psi) &= \beta \cdot \{ mb(r; s_t, p_t, \psi) \}
+        r(s_t, p_t):& \\
+        \frac{\partial c}{\partial r}(s_t, r) \cdot r + c(s_t, r) &= \beta \cdot \left\{p_t - k + \left[\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right] \cdot r + c(s_t + r, r) \right\} \\
+        mc(r; s_t, p_t) &= \beta \cdot \{ mb(r; s_t, p_t) \}
     \end{split}
 \end{equation}
 
-The left hand side ($mc$) is the marginal cost today of ramping up production today. The producer by ramping up production pays $c(s_t, r)$ and increases the costs of ramping up by $\frac{\partial c}{\partial r}(s_t, r) \cdot r$. The right hand side ($mb$) is the marginal benefit tomorrow of ramping up production today. It can be broken up into the price the prosumer believes they can get for the new production, $\psi \cdot p_t$, the avoided marginal cost tomorrow of having increased production today instead, $\frac{\partial c}{\partial r}(s_t + r, r)  \cdot r + c(s_t + r, r)$, and finally the increased marginal cost brought about by a higher level of production $\frac{\partial c}{\partial s_t}(s_t + r, r)$.
+The left hand side ($mc$) is the marginal cost today of ramping up production today. The producer by ramping up production pays $c(s_t, r)$ and increases the costs of ramping up by $\frac{\partial c}{\partial r}(s_t, r) \cdot r$. The right hand side ($mb$) is the marginal benefit tomorrow of ramping up production today. It can be broken up into the price the prosumer believes they can get for the new production, $p_t$, the avoided marginal cost tomorrow of having increased production today instead, $\frac{\partial c}{\partial r}(s_t + r, r)  \cdot r + c(s_t + r, r)$, and finally the increased marginal cost brought about by a higher level of production $\frac{\partial c}{\partial s_t}(s_t + r, r)$.
 
 \subsubsection{Quadratic costs}
 
@@ -58,15 +58,15 @@ For illustration purposes, consider the quadratic cost function $c(s, r) = r$ (s
 
 \begin{equation}
     \begin{split}
-        mc(r; s_t, p_t, \psi) &= 2r \\
-        mb(r; s_t, p_t, \psi) &= \psi \cdot p_t - k + 2r
+        mc(r; s_t, p_t) &= 2r \\
+        mb(r; s_t, p_t) &= p_t - k + 2r
     \end{split}
 \end{equation}
 
 such that,
 
 \begin{equation}
-    r(s_t, p_t; \psi) = \frac{\beta}{2 (1 - \beta)}  \left(\psi \cdot p_t - k \right)
+    r(s_t, p_t) = \frac{\beta}{2 (1 - \beta)}  \left(p_t - k \right)
 \end{equation}
 
 \begin{figure}[!ht]
@@ -103,22 +103,22 @@ The softplus function has the property that,
     \lim_{c_1 \xrightarrow{}\infty} c(s, r) = \max \{ 0, s \cdot r \}
 \end{equation}
 
-Using this property we can find an approximation of the policy function (see \ref{a:limiting}). Assuming positive unit profits, $\psi \cdot p_t > k$,
+Using this property we can find an approximation of the policy function (see \ref{a:limiting}). Assuming positive unit profits, $p_t > k$,
 
 \begin{equation} \label{rpolicy}
-    r(s_t, p_t; \psi) = \begin{cases}
-        \frac{1 - \beta}{\beta} \cdot s_t - \frac{1}{2} \sqrt{ \left(\frac{1 - \beta}{\beta} \cdot 2 s_t \right)^2 - 4 \cdot \left(\psi \cdot p_t - k\right) } & \text{ if } s_t > \frac{\beta}{1-\beta} \sqrt{\psi \cdot p_t - k} \\
-        \frac{\beta}{1-\beta} \sqrt{\psi \cdot p_t - k} - s_t                                                                                                  & \text{ otherwise }
+    r(s_t, p_t) = \begin{cases}
+        \frac{1 - \beta}{\beta} \cdot s_t - \frac{1}{2} \sqrt{ \left(\frac{1 - \beta}{\beta} \cdot 2 s_t \right)^2 - 4 \cdot \left(p_t - k\right) } & \text{ if } s_t > \frac{\beta}{1-\beta} \sqrt{p_t - k} \\
+        \frac{\beta}{1-\beta} \sqrt{p_t - k} - s_t                                                                                                  & \text{ otherwise }
     \end{cases}
 \end{equation}
 
-On the other hand, if $\psi \cdot p_t < k$, then,
+On the other hand, if $p_t < k$, then,
 
 \begin{equation}
-    r(s_t, p_t; \psi) = -\gamma \cdot s_t.
+    r(s_t, p_t) = -\gamma \cdot s_t.
 \end{equation}
 
-This function is plotted for two values of $\psi$ in Figure (\ref{fig:r}).
+This function is plotted in Figure (\ref{fig:r}).
 
 \begin{figure}[!ht]
     \centering
@@ -128,19 +128,19 @@ This function is plotted for two values of $\psi$ in Figure (\ref{fig:r}).
 \end{figure}
 
 \subsubsection{Local demand}
-Given the ramp-up policy function $r(s, p; \psi)$, it is possible to find the \textit{excess} demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers.
+Given the ramp-up policy function $r(s, p)$, it is possible to find the \textit{excess} demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers.
 
 Assume that the local market is composed of $N$ producers and $M$ prosumers. First, let $R_t$ be the aggregated ramp-up function,
 
 \begin{equation}
-    R_{t}(p_t) \coloneqq \sum^N_{i = 1} r(s_{i, t}, p_t; \psi_{i, t})
+    R_{t}(p_t) \coloneqq \sum^N_{i = 1} r(s_{i, t}, p_t)
 \end{equation}
 
 Then, the aggregate supply of electricity at time $t$, can be written as,
 
 \begin{equation}
     \begin{split}
-        \sum^N_{i = 1} s_{i, t+1} &= \sum^N_{i = 1} \left( s_{i, t} +  r(s_{i, t}, p_t; \psi_{i, t}) \right)\\
+        \sum^N_{i = 1} s_{i, t+1} &= \sum^N_{i = 1} \left( s_{i, t} +  r(s_{i, t}, p_t) \right)\\
         S_{t+1} &= S_t + R_{t}(p_t)
     \end{split}
 \end{equation}
@@ -155,23 +155,6 @@ Note that if $S_t > M \cdot e_t$, there is an excess supply ($X_t < 0$) of elect
 
 \begin{equation} \label{x_true}
     X_{t+1} = X_t + M \cdot \left(e_{t+1} - e_t \right) -  R_t
-\end{equation}
-
-\subsubsection{Belief update}
-
-Producers approximate the price evolution by assuming prices will change by a factor $\psi$ each period. I assume that this factor is picked from a set $\Psi$. Let $\psi_{t}$ be the ``forecasting factor'' currently employed by a producer. Next period, the producer obtains an instantenous payoff,
-
-\begin{equation}
-    \begin{split}
-        s_{t+1} &= s_t + r(s_{i, t}, p_t; \psi_{t}) \\
-        u_{t+1} &= s_{t+1} \cdot (p_{t+1} - k) - c(s_{t+1}, r_{t+1}) \cdot r(s_{t+1}, p_{t+1}; \psi_{t})
-    \end{split}
-\end{equation}
-
-Furthermore, let $U_{\psi_h} \coloneqq \sum^t_{\tau = 0} \mathbbm{1} \{\psi_{\tau} = \psi_h\} \cdot u_{\tau}$, that is the cumulative sum of instantenous payoffs obtained while using factor $\psi_h$. Then producers update their forecasting rule by chossing the all time best performing factor, namely,
-
-\begin{equation}
-    \psi_{t+1} = \arg\max_{\psi_h} \frac{\exp(U_{\psi_h})}{\sum_{\psi \in \Psi} \exp(U_{\psi})}
 \end{equation}
 
 
@@ -214,7 +197,7 @@ is a vector of traded quantities with the provider's neighbors. Expanding the pr
     \end{split}
 \end{equation}
 
-The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. For now, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$. The provider's optimization is an intertemporal problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, at time $t$, it assumes $M \cdot (\E[e_{t+1}] - e_{t}) \cong 0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. if $\matr{\pi}_e \approx \matr{I}$). Second, we assume the provider does not know the ramp-up function of producers in the local market, $r(s_t, p_t; \psi_t)$, hence they approximate the aggregate ramp-up function by a linear adaptive rule, proportional to the price, namely $R_t(p) \cong a_t + b_t \cdot p$ with $a < 0$ and $b > 0$.
+The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. For now, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$. The provider's optimization is an intertemporal problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, at time $t$, it assumes $M \cdot (\E[e_{t+1}] - e_{t}) \cong 0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. if $\matr{\pi}_e \approx \matr{I}$). Second, we assume the provider does not know the ramp-up function of producers in the local market, $r(s_t, p_t)$, hence they approximate the aggregate ramp-up function by a linear adaptive rule, proportional to the price, namely $R_t(p) \cong a_t + b_t \cdot p$ with $a < 0$ and $b > 0$.
 
 Given this setup we can specify the optimization problem of the provider. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$), the Bellman equation can be written as,
 
