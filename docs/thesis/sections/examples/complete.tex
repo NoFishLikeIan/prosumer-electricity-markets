@@ -1,0 +1,158 @@
+\documentclass[../main.tex]{subfiles}
+
+
+\subsubsection{Complete graph}
+Consider the simplest non-trivial example, namely the complete graph with three nodes (Figure \ref{tikz:complete}). The optimization of prosumer one can be written as,
+
+\begin{equation*}
+    V(X_{1, t}) = \max_{p_{1, t}, Y_t^{(1, 2)}, Y_t^{(1, 3)}} \left\{ \mathcal{L}\left( p_{1, t}, Y_t^{(1, 2)}, Y_t^{(1, 3)}, X_{1, t} \right) \right\}
+\end{equation*}
+
+\begin{figure}[!ht]
+    \centering
+    \input{sections/diagrams/complete.tikz}
+    \caption{Complete graph}
+    \label{tikz:complete}
+\end{figure}
+
+The Lagrangian multiplier can then be written as,
+
+\begin{equation*}
+    -\lambda_1 = P^{(1, 2)} + Y^{(1, 2)} \cdot \frac{\partial P^{(1, 2)}}{\partial Y^{(1, 2)}} + Y^{(1, 3)} \cdot \frac{\partial P^{(1, 3)}}{\partial Y^{(1, 2)}}
+\end{equation*}
+
+The optimization of prosumers two and three is equivalent. Using $Y^{(2, 1)} = - Y^{(1, 2)}$, the multipler of two becomes,
+
+\begin{equation*}
+    -\lambda_2 = P^{(2, 3)} + Y^{(2, 3)} \cdot \frac{\partial P^{(2, 3)}}{\partial Y^{(2, 3)}} - Y^{(1, 2)} \cdot \frac{\partial P^{(1, 2)}}{\partial Y^{(2, 3)}}
+\end{equation*}
+
+Finally, the multiplier of three, noting that $\frac{\partial Y^{(1, 3)}}{\partial Y^{(3, 1)}} = -1$,
+
+\begin{equation*}
+    -\lambda_3 = -P^{(1, 3)} - Y^{(1, 3)} \cdot \frac{\partial P^{(1, 3)}}{\partial Y^{(1, 3)}} - Y^{(2, 3)} \cdot \frac{\partial P^{(2, 3)}}{\partial Y^{(1, 3)}}
+\end{equation*}
+
+We can then use the Nash bargaining price (\ref{bargaining_solution}) to define $P$,
+
+\begin{equation*}
+    P^{(1, 2)} = \underbrace{\Delta^{(1, 2)}}_{\text{revenue difference}} - \underbrace{Y^{(1, 3)} \cdot P^{(1, 3)}}_{\text{outside option of } 1} + \underbrace{Y^{(2, 3)} \cdot P^{(2, 3)}}_{\text{outside option of } 2}  \Bigg/ 2 Y^{(1, 2)}
+\end{equation*}
+
+To get an intuition for the formula, note that if we were to cut the ties between one and three (setting $Y^{(1, 3)}$ to 0), thereby removing one's outside option, we would obtain a higher price $P^{(1, 2)}$.
+
+By stacking the price over every edge in a vector we obtain,
+
+\begin{equation*}
+    2 \cdot \underbrace{\begin{pmatrix}
+            Y^{(1, 2)} P^{(1, 2)} \\
+            Y^{(1, 3)} P^{(1, 3)} \\
+            Y^{(2, 3)} P^{(2, 3)}
+        \end{pmatrix}}_{\Y \circ P} =
+    \underbrace{\begin{pmatrix}
+            \Delta^{(1, 2)} \\
+            \Delta^{(1, 3)} \\
+            \Delta^{(2, 3)}
+        \end{pmatrix}}_{\Delta} - \underbrace{\begin{pmatrix}
+            0  & 1  & -1 \\
+            -1 & 0  & 1  \\
+            1  & -1 & 0
+        \end{pmatrix}}_{\matr{G}} \underbrace{\begin{pmatrix}
+            Y^{(1, 2)} P^{(1, 2)} \\
+            Y^{(1, 3)} P^{(1, 3)} \\
+            Y^{(2, 3)} P^{(2, 3)}
+        \end{pmatrix}}_{\Y \circ P}
+\end{equation*}
+
+This can be rewritten as,
+
+\begin{equation*}
+    \begin{split}
+        \left( \begin{pmatrix}
+                2 & 0 & 0 \\
+                0 & 2 & 0 \\
+                0 & 0 & 2
+            \end{pmatrix} + \begin{pmatrix}
+                0  & 1  & -1 \\
+                -1 & 0  & 1  \\
+                1  & -1 & 0
+            \end{pmatrix} \right) (\Y \circ P) &= \Delta \\
+        \begin{pmatrix}
+            2  & 1  & -1 \\
+            -1 & 2  & 1  \\
+            1  & -1 & 2
+        \end{pmatrix} (\Y \circ P) &= \Delta \\
+        \begin{pmatrix}
+            Y^{(1, 2)} & 0          & 0          \\
+            0          & Y^{(1, 3)} & 0          \\
+            0          & 0          & Y^{(2, 3)}
+        \end{pmatrix}
+        P
+        &= \begin{pmatrix}
+            2  & 1  & -1 \\
+            -1 & 2  & 1  \\
+            1  & -1 & 2
+        \end{pmatrix}^{-1} \Delta \\
+        P
+        = \underbrace{\begin{pmatrix}
+                1 / Y^{(1, 2)} & 0              & 0              \\
+                0              & 1 / Y^{(1, 3)} & 0              \\
+                0              & 0              & 1 / Y^{(2, 3)}
+            \end{pmatrix}}_{\diag(\Y)^{-1}} &\begin{pmatrix}
+            0.36  & -0.07 & 0.21  \\
+            0.21  & 0.36  & -0.07 \\
+            -0.07 & 0.21  & 0.36  \\
+        \end{pmatrix} \Delta \\
+    \end{split}
+\end{equation*}
+
+Letting $D_{\Y} \coloneqq \frac{\der}{\der \Y}$ be the derivative with respect to the vector $\Y$. Then taking the derivative in the above expression yields,
+
+\begin{equation}
+    \begin{split}
+        \der P &= \der \diag(\Y)^{-1} \begin{pmatrix}
+            0.36  & -0.07 & 0.21  \\
+            0.21  & 0.36  & -0.07 \\
+            -0.07 & 0.21  & 0.36  \\
+        \end{pmatrix} \Delta \\
+        \der P &= -\diag(\Y)^{-1} \der \diag(\Y) \underbrace{\diag(\Y)^{-1} \begin{pmatrix}
+                0.36  & -0.07 & 0.21  \\
+                0.21  & 0.36  & -0.07 \\
+                -0.07 & 0.21  & 0.36  \\
+            \end{pmatrix} \Delta}_{P} \\
+        \der P &= -\diag(\Y)^{-1} \der \diag(\Y) P \\
+        \der P &= -\diag(\Y)^{-1} \diag(P) \der \Y
+    \end{split}
+\end{equation}
+
+Hence we can write the jacobian of the price vector as,
+
+\begin{equation}
+    D_{\Y} P = -\begin{pmatrix}
+        P^{(1, 2)} / Y^{(1, 2)} & 0                       & 0                       \\
+        0                       & P^{(1, 3)} / Y^{(1, 3)} & 0                       \\
+        0                       & 0                       & P^{(2, 3)} / Y^{(2, 3)}
+    \end{pmatrix}
+\end{equation}
+
+Using the multiplier's definition this allows as to rewrite,
+
+\begin{equation}
+    \begin{split}
+        -\lambda_1 &= 2P^{(1, 2)} \\
+        -\lambda_2 &= 2P^{(2, 3)} \\
+        -\lambda_3 &= -2P^{(1, 3)}
+    \end{split}
+\end{equation}
+
+This yields the evolution of local prices $\matr{p}_{t+1} = \begin{pmatrix}
+        p_{1, t+1} \\ p_{2, t+1} \\ p_{3, t+1}
+    \end{pmatrix}_t$
+
+\begin{equation}
+    \matr{p}_{t+1} = \matr{p}_t + \left( \matr{a} + \frac{1 -\beta}{\beta} \matr{X}_t \right) \oslash \matr{b} - \begin{pmatrix}
+        1 & 0 & 0  \\
+        0 & 1 & 0  \\
+        0 & 0 & -1
+    \end{pmatrix} P_t
+\end{equation}
