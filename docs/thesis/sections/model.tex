@@ -285,32 +285,40 @@ with associated Jacobian (see \ref{a:jacobian_p}),
     D_{\Y} P(\Y_t) = -\diag(P(\Y_t) \oslash \Y_t)
 \end{equation}
 
-We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. Using the fact that $D_{\Y} P(\Y_t)_{i, j} = 0$ if $i \neq j$, shadow price of the bargaining procedure is then (Equation \ref{lambda}),
+We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. Using the fact that $D_{\Y} P(\Y_t)_{i, j} = 0$ if $i \neq j$ and $D_{\Y} P(\Y_t)_{i, j} = 1$ if $i < j$, the shadow price of the bargaining procedure (Equation \ref{lambda}) can be written as,
 
-letting,
-
-\begin{equation}
-    \delta(m) =\begin{cases}
-        1  & \text{if } i > m \\
-        -1 & \text{if } m < i
-    \end{cases}
-\end{equation}
 
 \begin{equation}
     \begin{split}
         -\lambda_t &= P^m(\Y_t) + \sum_{j \in N_{\mathcal{A}}(i)} Y_t^j \cdot D_{\Y} P(\Y_t)_{j, m} \\
-        &= \delta(m) \cdot 2 P^m(\Y_t)
+        &= 2 P^m(\Y_t)
     \end{split}
 \end{equation}
 
-Note that $\lambda_t$ needs to be the same for every neighbour, such that, for two neighbours $m$ and $n$
+Note that $\lambda_t$ needs to be the same for every neighbour, such that, for two neighbours $m$ and $n$,
 
 \begin{equation}
     \begin{split}
-        \delta(m) \cdot 2 P^m(\Y_t) &= \delta(n) \cdot 2 P^n(\Y_t) \\
-        \frac{P^n(\Y_t)}{P^m(\Y_t)} &= \frac{\delta(n)}{\delta(m)}
+        2 P^m(\Y_t) &= 2 P^n(\Y_t) \\
+        \frac{P^n(\Y_t)}{P^m(\Y_t)} &= 1
     \end{split}
 \end{equation}
+d
+This equation determines the ratio of $Y^{(i, m)}_t / Y^{(i, n)}_t$ for each element of the vector of $\matr{Y}_t$. Furthermore, to satisfy the resource constraint, it needs to be true that, $\sum_{j} Y^{(i, j)}_t = X_t$. These two equations allow to fully determine the vector $\matr{Y}_t$.
+
+
+\subsubsection{Interpretation of the policy function}
+
+To get a better understanding of the policy rule (Equation \ref{local_p}), assume that $p_t$ is at a level that keeps (in the eyes of the provider) the electricity production constant, namely,
+
+\begin{equation}
+    \tilde{R}(p_t) = 0 \iff p_t = -\frac{a_t}{b_t}
+\end{equation}
+
+Then $p_{t+1} = \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{b_t} + P^m(\matr{Y}_{t+1})$.
+
+First, a clear relationship is that between $X_t$ and $p_{t+1}$. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality $X_t > 0$. If the cost of acquiring electricity from abroad is expected to increase ($P^m(\matr{Y}_{t+1}) \uparrow$), the producer will increase the price in the local market, $p_{t+1}$, in order to increase local production.
+
 
 
 \subsubsection{Belief update}
@@ -318,7 +326,7 @@ Note that $\lambda_t$ needs to be the same for every neighbour, such that, for t
 Providers approximate the ramp-up production function of the local producers using a linear rule,
 
 \begin{equation}
-    R_{t+1}(p_t) \approx a_t + b_t \cdot p_t
+    R_{t+1}(p_t) \cong a_t + b_t \cdot p_t
 \end{equation}
 
 I assume that each period providers observe the realization $R_{t+1}(p_t)$ and pick the coefficients $a_{t+1}$ and $b_{t+1}$ via weighted least squares, more precisely
@@ -362,17 +370,14 @@ To recap the belief structure of the model,
 
 \subsection{Stability}
 
-Looking for stability. Assume the demand is locally satisfied,
+Assume the demand is locally satisfied,
 
 \begin{equation}
     M \cdot e_t = S_t: X_t = 0
 \end{equation}
 
-Furthermore, assume we are in an equilibrium $p_t = p_{t+1}$ and $p_t = k \implies r(s_{i, t}, p_t) = 0$. The first equation implies that,
+Furthermore, assume we are in a constant price equilibrium, $p_t = p_{t+1} = k$. The local price policy function implies that stability is sustained only if
 
 \begin{equation}
-    \begin{split}
-        \frac{a_t}{b_t} &= 0 \\
-        p_t &= k
-    \end{split}
+    \frac{a_t}{b_t} = P^m(\Y_{t+1}),
 \end{equation}
