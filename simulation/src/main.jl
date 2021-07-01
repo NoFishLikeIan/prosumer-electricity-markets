@@ -5,7 +5,10 @@ using Agents
 using Random, Distributions
 
 using Base.Threads
-using Roots, Optim
+
+using Plots, LaTeXStrings, GraphPlot
+using Cairo, Compose
+using DataFrames
 
 Random.seed!(11148705)
 

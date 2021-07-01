@@ -27,8 +27,8 @@ function plotnodes(dfagent, fn; maxnode=4)
 
     nodes = length(nodes) > maxnode ? nodes[1:maxnode] : nodes
 
-    T = maximum(dfagent[!, :step])
-    time = 0:T
+    Tₗ, Tᵤ = extrema(dfagent[!, :step])
+    time = Tₗ:Tᵤ
 
     nodedata = (getnodedata(dfagent, node) for node in nodes)
     figures = map(data -> fn(time, data), nodedata)
@@ -73,49 +73,12 @@ function pricesupplyplot(dfagent; savepath=nothing)
 
     if !isnothing(savepath)
         savefig(jointfigure, savepath)
+    else
+        return jointfigure
     end
 
-    return jointfigure
 end
 
-"""
-Plot the proportion of optimistic producers
-"""
-function plotproducerbeliefs(dfagent; savepath=nothing)
-
-    jointfigure = plotnodes(
-        dfagent,
-        (time, nodedata) -> begin
-        dfpros, dfprov, dfprod = nodedata
-        node = dfpros[1, :pos]
-            
-        εperiods = lowendowmentperiods(dfpros)
-
-        optψ = maximum(model.Ψ)
-        
-        optimistic = combine(
-            groupby(dfprod, [:step]),
-            :ψ => col -> count(col .== optψ) / length(col)
-        )[!, :ψ_function]
-
-        fig = plot(
-            time, optimistic, 
-            ylims=(0, 1),
-            title="Node $node", label="% of optimistic", color=:blue, legend=:topleft)
-            
-        vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
-            
-        return fig
-
-    end)
-
-        if !isnothing(savepath)
-        savefig(jointfigure, savepath)
-    end
-
-    return jointfigure
-
-end
 
 function plotproviderbeliefs(dfagent; savepath=nothing)
     jointfigure = plotnodes(
@@ -140,9 +103,61 @@ function plotproviderbeliefs(dfagent; savepath=nothing)
 
     end)
 
-    if !isnothing(savepath)
+        if !isnothing(savepath)
         savefig(jointfigure, savepath)
+    else
+        return jointfigure
+    end
+end
+
+function plotexcessdemand(dfagent, dfmodel; savepath=nothing)
+    modelnodes = unique(dfagent.pos)
+    Nnodes = length(modelnodes)
+
+    Tₗ, Tᵤ = extrema(dfmodel.step)
+    time =  Tₗ:Tᵤ
+    X = reshape(dfmodel.X[end], Nnodes, :)'[time, :]
+
+    figure = plot(title="Excess demand", xlabel="time", ylabel="X")
+
+    for (i, node) in enumerate(modelnodes)
+        plot!(time, X[:, i], label="X$node (t)")
     end
 
-    return jointfigure
+
+    if !isnothing(savepath)
+        savefig(figure, savepath)
+    else
+        return figure
+    end
+end
+
+function plotpricevariance(dfagent, model; savepath=nothing)
+    g = model.space.graph
+
+    pricevariance = Float64[]
+
+    nodelabel = unique(dfagent.pos)
+    
+    for node in nodelabel
+        _, dfprov, _ = getnodedata(dfagent, node)
+        σₚ = std(dfprov.p)
+
+        push!(pricevariance, σₚ)
+    end
+        
+    alphas = [var / maximum(pricevariance) for var in pricevariance]
+
+    nodefillc = [RGBA(220 / 255, 20 / 255, 60 / 255, i) for i in alphas]
+
+    if !isnothing(savepath)
+
+        draw(
+            PDF(savepath, 16cm, 16cm), 
+            gplot(g, nodefillc=nodefillc, nodelabel=nodelabel, layout=circular_layout)
+        )
+
+    end
+
+
 end

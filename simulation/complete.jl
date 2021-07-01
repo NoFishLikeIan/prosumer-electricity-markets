@@ -1,24 +1,22 @@
-using Plots
-using DataFrames
-
 include("src/main.jl")
+include("simulate.jl")
 
-plotpath = "../plots/energy/star/"
+plotpath = "../plots/energy/complete/"
 
 doplot = true
 
 A = [
-    0 1 1 1;
-    1 0 0 0;
-    1 0 0 0;
-    1 0 0 0;
-]
-
-G = [
     0 1 1;
     1 0 1;
     1 1 0
 ]
+
+G = [
+    0 1 -1;
+    -1 0 1;
+    1 -1 0
+]
+
 
 println("Simulating stable...")
 
@@ -48,6 +46,7 @@ if doplot
 
     plotexcessdemand(dfagentstable, dfmodelstable; savepath=joinpath(plotpath, "demand.pdf"))
 
+    
     plotpricevariance(dfagentstable, model; savepath=joinpath(plotpath, "pvar.pdf"))
 
 end
@@ -73,6 +72,7 @@ if doplot
 
     plotexcessdemand(dfagentunstable, dfmodelunstable; savepath=joinpath(plotpath, "unstable_demand.pdf"))
 
+    
     plotpricevariance(dfagentunstable, model; savepath=joinpath(plotpath, "unstable_pvar.pdf"))
 
 

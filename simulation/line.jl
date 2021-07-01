@@ -3,7 +3,7 @@ using DataFrames
 
 include("src/main.jl")
 
-plotpath = "plots/energy/line"
+plotpath = "../plots/energy/line"
 
 function makeline(n)
     A = zeros(Int64, n, n)
@@ -48,7 +48,5 @@ dfagent, dfmodel = run!(model, agent_step!, model_step!, T;adata, mdata)
 
 
 pricesupplyplot(dfagent; savepath=joinpath(plotpath, "pricesupply.pdf"))
-
-plotproducerbeliefs(dfagent; savepath=joinpath(plotpath, "optimistics.pdf"))
 
 plotproviderbeliefs(dfagent; savepath=joinpath(plotpath, "ols.pdf"))

@@ -8,6 +8,10 @@ function getbargsolution(g::SimpleGraph, G::Matrix{Int64}, Xs::Vector{Float64})
 
     PYmap = Dict(E .=> PY)
     Y = Dict(e => 0.0 for e in E)
+
+    if all(values(PYmap) .== 0)
+        return Y, copy(Y)
+    end
     
     for i in vertices(g)
 
@@ -29,7 +33,7 @@ function getbargsolution(g::SimpleGraph, G::Matrix{Int64}, Xs::Vector{Float64})
         end
     end
 
-    P = Dict(e => PYmap[e] / Y[e] for e in E)
+    P = Dict(e => Y[e] != 0 ? PYmap[e] / Y[e] : 0. for e in E)
 
     return Y, P
 end

@@ -1,7 +1,7 @@
 """
 Provider's local price setting
 """
-function p′(X, provider::Provider, model)
+function p′(X, provider::Provider, model; γ=.2)
     λ = -2 * first(values(model.P))
 
     β = model.β
@@ -11,5 +11,5 @@ function p′(X, provider::Provider, model)
 
     Δp = ∂x * X + a / b - λ
 
-    return max(provider.p + Δp, 0.)
+    return max(provider.p + Δp * γ, 0.)
 end

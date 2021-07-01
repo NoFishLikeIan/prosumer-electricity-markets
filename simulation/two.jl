@@ -3,7 +3,7 @@ using DataFrames
 
 include("src/main.jl")
 
-plotpath = "plots/energy/two"
+plotpath = "../plots/energy/two"
 
 A = [
     0 1;

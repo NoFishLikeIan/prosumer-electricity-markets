@@ -44,9 +44,9 @@ function model_step!(model)
         prosumer, provider = others
 
         R = sum(p.r for p in getlocalproducers(node, model))
-        S = sum(p.s for p in getlocalproducers(node, model))
+        supply = sum(p.s for p in getlocalproducers(node, model))
 
-        X = model.M * prosumer.ε - S
+        X = model.M * prosumer.ε - supply
 
         push!(model.p, provider.p)
         push!(model.R, R)

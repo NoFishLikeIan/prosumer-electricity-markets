@@ -12,7 +12,7 @@ function makeW(T; alpha=0.1)
 
 end
 
-function update_belief!(provider::Provider, model)
+function update_belief!(provider::Provider, model; withdecay=true)
 
     node = provider.pos
     N = length(model.space.s)
@@ -25,11 +25,11 @@ function update_belief!(provider::Provider, model)
     if !all(R .== 0) & !all(p .== 0)
 
         X = hcat(ones(T), p)
-        W = makeW(T)
+        W = withdecay ? makeW(T) : I
 
         a, b = inv(X'W * X) * (X'W * R)
 
-        provider.a = a 
+        provider.a = a
         provider.b = b
 
     end
