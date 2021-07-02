@@ -33,8 +33,67 @@ Given the associated line graph, the traded value vector is,
 
 \begin{equation}
     2 P \circ \Y_t = \begin{pmatrix}
-        0.357 & -0.214 & -0.071 \\
-        0.071 & 0.357  & -0.214 \\
-        0.214 & 0.071  & 0.357  \\
+        0.75  & -0.25 & -0.25 \\
+        -0.25 & 0.75  & -0.25 \\
+        -0.25 & -0.25 & 0.75
     \end{pmatrix} \Delta_t
 \end{equation}
+
+
+\subsubsection{Simulations}
+
+\begin{figure}[!h]
+    \label{fig:smallstar}
+    \begin{minipage}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{\plotpath/smallstar/demand.pdf}
+        \caption{Excess demand}
+        % \vspace{4ex}
+    \end{minipage}%%
+    \begin{minipage}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{\plotpath/smallstar/ols.pdf}
+        \caption{$a_t$ and $b_t$}
+        % \vspace{4ex}
+    \end{minipage}
+    \begin{minipage}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{\plotpath/smallstar/pricesupply.pdf}
+        \caption{Price and supply}
+        % \vspace{4ex}
+    \end{minipage}%% 
+    \begin{minipage}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{\plotpath/smallstar/pvar.pdf}
+        \caption{Price variance over graph}
+        % \vspace{4ex}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[!h]
+    \label{fig:smallstar_unstable}
+    \begin{minipage}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{\plotpath/smallstar/unstable_demand.pdf}
+        \caption{Excess demand}
+        % \vspace{4ex}
+    \end{minipage}%%
+    \begin{minipage}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{\plotpath/smallstar/unstable_ols.pdf}
+        \caption{$a_t$ and $b_t$}
+        % \vspace{4ex}
+    \end{minipage}
+    \begin{minipage}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{\plotpath/smallstar/unstable_pricesupply.pdf}
+        \caption{Price and supply}
+        % \vspace{4ex}
+    \end{minipage}%% 
+    \begin{minipage}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{\plotpath/smallstar/unstable_pvar.pdf}
+        \caption{Price variance over graph}
+        % \vspace{4ex}
+    \end{minipage}
+\end{figure}

@@ -4,11 +4,11 @@ using DataFrames
 include("src/main.jl")
 include("simulate.jl")
 
-plotpath = "../plots/energy/star/"
+plotpath = "../plots/energy/smallstar/"
 
 doplot = true
 
-A, G = makestar(15)
+A, G = makestar(3)
 
 println("Simulating stable...")
 

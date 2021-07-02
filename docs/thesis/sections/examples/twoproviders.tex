@@ -31,8 +31,11 @@ If the constraint is satisfied, $X_{1, t} = - X_{2, t} = Y^{(1, 2)}_t$, hence,
     \end{split}
 \end{equation}
 
-The constraint is satisfied only if,
+Using this in the policy function of one,
 
-\begin{equation}
-    a_{1, t} + b_{1, t} \cdot p_{1, t} = a_{2, t} + b_{2, t} \cdot p_{2, t}
-\end{equation}
+\begin{equation*}
+    \begin{split}
+        p_{1, t+1} &= p_{1, t} + \frac{a_t}{b_t} + \frac{1 - \beta}{\beta} \frac{X_{1, t}}{b_t} + 2P^{(1, 2)} \\
+        &= 2p_{1, t} + p_{2, t} + \frac{a_t}{b_t} + \frac{1 - \beta}{\beta} \frac{X_{1, t}}{b_t}
+    \end{split}
+\end{equation*}

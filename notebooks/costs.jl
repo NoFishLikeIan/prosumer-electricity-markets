@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.14.8
+# v0.12.21
 
 using Markdown
 using InteractiveUtils
@@ -13,17 +13,9 @@ end
 
 # ╔═╡ 4509a0c9-374e-4f0f-a5dd-5671f0c67bb4
 begin
-	Plots.reset_defaults()
-	Plots.resetfontsizes()
-end
-
-# ╔═╡ e2ac63a4-6440-41d6-9e05-6e31c6f366cb
-begin
-	upscale = 3 #8x upscaling in resolution
-	fntsm = Plots.font("sans-serif", pointsize=round(10.0*upscale))
-	fntlg = Plots.font("sans-serif", pointsize=round(14.0*upscale))
-	default(titlefont=fntlg, guidefont=fntlg, tickfont=fntsm, legendfont=fntsm)
-	default(size=(800*upscale,600*upscale)) #Plot canvas size
+	Plots.reset_defaults(); Plots.resetfontsizes()
+	
+	Plots.scalefontsizes(0.8)
 end
 
 # ╔═╡ 805018be-7695-45ae-a671-2f8d8cc4a858
@@ -31,7 +23,6 @@ plotpath = "../plots/energy"
 
 # ╔═╡ 4412cc25-bb76-4453-9727-5cf097a883e1
 begin
-	ψ = 1.1
 	s = 10.0
 	p = 5.0
 	β = 0.5
@@ -42,7 +33,7 @@ end
 # ╔═╡ e572d85f-1839-48e5-b1e2-2ee1123ef22e
 function makefoc(c, ∂c∂s, ∂c∂r)
 	mc(s, r) = ∂c∂r(s, r)*r + c(s, r)
-	mb(s, r) = ψ*(p - k) + (∂c∂r(s+r, r) - ∂c∂s(s+r, r))*r + c(s+r, r)
+	mb(s, r) = (p - k) + (∂c∂r(s+r, r) - ∂c∂s(s+r, r))*r + c(s+r, r)
 	
 	return mc, mb
 end
@@ -52,7 +43,7 @@ begin
 	costlabel = latexstring("\$c(r; s = $(s))\$")
 	derivlabel = latexstring("\$ \\frac{\\partial c}{\\partial r}(r; s = $(s)) \$")
 	
-	marlabel = latexstring("\$s = $(s), \\psi=$(ψ), p = $(p)\$")
+	marlabel = latexstring("\$s = $(s), p = $(p)\$")
 end
 
 # ╔═╡ 5fdea5b6-10b6-4818-92e2-0d92d8bd0bcc
@@ -104,7 +95,7 @@ md"""
 figure = plotfoc((s, r) -> r, (s, r) -> 0, (s, r) -> 1)
 
 # ╔═╡ 4fda69af-82b4-4426-bc9d-aa8e9db4ec67
-# savefig(figure, joinpath(plotpath, "quadcosts.pdf"))
+savefig(figure, joinpath(plotpath, "quadcosts.pdf"))
 
 # ╔═╡ 557dcc62-1cf9-4f70-af29-e42fea678fae
 md"""
@@ -127,11 +118,11 @@ end
 figuresoft = plotfoc(c, ∂c∂s, ∂c∂r)
 
 # ╔═╡ 93e56234-86d8-423b-8325-42d0ab2fa3de
-# savefig(figuresoft, joinpath(plotpath, "cost.pdf"))
+savefig(figuresoft, joinpath(plotpath, "cost.pdf"))
 
 # ╔═╡ b76606b0-3e1f-4d7d-bb88-b39e41827a67
-function r(s, p, ψ)
-	unitπ = ψ*p - k
+function r(s, p)
+	unitπ = p - k
 	
 	if unitπ < 0 return -γ*s end
 	
@@ -160,23 +151,11 @@ begin
 	
 	clims = (-sᵤ * γ, sᵤ * γ)
 	
-	pess = heatmap(
+	rfigure = heatmap(
 		supplyspace, pricespace, 
-		(s, p) -> r(s, p, 0.9), clim = clims,
-		title = "r(s, p; ψ = 0.9)",
+		(s, p) -> r(s, p), clim = clims,
 		xlabel = "current supply", ylabel = "price")
 	
-	opt = heatmap(
-		supplyspace, pricespace, 
-		(s, p) -> r(s, p, 1.1), clim = clims,
-		title = "r(s, p; ψ = 1.1)",
-		xlabel = "current supply", ylabel = "price")
-	
-	rfigure = plot(
-		pess, opt, 
-		size = ((800 + 150)*2*upscale, 600*upscale),
-		margin = 5Plots.mm
-	)
 end
 
 # ╔═╡ 52146730-b737-4b19-be11-2df335127b41
@@ -197,22 +176,18 @@ function simulatecosprices(T; p₀ = 5., s₀ = 10.)
 		p = prices[t] + sin(t/10) * exp(- 3t / T)
 	end
 	
-	supplies = ones(T, 2) * s₀
-	ramps = zeros(T, 2)
+	supplies = ones(T) * s₀
+	ramps = zeros(T)
 	
-	for (j, ψ) in enumerate([0.9, 1.1])
-			
+	
+	for t=1:(T-1)
+		p = prices[t] + sin(t/2) * exp(- 3t / T)
+		s = supplies[t]
 
-		for t=1:(T-1)
-			p = prices[t] + sin(t/2) * exp(- 3t / T)
-			s = supplies[t, j]
+		ramps[t+1] = r(s, p)
 
-			ramps[t+1, j] = r(s, p, ψ)
-
-			supplies[t+1, j] = max(s + ramps[t+1], 0.0)
-			prices[t+1] = p
-		end
-		
+		supplies[t+1] = max(s + ramps[t+1], 0.0)
+		prices[t+1] = p
 	end
 	
 	return supplies, prices, ramps
@@ -229,7 +204,7 @@ end
 # ╔═╡ 3fdd4dc4-caf7-41f2-a6fc-a8dc89fa6fbc
 begin
 	
-	rstring = latexstring("\$ r(p_t, s_t, \\psi_t) \$")
+	rstring = latexstring("\$ r(p_t, s_t) \$")
 	
 	simfig = plot(
 		xlabel = "t",
@@ -237,15 +212,15 @@ begin
 	)
 	
 	
-	for j in [1, 2]
-		plot!(
-			simfig, 2:T, linewidth = 3,
-			ramps[2:end, j], label = "r, ψ = $([0.9, 1.1][j])", ylabel = "r")	
-	end
+	plot!(simfig, 
+		2:T, ramps[2:end],
+		linewidth = 3, ylabel = "r", label = nothing)	
+	
 	
 	plot!(
 		twinx(simfig), 1:T, 
 		prices, label = "p", alpha = 0.5,
+		ylabel = "price",
 		c=:green, legend = :bottomleft)
 	
 	simfig
@@ -255,11 +230,10 @@ end
 # ╔═╡ Cell order:
 # ╠═d24cee46-d3f2-11eb-0f8c-93119645edd9
 # ╠═4509a0c9-374e-4f0f-a5dd-5671f0c67bb4
-# ╠═e2ac63a4-6440-41d6-9e05-6e31c6f366cb
 # ╠═805018be-7695-45ae-a671-2f8d8cc4a858
 # ╠═4412cc25-bb76-4453-9727-5cf097a883e1
-# ╟─e572d85f-1839-48e5-b1e2-2ee1123ef22e
-# ╟─48506150-b30a-4e05-ac66-886c88171783
+# ╠═e572d85f-1839-48e5-b1e2-2ee1123ef22e
+# ╠═48506150-b30a-4e05-ac66-886c88171783
 # ╠═5fdea5b6-10b6-4818-92e2-0d92d8bd0bcc
 # ╟─ff79e521-c7a5-4ad2-96a0-0dc1c2c1c76c
 # ╠═f859798a-8229-4c54-90ed-fc8fdc833cec
@@ -271,9 +245,9 @@ end
 # ╠═93e56234-86d8-423b-8325-42d0ab2fa3de
 # ╠═b76606b0-3e1f-4d7d-bb88-b39e41827a67
 # ╠═52bc7382-42c8-4b4c-b188-3c8c9af281bf
-# ╟─9dbece0b-2aaf-475e-b45a-4e60c8557a87
+# ╠═9dbece0b-2aaf-475e-b45a-4e60c8557a87
 # ╠═52146730-b737-4b19-be11-2df335127b41
 # ╟─ddf53627-181f-4fc0-b8dc-39d6243f1f0e
-# ╟─27262d0f-06f5-4032-9a72-afd2e4cb4798
+# ╠═27262d0f-06f5-4032-9a72-afd2e4cb4798
 # ╠═0c2afa65-010c-4a06-aedb-112932a01c6d
-# ╟─3fdd4dc4-caf7-41f2-a6fc-a8dc89fa6fbc
+# ╠═3fdd4dc4-caf7-41f2-a6fc-a8dc89fa6fbc
