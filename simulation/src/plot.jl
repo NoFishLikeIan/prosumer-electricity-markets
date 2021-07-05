@@ -112,11 +112,9 @@ end
 
 function plotexcessdemand(dfagent, dfmodel; savepath=nothing)
     modelnodes = unique(dfagent.pos)
-    Nnodes = length(modelnodes)
-
     Tₗ, Tᵤ = extrema(dfmodel.step)
     time =  Tₗ:Tᵤ
-    X = reshape(dfmodel.X[end], Nnodes, :)'[time, :]
+    X = hcat(dfmodel.X...)'
 
     figure = plot(title="Excess demand", xlabel="time", ylabel="X")
 

@@ -10,8 +10,6 @@ using Plots, LaTeXStrings, GraphPlot
 using Cairo, Compose
 using DataFrames
 
-Random.seed!(11148705)
-
 include("utils.jl")
 include("models/agents.jl")
 
@@ -26,3 +24,5 @@ include("models/init.jl")
 include("softpluscosts.jl")
 include("plot.jl")
 include("makegraph.jl")
+
+ENV["GKSwstype"] = "nul"
