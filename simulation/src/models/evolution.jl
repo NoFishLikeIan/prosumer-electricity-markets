@@ -12,7 +12,7 @@ end
 function agent_step!(provider::Provider, model)
     others = agents_in_position(provider, model)
 
-    prosumer = collectfirst(others)
+    prosumer = first(others)
     
     supply = sum(p.s for p in getlocalproducers(provider, model))
     demand = prosumer.ε * model.M

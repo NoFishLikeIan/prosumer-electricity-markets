@@ -1,6 +1,6 @@
 Pₛ = [1 0; 0 1]
 
-ρₗ, ρᵤ = 0.99, 0.99
+ρₗ, ρᵤ = 0.5, 0.9
 
 ε = ([ρₗ 1 - ρₗ; 1 - ρᵤ ρᵤ], [2.0, 10.0])
 
@@ -10,7 +10,7 @@ default_params = Dict(
     :M => 1_000, :N => 3,
     :ε => ε)
 
-function simulatemarket(model; adata=[:pos, :p, :r, :ε, :s, :b, :a],  mdata=[:X, :R], T=100)
+function simulatemarket!(model; adata=[:pos, :p, :r, :ε, :s, :b, :a],  mdata=[:X, :R], T=100)
 
     dfagent, dfmodel = run!(model, agent_step!, model_step!, T;adata, mdata)
 
@@ -18,7 +18,9 @@ function simulatemarket(model; adata=[:pos, :p, :r, :ε, :s, :b, :a],  mdata=[:X
 end
 
 
-function simulatefromsteady(model; adata=[:pos, :p, :r, :ε, :s, :b, :a],  mdata=[:X, :R], T₀=1_000, T=100)
+function simulatefromsteady!(model; 
+    adata=[:pos, :p, :r, :ε, :s, :b, :a],
+    mdata=[:X, :R], T₀=1_000, T=100)
 
     ε = model.ε
     εₛ = (Pₛ, ε[2])
@@ -46,9 +48,11 @@ end
 function plotfromsteadstate(A, G, T; parameters=default_params, plotpath=nothing)
 
     model = initializemodel(A, G, parameters)
-    dfagent, dfmodel = simulatefromsteady(model; T=T)
+    dfagent, dfmodel = simulatefromsteady!(model; T=T)
 
     if !isnothing(plotpath)
+
+        println("Plotting at $plotpath...")
 
         pricesupplyplot(dfagent; savepath=joinpath(plotpath, "pricesupply.pdf"))
 

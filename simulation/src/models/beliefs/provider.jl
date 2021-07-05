@@ -29,8 +29,8 @@ function update_belief!(provider::Provider, model; withdecay=true)
 
         a, b = inv(X'W * X) * (X'W * R)
 
-        provider.a = a
-        provider.b = b
+        provider.a = min(a, 0.)
+        provider.b = max(b, 1.)
 
     end
 
