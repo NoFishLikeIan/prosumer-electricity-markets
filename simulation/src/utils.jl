@@ -6,8 +6,11 @@ end
 Assumes as input a list [1, 2, 3, 5, 6] -> [(1, 3), (5, 6)]
 """
 function findconsecutive(arr::Vector{Int64})
+
+    if isempty(arr) return [] end
+
     bounds = []
-    current = [1, -1]
+    current = [first(arr), -1]
 
     N = length(arr)
 

@@ -36,6 +36,23 @@ function agent_step!(producer::Producer, model)
 
 end
 
+function πprovider(X, provider, model)
+    trade = 0.
+
+    for (edge, Yⱼ) in model.Y
+        i, j = edge
+        Pⱼ = model.P[edge]
+
+        if i == provider.pos
+            trade += Yⱼ * Pⱼ
+        elseif j == provider.pos
+            trade += -Yⱼ * Pⱼ
+        end
+    end
+    
+    return X * provider.p - trade
+end
+
 function model_step!(model)
 
     for node in 1:length(model.space.s)
@@ -63,5 +80,20 @@ function model_step!(model)
     model.P = P 
     model.Y = Y 
 
+    # Profits have to be computed after P and Y
+    for node in 1:length(model.space.s)
+
+        others = agents_in_position(node, model)
+        prosumer, provider = others
+
+        supply = sum(p.s for p in getlocalproducers(node, model))
+
+        X = model.M * prosumer.ε - supply
+
+        push!(model.profit, πprovider(X, provider, model))
+
+    end
+    
     model.step += 1
+    print("Simulation, t = $(model.step)", '\r')
 end

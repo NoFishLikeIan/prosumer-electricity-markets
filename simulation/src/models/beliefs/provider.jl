@@ -1,3 +1,5 @@
+ismultipleof(x, m) = x > 0 && (x % m) == 0
+
 """
 Make time exponential decay weighting matrix 
 """
@@ -22,15 +24,15 @@ function update_belief!(provider::Provider, model; withdecay=true)
 
     T = length(p)
 
-    if !all(R .== 0) & !all(p .== 0)
+    if ismultipleof(model.step, 15)
 
         X = hcat(ones(T), p)
         W = withdecay ? makeW(T) : I
 
         a, b = inv(X'W * X) * (X'W * R)
 
-        provider.a = min(a, 0.)
-        provider.b = max(b, 1.)
+        provider.a = a
+        provider.b = b
 
     end
 

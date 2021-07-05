@@ -1,7 +1,7 @@
 """
 Provider's local price setting
 """
-function p′(X, provider::Provider, model; γ=.2)
+function p′(X, provider::Provider, model; γ=1.)
     λ = -2 * first(values(model.P))
 
     β = model.β

@@ -4,21 +4,22 @@ include("simulate.jl")
 plotpath = "../plots/energy"
 
 Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
-default(size=(1200, 800), margin=5Plots.mm) # Plotting defaults
+default(size=(1000, 800), margin=5Plots.mm) # Plotting defaults
 
 
-T = 150
-nodes = 3
+T = 250
+nodes = 4
 As, Gs = makestar(nodes)
 Al, Gl = makeline(nodes)
 
 begin
-    dfagentstar, dfmodelstar, modelstar = plotfromsteadstate(
-        As, Gs, T; plotpath=join(plotpath, "smallstar"))
+    dfagentstar, dfmodelstar, modelstar = plotfromsteadystate(
+        As, Gs, T; plotpath=joinpath(plotpath, "smallstar"))
 
-    dfagentline, dfmodelline, modelline = plotfromsteadstate(
-        Al, Gl, T; plotpath=join(plotpath, "line"))
+    dfagentline, dfmodelline, modelline = plotfromsteadystate(
+        Al, Gl, T; plotpath=joinpath(plotpath, "line"))
 end
 
 Plots.resetfontsizes()
 
+dfagent, dfmodel, model = dfagentline, dfmodelline, modelline

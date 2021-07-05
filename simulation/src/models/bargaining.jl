@@ -1,8 +1,8 @@
-function getbargsolution(g::SimpleGraph, G::Matrix{Int64}, Xs::Vector{Float64})
+function getbargsolution(g::SimpleGraph, G::Matrix{Int64}, Xs::Vector{Float64}, ps::Vector{Float64})
 
     E = map(edgetotuple, edges(g))
     
-    Δₓ = [Xs[i] - Xs[j] for (i, j) in E]
+    Δₓ = [Xs[i] * ps[i] - Xs[j] * ps[j] for (i, j) in E]
 
     PY = 0.5 * inv(2I + G) * Δₓ
 
@@ -43,9 +43,10 @@ function computebargaining(model)
 
     latest = Nnodes - 1
     Xs = model.X[end - latest:end]
+    ps = model.p[end - latest:end]
     g = model.space.graph
 
-    Y, P = getbargsolution(g, model.G, Xs)
+    Y, P = getbargsolution(g, model.G, Xs, ps)
 
     return Y, P
     

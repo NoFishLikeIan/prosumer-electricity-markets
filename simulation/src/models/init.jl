@@ -1,5 +1,7 @@
 function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; seed=1148705, ϵ=1e-5)
 
+    parameters = copy(parameters) # :(
+
     if :c ∉ keys(parameters) 
         parameters[:c] = (c, ∂c∂s, ∂c∂r)
     end
@@ -20,6 +22,7 @@ function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; s
     parameters[:R] = repeat([0.0], Nnodes)
     parameters[:p] = repeat([0.0], Nnodes)
     parameters[:X] = repeat([0.0], Nnodes)
+    parameters[:profit] = repeat([0.0], Nnodes)
 
     function byids(model::ABM)
         return sort(collect(allids(model)))
@@ -31,14 +34,14 @@ function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; s
         warn=false, scheduler=byids
     )
 
-    a₀, b₀ = -25., 2. # FIXME: Is this stable?
+    a₀, b₀ = -5., 0.1 # FIXME: Guess from knowing r
 
 
     N = parameters[:N]
     M = parameters[:M]
 
 
-    ε₀ = maximum(parameters[:ε][2]) # Biggest value of possible demand
+    ε₀ = minimum(parameters[:ε][2]) # Lowest value of possible demand
 
     r₀ = 0.
     s₀ = M * ε₀ / N # Supply that fixes demand
