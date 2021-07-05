@@ -59,25 +59,13 @@ $\theta_i$ is the sequence of shifted Pell numbers $P_{i+1}$ that have a closed 
     \end{cases}
 \end{equation}
 
-Using the definition of Penn number
-
-\begin{equation}
-    P_m = \frac{(1 + \sqrt{2})^m - (1 - \sqrt{2})^m}{2\sqrt{2}}
-\end{equation}
-
-we can rewrite,
+Letting,
 
 \begin{equation*}
     H(i, j, n) \coloneqq \frac{P_{n + 1 - j} \cdot P_i}{P_{n+1}}
 \end{equation*}
 
-Using some manipulation $P_{-a} = (-1)^{a+1} P_a$ and $P_{a+b} = P_{a} P_{b+1} + P_{a-1} P_b$,
-
-\begin{equation}
-    \lim_{n \xrightarrow{} \infty} H(i, j, n) = (-1)^{j + 1}  \left(P_j \cdot \gamma - P_{j+1} \right) P_i
-\end{equation}
-
-such that,
+we can rewrite,
 
 \begin{equation}
     (\matr{2I + G})^{-1}_{i, j} = \begin{cases}
@@ -85,3 +73,22 @@ such that,
         (-1)^{2i } H(j, i, n)   & \text{if } i > j
     \end{cases}
 \end{equation}
+
+Let the silver ratios be,
+
+\begin{equation}
+    \begin{split}
+        \delta_{p} &= 1 + \sqrt{2} \\
+        \delta_{m} &= 1 - \sqrt{2}
+    \end{split}
+\end{equation}
+
+Using the properties, $P_{-a} = (-1)^{a+1} P_a$, $P_{a+b} = P_{a} P_{b+1} + P_{a-1} P_b$, and some manipulation
+
+\begin{equation}
+    \begin{split}
+        \lim_{n \xrightarrow{} \infty} H(i, j, n) &= (-1)^{j + 1}  \left(P_j \cdot \delta_{p} - P_{j+1} \right) P_i \\
+        &= \frac{(-1)^j }{2\sqrt{2}} \cdot (\delta_{p}^i - \delta_{m}^i) \cdot \delta^j_{m}
+    \end{split}
+\end{equation}
+

@@ -22,6 +22,9 @@ compinv = la.inv(M)
 
 theta_n = la.det(M)
 
+sq2 = np.sqrt(2)
+twosq2 = 2*np.sqrt(2)
+
 
 def phi(i, n):
     if i == n:
@@ -42,9 +45,6 @@ def theta(i):
 
 
 def pellnumber(i):
-
-    sq2 = np.sqrt(2)
-    twosq2 = 2*np.sqrt(2)
     pos = 1 + sq2
     neg = 1 - sq2
 
@@ -83,12 +83,44 @@ if np.allclose(thinv, compinv):
 else:
     print("Approximation: Failure")
 
-gamma = 1 + np.sqrt(2)
+deltap = 1 + np.sqrt(2)
+deltam = 1 - np.sqrt(2)
+
+
+def firstsum(j):
+    return pellnumber(j)*deltap - pellnumber(j + 1)
 
 
 def limitinv(i, j):
 
     sign = np.power(-1, j + 1)
 
-    return sign*(pellnumber(j)*gamma - pellnumber(j + 1))*pellnumber(i)
+    return sign*firstsum(j)*pellnumber(i)
 
+
+def simplified(i, j):
+    diff = np.power(deltap, i) - np.power(deltam, i)
+    m = np.power(deltam, j)
+    sign = np.power(-1, j)
+
+    return sign*m*diff/twosq2
+
+
+def delt(i, j):
+
+    sign = np.power(-1, j)
+
+    fct = np.power(deltap, i) * np.power(deltam, j) - np.power(deltam, i+j)
+
+    return sign * np.power(-1, j) * fct / twosq2
+
+
+def diagdelt(i, n=150):
+    return sum(delt(i, j) for j in list(range(1, n)))
+
+
+entries = list(range(1, 10))
+bargaining = [diagdelt(i) for i in entries]
+
+plt.plot(entries, bargaining)
+plt.savefig("t.png")
