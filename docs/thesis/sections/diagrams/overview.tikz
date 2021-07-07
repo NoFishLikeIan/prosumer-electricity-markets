@@ -1,38 +1,49 @@
-\tikzstyle{prosumers} = [
+\tikzstyle{var} = [
 draw,circle,
 prosumer,
 fill=prosumer,
 text=black,
-minimum size=5pt]
-
-\tikzstyle{provider} = [
-draw,circle,
 minimum size=10pt]
 
+\tikzstyle{agent} = [
+draw, circle,
+fill=yellow,
+minimum size=10pt]
+
+\tikzstyle{onnode} = [
+    draw, circle, fill=white
+]
+
+\tikzstyle{time} = [
+draw=gray, rectangle,
+dashed,
+thick,
+inner sep=5pt]
+
 \tikzstyle{market} = [
-draw=gray, dashed, thick,
-inner sep=8pt]
+draw=gray, circle,
+dashed,
+thick,
+inner sep=5pt]
 
-
-\begin{tikzpicture}[{Latex[scale=0.5]}-{Latex[scale=0.5]}, thick]
+\begin{tikzpicture}[-{Latex}, thick, every text node part/.style={align=center, fontscale=0.8}]
 
     % Placing providers
     \foreach \x/\y [count=\j] in {1/1, -1/1, 1/-1, -1/-1}
         % Draw provider
-        {\node [provider]  (\j) at (2*\x, 2*\y) [fontscale=0.8] {\makecell[l]{Prov. \j \\ $X(p_{\j})$}};
-
-            % Draw prosumers
-            \edef\points{}
-            \foreach \z/\w [count=\i] in {0/2, 1/2.1, 1.75/1.75, 2.1/1, 2/0}
-                {\node [prosumers] (\x\y\i) at (\x + 1.3*\x*\z, \y + 1.5*\y*\w) [fontscale=0.6] {$x_{\i}$};
-                    \path (\j) edge [] node [fontscale = 0.6] {} (\x\y\i);
-                    \xdef\points{(\x\y\i) \points}
-                };}
+        {
+            \node [agent]  (\j) at (2*\x, 2*\y) [] {Provider \j};
+            \node [market] (\j-mkt) at (5*\x, 5*\y) [] {Wholesale \\ market \j};
+            \path 
+                (\j-mkt) edge [bend right] node [onnode] {$X_{\j}$} (\j)
+                (\j) edge [dashed, bend right] node [onnode, dashed] {$p_{\j}$} (\j-mkt)
+            ;
+        }
 
     \path
-    (1) edge [-{Latex}] node [above, fontscale=0.8] {$Y^{(1, 2)}$} (2)
-    (1) edge [-{Latex}] node [right, fontscale = 0.8] {$Y^{(1, 3)}$} (3)
-    (1) edge [-{Latex}] node [above left, fontscale = 0.8] {$Y^{(1, 4)}$} (4)
-    (3) edge [-{Latex}] node [above, fontscale = 0.8] {$Y^{(3, 4)}$} (4);
+    (1) edge [] node [above] {$Y^{(1, 2)}$} (2)
+    (1) edge [] node [right] {$Y^{(1, 3)}$} (3)
+    (1) edge [] node [above left] {$Y^{(1, 4)}$} (4)
+    (3) edge [] node [above] {$Y^{(3, 4)}$} (4);
 
 \end{tikzpicture}

@@ -21,45 +21,27 @@ thick,
 inner sep=5pt]
 
 \tikzstyle{market} = [
-draw=gray, rectangle,
+draw=gray, circle,
 dashed,
 thick,
-inner sep=15pt]
+inner sep=5pt]
 
 
-\begin{tikzpicture}[-{Latex[scale=1]}, thick]
+\begin{tikzpicture}[-{Latex[scale=1]}, thick, every text node part/.style={align=center, fontscale=0.8}]
 
-    \node [agent] (producer_prev) {$\text{Prod}_{t-1}$};
-    \node [var, right = 5cm of producer_prev] (s) {\makecell[c]{Elect. \\ $s_t$}};
-    \node [derived, below = 2cm of s] (demand) {\makecell[c]{Demand \\ $X_t$}};
-    \node [derived, left = 1cm of demand] (producer_payoff) {\makecell[c]{Prod. payoff \\ $\pi_t$}};
-    \node [var, below = 1cm of demand] (price) {$p_t$};
-    \node [agent, below right = 0.5cm and 1cm of price] (provider) {Prov.};
-    \node [derived, right = 1cm of demand] (provider_payoff) {\makecell[c]{Prov. payoff \\ $\Pi_t$}};
-
+    \node [agent] (prov) {Provider};
+    \node [market, left = 2cm of prov] (cb-market) {Cross-border \\ market};
+    \node [agent, above right = 1cm and 5cm of prov] (prod) {Producers};
+    \node [agent, below right = 1cm and 5cm of prov] (pros) {Prosumers};
+    \node [market, right = 2cm of prov] (w-market) {Wholesale \\ market};
 
     \path
-    (producer_prev) edge [] node [var] (ramp) {$r_{t-1}$} (s)
-    (provider) edge (price)
-    (price) edge (demand)
-    (demand) edge (producer_payoff)
-    (demand) edge (provider_payoff)
-    (s) edge (demand)
-    (producer_payoff) edge [-, bend left, dashed] node [fill=white] {$\E_{\psi}$}(producer_prev)
-
-    (provider_payoff) edge [-, dashed] node [fill=white] {$\E$}(provider)
-
-    (ramp) edge [] node [below left] {$c(r)$} (producer_payoff)
+    (cb-market) edge [bend left] node [above] {$Y_t$} (prov)
+    (prov) edge [dashed, bend left] node [below] {$P_t$} (cb-market)
+    (prov) edge [ bend left] node [above] {$X_t$} (w-market)
+    (w-market) edge [dashed, bend left] node [below] {$p_t$} (prov)
+    (prod) edge [] node [above left] {$S_t$} (w-market)
+    (w-market) edge [] node [below left] {$e_t \cdot M$} (pros)
     ;
-
-    \node [time, fit = (producer_prev) (ramp), label=above:{Previous period}] (Previous) {};
-    \node [market, fit = (producer_prev) (s) (Previous), label=above:{Production}] (Production) {};
-    \node [market, fit = (provider) (price), label=below:{Provider}] (Provider) {};
-
-    \matrix [draw,below left, fill=white] at (current bounding box.north east) {
-    \node [agent,label=right:{Agents}] {}; \\
-    \node [derived,label=right:{Derived values}] {}; \\
-    \node [var,label=right:{Variables}] {}; \\
-    };
 
 \end{tikzpicture}

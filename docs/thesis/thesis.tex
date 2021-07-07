@@ -11,6 +11,7 @@
     \usepackage{bm}
 
     \usepackage{graphicx}
+    \usepackage{wrapfig}
     \usepackage{tikz} 
     \usepackage{relsize}
     \usepackage{makecell}
@@ -80,16 +81,18 @@
 
 \newpage
 
-\iffalse
-    \subfile{sections/introduction.tex}
-\fi
+\iffalse \subfile{sections/introduction.tex} \fi
 
 \subfile{sections/model.tex}
 
-\subfile{sections/examples.tex}
+\subfile{sections/contagion.tex}
+\subfile{sections/results.tex}
 
 \iffalse
-    \newpage
+    \subfile{sections/examples.tex}
+
+
+    % \newpage
     \pagenumbering{gobble} % stop page numbering
     % \nocite{*}
     \printbibliography
