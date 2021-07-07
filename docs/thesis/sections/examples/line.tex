@@ -22,13 +22,13 @@ Note that this implies that,
 
 \begin{equation}
     \matr{2I + G} =
-    \begin{pmatrix}
-        {2}  & {1}  & {}       & {}       & {}  \\
-        {-1} & {2}  & {1}      & {}       & {}  \\
-        {}   & {-1} & {\ddots} & {\ddots} & {}  \\
-        {}   & {}   & {\ddots} & {\ddots} & {1} \\
-        {}   & {}   & {}       & {-1}     & {2}
-    \end{pmatrix}
+    \begin{pNiceMatrix}[columns-width=auto]
+        {2}  & {-1}  & {}       & {}       & {}  \\
+        {1} & {2}  & {-1}      & {}       & {}  \\
+        {}   & {1} & {\ddots} & {\ddots} & {}  \\
+        {}   & {}   & {\ddots} & {\ddots} & {-1} \\
+        {}   & {}   & {}       & {1}     & {2}
+    \end{pNiceMatrix}
 \end{equation}
 
 is a tridiagonal Toeplitz matrix. This can be inverted using \citein{Huang1997},

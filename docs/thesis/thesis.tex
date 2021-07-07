@@ -16,7 +16,8 @@
     \usepackage{relsize}
     \usepackage{makecell}
     \usepackage{booktabs}
-    
+    \usepackage{subcaption}
+
 
     \usepackage{blindtext} % FIXME: Remove for dummy text
 
@@ -25,6 +26,7 @@
     % Paths
 
     \newcommand{\plotpath}{../../plots/energy}
+    \newcommand{\bargpath}{../../plots/barg}
 
     % Formatting
     \setlength{\parindent}{0em}
@@ -86,18 +88,17 @@
 \subfile{sections/model.tex}
 
 \subfile{sections/contagion.tex}
-\subfile{sections/results.tex}
 
 \iffalse
+    \subfile{sections/results.tex}
     \subfile{sections/examples.tex}
 
 
     % \newpage
-    \pagenumbering{gobble} % stop page numbering
     % \nocite{*}
     \printbibliography
 \fi
-
+\pagenumbering{gobble} % stop page numbering
 \newpage \appendix \subfile{sections/appendix.tex}
 
 

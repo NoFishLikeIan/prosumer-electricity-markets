@@ -1,0 +1,26 @@
+\tikzstyle{node} = [
+    draw, circle,
+    minimum size=10pt
+]
+
+\tikzstyle{dots} = [
+    draw, circle,
+    dashed, line width=0pt
+]
+
+\begin{tikzpicture}[-, thick, fontscale=0.8]
+
+    \node [node] (12) {(1, 2)};
+    \node [node, right = 2cm of 1] (23) {(2, 3)};
+    \node [node, right = 2cm of 2] (34) {(3, 4)};
+    \node [dots, right = 2cm of 4] (dots) {$\ldots$};
+    \node [node, right = 2cm of dots] (last) {(n-1, n)};
+
+
+    \path
+    (12) edge [] node [above] {2} (23)
+    (23) edge [] node [above] {3} (34)
+    (34) edge [] node [above] {5} (dots)
+    (dots) edge [] node [above] {n-1} (last);
+
+\end{tikzpicture}

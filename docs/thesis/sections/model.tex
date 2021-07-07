@@ -241,13 +241,54 @@ which yields (see \ref{a:barsol}), for every edge $(i, j)$ with $a_{i, j} \neq 0
 \end{equation}
 
 
-In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. One can therefore simplify the solution by using the directed line graph associated with the original graph, with adjacency matrix $\matr{G} \in \R^{\abs{E}\times \abs{E}}$. First, let $\Delta_t$ in $\R^{\abs{E}}$ be the vector of revenue difference in the respective local markets with entries,
+In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. One can therefore simplify the solution by using the directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\matr{G} \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and draw an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, giving a positive sign to the edge if the ``outside option'' is that of the first entry and negative if is that of the second entry (e.g. in our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $(2, 7)$ is the outside option of $2$ which is the second entry in $(1, 2)$). For example, consider an arbitrary long sequential graph,
+
+\begin{figure}[!ht]
+    \centering
+    \input{sections/diagrams/linemodel.tikz}
+\end{figure}
+
+Such a graph has a symmetric adjacency matrix of size $n$,
+
+\begin{equation}
+    \matr{A} =
+    \begin{pmatrix}
+        {0} & {1} & {0} & {}       & {}  & {}  \\
+        {1} & {0} & {1} & {}       & {}  & {}  \\
+        {0} & {1} & {0} & {}       & {}  & {}  \\
+        {}  & {}  & {}  & {\ddots} & {}  & {}  \\
+        {}  & {}  & {}  & {}       & {0} & {1} \\
+        {}  & {}  & {}  & {}       & {1} & {0}
+    \end{pmatrix}
+\end{equation}
+
+Now to construct the corresponding line graph consider the line graph node $(i, i+1)$. The adjacency matrix of the line graph will have then entry $-1$ with the edge $(i+1, i+2)$ since it represents the outside option of the second element and, likewise, $-1$ with the edge $(i-1, i)$. Hence the adjacency matrix $\matr{G},$ is the $(n-1) \times (n-1)$ matrix,
+
+\begin{equation}
+    \matr{G} =
+    \begin{pmatrix}
+        {0}  & {-1} & {0}  & {}       & {}   & {}   \\
+        {-1} & {0}  & {-1} & {}       & {}   & {}   \\
+        {0}  & {-1} & {0}  & {}       & {}   & {}   \\
+        {}   & {}   & {}   & {\ddots} & {}   & {}   \\
+        {}   & {}   & {}   & {}       & {0}  & {-1} \\
+        {}   & {}   & {}   & {}       & {-1} & {0}
+    \end{pmatrix}
+\end{equation}
+
+\begin{figure}[!ht]
+    \centering
+    \input{sections/diagrams/linemodel.tikz}
+\end{figure}
+The sequential graph example is illustrative but in general there is no analytical way to go from $\matr{A}$ and $\matr{G}$ and one has to compute it algorithmically on a case by case basis.
+
+Now, let $\Delta_t$ in $\R^{\abs{E}}$ be the vector of revenue difference in the respective local markets with entries,
 
 \begin{equation}
     \Delta^{(i, j)}_t \coloneqq X_{i, t} \cdot p_{i, t} - X_{j, t} \cdot p_{j, t}
 \end{equation}
 
-At each time $t$, equation (\ref{bargaining_solution}) can be then written as,
+Given $\matr{G}$ and $\Delta^{(i, j)}_t$, at each step $t$, equation (\ref{bargaining_solution}) can be written as,
 
 \begin{equation} \label{matrix_bargaining_solution}
     \begin{split}

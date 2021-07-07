@@ -1,0 +1,28 @@
+\tikzstyle{node} = [
+    draw, circle,
+    minimum size=10pt
+]
+
+\tikzstyle{dots} = [
+    draw, circle,
+    dashed, line width=0pt
+]
+
+\begin{tikzpicture}[-, thick, fontscale=0.8]
+
+    \node [node] (1) {1};
+    \node [node, right = 2cm of 1] (2) {2};
+    \node [node, right = 2cm of 2] (3) {3};
+    \node [node, right = 2cm of 3] (4) {4};
+    \node [dots, right = 2cm of 4] (dots) {$\ldots$};
+    \node [node, right = 2cm of dots] (n) {n};
+
+
+    \path
+    (1) edge [] node [above] {$Y^{(1, 2)}$} (2)
+    (2) edge [] node [above] {$Y^{(2, 3)}$} (3)
+    (3) edge [] node [above] {$Y^{(3, 4)}$} (4)
+    (4) edge [] node [above] {$Y^{(4, 5)}$} (dots)
+    (dots) edge [] node [above] {$Y^{(n-1, n)}$} (n);
+
+\end{tikzpicture}
