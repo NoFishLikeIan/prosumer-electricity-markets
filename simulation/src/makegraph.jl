@@ -1,24 +1,8 @@
-function makeline(n)
-    ι = ones(Int64, n - 1)
-    A = diagm(1 => ι, -1 => ι)
-
-    ιₑ = ones(Int64, n - 2)
-    G = diagm(1 => ιₑ, -1 => ιₑ)
-
-    return A, G
-end
-
 """
-- i, j edges; 
-- there are n edges of form (1, j), n-1 of form (2, j) and so on;
-- G is symmetric
+Computes G matrix for arbitrary A
 """
-function makecomplete(n::Int64)
-    A = ones(Int64, n, n)
-    A[diagind(A)] .= 0
-
-    E = map(edgetotuple, edges(SimpleGraph(A)))
-
+function makeG(A)
+	E = map(edgetotuple, edges(SimpleGraph(A)))
     nₑ = length(E)
     G = zeros(Int64, nₑ, nₑ)
 
@@ -38,8 +22,16 @@ function makecomplete(n::Int64)
         end
 
     end
+	
+	return G
+end
 
-    return A, G
+
+function makeline(n)
+    ι = ones(Int64, n - 1)
+    A = diagm(1 => ι, -1 => ι)
+
+    return A, makeG(A)
 end
 
 function makestar(n::Int64)
@@ -48,8 +40,5 @@ function makestar(n::Int64)
     A[1, 2:end] .= 1
     A += A'
 
-    G = ones(Int64, n - 1, n - 1)
-    G[diagind(G)] .= 0
-
-    return A, G
+    return A, makeG(A)
 end
