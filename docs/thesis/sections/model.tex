@@ -241,7 +241,7 @@ which yields (see \ref{a:barsol}), for every edge $(i, j)$ with $a_{i, j} \neq 0
 \end{equation}
 
 
-In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. One can therefore simplify the solution by using the directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\matr{G} \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and draw an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, giving a positive sign to the edge if the ``outside option'' is that of the first entry and negative if is that of the second entry (e.g. in our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $(2, 7)$ is the outside option of $2$ which is the second entry in $(1, 2)$). For example, consider an arbitrary long sequential graph,
+In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. One can therefore simplify the solution by using the directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\matr{G} \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, giving a positive sign to the edge if the ``outside option'' is that of the first entry and negative if is that of the second entry (e.g. in our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $(2, 7)$ is the outside option of $2$ which is the second entry in $(1, 2)$). For example, consider an arbitrary long sequential graph,
 
 \begin{figure}[!ht]
     \centering
@@ -295,24 +295,47 @@ Given $\matr{G}$ and $\Delta^{(i, j)}_t$, at each step $t$, equation (\ref{barga
         2(P \circ \Y) &= \Delta  - \matr{G} \left( P \circ \Y \right) \\
         (2\matr{I} + \matr{G}) (P \circ \Y) &= \Delta  \\
         (P \circ \Y) &= (2\matr{I} + \matr{G})^{-1} \Delta \\
-        \diag(\Y) P &=  (2\matr{I} + \matr{G})^{-1} \Delta \\
-        P &= \diag(\Y)^{-1} (2\matr{I} + \matr{G})^{-1} \Delta
+        P &= \left((2\matr{I} + \matr{G})^{-1} \Delta \right) \oslash \Y
     \end{split}
 \end{equation}
 
-where $\circ$ denotes the element-wise (Hadamard) product. Hence, the bargaining solution gives the price following price formation,
+where $\circ$ and $\oslash$ denote the element-wise (Hadamard) product and division. Hence, the bargaining solution gives the following price formation,
 
-\begin{equation}
-    P(\Y_t) = \diag(\Y_t)^{-1} (2\matr{I} + \matr{G})^{-1} \Delta
+\begin{equation} \label{Pmatrix}
+    P(\Y_t) = \left((2\matr{I} + \matr{G})^{-1} \Delta_t \right) \oslash \Y_t
 \end{equation}
 
 with associated Jacobian (see \ref{a:jacobian_p}),
 
-\begin{equation}
-    D_{\Y} P(\Y_t) = -\diag(P(\Y_t) \oslash \Y_t)
+\begin{equation} \label{Pjacobian}
+    D_{\Y} P(\Y_t) = -\diag(P(\Y_t) \oslash \Y_t).
 \end{equation}
 
-We can use this, combined with the local optimization $\lambda_t$, to obtain an explicit expression of the local optimization. Using the fact that $D_{\Y} P(\Y_t)_{i, j} = 0$ if $i \neq j$ and $D_{\Y} P(\Y_t)_{i, j} = 1$ if $i < j$, the shadow price of the bargaining procedure (Equation \ref{lambda}) can be written as,
+Equation (\ref{Pmatrix}) shows that the trading prices on an edge, $P^{(i, j)}$, depends only on the state of the edges' two nodes, via $Y^{(i, j)}_t$, the revenue differences across the networks, via $\Delta_t$, and the network structure. This function also highlights a pitfall of the Nash bargaining procedure on networks. In particular, if the graph $\mathcal{A}$ contains a cycle, the matrix $(2\matr{I} + \matr{G})^{-1}$ is singular, given that the number of equations at our disposable to determine $P(\Y_t)$ is not sufficient. To see this consider the simple case of adding an extra edge in the graph below (left to right). On the right graph we demand a further unknown, $P^{(2, 3)}$, but we do not provider further equations.
+
+\begin{figure}[!ht]
+    \centering
+    \resizebox{\linewidth}{!}{\input{sections/diagrams/cycleissue.tikz}}
+\end{figure}
+
+This can be also seen by looking at the two $\det(2 \matr{I} + \matr{G})$,
+
+\begin{equation*}
+    \text{the first, }
+    \det \begin{pmatrix}
+        2 & 1 \\
+        1 & 2
+    \end{pmatrix}  = 3 \text{ and the second, }
+    \det \begin{pmatrix}
+        2  & 1 & -1 \\
+        1  & 2 & 1  \\
+        -1 & 1 & 2
+    \end{pmatrix} = 0.
+\end{equation*}
+
+Because of this limitation, here I will limit the analysis to acyclical (or complete) graphs. Extending this model to cyclical graphs simply requires defining a more general once differentiable function $P: \R^{\abs{E}} \mapsto \R^{\abs{E}}$ that models the bargaining procedure.
+
+Now we can use Equations (\ref{Pmatrix}) and (\ref{Pjacobian}), combined with the local optimization, to obtain an explicit expression of the shadow price of the bargaining procedure, $\lambda_t$. Using the fact that $D_{\Y} P(\Y_t)_{e_1, e_2} = 0$ if $e_1 \neq e_2$ and $D_{\Y} P(\Y_t)_{i, j} = \pm 1$ (i.e. no direct dependence between $P^{(i, j)}$ and $P^{(l, m)}$ for $(i, j) \neq (l, m)$), the shadow price of the bargaining procedure (Equation \ref{lambda}) can be written as,
 
 
 \begin{equation}
@@ -331,10 +354,10 @@ Note that $\lambda_t$ needs to be the same for every neighbour, such that, for t
     \end{split}
 \end{equation}
 
-This equation determines the ratio of $Y^{(i, m)}_t / Y^{(i, n)}_t$ for each element of the vector of $\matr{Y}_t$. Furthermore, to satisfy the resource constraint, it needs to be true that, $\sum_{j} Y^{(i, j)}_t = X_t$. These two equations allow to fully determine the vector $\matr{Y}_t$.
+This equation determines the ratio of $Y^{(i, m)}_t / Y^{(i, n)}_t$ for each element of the vector of $\matr{Y}_t$. Furthermore, to satisfy the resource constraint, it needs to be true that, $\sum_{j} Y^{(i, j)}_t = X_{i, t}$. These two equations allow to fully determine the vector $\matr{Y}_t$.
 
 
-\subsubsection{Policy function}
+\subsubsection{Making sense of the policy function}
 
 Having derived the budget constraint on the bargained quantity, we can rewrite Equation (\ref{local_p}) as
 
