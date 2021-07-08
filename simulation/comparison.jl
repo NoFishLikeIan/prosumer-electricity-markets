@@ -41,13 +41,10 @@ for (shockname, shockmatrices) in shocks
         plotpath=joinpath(plotpath, shockname, "star")
     )
 
-
     dfagentline, dfmodelline, modelline = plotfromsteadystate(
         Al, Gl, Tₛ; εpath=εg, 
         plotpath=joinpath(plotpath, shockname, "line")
     )
-
-    println()
     
 end
 

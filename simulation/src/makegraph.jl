@@ -42,3 +42,7 @@ function makestar(n::Int64)
 
     return A, makeG(A)
 end
+
+function turquoise(α)
+    RGBA(0, 153 / 255, 154 / 255, α)
+end

@@ -11,6 +11,8 @@ using Cairo, Compose
 using DataFrames
 
 include("utils.jl")
+include("plotutils.jl")
+
 include("models/agents.jl")
 
 include("models/policies/provider.jl")
