@@ -3,7 +3,7 @@ function makeline(n)
     A = diagm(1 => ι, -1 => ι)
 
     ιₑ = ones(Int64, n - 2)
-    G = diagm(1 => ιₑ, -1 => -ιₑ)
+    G = diagm(1 => ιₑ, -1 => ιₑ)
 
     return A, G
 end

@@ -133,7 +133,7 @@ function r(s, p)
 	if s > invβf * √(unitπ)
 		return βf * s - 0.5 * √((2βf * s)^2 - 4unitπ)
 	else
-		return invβf * √(unitπ) - s
+		return 5.
 	end
 
 		
@@ -150,16 +150,26 @@ end
 begin
 	
 	clims = (-sᵤ * γ, sᵤ * γ)
+	boundarylabel = latexstring("\$ s = \\frac{\\beta}{1- \\beta} \\sqrt{p_t - k} \$")
 	
 	rfigure = heatmap(
 		supplyspace, pricespace, 
-		(s, p) -> r(s, p), clim = clims,
+		(s, p) -> r(s, p), clim = clims, c=:RdYlGn_5,
+		title = latexstring("\$ r(s_t, p_t) \$"),
 		xlabel = "current supply", ylabel = "price")
+	
+	plot!(
+		rfigure, supplyspace, s -> (s*β/(1 - β))^2 + k, legend = :topleft,
+		linestyle=:dash,
+		label = boundarylabel, c = :black, ylims=(0, 100))
 	
 end
 
 # ╔═╡ 52146730-b737-4b19-be11-2df335127b41
 savefig(rfigure, joinpath(plotpath, "rfunction.pdf"))
+
+# ╔═╡ e5e75b86-de5c-11eb-32a4-9df894c37b89
+
 
 # ╔═╡ ddf53627-181f-4fc0-b8dc-39d6243f1f0e
 md"""
@@ -227,6 +237,9 @@ begin
 	
 end
 
+# ╔═╡ e3f036fe-de5c-11eb-3957-8514b9ef4374
+
+
 # ╔═╡ Cell order:
 # ╠═d24cee46-d3f2-11eb-0f8c-93119645edd9
 # ╠═4509a0c9-374e-4f0f-a5dd-5671f0c67bb4
@@ -247,7 +260,9 @@ end
 # ╠═52bc7382-42c8-4b4c-b188-3c8c9af281bf
 # ╠═9dbece0b-2aaf-475e-b45a-4e60c8557a87
 # ╠═52146730-b737-4b19-be11-2df335127b41
+# ╠═e5e75b86-de5c-11eb-32a4-9df894c37b89
 # ╟─ddf53627-181f-4fc0-b8dc-39d6243f1f0e
 # ╠═27262d0f-06f5-4032-9a72-afd2e4cb4798
 # ╠═0c2afa65-010c-4a06-aedb-112932a01c6d
 # ╠═3fdd4dc4-caf7-41f2-a6fc-a8dc89fa6fbc
+# ╠═e3f036fe-de5c-11eb-3957-8514b9ef4374
