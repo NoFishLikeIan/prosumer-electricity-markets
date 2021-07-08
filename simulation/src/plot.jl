@@ -44,6 +44,8 @@ Plot the supply and the price in all markets
 """
 function pricesupplyplot(dfagent, model; savepath=nothing)
 
+    pmax = maximum(filter(!ismissing, dfagent.p))
+
     jointfigure = plotnodes(
         dfagent,
         (timeaxis, nodedata) -> begin
@@ -60,7 +62,7 @@ function pricesupplyplot(dfagent, model; savepath=nothing)
         fig = plot(
             timeaxis, pricet, 
             title="Node $node", label="price", color=:blue, 
-            ylabel="p", legend=:topleft)
+            ylims=(0, pmax), ylabel="p", legend=:topleft)
                     
         for (startp, endp) in εperiods
             vspan!(fig, [startp, endp], color=:red, alpha=0.3, label=nothing)
@@ -68,7 +70,7 @@ function pricesupplyplot(dfagent, model; savepath=nothing)
 
         fig = bar!(
             twinx(fig), timeaxis, supply, ylabel="supply", alpha=0.2,
-            label="s", color=:green, legend=:topright)
+            ylims=(0, Inf), label="s", color=:green, legend=:topright)
             
         return fig
 

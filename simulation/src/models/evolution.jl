@@ -1,11 +1,21 @@
 function agent_step!(prosumer::Prosumer, model)
-    Γ, S = model.properties[:ε]
+    if !isnothing(model.εpath) # If given predefined path
+        
+        n = prosumer.pos
+        t = model.step
 
-    state = findfirst(==(prosumer.ε), S)
-
-    if rand(model.rng) > Γ[state, state] 
-        prosumer.ε = S[flip12(state)]
+        prosumer.ε = model.εpath[t, n]
+        
+    else    
+        Γ, S = model.properties[:ε]
+    
+        state = findfirst(==(prosumer.ε), S)
+    
+        if rand(model.rng) > Γ[state, state] 
+            prosumer.ε = S[flip12(state)]
+        end
     end
+
 
 end
 

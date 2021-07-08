@@ -1,6 +1,15 @@
-function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; seed=1148705, ϵ=1e-5)
+"""
+Initialize a model for a given A and G matrix.
+
+Optionally give an εpath
+"""
+function initializemodel(
+    A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; 
+    εpath=nothing, seed=1148705)
 
     parameters = copy(parameters) # :(
+    
+    parameters[:εpath] = εpath # FIXME: Not the best way to do this tbh
 
     if :c ∉ keys(parameters) 
         parameters[:c] = (c, ∂c∂s, ∂c∂r)
@@ -50,7 +59,7 @@ function initializemodel(A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; s
 
         add_agent!(node, Prosumer, model, ε₀)
 
-        p₀ = parameters[:k] + ϵ # Start at stable value pₜ = k
+        p₀ = parameters[:k] + 1e-2 # Start at stable value pₜ = k
 
         add_agent!(node, Provider, model, a₀, b₀, p₀)
 

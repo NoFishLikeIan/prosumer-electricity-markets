@@ -12,7 +12,7 @@ default_params = Dict(
 
 function simulatemarket!(model; adata=[:pos, :p, :r, :ε, :s, :b, :a],  mdata=[:X, :R], T=100)
 
-    dfagent, dfmodel = run!(model, agent_step!, model_step!, T;adata, mdata)
+    dfagent, dfmodel = run!(model, agent_step!, model_step!, T; adata, mdata)
 
     # Fix bug of carried over X
     modelnodes = unique(dfagent.pos)
@@ -53,14 +53,12 @@ function simulatefromsteady!(model;
 
 end
 
-function plotfromsteadystate(A, G, T; parameters=default_params, plotpath=nothing)
+function plotfromsteadystate(A, G, T; parameters=default_params, εpath=nothing, plotpath=nothing)
 
-    model = initializemodel(A, G, parameters)
+    model = initializemodel(A, G, parameters; εpath=εpath)
     dfagent, dfmodel = simulatemarket!(model; T=T)
 
     if !isnothing(plotpath)
-
-        println("Plotting at $plotpath...")
 
         pricesupplyplot(dfagent, model; savepath=joinpath(plotpath, "pricesupply.pdf"))
 
@@ -74,8 +72,6 @@ function plotfromsteadystate(A, G, T; parameters=default_params, plotpath=nothin
         plotprofit(dfagent, model; savepath=joinpath(plotpath, "profits.pdf"))
 
     end
-
-    println("...done!")
 
     return dfagent, dfmodel, model
 
