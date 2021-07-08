@@ -5,10 +5,10 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 0593a9ab-2085-4892-9f77-32296375cbe3
-using Colors, GraphPlot, LightGraphs, LinearAlgebra, Plots, SimpleWeightedGraphs
+using LightGraphs, LinearAlgebra, SimpleWeightedGraphs
 
 # ╔═╡ 3108ec47-f98d-4199-be28-ad07ca9b2ce3
-using Cairo, Compose
+using Cairo, Compose, ColorSchemes, Colors, GraphPlot, Plots
 
 # ╔═╡ a8f79c1b-3f67-4cd2-9a74-9d41862eb166
 using Latexify, PlutoUI
@@ -19,22 +19,34 @@ include("../simulation/src/main.jl")
 # ╔═╡ 2e7361ed-a41b-4bdb-944f-4e9b68af0032
 plotpath = "../plots/barg"
 
+# ╔═╡ 00bbdf8f-5a3e-4a68-851d-ce91972abf2d
+digtostring(num) = join(['.', last(split(string(num), '.'))])
+
 # ╔═╡ 18a5cfee-649c-4225-a37d-07a863850d2e
-red = [220, 20, 60] ./ 255
+red = makecolor(:red)
 
 # ╔═╡ 83082736-dbda-11eb-3baa-ef1dc6d139fc
 function bargainingpower(G::Matrix{Int64})
 	inv(2I + G)
 end
 
-# ╔═╡ 00bbdf8f-5a3e-4a68-851d-ce91972abf2d
-digtostring(num) = join(['.', last(split(string(num), '.'))])
-
-# ╔═╡ 40d2a842-c1a3-4d4f-8356-939a0874f8cc
-function isconstant(arr)
-	notequal = findfirst(x -> x != arr[1], arr)
+# ╔═╡ a2bdeb45-76e2-49d5-9c02-fe36331c0add
+function plotG(A)
 	
-	return isnothing(notequal) ? true : false
+	G = makeG(A)
+	
+	graph = SimpleWeightedDiGraph(G)
+	
+	edgecolor = [
+		e.weight > 0 ? colorant"red" : colorant"blue"
+		for e in edges(graph)
+	]
+	
+	gplot(
+		graph, layout = circular_layout, 
+		nodelabel = map(edgetotuple,edges(SimpleGraph(A))),
+		nodefillc = red(), edgestrokec = edgecolor)
+	
 end
 
 # ╔═╡ d24b87fe-f297-4529-85d0-60cd6b81fe74
@@ -61,72 +73,18 @@ function plotpower(A, G; savepath = nothing, layout = circular_layout, digits = 
 		ones(length(nodepower)) : 
 		rescaleto(nodepower, 0.5, 1.0)
 	
-	nodecolor = [RGBA(red..., α) for α in alphas] 
+	nodecolor = map(red, alphas) 
 	
 	printpower = [digtostring(round(n, digits = digits)) for n in nodepower]
 	
-	makegplot() = gplot(g, 
+	context = gplot(g, 
 		nodefillc=nodecolor, nodelabel=printpower, layout=layout)
 
 	if !isnothing(savepath) 
-		draw(PDF(savepath, 16cm, 16cm), makegplot())
+		draw(PDF(savepath, 16cm, 16cm), context)
 	end
 	
-	return makegplot()
-	
-end
-
-# ╔═╡ 17dbd9ea-200c-4800-9fe6-9f56d7f01fa6
-isconstant([1, 2, 3])
-
-# ╔═╡ 007f05f8-65bb-4511-bf32-b3e1b03112c8
-rescaleto
-
-# ╔═╡ 1cbdb317-fe0d-4223-a4dd-6abc3250389f
-"""
-Computes G matrix for arbitrary A
-"""
-function makeG(A)
-	E = map(edgetotuple, edges(SimpleGraph(A)))
-    nₑ = length(E)
-    G = zeros(Int64, nₑ, nₑ)
-
-    for (row, e₁) in enumerate(E), (col, e₂) in enumerate(E)
-
-        if row == col || isempty(e₁ ∩ e₂) continue end
-
-        e = first(e₁ ∩ e₂)
-
-        isoptionone = (e == first(e₁))
-        iscorrect = (e == first(e₂))
-
-        if isoptionone ⊻ iscorrect
-            G[row, col] = -1
-        else
-            G[row, col] = 1
-        end
-
-    end
-	
-	return G
-end
-
-# ╔═╡ a2bdeb45-76e2-49d5-9c02-fe36331c0add
-function plotG(A)
-	
-	G = makeG(A)
-	
-	graph = SimpleWeightedDiGraph(G)
-	
-	edgecolor = [
-		e.weight > 0 ? colorant"red" : colorant"blue"
-		for e in edges(graph)
-	]
-	
-	gplot(
-		graph, layout = circular_layout, 
-		nodelabel = map(edgetotuple,edges(SimpleGraph(A))),
-		nodefillc = RGB(red...), edgestrokec = edgecolor)
+	return context
 	
 end
 
@@ -141,7 +99,7 @@ n = 7
 # ╔═╡ cf6ebce3-f18f-4aab-af1e-63c01df3b058
 begin
 	Aₗ, Gₗ = makeline(n)
-	plotpower(Aₗ, -Gₗ; savepath = joinpath(plotpath, "line.pdf"))
+	plotpower(Aₗ, Gₗ; savepath = joinpath(plotpath, "line.pdf"))
 end
 
 # ╔═╡ d7313c18-5c57-4295-95a6-45ad96a4a972
@@ -171,12 +129,6 @@ function makecircular(n::Int64)
 	
 	return A, G
 	
-end
-
-# ╔═╡ 6b1d3c77-d5d4-48b5-8a0d-ed8375fdfcaa
-begin
-	Aᵪ, Gᵪ = makecomplete(n)
-	plotpower(Aᵪ, Gᵪ, savepath = joinpath(plotpath, "complete.pdf"))
 end
 
 # ╔═╡ 13935391-438b-44ac-9bbb-e50cb8400488
@@ -237,15 +189,11 @@ det(2I + Gcycle)
 # ╠═a8f79c1b-3f67-4cd2-9a74-9d41862eb166
 # ╠═ebe113e0-dbd9-11eb-27ba-1d118cccfaea
 # ╠═2e7361ed-a41b-4bdb-944f-4e9b68af0032
+# ╠═00bbdf8f-5a3e-4a68-851d-ce91972abf2d
 # ╠═18a5cfee-649c-4225-a37d-07a863850d2e
 # ╠═83082736-dbda-11eb-3baa-ef1dc6d139fc
-# ╠═00bbdf8f-5a3e-4a68-851d-ce91972abf2d
-# ╠═40d2a842-c1a3-4d4f-8356-939a0874f8cc
 # ╠═a2bdeb45-76e2-49d5-9c02-fe36331c0add
 # ╠═d24b87fe-f297-4529-85d0-60cd6b81fe74
-# ╠═17dbd9ea-200c-4800-9fe6-9f56d7f01fa6
-# ╠═007f05f8-65bb-4511-bf32-b3e1b03112c8
-# ╠═1cbdb317-fe0d-4223-a4dd-6abc3250389f
 # ╟─1940905a-68af-4aa0-b4c4-3e413df7130f
 # ╠═79cb4d06-0ccc-4ad5-ad80-3298b0432f6f
 # ╠═cf6ebce3-f18f-4aab-af1e-63c01df3b058
@@ -253,7 +201,6 @@ det(2I + Gcycle)
 # ╠═7924086f-7acd-44c3-bcb7-e73456d50a97
 # ╟─bd1db161-7ea1-4cbf-9131-a8d325623e93
 # ╠═8c925a00-5b3c-4e3b-9ea4-740ae334dcda
-# ╠═6b1d3c77-d5d4-48b5-8a0d-ed8375fdfcaa
 # ╠═13935391-438b-44ac-9bbb-e50cb8400488
 # ╠═c2255603-d2a4-42cb-92bd-bf046421b340
 # ╟─59f0021d-ada1-4bbc-9c4f-11bf3f522847

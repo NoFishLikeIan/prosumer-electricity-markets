@@ -93,34 +93,39 @@ function plotexcessdemand(dfagent, dfmodel; savepath=nothing)
     end
 end
 
+computenodesize(N) = 1 / (3 * sqrt(N))
+
 function plotpricevariance(dfagent, model; savepath=nothing)
-    g = model.space.graph
+    g = model.space.graph   
+
+    markets = vertices(g)
+    N = length(markets)
 
     pricevariance = Float64[]
 
-    nodelabel = unique(dfagent.pos)
-    
-    for node in nodelabel
-        _, dfprov, _ = getnodedata(dfagent, node)
+    for node in markets
+    _, dfprov, _ = getnodedata(dfagent, node)
         σₚ = std(dfprov.p)
 
         push!(pricevariance, σₚ)
     end
+    
+    nodelabel = [
+        "σₚ($i) = $( @sprintf "%.0f" σ )" for (i, σ) in enumerate(pricevariance)]
         
     alphas = rescaleto(pricevariance, 0.5, 1.0)
 
-    nodefillc = map(turquoise, alphas)
+    nodefillc = map(makecolor(:blue), alphas)
 
-    if !isnothing(savepath)
+    context = gplot(
+        g, nodefillc=nodefillc, 
+        nodelabel=nodelabel,
+        NODESIZE=computenodesize(N),
+        layout=circular_layout)
 
-        draw(
-            PDF(savepath, 16cm, 16cm), 
-            gplot(g, nodefillc=nodefillc, nodelabel=nodelabel, layout=circular_layout)
-        )
+    if !isnothing(savepath) draw(PDF(savepath, 32cm, 32cm), context) end
 
-    end
-
-
+    return context
 end
 
 
@@ -129,20 +134,24 @@ function plotprofit(dfagent, model; savepath=nothing)
 
     nodelabel = unique(dfagent.pos)
     
-    profit = sum(reshape(model.profit, length(nodelabel), :), dims=2)
-        
-    alphas = rescaleto(vec(profit), 0.5, 1.0)
+    profit = sum(reshape(model.profit, length(nodelabel), :), dims=2) |> vec
 
-    nodefillc = map(turquoise, alphas)
+    alphas = rescaleto(profit, 0.1, 1.0)
+
+    nodefillc = map(makecolor(:blue), alphas)
+
+       
+    nodelabel = [
+        "π($i) = $(@sprintf "%.2E" prof)" 
+        for (i, prof) in enumerate(profit)]
+
+    context = gplot(
+        g, nodefillc=nodefillc, 
+        nodelabel=nodelabel, 
+        NODESIZE=computenodesize(N),
+        layout=circular_layout)
     
-    if !isnothing(savepath)
-
-        draw(
-            PDF(savepath, 16cm, 16cm), 
-            gplot(g, nodefillc=nodefillc, nodelabel=nodelabel, layout=circular_layout)
-        )
-
-    end
+    if !isnothing(savepath) draw(PDF(savepath, 32cm, 32cm), context) end
 
 
 end

@@ -6,7 +6,7 @@ using Random, Distributions
 
 using Base.Threads
 
-using Plots, LaTeXStrings, GraphPlot, StatsPlots
+using Plots, LaTeXStrings, GraphPlot, StatsPlots, Printf
 using Cairo, Compose
 using DataFrames
 

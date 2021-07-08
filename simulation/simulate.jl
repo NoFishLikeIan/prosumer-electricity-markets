@@ -66,7 +66,6 @@ function plotfromsteadystate(A, G, T; parameters=default_params, εpath=nothing,
 
         plotexcessdemand(dfagent, dfmodel; savepath=joinpath(plotpath, "demand.pdf"))
 
-        
         plotpricevariance(dfagent, model; savepath=joinpath(plotpath, "pvar.pdf"))
 
         plotprofit(dfagent, model; savepath=joinpath(plotpath, "profits.pdf"))

@@ -74,3 +74,19 @@ function δ(i, j)
 function getjumpindex(arr, start, N) 
     return arr[start:N:length(arr)]
 end
+
+function roundtillint(num, digits)
+    rounded = round(num; digits=digits)
+    return digits == 0 ? Int64(rounded) : rounded  
+end
+
+function numtostring(num; digits=3) 
+    rounded = roundtillint(num, digits) |> string
+
+    if abs(num) < 1.
+        afterzero = split(rounded, '.') |> last
+        return join(['.', afterzero])
+    else
+        return rounded
+    end
+end

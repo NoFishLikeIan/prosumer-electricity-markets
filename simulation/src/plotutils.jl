@@ -23,7 +23,7 @@ end
 """
 Pass a function that takes the nodedata and time and returns a figure
 """
-function plotnodes(dfagent, fn; maxnode=6)
+function plotnodes(dfagent, fn; maxnode=9)
     nodes = unique(dfagent[!, :pos])
 
     nodes = length(nodes) > maxnode ? nodes[1:maxnode] : nodes
@@ -55,4 +55,17 @@ function rescaleto(arr, from, to)
     Δ = to - from
 
     return @. scaledtounity * Δ + from
+end
+
+palette = Dict(
+    :red      => [0.870588, 0.101961, 0.101961],
+    :sand     => [0.94902, 0.827451, 0.596078],
+    :magnolia => [0.909804, 0.921569, 0.968627],
+    :orange   => [0.843137, 0.521569, 0.129412],
+    :blue     => [0.615686274509804, 0.7294117647058823, 1.0]
+)
+
+function makecolor(colorsymbol)
+    r, g, b = palette[colorsymbol]
+    colorfn(α=1.) = RGBA(r, g, b, α)
 end

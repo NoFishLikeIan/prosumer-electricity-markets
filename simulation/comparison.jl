@@ -7,7 +7,7 @@ Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
 default(size=(1000, 800), margin=5Plots.mm) # Plotting defaults
 
 T = 100
-nodes = 5
+nodes = 7
 lowε, highε = last(default_params[:ε])
 εshock = lowε * ones(T, nodes)
 
@@ -27,14 +27,13 @@ shocks = Dict(
 As, Gs = makestar(nodes)
 Al, Gl = makeline(nodes)
 
-
 for (shockname, shockmatrices) in shocks
     
     println("Simulating $shockname...")
 
     εs, εg = shockmatrices
 
-    Tₛ = shockname == "random" ? T * 5 : T
+    Tₛ = shockname == "random" ? T * 2 : T
 
     dfagentstar, dfmodelstar, modelstar = plotfromsteadystate(
         As, Gs, Tₛ; εpath=εs, 
