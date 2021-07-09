@@ -464,3 +464,4 @@ plots/figure/
 theorypy/*
 
 src/junk.jl
+simulation/simresults
