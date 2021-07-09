@@ -8,7 +8,11 @@ using Base.Threads
 
 using Plots, LaTeXStrings, GraphPlot, StatsPlots, Printf
 using Cairo, Compose
-using DataFrames
+using DataFrames, JLD
+
+using DotEnv
+
+DotEnv.config("../.env")
 
 include("utils.jl")
 include("plotutils.jl")
@@ -26,5 +30,4 @@ include("models/init.jl")
 include("softpluscosts.jl")
 include("plot.jl")
 include("makegraph.jl")
-
-ENV["GKSwstype"] = "nul"
+include("analysis.jl")

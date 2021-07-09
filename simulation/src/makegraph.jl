@@ -42,3 +42,12 @@ function makestar(n::Int64)
 
     return A, makeG(A)
 end
+
+function makebinarytree(n::Int64)
+    k = ntokinbtree(n)
+    graph = binary_tree(k)
+
+    A = adjacency_matrix(graph)
+
+    return A, makeG(A)
+end

@@ -4,7 +4,7 @@ Initialize a model for a given A and G matrix.
 Optionally give an εpath
 """
 function initializemodel(
-    A::Matrix{Int64}, G::Matrix{Int64}, parameters::Dict; 
+    A, G, parameters::Dict; 
     εpath=nothing, seed=1148705)
 
     parameters = copy(parameters) # :(

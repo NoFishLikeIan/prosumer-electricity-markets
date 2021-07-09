@@ -1,3 +1,5 @@
+theme(:vibrant)
+
 """
 Plot the supply and the price in all markets
 """
@@ -57,7 +59,7 @@ function plotproviderbeliefs(dfagent, model; savepath=nothing)
 
         fig = plot(
             time, bs, 
-            title="Node $node", label="slope", color=:blue, legend=:topleft)
+            title="Node $node", label="slope", legend=:topleft)
             
         vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
 
@@ -80,12 +82,16 @@ function plotexcessdemand(dfagent, dfmodel; savepath=nothing)
     time =  Tₗ:Tᵤ
     X = hcat(dfmodel.X...)'
 
+    ∑X = positive.(sum(X, dims=2))
+
     figure = plot(title="Excess demand", xlabel="time", ylabel="X")
 
     for (i, node) in enumerate(modelnodes)
-        plot!(time, X[:, i], label="X$node (t)")
+        plot!(figure, time, X[:, i], label="X$node (t)")
     end
     
+    bar!(figure, time, ∑X, label="∑X > 0", legend=:bottomright, alpha=.5, linecolor=:match)
+
     if !isnothing(savepath)
         savefig(figure, savepath)
     else
@@ -96,19 +102,10 @@ end
 computenodesize(N) = 1 / (3 * sqrt(N))
 
 function plotpricevariance(dfagent, model; savepath=nothing)
-    g = model.space.graph   
-
-    markets = vertices(g)
-    N = length(markets)
-
-    pricevariance = Float64[]
-
-    for node in markets
-    _, dfprov, _ = getnodedata(dfagent, node)
-        σₚ = std(dfprov.p)
-
-        push!(pricevariance, σₚ)
-    end
+    g = model.space.graph  
+    N = length(g)
+    
+    pricevariance = getpricevariance(dfagent, model)
     
     nodelabel = [
         "σₚ($i) = $( @sprintf "%.0f" σ )" for (i, σ) in enumerate(pricevariance)]

@@ -6,9 +6,9 @@ plotpath = "../plots/"
 Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
 default(size=(1000, 800), margin=5Plots.mm) # Plotting defaults
 
-T = 100
-Tε = 10:20
-nodes = 5
+T = 200
+Tε = 20:30
+nodes = 7
 lowε, highε = last(default_params[:ε])
 εshock = lowε * ones(T, nodes)
 
@@ -16,7 +16,7 @@ lowε, highε = last(default_params[:ε])
 εshockone[Tε, 1] .= highε
 
 εshockfour = copy(εshock)
-εshockfour[Tε, 3] .= highε
+εshockfour[Tε, 4] .= highε
 
 εshockonepermanent = copy(εshock)
 εshockonepermanent[10:end, 3] .= highε
@@ -31,6 +31,7 @@ shocks = Dict(
 
 As, Gs = makestar(nodes)
 Al, Gl = makeline(nodes)
+
 
 for (shockname, shockmatrices) in shocks
     
@@ -49,6 +50,11 @@ for (shockname, shockmatrices) in shocks
         Al, Gl, Tₛ; εpath=εg, 
         plotpath=joinpath(plotpath, shockname, "line")
     )
+
+    results[shockname] = Dict(
+        "star" => (dfagentstar, dfmodelstar, modelstar),
+        "line" => (dfagentline, dfmodelline, modelline)
+    ) 
     
 end
 

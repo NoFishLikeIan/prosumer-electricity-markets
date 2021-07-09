@@ -1,3 +1,9 @@
+isinfinite(a) = !isfinite(a)
+
+function isdegenerate(PY)
+    any(isinfinite.(PY)) || all(PY .== 0)
+end
+
 function getbargsolution(g::SimpleGraph, G::Matrix{Int64}, Xs::Vector{Float64}, ps::Vector{Float64})
 
     E = map(edgetotuple, edges(g))
@@ -9,7 +15,7 @@ function getbargsolution(g::SimpleGraph, G::Matrix{Int64}, Xs::Vector{Float64}, 
     PYmap = Dict(E .=> PY)
     Y = Dict(e => 0.0 for e in E)
 
-    if all(values(PYmap) .== 0)
+    if isdegenerate(PY)
         return Y, copy(Y)
     end
     
@@ -47,6 +53,10 @@ function computebargaining(model)
     g = model.space.graph
 
     Y, P = getbargsolution(g, model.G, Xs, ps)
+
+    if any(isnan.(values(P)))
+        println(model.step)
+    end
 
     return Y, P
     
