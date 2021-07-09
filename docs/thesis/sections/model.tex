@@ -23,7 +23,7 @@ Prosumers are endowed an electricity quantity from renewable energy and have a c
 
 \subsection{Producers}
 
-Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost and with a one period delay. This electricity is sold on the local market at a price $p$ given by electricity providers and costs $k$ to maintain. Furthermore, they are naive about the price formation mechanism and assume prices to be constant, $p_{t+1} \cong p_{t}$,  hence indipendent of their production decisions. Let $s$ be the electricity production and $c(s, r)$ the cost of ramping up or turning down production next period by $r$. I assume only a portion $\gamma$ of the electricity production can be freely reduced each period. This setup leads to the following optimization problem.
+Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost and with a one period delay. This electricity is sold on the local market at a price $p$ given by electricity providers and costs $k$ to maintain. Furthermore, they are naive about the price formation mechanism and assume prices to be constant, $\E\left[p_{t+1}\right] = p_{t}$,  hence independent of their production decisions. Let $s$ be the electricity production and $c(s, r)$ the cost of ramping up or turning down production next period by $r$. I assume only a portion $\gamma$ of the electricity production can be freely reduced each period. This setup leads to the following optimization problem.
 
 \begin{equation} \label{bellman_prod}
     \begin{split}
@@ -71,7 +71,7 @@ The left hand side ($mc$) is the marginal cost today of ramping up production to
 
 \fi
 
-Clearly, the ramp-up policy function will depend entirely on the choice of the marginal cost function, $c(s, r)$. Intuitevely ramping down should have no costs, namely $c(s, r) = 0$ if $r < 0$, and should have increasing marginal costs both in scale of supply, $\partial c / \partial s > 0$, and in ramp-up level, $\partial c / \partial r > 0$. A differentiable function with (asymptotically) this feature is the sofplus function, sketched for some state $s = 10$ in Figure \ref{fig:costs},
+Clearly, the ramp-up policy function will depend entirely on the choice of the marginal cost function, $c(s, r)$. Intuitively ramping down should have no costs, namely $c(s, r) = 0$ if $r < 0$, and should have increasing marginal costs both in scale of supply, $\partial c / \partial s > 0$, and in ramp-up level, $\partial c / \partial r > 0$. A differentiable function with (asymptotically) this feature is the sofplus function, sketched for some state $s = 10$ in Figure \ref{fig:costs},
 
 \begin{equation}
     c(s, r; c_1) \coloneqq \frac{1}{c_1} \cdot \log \left( 1 + \exp(c_1 \cdot s \cdot r) \right)
@@ -177,9 +177,7 @@ is a vector of traded quantities with the provider's neighbors. Expanding the pr
     \end{split}
 \end{equation}
 
-The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. For now, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$. The provider's optimization is an intertemporal problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, at time $t$, it assumes $M \cdot (\E[e_{t+1}] - e_{t}) \cong 0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. if $\matr{\pi}_e \approx \matr{I}$). Second, I assume the provider does not know the ramp-up function of producers in the local market, $r(s_t, p_t)$, hence they approximate the aggregate ramp-up function by a linear adaptive rule, proportional to the price, namely $R_t(p) \cong a_t + b_t \cdot p$ with $a < 0$ and $b > 0$.
-
-Given this setup we can specify the optimization problem of the provider. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$), the Bellman equation can be written as,
+The condition $X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}$ requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. Note that this implies that electricity across the network flows always towards places of scarcity but in doing so it disrupts the pricing across the network. In this way, electricity prices signal both scarcity and bargaining power within the network. The provider's optimization is then an intertemporal problem that depends on the state $X_t$ which follows the evolution layed down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, at time $t$, it assumes $\E\left[M \cdot (\E[e_{t+1}] - e_{t}) \right] = 0$. This assumption is a good approximation in the case of a very persistent Markov chain $e_t$ (i.e. if $\matr{\pi}_e \approx \matr{I}$). Second, I assume the provider does not know the ramp-up function of producers in the local market, $r(s_t, p_t)$, hence they approximate the aggregate ramp-up function by a linear adaptive rule, proportional to the price, namely $\E\left[R_t(p) \right] = a_t + b_t \cdot p$ with $a < 0$ and $b > 0$. For now, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$. Given this setup we can specify the optimization problem of the provider. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$), the Bellman equation can be written as,
 
 \begin{equation*}
     \begin{split}
@@ -194,7 +192,7 @@ Optimization with respect to the price $p_t$, requires,
     X = \beta \cdot V^\prime \left(X - \left( a_t + b_t \cdot p_t \right) \right) \cdot b_t
 \end{equation}
 
-This first order condition requires that the marginal benefit of exploting current excess demand $X$ should equal the perceived marginal benefit loss ($\beta \cdot V^\prime \left(X - \left( a_t + b_t \cdot p_t \right) \right)$) of reducing excess demand next period ($b_t$). On the other hand, the derivative with respect to an arbitrary traded quantity $Y^j_t$,
+This first order condition requires that the marginal benefit of exploiting current excess demand $X$ should equal the perceived marginal benefit loss ($\beta \cdot V^\prime \left(X - \left( a_t + b_t \cdot p_t \right) \right)$) of reducing excess demand next period ($b_t$). On the other hand, the derivative with respect to an arbitrary traded quantity $Y^j_t$,
 
 \begin{equation}
     \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y_t^j \cdot P_t^j(\Y_t))}{\partial Y_t^m} = -\lambda_t,
@@ -333,7 +331,7 @@ This can be also seen by looking at the two $\det(2 \matr{I} + \matr{G})$,
     \end{pmatrix} = 0.
 \end{equation*}
 
-Because of this limitation, here I will limit the analysis to acyclical (or complete) graphs. Extending this model to cyclical graphs simply requires defining a more general once differentiable function $P: \R^{\abs{E}} \mapsto \R^{\abs{E}}$ that models the bargaining procedure.
+Because of this limitation, here I will limit the analysis to acyclic (or complete) graphs. Extending this model to cyclical graphs simply requires defining a more general once differentiable function $P: \R^{\abs{E}} \mapsto \R^{\abs{E}}$ that models the bargaining procedure.
 
 Now we can use Equations (\ref{Pmatrix}) and (\ref{Pjacobian}), combined with the local optimization, to obtain an explicit expression of the shadow price of the bargaining procedure, $\lambda_t$. Using the fact that $D_{\Y} P(\Y_t)_{e_1, e_2} = 0$ if $e_1 \neq e_2$ and $D_{\Y} P(\Y_t)_{i, j} = \pm 1$ (i.e. no direct dependence between $P^{(i, j)}$ and $P^{(l, m)}$ for $(i, j) \neq (l, m)$), the shadow price of the bargaining procedure (Equation \ref{lambda}) can be written as,
 
@@ -345,7 +343,7 @@ Now we can use Equations (\ref{Pmatrix}) and (\ref{Pjacobian}), combined with th
     \end{split}
 \end{equation}
 
-Note that $\lambda_t$ needs to be the same for every neighbour, such that, for two neighbours $m$ and $n$,
+Note that $\lambda_t$ needs to be the same for every neighbor, such that, for two neighbors $m$ and $n$,
 
 \begin{equation}
     \begin{split}
@@ -365,14 +363,14 @@ Having derived the budget constraint on the bargained quantity, we can rewrite E
     p_{t+1} = p_t + \frac{a_t}{b_t} + \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{b_t} + 2P^m(\matr{Y}_{t})
 \end{equation}
 
-First, this equation enstablishes a clear relationship between $X_t$ and $p_{t+1}$. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality $X_t > 0$. If the cost of acquiring electricity from abroad, $P^m(\matr{Y}_{t})$, increases the producer will increase the price in the local market, $p_{t+1}$, in order to increase local production. Hence this expression gives a clear mechanism of the trasmission between prices in the cross-border market and the regional wholesale market.
+First, this equation establishes a clear relationship between $X_t$ and $p_{t+1}$. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality $X_t > 0$. If the cost of acquiring electricity from abroad, $P^m(\matr{Y}_{t})$, increases the producer will increase the price in the local market, $p_{t+1}$, in order to increase local production. Hence this expression gives a clear mechanism of the transmission between prices in the cross-border market and the regional wholesale market.
 
 \subsubsection{Belief update}
 
 Providers approximate the ramp-up production function of the local producers using a linear rule,
 
 \begin{equation}
-    R_{t+1}(p_t) \cong a_t + b_t \cdot p_t
+    \E\left[R_{t+1}(p_t) \right] = a_t + b_t \cdot p_t
 \end{equation}
 
 I assume that each period providers observe the realization $R_{t+1}(p_t)$ and pick the coefficients $a_{t+1}$ and $b_{t+1}$ via weighted least squares, more precisely
