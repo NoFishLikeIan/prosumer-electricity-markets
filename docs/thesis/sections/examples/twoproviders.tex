@@ -1,6 +1,4 @@
-\subsection{Two providers}
-
-Consider now the case of two providers drawn below.
+Consider first the case of two providers drawn below.
 
 \vspace{5mm}
 \begin{minipage}{.5\textwidth}
@@ -8,21 +6,26 @@ Consider now the case of two providers drawn below.
 \end{minipage}
 \begin{minipage}{.45\textwidth}
     \begin{equation*}
-        \matr{A} = \begin{pmatrix}
-            0 & 1 \\
-            1 & 0
-        \end{pmatrix}
+        \begin{split}
+            \matr{A} &= \begin{pmatrix}
+                0 & 1 \\
+                1 & 0
+            \end{pmatrix} \\
+            \matr{G} &= \begin{pmatrix}
+                0
+            \end{pmatrix}
+        \end{split}
     \end{equation*}
 \end{minipage}
 \vspace{5mm}
 
-Using equation the bargaining solution we obtain the trading price,
+Using the bargaining solution, equation (\ref{bargaining_solution}), we obtain the trading price,
 
 \begin{equation}
     P^{(1, 2)}_t = \frac{X_{1, t} \cdot p_{1, t} - X_{2, t} \cdot p_{2, t}}{2 Y^{(1, 2)}_t}
 \end{equation}
 
-If the constraint is satisfied, $X_{1, t} = - X_{2, t} = Y^{(1, 2)}_t$, hence,
+Satisfaction of the constraint requires that, $X_{1, t} = - X_{2, t} = Y^{(1, 2)}_t$, hence,
 
 \begin{equation}
     \begin{split}
@@ -31,7 +34,7 @@ If the constraint is satisfied, $X_{1, t} = - X_{2, t} = Y^{(1, 2)}_t$, hence,
     \end{split}
 \end{equation}
 
-Using this in the policy function of one,
+Using this in the policy function of one we obtain,
 
 \begin{equation*}
     \begin{split}

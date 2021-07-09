@@ -4,7 +4,6 @@ minimum size=10pt]
 
 \tikzstyle{agent} = [
 draw, circle,
-fill=yellow,
 minimum size=10pt]
 
 \begin{tikzpicture}[-{Latex[scale=1]}, thick]

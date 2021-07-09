@@ -64,7 +64,7 @@
     ]{biblatex}
 
     \bibliography{
-        ../../../Desktop/bibliographies/thesis,
+        ../../../../Desktop/bibliographies/thesis,
         ../maths}
         
     \newcommand{\citein}[1]{\citeauthor{#1} (\citeyear{#1})}
@@ -82,23 +82,22 @@
 
 \newpage
 
-\iffalse \subfile{sections/introduction.tex} \fi
+\subfile{sections/introduction.tex}
 
 \subfile{sections/model.tex}
 
 \subfile{sections/contagion.tex}
 
-\iffalse
-    \subfile{sections/results.tex}
-    \subfile{sections/examples.tex}
+
+\subfile{sections/results.tex}
 
 
-    % \newpage
-    % \nocite{*}
-    \printbibliography
-    \pagenumbering{gobble} % stop page numbering
-    \newpage \appendix \subfile{sections/appendix.tex}
-\fi
+% \newpage
+% \nocite{*}
+\printbibliography
+\pagenumbering{gobble} % stop page numbering
+\newpage \appendix \subfile{sections/appendix.tex}
+
 
 
 \end{document}
