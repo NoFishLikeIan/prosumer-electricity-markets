@@ -133,6 +133,7 @@ function plotprofit(dfagent, model; savepath=nothing)
     g = model.space.graph
 
     nodelabel = unique(dfagent.pos)
+    N = length(nodelabel)
     
     profit = sum(reshape(model.profit, length(nodelabel), :), dims=2) |> vec
 

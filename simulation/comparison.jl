@@ -7,21 +7,26 @@ Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
 default(size=(1000, 800), margin=5Plots.mm) # Plotting defaults
 
 T = 100
-nodes = 7
+Tε = 10:20
+nodes = 5
 lowε, highε = last(default_params[:ε])
 εshock = lowε * ones(T, nodes)
 
 εshockone = copy(εshock)
-εshockone[10:13, 1] .= highε
+εshockone[Tε, 1] .= highε
 
-εshockthree = copy(εshock)
-εshockthree[10:13, 3] .= highε
+εshockfour = copy(εshock)
+εshockfour[Tε, 3] .= highε
+
+εshockonepermanent = copy(εshock)
+εshockonepermanent[10:end, 3] .= highε
 
 shocks = Dict(
     "constant" => (εshock, εshock),
-    "peripherical" => (εshockthree, εshockone),
-    "central" => (εshockone, εshockthree),
-    "random" => (nothing, nothing)
+    "peripherical" => (εshockfour, εshockone),
+    "central" => (εshockone, εshockfour),
+    "random" => (nothing, nothing),
+    "permanent" => (εshockonepermanent, εshockonepermanent)
 )
 
 As, Gs = makestar(nodes)
