@@ -6,7 +6,7 @@ minimum size=10pt]
 draw, circle,
 minimum size=10pt]
 
-\begin{tikzpicture}[-{Latex[scale=1]}, thick]
+\begin{tikzpicture}[-, thick]
 
     \node [agent] (one) {Prov. $1$};
     \node [agent, left = 3cm of one] (two) {Prov. $2$};
