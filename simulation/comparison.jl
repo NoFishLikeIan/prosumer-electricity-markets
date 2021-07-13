@@ -3,8 +3,6 @@ include("simulate.jl")
 
 plotpath = "../plots/"
 
-Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
-default(size=(1000, 800), margin=5Plots.mm) # Plotting defaults
 
 T = 200
 Tε = 20:30
@@ -32,6 +30,7 @@ shocks = Dict(
 As, Gs = makestar(nodes)
 Al, Gl = makeline(nodes)
 
+results = Dict()
 
 for (shockname, shockmatrices) in shocks
     
@@ -43,7 +42,8 @@ for (shockname, shockmatrices) in shocks
 
     dfagentstar, dfmodelstar, modelstar = plotfromsteadystate(
         As, Gs, Tₛ; εpath=εs, 
-        plotpath=joinpath(plotpath, shockname, "star")
+        plotpath=joinpath(plotpath, shockname, "star"),
+        nodestoplot=[1, 4]
     )
 
     dfagentline, dfmodelline, modelline = plotfromsteadystate(
@@ -58,5 +58,4 @@ for (shockname, shockmatrices) in shocks
     
 end
 
-Plots.resetfontsizes()
 println("Done!")

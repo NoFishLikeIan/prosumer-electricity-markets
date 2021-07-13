@@ -53,14 +53,20 @@ function simulatefromsteady!(model;
 
 end
 
-function plotfromsteadystate(A, G, T; parameters=default_params, εpath=nothing, plotpath=nothing)
+function plotfromsteadystate(
+    A, G, T; 
+    parameters=default_params, 
+    εpath=nothing, 
+    plotpath=nothing,
+    nodestoplot=Int64[]
+)
 
     model = initializemodel(A, G, parameters; εpath=εpath)
     dfagent, dfmodel = simulatemarket!(model; T=T)
 
     if !isnothing(plotpath)
 
-        pricesupplyplot(dfagent, model; savepath=joinpath(plotpath, "pricesupply.pdf"))
+        pricesupplyplot(dfagent, model; savepath=joinpath(plotpath, "pricesupply.pdf"), nodestoplot=nodestoplot)
 
         plotproviderbeliefs(dfagent, model; savepath=joinpath(plotpath, "ols.pdf"))
 

@@ -23,10 +23,10 @@ end
 """
 Pass a function that takes the nodedata and time and returns a figure
 """
-function plotnodes(dfagent, fn; maxnode=9)
+function plotnodes(dfagent, fn; nodestoplot=Int64[])
     nodes = unique(dfagent[!, :pos])
 
-    nodes = length(nodes) > maxnode ? nodes[1:maxnode] : nodes
+    nodes = isempty(nodestoplot) ? nodes : nodes[nodestoplot]
 
     Tₗ, Tᵤ = extrema(dfagent[!, :step])
     time = Tₗ:Tᵤ
@@ -38,14 +38,14 @@ function plotnodes(dfagent, fn; maxnode=9)
 
     return allfigures
 end
-
+    
 function isconstant(arr)
 	notequal = findfirst(x -> x != arr[1], arr)
 	
 	return isnothing(notequal) ? true : false
 end
 
-function rescaleto(arr, from, to)
+    function rescaleto(arr, from, to)
     if isconstant(arr) return ones(length(arr)) * to end
     
     l, u = extrema(arr)
@@ -64,7 +64,7 @@ palette = Dict(
     :orange   => [0.843137, 0.521569, 0.129412],
     :blue     => [0.615686274509804, 0.7294117647058823, 1.0]
 )
-
+    
 function makecolor(colorsymbol)
     r, g, b = palette[colorsymbol]
     colorfn(α=1.) = RGBA(r, g, b, α)

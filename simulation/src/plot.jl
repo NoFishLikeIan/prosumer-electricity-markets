@@ -1,15 +1,17 @@
+# Defaults
 theme(:vibrant)
+default(size=(800, 600), dpi=300, margin=margin = 5Plots.mm)
+Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
+
 
 """
 Plot the supply and the price in all markets
 """
-function pricesupplyplot(dfagent, model; savepath=nothing)
+function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
 
     pmax = maximum(filter(!ismissing, dfagent.p))
 
-    jointfigure = plotnodes(
-        dfagent,
-        (timeaxis, nodedata) -> begin
+    singleplot = (timeaxis, nodedata) -> begin
         dfpros, dfprov, dfprod = nodedata
         node = dfpros[1, :pos]
             
@@ -22,28 +24,30 @@ function pricesupplyplot(dfagent, model; savepath=nothing)
 
         fig = plot(
             timeaxis, pricet, 
-            title="Node $node", label="price", color=:blue, 
-            ylims=(0, pmax), ylabel="p", legend=:topleft)
+            title="Node $node", label="price", 
+            color=:blue, ylims=(0, pmax),
+            legend=:bottomright)
                     
         for (startp, endp) in εperiods
             vspan!(fig, [startp, endp], color=:red, alpha=0.3, label=nothing)
         end
 
         fig = bar!(
-            twinx(fig), timeaxis, supply, ylabel="supply", alpha=0.2,
-            ylims=(0, Inf), label="s", color=:green, legend=:topright)
+            twinx(fig), timeaxis, supply, alpha=0.2,
+            ylims=(0, Inf), 
+            label="supply", color=:green, 
+            legend=:topright)
             
         return fig
-
-    end)
-
-    if !isnothing(savepath)
-        savefig(jointfigure, savepath)
-    else
-        return jointfigure
     end
 
-    end
+    jointfigure = plotnodes(dfagent, singleplot; nodestoplot=nodestoplot)
+
+    if !isnothing(savepath) savefig(jointfigure, savepath) end
+    
+    return jointfigure
+
+end
 
 
 function plotproviderbeliefs(dfagent, model; savepath=nothing)
@@ -52,9 +56,9 @@ function plotproviderbeliefs(dfagent, model; savepath=nothing)
         (time, nodedata) -> begin
         dfpros, dfprov, dfprod = nodedata
         node = dfpros[1, :pos]
-            
+        
         εperiods = highdemandperiods(dfpros, model)
-
+            
         as, bs = eachcol(dfprov[!, [:a, :b]])
 
         fig = plot(
@@ -79,7 +83,7 @@ end
 function plotexcessdemand(dfagent, dfmodel; savepath=nothing)
     modelnodes = unique(dfagent.pos)
     Tₗ, Tᵤ = extrema(dfmodel.step)
-    time =  Tₗ:Tᵤ
+        time =  Tₗ:Tᵤ
     X = hcat(dfmodel.X...)'
 
     ∑X = positive.(sum(X, dims=2))
@@ -106,7 +110,7 @@ function plotpricevariance(dfagent, model; savepath=nothing)
     N = length(g)
     
     pricevariance = getpricevariance(dfagent, model)
-    
+        
     nodelabel = [
         "σₚ($i) = $( @sprintf "%.0f" σ )" for (i, σ) in enumerate(pricevariance)]
         
@@ -115,7 +119,7 @@ function plotpricevariance(dfagent, model; savepath=nothing)
     nodefillc = map(makecolor(:blue), alphas)
 
     context = gplot(
-        g, nodefillc=nodefillc, 
+    g, nodefillc=nodefillc, 
         nodelabel=nodelabel,
         NODESIZE=computenodesize(N),
         layout=circular_layout)
@@ -128,7 +132,7 @@ end
 
 function plotprofit(dfagent, model; savepath=nothing)
     g = model.space.graph
-
+    
     nodelabel = unique(dfagent.pos)
     N = length(nodelabel)
     
@@ -151,6 +155,7 @@ function plotprofit(dfagent, model; savepath=nothing)
     
     if !isnothing(savepath) draw(PDF(savepath, 32cm, 32cm), context) end
 
+    return context
 
 end
 
