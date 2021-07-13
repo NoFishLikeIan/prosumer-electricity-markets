@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.21
+# v0.14.8
 
 using Markdown
 using InteractiveUtils
@@ -19,7 +19,7 @@ begin
 end
 
 # ╔═╡ 805018be-7695-45ae-a671-2f8d8cc4a858
-plotpath = "../plots/energy"
+plotpath = "../plots"
 
 # ╔═╡ 4412cc25-bb76-4453-9727-5cf097a883e1
 begin
@@ -154,7 +154,7 @@ begin
 	
 	rfigure = heatmap(
 		supplyspace, pricespace, 
-		(s, p) -> r(s, p), clim = clims, c=:RdYlGn_5,
+		(s, p) -> r(s, p), clim = clims, c=:imola,
 		title = latexstring("\$ r(s_t, p_t) \$"),
 		xlabel = "current supply", ylabel = "price")
 	

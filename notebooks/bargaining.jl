@@ -30,10 +30,16 @@ function bargainingpower(G::Matrix{Int64})
 	inv(2I + G)
 end
 
+# ╔═╡ 3f410a8b-dcf9-49a7-929c-439bfac55bc3
+function computenodesize(N)
+	3 / sqrt(N)
+end
+
 # ╔═╡ a2bdeb45-76e2-49d5-9c02-fe36331c0add
 function plotG(A)
 	
 	G = makeG(A)
+	N = length(G) 
 	
 	graph = SimpleWeightedDiGraph(G)
 	
@@ -44,6 +50,7 @@ function plotG(A)
 	
 	gplot(
 		graph, layout = circular_layout, 
+		NODESIZE = computenodesize(N),
 		nodelabel = map(edgetotuple,edges(SimpleGraph(A))),
 		nodefillc = red(), edgestrokec = edgecolor)
 	
@@ -110,7 +117,7 @@ md"""
 # ╔═╡ 7924086f-7acd-44c3-bcb7-e73456d50a97
 begin
 	Aₛ, Gₛ = makestar(n)
-	nodepower = plotpower(Aₛ, Gₛ; savepath = joinpath(plotpath, "star.pdf"), layout=spring_layout)
+	plotpower(Aₛ, Gₛ; savepath = joinpath(plotpath, "star.pdf"), layout=spring_layout)
 end
 
 # ╔═╡ bd1db161-7ea1-4cbf-9131-a8d325623e93
@@ -192,6 +199,7 @@ det(2I + Gcycle)
 # ╠═00bbdf8f-5a3e-4a68-851d-ce91972abf2d
 # ╠═18a5cfee-649c-4225-a37d-07a863850d2e
 # ╠═83082736-dbda-11eb-3baa-ef1dc6d139fc
+# ╠═3f410a8b-dcf9-49a7-929c-439bfac55bc3
 # ╠═a2bdeb45-76e2-49d5-9c02-fe36331c0add
 # ╠═d24b87fe-f297-4529-85d0-60cd6b81fe74
 # ╟─1940905a-68af-4aa0-b4c4-3e413df7130f
