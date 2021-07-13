@@ -26,7 +26,7 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
             timeaxis, pricet, 
             title="Node $node", label="price", 
             color=:blue, ylims=(0, pmax),
-            legend=:bottomright)
+            legend=:topright)
                     
         for (startp, endp) in εperiods
             vspan!(fig, [startp, endp], color=:red, alpha=0.3, label=nothing)
@@ -36,7 +36,7 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
             twinx(fig), timeaxis, supply, alpha=0.2,
             ylims=(0, Inf), 
             label="supply", color=:green, 
-            legend=:topright)
+            legend=:right)
             
         return fig
     end
