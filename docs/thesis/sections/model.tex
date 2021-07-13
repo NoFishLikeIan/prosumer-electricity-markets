@@ -1,7 +1,7 @@
 \documentclass[../thesis.tex]{subfiles}
 \section{Model}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \input{sections/diagrams/timing.tikz}
     \caption{Regional wholesale electricity market}
@@ -57,7 +57,7 @@ The left hand side ($mc$) is the marginal cost today of ramping up production to
         r(s_t, p_t) = \frac{\beta}{2 (1 - \beta)}  \left(p_t - k \right)
     \end{equation}
 
-    \begin{figure}[!ht]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=\textwidth]{\plotpath/quadcosts.pdf}
         \caption{Quadratic cost function and an instance of solution}
@@ -72,7 +72,7 @@ Clearly, the ramp-up policy function will depend entirely on the choice of the m
     c(s, r; c_1) \coloneqq \frac{1}{c_1} \cdot \log \left( 1 + \exp(c_1 \cdot s \cdot r) \right)
 \end{equation}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{\plotpath/cost.pdf}
     \caption{Softplus cost function}
@@ -88,7 +88,7 @@ Notice that $c(s, r; c_1) \xrightarrow{} \max \{ 0, s \cdot r \}$ as $c_1 \xrigh
 
 The equation has a few intuitive properties. First of all, there is no ramp-up if there is no unit profit, that is $r(s_t, p_t) = 0$ if $p_t - k = 0$. Second, ramp-up increases in $s_t$ and decreases in $p_t$. The function is plotted in Figure $\ref{fig:r}$.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{\plotpath/rfunction.pdf}
     \caption{Ramp-up function with softplus costs}
@@ -126,7 +126,7 @@ Note that if $S_t > M \cdot e_t$, there is an excess supply ($X_t < 0$) of elect
 
 \subsection{Providers}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \input{sections/diagrams/overview.tikz}
     \caption{An instance of the cross-border electricity market}
@@ -237,7 +237,7 @@ which yields (see \ref{a:barsol}), for every edge $(i, j)$ with $a_{i, j} \neq 0
 
 In the bargaining problem we have a set of directed edges $E = \set{i \to j: i, j \in N}$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. One can therefore simplify the solution by using the directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, giving a positive sign to the edge if the ``outside option'' is that of the first entry and negative if is that of the second entry (e.g. in our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $(2, 7)$ is the outside option of $2$ which is the second entry in $(1, 2)$). For example, consider an arbitrary long sequential graph,
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \input{sections/diagrams/linemodel.tikz}
 \end{figure}
@@ -270,7 +270,7 @@ Now to construct the corresponding line graph consider the line graph node $(i, 
     \end{pmatrix}
 \end{equation}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \input{sections/diagrams/linemodel.tikz}
 \end{figure}
@@ -307,7 +307,7 @@ with associated Jacobian (see \ref{a:jacobian_p}),
 
 Equation (\ref{Pmatrix}) shows that the trading prices on an edge, $P^{(i, j)}$, depends only on the state of the edges' two nodes, via $Y^{(i, j)}_t$, the revenue differences across the networks, via $\Delta_t$, and the network structure. This function also highlights a pitfall of the Nash bargaining procedure on networks. In particular, if the graph $\mathcal{A}$ contains a cycle, the matrix $(2\I + \G)^{-1}$ is singular, given that the number of equations at our disposable to determine $P(\Y_t)$ is not sufficient. To see this consider the simple case of adding an extra edge in the graph below (left to right). On the right graph we demand a further unknown, $P^{(2, 3)}$, but we do not provider further equations.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
     \centering
     \resizebox{\linewidth}{!}{\input{sections/diagrams/cycleissue.tikz}}
 \end{figure}
