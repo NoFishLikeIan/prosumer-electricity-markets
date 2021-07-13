@@ -34,7 +34,7 @@ Satisfaction of the constraint requires that, $X_{1, t} = - X_{2, t} = Y^{(1, 2)
     \end{split}
 \end{equation}
 
-Equation (\ref{two:P}) tells us that the influence of each node on the traded price is simply $1 / 2$. Note that in this is consistent with our
+Equation (\ref{two:P}) tells us that the influence of each node on the traded price is simply $1 / 2$. Note that in this is consistent with the influence matrix,
 
 \begin{equation}
     (2 \I_{1} + \G)^{-1} = \left( 2 \begin{pmatrix} 1 \end{pmatrix} + \begin{pmatrix} 0 \end{pmatrix} \right)^{-1} = \frac{1}{2}
@@ -49,20 +49,49 @@ Using this in the policy function of one we obtain,
     \end{split}
 \end{equation*}
 
-\iffalse
-    \begin{figure}[H]
-        \begin{subfigure}{0.48\textwidth}
-            \centering
-            \includegraphics[width = \textwidth]{\plotpath/two/pricesupply.pdf}
-            \caption{Price and supply in each node}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}{0.48\textwidth}
-            \centering
-            \includegraphics[width = \textwidth]{\plotpath/two/demand.pdf}
-            \caption{Excess demand, $X_{1, t}$ and $X_{2, t}$, and supply shortage, $X_{1, t} + X_{2, t}$.}
-        \end{subfigure}
-        \caption{A demand shock with two providers} \label{fig:two}
-    \end{figure}
+and, by the same procedure, the policy function of two,
 
-\fi
+\begin{equation*}
+    p_{2, t+1} = 2 p_{2, t} +  p_{1, t} + \frac{a_{2, t}}{b_{2, t}} + \frac{1 - \beta}{\beta} \frac{X_{2, t}}{b_{2, t}}
+\end{equation*}
+
+Stacking vertically we obtain,
+
+\begin{equation}
+    p_{t+1} = \begin{pmatrix}
+        2  & 1 \\
+        -1 & 0
+    \end{pmatrix} p_t + a_t \oslash b_t + \frac{1 - \beta}{\beta} \left( X_t \oslash b_t \right)
+\end{equation}
+
+This equation determines the coevolution of the two prices. Consider the case in which there is no excess demand $X_{1, t} = X_{2, t} = 0$ and prices are constant, at levels $\bar{p}$. Then the coevolution equations yields,
+
+\begin{equation} \label{two:const}
+    \bar{p} =
+\end{equation}
+
+Hence, prices are constant and no trade happens as long as the beliefs of the two providers are the same. Note that this is true in a completely symmetric case. Starting from this, consider a positive shock in the excess demand in node two at time $\tau$ ($X_{2, \tau}$ increases due to an increase in $e_{2, \tau}$). Then, using the condition (\ref{two:const}),
+
+\begin{equation}
+    \begin{split}
+        p_{2, \tau + 1} &= p_2 + \frac{1 - \beta}{\beta} \cdot \frac{X_{2, \tau}}{b} \\
+        p_{1, \tau + 1} &= p_1
+    \end{split}
+\end{equation}
+
+
+\begin{figure}[H]
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{\plotpath/two/pricesupply.pdf}
+        \caption{Price and supply in each node}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{\plotpath/two/demand.pdf}
+        \caption{Excess demand, $X_{1, t}$ and $X_{2, t}$, and supply shortage, $X_{1, t} + X_{2, t}$.}
+    \end{subfigure}
+    \caption{A demand shock with two providers} \label{fig:two}
+\end{figure}
+
