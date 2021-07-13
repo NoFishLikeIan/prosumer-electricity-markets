@@ -11,7 +11,7 @@ Consider first the case of two providers drawn below.
                 0 & 1 \\
                 1 & 0
             \end{pmatrix} \\
-            \matr{G} &= \begin{pmatrix}
+            \G &= \begin{pmatrix}
                 0
             \end{pmatrix}
         \end{split}
@@ -27,20 +27,42 @@ Using the bargaining solution, equation (\ref{bargaining_solution}), we obtain t
 
 Satisfaction of the constraint requires that, $X_{1, t} = - X_{2, t} = Y^{(1, 2)}_t$, hence,
 
-\begin{equation}
+\begin{equation} \label{two:P}
     \begin{split}
         P^{(1, 2)}_t &= \frac{Y^{(1, 2)}_t \cdot \left( p_{1, t} + p_{2, t} \right)}{2  Y^{(1, 2)}_t} \\
         &= \frac{p_{1, t} + p_{2, t}}{2}
     \end{split}
 \end{equation}
 
+Equation (\ref{two:P}) tells us that the influence of each node on the traded price is simply $1 / 2$. Note that in this particular case,
+
+\begin{equation}
+    (2 ) =
+\end{equation}
+
 Using this in the policy function of one we obtain,
 
 \begin{equation*}
     \begin{split}
-        p_{1, t+1} &= p_{1, t} + \frac{a_t}{b_t} + \frac{1 - \beta}{\beta} \frac{X_{1, t}}{b_t} + 2P^{(1, 2)} \\
-        &= 2p_{1, t} + p_{2, t} + \frac{a_t}{b_t} + \frac{1 - \beta}{\beta} \frac{X_{1, t}}{b_t}
+        p_{1, t+1} &= p_{1, t} + \frac{a_{1, t}}{b_{1, t}} + \frac{1 - \beta}{\beta} \frac{X_{1, t}}{b_{1, t}} + 2P^{(1, 2)} \\
+        &= 2p_{1, t} + p_{2, t} + \frac{a_{1, t}}{b_{1, t}} + \frac{1 - \beta}{\beta} \frac{X_{1, t}}{b_{1, t}}
     \end{split}
 \end{equation*}
 
-\textbf{TODO: Here it can be fully solved for simple cases}
+\iffalse
+    \begin{figure}[!ht]
+        \begin{subfigure}{0.48\textwidth}
+            \centering
+            \includegraphics[width = \textwidth]{\plotpath/two/pricesupply.pdf}
+            \caption{Price and supply in each node}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.48\textwidth}
+            \centering
+            \includegraphics[width = \textwidth]{\plotpath/two/demand.pdf}
+            \caption{Excess demand, $X_{1, t}$ and $X_{2, t}$, and supply shortage, $X_{1, t} + X_{2, t}$.}
+        \end{subfigure}
+        \caption{A demand shock with two providers} \label{fig:two}
+    \end{figure}
+
+\fi

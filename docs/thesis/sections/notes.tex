@@ -290,7 +290,7 @@ which yields, for every edge $(i, j)$ with $ a_{i, j} \neq 0$,
 
 % FIXME: This is the incidence matrix
 
-To write Equation (\ref{solution}) in matrix notation, I introduce the line graph associated with our original graph. This is useful because all the vectors of interest, $P, Y, \Delta X$, are vectors over edges rather than nodes. A line graph is the graph with adjacency matrix $\matr{G}(\matr{A}) \in \R^{\abs{E} \times \abs{E}}$ were the nodes are edges of the original graphs and edges are inner nodes of the original graph
+To write Equation (\ref{solution}) in matrix notation, I introduce the line graph associated with our original graph. This is useful because all the vectors of interest, $P, Y, \Delta X$, are vectors over edges rather than nodes. A line graph is the graph with adjacency matrix $\G(\matr{A}) \in \R^{\abs{E} \times \abs{E}}$ were the nodes are edges of the original graphs and edges are inner nodes of the original graph
 
 For example, consider the graph,
 
@@ -345,7 +345,7 @@ The corresponding line graph is,
 \end{minipage} \hfill
 \begin{minipage}{0.35\textwidth}
     \begin{equation*}
-        \matr{G}(\matr{A}) = \begin{pmatrix}
+        \G(\matr{A}) = \begin{pmatrix}
             0   & 1 & 1   & 0 \\
             - 1 & 0 & 0   & 0 \\
             - 1 & 0 & 0   & 1 \\
@@ -369,19 +369,19 @@ Equation (\ref{solution}) can be then written as,
 
 \begin{equation} \label{matrix_solution}
     \begin{split}
-        2(P \circ Y) &= \Delta X - \matr{G} \left( P \circ Y \right) \\
-        (2\matr{I} + \matr{G}) (P \circ Y) &= \Delta X \\
-        (P \circ Y) &= (2\matr{I} + \matr{G})^{-1} \Delta X \\
-        P &= (2\matr{I} + \matr{G})^{-1} (\Delta X \oslash Y)
+        2(P \circ Y) &= \Delta X - \G \left( P \circ Y \right) \\
+        (2\I + \G) (P \circ Y) &= \Delta X \\
+        (P \circ Y) &= (2\I + \G)^{-1} \Delta X \\
+        P &= (2\I + \G)^{-1} (\Delta X \oslash Y)
     \end{split}
 \end{equation}
 
-where $\circ$ and $\oslash$ denote the element-wise (Hadamard) product and division respectively. Using the Neumann expansion of $(2\matr{I} + \matr{G})^{-1}$ we obtain,
+where $\circ$ and $\oslash$ denote the element-wise (Hadamard) product and division respectively. Using the Neumann expansion of $(2\I + \G)^{-1}$ we obtain,
 
 % FIXME: see Appendix \ref{a:neumann}
 
 \begin{equation} \label{neumann_matrix_solution}
-    P = \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k (\Delta X \oslash Y)
+    P = \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \G^k (\Delta X \oslash Y)
 \end{equation}
 
 \subsubsection{Solution of the bargaining problem}
@@ -389,15 +389,15 @@ where $\circ$ and $\oslash$ denote the element-wise (Hadamard) product and divis
 Note that (\ref{neumann_matrix_solution}) defines the bargaining price as a function of the traded quantity $P(Y)$. Let $\partial P$ be the vector of derivatives $\partial P^{(i, j)} / \partial Y^{(i, j)}$ (i.e. the diagonal of the Jacobian, $J_P$).
 
 \begin{equation}
-    \partial P = - \diag\left(\sum^\infty_{i=0} \frac{(-1)^k}{2^{k+1}} \matr{G}^k\right) \Delta X \oslash Y^{\circ 2}
+    \partial P = - \diag\left(\sum^\infty_{i=0} \frac{(-1)^k}{2^{k+1}} \G^k\right) \Delta X \oslash Y^{\circ 2}
 \end{equation}
 
 We can use this in equation (\ref{firm_optimization}),
 
 \begin{equation} \label{foc_grid}
     \begin{split}
-        P + \partial P \circ Y &= \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k (\Delta X \oslash Y) - \diag\left(\sum^\infty_{i=0} \frac{(-1)^k}{2^{k+1}} \matr{G}^k\right) (\Delta X \oslash Y^{\circ 2}) \circ Y \\
-        &= \underbrace{\left[ \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k - \diag \left( \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \matr{G}^k \right) \right]}_{\matr{H(G)}} (\Delta X \oslash Y)
+        P + \partial P \circ Y &= \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \G^k (\Delta X \oslash Y) - \diag\left(\sum^\infty_{i=0} \frac{(-1)^k}{2^{k+1}} \G^k\right) (\Delta X \oslash Y^{\circ 2}) \circ Y \\
+        &= \underbrace{\left[ \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \G^k - \diag \left( \sum^{\infty}_{k=0}\frac{(-1)^k}{2^{k+1}} \G^k \right) \right]}_{\matr{H(G)}} (\Delta X \oslash Y)
     \end{split}
 \end{equation}
 
@@ -407,5 +407,5 @@ The matrix $\matr{H(G)}$ is an hollow matrix by construction (i.e. $\matr{H(G)}_
 
 \subsubsection{To do}
 
-Find a way to link equation $P + \partial P \circ Y$ with the optimization problem of the grid firm. It seems like $(P + \partial P \circ Y)_j = p + \frac{X}{\partial X / \partial p}$ for all $j$ does not allow for much of a solution. Furthermore, there is a nice economic interpretation for the equation for $P$ that has to do with the cycles of the matrix $\matr{G}$ (indirect effects of having an outside edge) which I have seen in some paper that I cannot find at the moment.
+Find a way to link equation $P + \partial P \circ Y$ with the optimization problem of the grid firm. It seems like $(P + \partial P \circ Y)_j = p + \frac{X}{\partial X / \partial p}$ for all $j$ does not allow for much of a solution. Furthermore, there is a nice economic interpretation for the equation for $P$ that has to do with the cycles of the matrix $\G$ (indirect effects of having an outside edge) which I have seen in some paper that I cannot find at the moment.
 
