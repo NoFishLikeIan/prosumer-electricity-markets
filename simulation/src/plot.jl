@@ -159,18 +159,29 @@ function plotprofit(dfagent, model; savepath=nothing)
 
 end
 
-function compareblackout(dfmodelstar, dfmodelline;  savepath=nothing)
-    Xstar = abs.(sum(hcat(dfmodelstar.X...)', dims=2))
-    Xline = abs.(sum(hcat(dfmodelline.X...)', dims=2))
+function compareblackout(excdemand; savepath=nothing)
+	blackoutlabel = latexstring("\$ \\sum_{i, t} X_{i, t}\$")
+    coherencelabel = latexstring("\$ \\rho\$")
+    figure = plot(xlabel=coherencelabel, ylabel=blackoutlabel)
+        
+    for (i, results) in enumerate(excdemand)
 
-    t = dfmodelstar.step
-    ΔX = Xstar - Xline
+        graphname, data = results
+        
+        color = Plots.palette(:tab10)[i]
 
-    figure = bar(t, ΔX, label="Star - Line")
+        presentrows = any((!isnan).(data), dims=2) |> vec
+
+        coherences, cumulativeblackout, σ = eachcol(data[presentrows, :])
+        
+        scatter!(
+            figure, coherences, cumulativeblackout;
+            ribbon=σ, markersize=2,
+            c=color, label=graphname)
+    end
         
     if !isnothing(savepath)
         savefig(figure, savepath)
-    else
-        return figure
     end
+    return figure
 end

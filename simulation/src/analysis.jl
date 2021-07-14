@@ -20,7 +20,9 @@ function nodepower(A, G)
 end
 
 function coherence(A, G)
-    nodepower(A, G) |> var
+    powers = nodepower(A, G)   
+    
+    return std(powers)
 end
 
 """
@@ -34,6 +36,8 @@ function ntokinbtree(n::Int64)::Int64
         throw(DomainError(k, "Value of k non integer"))
     end
 end
+
+isrepresentable(n) = log2(n + 1) |> isinteger
 
 
 """

@@ -2,24 +2,34 @@ include("src/main.jl")
 include("simulate.jl")
 
 resultspath = "simresults/data.jld"
-plotpath = "../plots/"
+plotpath = "../plots/blackouts"
 CACHE = true
 
 makegraphs = Dict(
     "star" => makestar,
     "line" => makeline,
-    # "binary" => makebinarytree
+    "binary" => makebinarytree
 )
 
+function makeshock(n, T, from, to, params::Dict) 
+    lowε, highε = last(params[:ε])
+    makeshock(n, T, from, to, lowε, highε)
+end
+function makeshock(n, T, from, to, ε::Float64, εₛ::Float64)
+    εpath = ε * ones(T + 1, n)
+    εpath[from:to, 1] .=  εₛ 
+
+    return εpath
+end
 
 """
-Computes coherences across binary tree, line, and star of sizes ns and gets average price variance with T and parameters
+Computes coherences across binary tree, line, and star of sizes ns and gets cumulative definicits with T and parameters
 """
-function simulatepricecoherence(ns, T, parameters)
+function simulatedemanddeficits(ns, T, parameters; T₀=50)
 
-    coherences = Dict(
+    simresults = Dict(
         keys(makegraphs) .=> [
-            zeros(length(ns), 2) for _ in 1:length(makegraphs)
+            zeros(length(ns), 3) for _ in 1:length(makegraphs)
         ]
     )
         
@@ -27,38 +37,45 @@ function simulatepricecoherence(ns, T, parameters)
         println("Simulation for $gname...")
         @threads for i in 1:length(ns)
             n = ns[i]
+
+            if !isrepresentable(n) && gname == "binary"
+                simresults[gname][i, :] = [NaN, NaN, NaN]
+                continue
+            end
+
+            εpath = makeshock(n, T, T₀, T₀ + 10, parameters)
+
             A, G = makeg(n) 
-            coherences[gname][i, 1] = coherence(A, G)
+            simresults[gname][i, 1] = coherence(A, G)
 
-            model = initializemodel(A, G, parameters)
-            dfagent, _ = simulatemarket!(model; T=T)
+            model = initializemodel(A, G, parameters; εpath=εpath)
+            _, dfmodel = simulatemarket!(model; T=T)
 
-            σₚ = getpricevariance(dfagent, model)
-            coherences[gname][i, 2] = maximum(σₚ)
+            X = hcat(dfmodel.X...)'[T₀:end, :]
+            ∑X = positive.(sum(X, dims=2))
 
+            simresults[gname][i, 2] = mean(∑X)
+            simresults[gname][i, 3] = std(∑X)
         end
     end
 
 
-    return coherences
+    return simresults
 end
 
 results = isfile(resultspath) ? JLD.load(resultspath) : Dict()
-cohvprices = get(results, "cohvprice", nothing)
+excdemand = get(results, "excdemand", nothing)
 
-if !CACHE || isnothing(cohvprices) 
+if !CACHE || isnothing(excdemand) 
 
-    T = 150
-    ns = 3:20 # map(ktoninbtree, 2:10)
+    T = 200
+    ns = 3:127
 
-    cohvprices = simulatepricecoherence(ns, T, default_params)
+    excdemand = simulatedemanddeficits(ns, T, default_params)
 
-    JLD.save(resultspath, "cohvprice", cohvprices)
+    JLD.save(resultspath, "excdemand", excdemand)
+else
+    println("Using cached from $resultspath")
 end
     
-begin
-    Plots.scalefontsizes(0.8); default(size=(1000, 800), margin=5Plots.mm) # Plotting defaults
-
-
-    Plots.resetfontsizes()
-end
+fig = compareblackout(excdemand; savepath=joinpath(plotpath, "blackoutsim.pdf"))
