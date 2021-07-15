@@ -33,7 +33,7 @@ inner sep=5pt]
     \node [market, left = 2cm of prov] (cb-market) {Cross-border \\ market};
     \node [agent, above right = 1cm and 5cm of prov] (prod) {Producers};
     \node [agent, below right = 1cm and 5cm of prov] (pros) {Prosumers};
-    \node [market, right = 2cm of prov] (w-market) {Wholesale \\ market};
+    \node [market, right = 2cm of prov] (w-market) {Local \\ wholesale \\ market};
 
     \path
     (cb-market) edge [bend left] node [above] {$Y_t$} (prov)
@@ -41,7 +41,7 @@ inner sep=5pt]
     (prov) edge [ bend left] node [above] {$X_t$} (w-market)
     (w-market) edge [dashed, bend left] node [below] {$p_t$} (prov)
     (prod) edge [] node [above left] {$S_t$} (w-market)
-    (w-market) edge [] node [below left] {$e_t \cdot M$} (pros)
+    (w-market) edge [{Latex[scale=1]}-{Latex[scale=1]}] node [below left] {$e_t \  M$} (pros)
     ;
 
 \end{tikzpicture}

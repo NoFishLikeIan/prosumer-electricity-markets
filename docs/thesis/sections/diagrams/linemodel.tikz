@@ -5,6 +5,7 @@
 
 \tikzstyle{dots} = [
     draw, circle,
+    minimum size=10pt,
     dashed, line width=0pt
 ]
 
@@ -19,10 +20,10 @@
 
 
     \path
-    (1) edge [] node [above] {$Y^{(1, 2)}$} (2)
-    (2) edge [] node [above] {$Y^{(2, 3)}$} (3)
-    (3) edge [] node [above] {$Y^{(3, 4)}$} (4)
-    (4) edge [] node [above] {$Y^{(4, 5)}$} (dots)
-    (dots) edge [] node [above] {$Y^{(n-1, n)}$} (n);
+    (1) edge [] node [above] {$(1, 2)$} (2)
+    (2) edge [] node [above] {$(2, 3)$} (3)
+    (3) edge [] node [above] {$(3, 4)$} (4)
+    (4) edge [] node [above] {$(4, 5)$} (dots)
+    (dots) edge [] node [above] {$(n-1, n)$} (n);
 
 \end{tikzpicture}

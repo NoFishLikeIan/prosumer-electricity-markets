@@ -7,7 +7,7 @@
 Let,
 
 \begin{equation}
-    J(s, p, r) = s \cdot (p - k) - c(s, r) \cdot r + \beta \cdot V(s + r, p)
+    J(s, p, r) = s \  (p - k) - c(s, r) \  r + \beta \  V(s + r, p)
 \end{equation}
 
 such that, Equation (\ref{bellman_prod}) can be written as,
@@ -19,14 +19,14 @@ such that, Equation (\ref{bellman_prod}) can be written as,
 Maximization of $J$ requires (first order condition),
 
 \begin{equation} \label{J_foc_r}
-    \frac{\partial J}{\partial r}(s, p, r)  = -\frac{\partial c}{\partial r}(s, r) \cdot r - c(s, r) + \beta \cdot \frac{\partial V}{\partial s}(s + r, p) = 0
+    \frac{\partial J}{\partial r}(s, p, r)  = -\frac{\partial c}{\partial r}(s, r) \  r - c(s, r) + \beta \  \frac{\partial V}{\partial s}(s + r, p) = 0
 \end{equation}
 
 Assuming maximization in $r$, by the envelope theorem,
 
 \begin{equation}
     \begin{split}
-        \frac{\partial V}{\partial s}(s, p) &= (p - k) - \frac{\partial c}{\partial s}(s, r) \cdot r + \beta \cdot \frac{\partial V}{\partial s}(s + r, p)
+        \frac{\partial V}{\partial s}(s, p) &= (p - k) - \frac{\partial c}{\partial s}(s, r) \  r + \beta \  \frac{\partial V}{\partial s}(s + r, p)
     \end{split}
 \end{equation}
 
@@ -34,21 +34,21 @@ Using Equation (\ref{J_foc_r}) on the first condition yields,
 
 \begin{equation}
     \begin{split}
-        \frac{\partial V}{\partial s}(s, p) &= (p - k) - \frac{\partial c}{\partial s}(s, r) \cdot r + \frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r) \\
-        &= (p - k) + \left[\frac{\partial c}{\partial r}(s, r) - \frac{\partial c}{\partial s}(s, r)\right] \cdot r + c(s, r)
+        \frac{\partial V}{\partial s}(s, p) &= (p - k) - \frac{\partial c}{\partial s}(s, r) \  r + \frac{\partial c}{\partial r}(s, r) \  r + c(s, r) \\
+        &= (p - k) + \left[\frac{\partial c}{\partial r}(s, r) - \frac{\partial c}{\partial s}(s, r)\right] \  r + c(s, r)
     \end{split}
 \end{equation}
 
 Iterating forward yields,
 
 \begin{equation}
-    \frac{\partial V}{\partial s}(s + r, p)  = p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
+    \frac{\partial V}{\partial s}(s + r, p)  = p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \  r + c(s + r, r)
 \end{equation}
 
 Using (\ref{J_foc_r}),
 
 \begin{equation}
-    \frac{\frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r)}{\beta} =  p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
+    \frac{\frac{\partial c}{\partial r}(s, r) \  r + c(s, r)}{\beta} =  p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \  r + c(s + r, r)
 \end{equation}
 
 \subsection{Stability of different cost functions}
@@ -56,7 +56,7 @@ Using (\ref{J_foc_r}),
 The first order condition for $r$ requires that,
 
 \begin{equation}
-    \frac{\frac{\partial c}{\partial r}(s, r) \cdot r + c(s, r)}{\beta} =  p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \cdot r + c(s + r, r)
+    \frac{\frac{\partial c}{\partial r}(s, r) \  r + c(s, r)}{\beta} =  p - k + \left[\frac{\partial c}{\partial r}(s + r, r) - \frac{\partial c}{\partial s}(s + r, r)\right] \  r + c(s + r, r)
 \end{equation}
 
 Any cost function with the trivial property that not ramping up is free, $c(s, 0) = 0$, is stable, $r = 0$, if and only if,
@@ -72,13 +72,13 @@ Any cost function with the trivial property that not ramping up is free, $c(s, 0
 Assume a softplus cost function and notice that, letting
 
 \begin{equation*}
-    \sigm_{c_1}(x) = \frac{1}{1 + \exp(-c_1 \cdot x)},
+    \sigm_{c_1}(x) = \frac{1}{1 + \exp(-c_1 \  x)},
 \end{equation*}
 
 we can write,
 
 \begin{equation}
-    \frac{\partial c}{\partial s}(s, r) = \sigm_{c_1}(s \cdot r) \cdot r \ \text{ and } \ \frac{\partial c}{\partial r}(s, r) = \sigm_{c_1}(s \cdot r) \cdot s
+    \frac{\partial c}{\partial s}(s, r) = \sigm_{c_1}(s \  r) \  r \ \text{ and } \ \frac{\partial c}{\partial r}(s, r) = \sigm_{c_1}(s \  r) \  s
 \end{equation}
 
 
@@ -86,8 +86,8 @@ Hence the two function that regulate the first order condition of the prosumer c
 
 \begin{equation}
     \begin{split}
-        mc(r) &= \frac{\partial c}{\partial r}(s_t, r) \cdot r + c(s_t, r) \\
-        &= \sigm_{c_1}(s_t \cdot r) \cdot s_t \cdot r_t + c(s_t, r)
+        mc(r) &= \frac{\partial c}{\partial r}(s_t, r) \  r + c(s_t, r) \\
+        &= \sigm_{c_1}(s_t \  r) \  s_t \  r_t + c(s_t, r)
     \end{split}
 \end{equation}
 
@@ -95,9 +95,9 @@ and
 
 \begin{equation}
     \begin{split}
-        mb(r) &= p_t - k + \left[\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right] \cdot r + c(s_t + r, r)\\
-        &= p_t - k + \left[\sigm_{c_1}(.) \cdot (s_t + r) - \sigm_{c_1}(.) \cdot r \right] \cdot r + c(s_t + r, r) \\
-        &=p_t - k + \sigm_{c_1}((s_t + r) \cdot r) \cdot s_t \cdot r + c(s_t + r, r)
+        mb(r) &= p_t - k + \left[\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right] \  r + c(s_t + r, r)\\
+        &= p_t - k + \left[\sigm_{c_1}(.) \  (s_t + r) - \sigm_{c_1}(.) \  r \right] \  r + c(s_t + r, r) \\
+        &=p_t - k + \sigm_{c_1}((s_t + r) \  r) \  s_t \  r + c(s_t + r, r)
     \end{split}
 \end{equation}
 
@@ -110,17 +110,17 @@ We can then study the behaviour of the two functions as $c_1 \xrightarrow{} \inf
     \end{cases}
 \end{equation}
 
-We can use this and the fact that $\limc c(s, r) = \max\{0, s \cdot r\}$, to evaluate,
+We can use this and the fact that $\limc c(s, r) = \max\{0, s \  r\}$, to evaluate,
 
 \begin{equation}
-    \limc mc(r) = \max \{0, 2s_t \cdot r\}
+    \limc mc(r) = \max \{0, 2s_t \  r\}
 \end{equation}
 
 and,
 
 \begin{equation*}
-    \limc mb(r) = p_t - k + \max\{0, (s_t + r) \cdot r\} + \begin{cases}
-        s_t \cdot r &\text{if } r \in (-\infty, -s_t] \cup [0, \infty) \\
+    \limc mb(r) = p_t - k + \max\{0, (s_t + r) \  r\} + \begin{cases}
+        s_t \  r &\text{if } r \in (-\infty, -s_t] \cup [0, \infty) \\
         0 &\text{if } r \in (-s_t, 0)
     \end{cases}
 \end{equation*}
@@ -129,7 +129,7 @@ Using the optimization constraint, $r \in [-s_t, \infty)$, we obtain,
 
 \begin{equation}
     \limc mb(r) = p_t - k + \begin{cases}
-        2 s_t \cdot r + r^2 &\text{if } r > 0 \\
+        2 s_t \  r + r^2 &\text{if } r > 0 \\
         0 &\text{if } r \in [-s_t, 0]
     \end{cases}
 \end{equation}
@@ -140,10 +140,10 @@ Then, in the limit, we can rewrite the first order condition as,
     \begin{split}
         \limc mc(r) &= \beta \limc mb(r) \\
         \frac{1}{\beta} \begin{cases}
-            2 s_t \cdot r  &\text{if } r > 0 \\
+            2 s_t \  r  &\text{if } r > 0 \\
             0 &\text{if } r \in [-s_t, 0]
         \end{cases} &= p_t - k  + \begin{cases}
-            2 s_t \cdot r + r^2 &\text{if } r > 0 \\
+            2 s_t \  r + r^2 &\text{if } r > 0 \\
             0 &\text{if } r \in [-s_t, 0]
         \end{cases}
     \end{split}
@@ -152,10 +152,10 @@ Then, in the limit, we can rewrite the first order condition as,
 This allows us to find an approximate policy function. Namely, assuming producing is profitable, $p_t - k > 0$ and $s_t  > \frac{\beta}{1-\beta} \sqrt{p_t - k}$, we have the interior solution,
 
 \begin{equation}
-    r(s_t, p_t) = \frac{1}{2} \cdot \left[  \left(\frac{1 - \beta}{\beta} \cdot 2 s_t \right) - \sqrt{\left(\frac{1 - \beta}{\beta} \cdot 2 s_t \right)^2 - 4 \cdot \left(p_t - k\right)} \right].
+    r(s_t, p_t) = \frac{1}{2} \  \left[  \left(\frac{1 - \beta}{\beta} \  2 s_t \right) - \sqrt{\left(\frac{1 - \beta}{\beta} \  2 s_t \right)^2 - 4 \  \left(p_t - k\right)} \right].
 \end{equation}
 
-If, on the other hand, $s_t \leq \frac{\beta}{1-\beta} \sqrt{p_t - k}$, then $\beta \cdot mb(r) > mc(r)$, hence,
+If, on the other hand, $s_t \leq \frac{\beta}{1-\beta} \sqrt{p_t - k}$, then $\beta \  mb(r) > mc(r)$, hence,
 
 \begin{equation}
     r(s_t, p_t) = \frac{\beta}{1-\beta} \sqrt{p_t - k} - s_t
@@ -164,7 +164,7 @@ If, on the other hand, $s_t \leq \frac{\beta}{1-\beta} \sqrt{p_t - k}$, then $\b
 Finally, if $p_t - k < 0$
 
 \begin{equation}
-    r(s_t, p_t) = -\gamma \cdot s
+    r(s_t, p_t) = -\gamma \  s
 \end{equation}
 
 \subsection{Evolution of excess demand} \label{a:ev_demand}
@@ -173,8 +173,8 @@ Using the definition of $X_t$, equation (\ref{x_inst}), we can rewrite,
 
 \begin{equation}
     \begin{split}
-        X_{t+1} &= M \cdot e_{t+1} - S_{t+1} \\
-        S_{t+1} &= M \cdot e_{t+1} - X_{t+1} = R_t + S_t
+        X_{t+1} &= M \  e_{t+1} - S_{t+1} \\
+        S_{t+1} &= M \  e_{t+1} - X_{t+1} = R_t + S_t
     \end{split}
 \end{equation}
 
@@ -182,8 +182,8 @@ hence,
 
 \begin{equation}
     \begin{split}
-        X_{t+1} - M \cdot e_{t+1} &= X_t - M \cdot e_t - R_t \\
-        X_{t+1} &= X_t + M \cdot \left(e_{t+1} - e_t \right) -  R_t
+        X_{t+1} - M \  e_{t+1} &= X_t - M \  e_t - R_t \\
+        X_{t+1} &= X_t + M \  \left(e_{t+1} - e_t \right) -  R_t
     \end{split}
 \end{equation}
 
@@ -194,16 +194,16 @@ hence,
 First assume that $X_t > 0$. The case for $X_t < 0$ is perfectly symmetric. Let the approximated ramp-up function be,
 
 \begin{equation}
-    \tilde{R}(p) \coloneqq a + b \cdot p = \E[R(p)]
+    \tilde{R}(p) \coloneqq a + b \  p = \E[R(p)]
 \end{equation}
 
 Each period the provider faces the problem,
 
 \begin{equation*}
     \begin{split}
-        \mathcal{L}(p, \Y, X) &= p \cdot X - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \cdot P^j(\Y) \\
-        &+ \lambda_t \cdot \left( X -  \sum_{j} Y_t^j \right) \\
-        &+ \beta \cdot  V\left(X - \tilde{R} (p) \right)
+        \mathcal{L}(p, \Y, X) &= p \  X - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \  P^j(\Y) \\
+        &+ \lambda_t \  \left( X -  \sum_{j} Y_t^j \right) \\
+        &+ \beta \   V\left(X - \tilde{R} (p) \right)
     \end{split}
 \end{equation*}
 
@@ -211,16 +211,16 @@ such that $V(X) = \max_{p, \Y} \mathcal{L}(p, \Y, X)$. The first order condition
 
 \begin{equation} \label{foc_p}
     \begin{split}
-        \frac{\partial}{\partial p} \mathcal{L} &= X - \beta \cdot V^\prime \left(X - \tilde{R}(p) \right) \cdot \tilde{R}^\prime(p) = 0 \\
-        X &= \beta \cdot V^\prime \left(X - \tilde{R}(p) \right) \cdot \frac{\partial \tilde{R}}{\partial p}(p)
+        \frac{\partial}{\partial p} \mathcal{L} &= X - \beta \  V^\prime \left(X - \tilde{R}(p) \right) \  \tilde{R}^\prime(p) = 0 \\
+        X &= \beta \  V^\prime \left(X - \tilde{R}(p) \right) \  \frac{\partial \tilde{R}}{\partial p}(p)
     \end{split}
 \end{equation}
 
-This first order condition implies that the benefit of charging a higher price today, which is today's demand $X$, should be equal to the cost of reducing the demand tomorrow, $\beta \cdot V^\prime \left(X - \tilde{R}(p) \right) \cdot \frac{\partial \tilde{R}}{\partial p}(p)$. The second first order condition requires that, for each neighbor $m$, 
+This first order condition implies that the benefit of charging a higher price today, which is today's demand $X$, should be equal to the cost of reducing the demand tomorrow, $\beta \  V^\prime \left(X - \tilde{R}(p) \right) \  \frac{\partial \tilde{R}}{\partial p}(p)$. The second first order condition requires that, for each neighbor $m$, 
 
 \begin{equation} \label{foc_Y}
     \begin{split}
-        \frac{\partial}{\partial Y^m} \mathcal{L} &= \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y^j \cdot P^j(\Y))}{\partial Y^m} + \lambda = 0
+        \frac{\partial}{\partial Y^m} \mathcal{L} &= \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y^j \  P^j(\Y))}{\partial Y^m} + \lambda = 0
     \end{split}
 \end{equation}
 
@@ -228,9 +228,9 @@ We can distribute the partial derivative by noting that for each entry in the su
 
 \begin{equation} \label{lambda}
     \begin{split}
-        -\lambda &= \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y^j \cdot P^j(\Y))}{\partial Y^m} \\
-        &= Y^1 \cdot \frac{\partial P^1(\Y)}{\partial Y^m} + \ldots + \underbrace{\frac{\partial Y^m}{\partial Y^m} P^m(\Y) + Y^m \cdot \frac{\partial P^m(\Y)}{\partial Y^m} }_{\text{by the chain rule}} + Y^{m+1} \cdot \frac{\partial P^{m+1}(\Y)}{\partial Y^m} \ldots \\
-        &= P^m(\Y) + \sum_{j \in N_{\mathcal{A}}(i)} Y^j \cdot \frac{\partial P^j(\Y)}{\partial Y^m}
+        -\lambda &= \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y^j \  P^j(\Y))}{\partial Y^m} \\
+        &= Y^1 \  \frac{\partial P^1(\Y)}{\partial Y^m} + \ldots + \underbrace{\frac{\partial Y^m}{\partial Y^m} P^m(\Y) + Y^m \  \frac{\partial P^m(\Y)}{\partial Y^m} }_{\text{by the chain rule}} + Y^{m+1} \  \frac{\partial P^{m+1}(\Y)}{\partial Y^m} \ldots \\
+        &= P^m(\Y) + \sum_{j \in N_{\mathcal{A}}(i)} Y^j \  \frac{\partial P^j(\Y)}{\partial Y^m}
     \end{split}
 \end{equation} 
 
@@ -239,7 +239,7 @@ We can distribute the partial derivative by noting that for each entry in the su
 By the envelope theorem,
 
 \begin{equation} \label{env}
-    V^\prime(X_t) = p_t + \lambda_t + \beta \cdot V^\prime(X_{t+1})
+    V^\prime(X_t) = p_t + \lambda_t + \beta \  V^\prime(X_{t+1})
 \end{equation}
 
 
@@ -258,15 +258,15 @@ Iterating forward,
 Using (\ref{foc_p}),
 
 \begin{equation}
-    \frac{X_t}{\beta \cdot \frac{\partial \tilde{R}}{\partial p}(p_t)} = p_{t+1} + \lambda_{t+1} + \frac{X_{t} - \tilde{R}(p_t)}{\frac{\partial \tilde{R}}{\partial p}(p_{t+1})}
+    \frac{X_t}{\beta \  \frac{\partial \tilde{R}}{\partial p}(p_t)} = p_{t+1} + \lambda_{t+1} + \frac{X_{t} - \tilde{R}(p_t)}{\frac{\partial \tilde{R}}{\partial p}(p_{t+1})}
 \end{equation}
 
 Finally, using the linearity of $\tilde{R}$, $\frac{\partial \tilde{R}}{\partial p} = b$,
 
 \begin{equation}
     \begin{split}
-        \frac{X_t}{\beta \cdot b} &=  \lambda_{t+1} + p_{t+1} + \frac{X_t}{b} - \frac{a +  b \cdot p_{t}}{b} \\
-        p_{t+1} &= \left( p_t + \frac{a}{b} \right) +  \left( \frac{1 - \beta}{\beta} \right) \cdot \frac{X_t}{b} - \lambda_{t+1}
+        \frac{X_t}{\beta \  b} &=  \lambda_{t+1} + p_{t+1} + \frac{X_t}{b} - \frac{a +  b \  p_{t}}{b} \\
+        p_{t+1} &= \left( p_t + \frac{a}{b} \right) +  \left( \frac{1 - \beta}{\beta} \right) \  \frac{X_t}{b} - \lambda_{t+1}
     \end{split}
 \end{equation} 
 
@@ -275,13 +275,13 @@ Finally, using the linearity of $\tilde{R}$, $\frac{\partial \tilde{R}}{\partial
 The Nash bargaining solution is such that
 
 \begin{equation*}
-    P^{(i, j)} = \arg \max_{P^{(i, j)}} \left\{\Pi_i \cdot \Pi_j \right\}.
+    P^{(i, j)} = \arg \max_{P^{(i, j)}} \left\{\Pi_i \  \Pi_j \right\}.
 \end{equation*}
 
 The first order condition is such that,
 
 \begin{equation*}
-    \frac{\partial}{\partial P^{(i, j)}} \left( \Pi_i \cdot \Pi_j \right) = \frac{\partial \Pi_i}{\partial  P^{(i, j)}} \cdot \Pi_j + \Pi_i \cdot \frac{\partial \Pi_j}{\partial  P^{(i, j)}} = 0
+    \frac{\partial}{\partial P^{(i, j)}} \left( \Pi_i \  \Pi_j \right) = \frac{\partial \Pi_i}{\partial  P^{(i, j)}} \  \Pi_j + \Pi_i \  \frac{\partial \Pi_j}{\partial  P^{(i, j)}} = 0
 \end{equation*}
 
 Then, by symmetry, $\frac{\partial \Pi_j}{\partial  P^{(i, j)}} = - \frac{\partial \Pi_i}{\partial  P^{(i, j)}}$,
@@ -366,15 +366,15 @@ $\theta_i$ is the sequence of shifted Pell numbers $P_{i+1}$ that have a closed 
 
 \begin{equation}
     (\matr{2I + G})^{-1}_{i, j} = \begin{cases}
-        (-1)^{i + j} \cdot P_{n + 1- j} \cdot P_i / P_{n+1} & \text{if } i \leq j \\
-        (-1)^{2i } \cdot P_{n + 1- i} \cdot P_j / P_{n+1}   & \text{if } i > j
+        (-1)^{i + j} \  P_{n + 1- j} \  P_i / P_{n+1} & \text{if } i \leq j \\
+        (-1)^{2i } \  P_{n + 1- i} \  P_j / P_{n+1}   & \text{if } i > j
     \end{cases}
 \end{equation}
 
 Letting,
 
 \begin{equation*}
-    H(i, j, n) \coloneqq \frac{P_{n + 1 - j} \cdot P_i}{P_{n+1}}
+    H(i, j, n) \coloneqq \frac{P_{n + 1 - j} \  P_i}{P_{n+1}}
 \end{equation*}
 
 we can rewrite,
@@ -399,8 +399,8 @@ Using the properties, $P_{-a} = (-1)^{a+1} P_a$, $P_{a+b} = P_{a} P_{b+1} + P_{a
 
 \begin{equation}
     \begin{split}
-        \lim_{n \xrightarrow{} \infty} H(i, j, n) &= (-1)^{j + 1}  \left(P_j \cdot \delta_{p} - P_{j+1} \right) P_i \\
-        &= \frac{(-1)^j }{2\sqrt{2}} \cdot (\delta_{p}^i - \delta_{m}^i) \cdot \delta^j_{m}
+        \lim_{n \xrightarrow{} \infty} H(i, j, n) &= (-1)^{j + 1}  \left(P_j \  \delta_{p} - P_{j+1} \right) P_i \\
+        &= \frac{(-1)^j }{2\sqrt{2}} \  (\delta_{p}^i - \delta_{m}^i) \  \delta^j_{m}
     \end{split}
 \end{equation}
 

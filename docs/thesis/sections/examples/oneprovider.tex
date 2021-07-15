@@ -4,41 +4,41 @@
 Assume that there is only one provider, such that $N_{\mathcal{A}}(1) = \emptyset$. The provider's constraint, at each $t$, reduces to,
 
 \begin{equation}
-    X_t = \sum_{j \in \emptyset} Y_t^{(i, j)} = 0
+  X_t = \sum_{j \in \emptyset} Y_t^{(i, j)} = 0
 \end{equation}
 
 This implies that the providers needs to set $p_t$ such that,
 
 \begin{equation}
-    p_t = -\frac{a_t}{b_t}
+  p_t = -\frac{a_t}{b_t}
 \end{equation}
 
 This yields the demand evolution,
 
 \begin{equation}
-    X_{t+1} = X_t + M \cdot \left(e_{t+1} - e_t \right) - \sum^N_{i = 1} r(s_{i, t}, - a_t / b_t; \psi_{i, t})
+  X_{t+1} = X_t + M \  \left(e_{t+1} - e_t \right) - \sum^N_{i = 1} r(s_{i, t}, - a_t / b_t; \psi_{i, t})
 \end{equation}
 
 Electricity is therefore stable only if,
 
 \begin{equation}
-    M \cdot \left(e_{t+1} - e_t \right) = \sum^N_{i = 1} r(s_{i, t}, - a_t / b_t; \psi_{i, t})
+  M \  \left(e_{t+1} - e_t \right) = \sum^N_{i = 1} r(s_{i, t}, - a_t / b_t; \psi_{i, t})
 \end{equation}
 
-Assume that $e_t \in \set{10, 100}$ and that the electricity supply is such that the electricity at time $t$ is fully satisfied, $s_{i, t} = \frac{M}{N} \cdot e_t$. Furthermore, assume that every producer has the same belief, $\psi_{i, t} = 1$. Then,
+Assume that $e_t \in \set{10, 100}$ and that the electricity supply is such that the electricity at time $t$ is fully satisfied, $s_{i, t} = \frac{M}{N} \  e_t$. Furthermore, assume that every producer has the same belief, $\psi_{i, t} = 1$. Then,
 
 \begin{equation}
-    \begin{split}
-        r(s_{i, t}, -a_t / b_t; 1) &= \frac{1 - \beta}{\beta} \cdot \frac{M}{N} \cdot e_t - \frac{1}{2} \sqrt{\left(\frac{1 - \beta}{\beta} \cdot \frac{M}{N} \cdot e_t \right)^2 - 4 \cdot \left(- \frac{a_t}{b_t} - k \right)} \\
-        \sum r(s_{i, t}, -a_t / b_t; 1) &= \frac{1 - \beta}{\beta} \cdot M e_t - \frac{1}{2} \sqrt{ \left(\frac{1 - \beta}{\beta} \cdot M e_t \right)^2 - 4N \cdot  \left(- \frac{a_t}{b_t} - k \right)}
-    \end{split}
+  \begin{split}
+    r(s_{i, t}, -a_t / b_t; 1) &= \frac{1 - \beta}{\beta} \  \frac{M}{N} \  e_t - \frac{1}{2} \sqrt{\left(\frac{1 - \beta}{\beta} \  \frac{M}{N} \  e_t \right)^2 - 4 \  \left(- \frac{a_t}{b_t} - k \right)} \\
+    \sum r(s_{i, t}, -a_t / b_t; 1) &= \frac{1 - \beta}{\beta} \  M e_t - \frac{1}{2} \sqrt{ \left(\frac{1 - \beta}{\beta} \  M e_t \right)^2 - 4N \   \left(- \frac{a_t}{b_t} - k \right)}
+  \end{split}
 \end{equation}
 
 Then,
 
 \begin{equation}
-    \begin{split}
-        M e_{t+1} - M e_t &= \frac{1 - \beta}{\beta} \cdot M e_t - \frac{1}{2} \sqrt{ \left(\frac{1 - \beta}{\beta} \cdot M e_t \right)^2 - 4N \cdot  \left(- \frac{a_t}{b_t} - k \right)} \\
-        4M^2 \cdot \left(\frac{1}{\beta} e_t - e_{t+1} \right)^2 &= \left(\frac{1 - \beta}{\beta} \cdot M e_t \right)^2 - 4N \cdot  \left(- \frac{a_t}{b_t} - k \right)
-    \end{split}
+  \begin{split}
+    M e_{t+1} - M e_t &= \frac{1 - \beta}{\beta} \  M e_t - \frac{1}{2} \sqrt{ \left(\frac{1 - \beta}{\beta} \  M e_t \right)^2 - 4N \   \left(- \frac{a_t}{b_t} - k \right)} \\
+    4M^2 \  \left(\frac{1}{\beta} e_t - e_{t+1} \right)^2 &= \left(\frac{1 - \beta}{\beta} \  M e_t \right)^2 - 4N \   \left(- \frac{a_t}{b_t} - k \right)
+  \end{split}
 \end{equation}
