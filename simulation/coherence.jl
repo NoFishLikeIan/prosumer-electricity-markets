@@ -3,11 +3,11 @@ include("simulate.jl")
 
 resultspath = "simresults/data.jld"
 plotpath = "../plots/blackouts"
-CACHE = true
+CACHE = false
 
 makegraphs = Dict(
     "star" => makestar,
-    "line" => makeline,
+    "path" => makepath,
     "binary" => makebinarytree
 )
 
@@ -23,9 +23,9 @@ function makeshock(n, T, from, to, ε::Float64, εₛ::Float64)
 end
 
 """
-Computes coherences across binary tree, line, and star of sizes ns and gets cumulative definicits with T and parameters
+Computes coherences across binary tree, path, and star of sizes ns and gets cumulative definicits with T and parameters
 """
-function simulatedemanddeficits(ns, T, parameters; T₀=50)
+function simulatedemanddeficits(ns, T, parameters; T₀=20)
 
     simresults = Dict(
         keys(makegraphs) .=> [
@@ -43,7 +43,7 @@ function simulatedemanddeficits(ns, T, parameters; T₀=50)
                 continue
             end
 
-            εpath = makeshock(n, T, T₀, T₀ + 10, parameters)
+            εpath = makeshock(n, T, T₀, T₀ + 5, parameters)
 
             A, G = makeg(n) 
             simresults[gname][i, 1] = coherence(A, G)
@@ -52,10 +52,11 @@ function simulatedemanddeficits(ns, T, parameters; T₀=50)
             _, dfmodel = simulatemarket!(model; T=T)
 
             X = hcat(dfmodel.X...)'[T₀:end, :]
-            ∑X = positive.(sum(X, dims=2))
+            ∑X = sum(X, dims=2)
+            ∑Xₚ = @. positive(∑X) / n
 
-            simresults[gname][i, 2] = mean(∑X)
-            simresults[gname][i, 3] = std(∑X)
+            simresults[gname][i, 2] = mean(∑Xₚ)
+            simresults[gname][i, 3] = std(∑Xₚ)
         end
     end
 
@@ -63,19 +64,22 @@ function simulatedemanddeficits(ns, T, parameters; T₀=50)
     return simresults
 end
 
+T = 250
+T₀ = 150
+ns = 3:30
+
 results = isfile(resultspath) ? JLD.load(resultspath) : Dict()
 excdemand = get(results, "excdemand", nothing)
 
 if !CACHE || isnothing(excdemand) 
 
-    T = 200
-    ns = 3:127
-
-    excdemand = simulatedemanddeficits(ns, T, default_params)
+    excdemand = simulatedemanddeficits(ns, T, default_params; T₀=T₀)
 
     JLD.save(resultspath, "excdemand", excdemand)
 else
     println("Using cached from $resultspath")
 end
-    
-fig = compareblackout(excdemand; savepath=joinpath(plotpath, "blackoutsim.pdf"))
+
+figρ = plotcoherences(excdemand, ns; savepath=joinpath(plotpath, "rhos.pdf"))
+
+figblack = compareblackout(excdemand; savepath=joinpath(plotpath, "blackoutsim.pdf"))

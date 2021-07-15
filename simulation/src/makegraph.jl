@@ -27,7 +27,7 @@ function makeG(A)
 end
 
 
-function makeline(n)
+function makepath(n)
     ι = ones(Int64, n - 1)
     A = diagm(1 => ι, -1 => ι)
 

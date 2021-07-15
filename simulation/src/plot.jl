@@ -1,7 +1,7 @@
 # Defaults
 theme(:vibrant)
 default(size=(800, 600), dpi=300, margin=margin = 5Plots.mm)
-Plots.resetfontsizes(); Plots.scalefontsizes(0.8)
+Plots.resetfontsizes()
 
 
 """
@@ -160,25 +160,56 @@ function plotprofit(dfagent, model; savepath=nothing)
 end
 
 function compareblackout(excdemand; savepath=nothing)
-	blackoutlabel = latexstring("\$ \\sum_{i, t} X_{i, t}\$")
-    coherencelabel = latexstring("\$ \\rho\$")
+	blackoutlabel = latexstring("\$ \\frac{\\sum_{t \\geq \\tau, i} X_{i, t}}{T - \\tau} \$")
+    coherencelabel = latexstring("\$ \\rho\\left( \\mathcal{A} \\right)\$")
+    
     figure = plot(xlabel=coherencelabel, ylabel=blackoutlabel)
         
     for (i, results) in enumerate(excdemand)
 
         graphname, data = results
         
-        color = Plots.palette(:tab10)[i]
+        col = Plots.palette(:tab10)[i]
 
         presentrows = any((!isnan).(data), dims=2) |> vec
 
-        coherences, cumulativeblackout, σ = eachcol(data[presentrows, :])
-        
+        ρs, cumulativeblackout, σ = eachcol(data[presentrows, :])
+
+        srt = sortperm(ρs)
+
         scatter!(
-            figure, coherences, cumulativeblackout;
-            ribbon=σ, markersize=2,
-            c=color, label=graphname)
+            figure, ρs[srt], cumulativeblackout[srt]; markersize=2,
+            c=col, label=graphname)
+        
+        plot!(figure, ρs[srt], cumulativeblackout[srt]; c=col, label=nothing)
     end
+        
+    if !isnothing(savepath)
+        savefig(figure, savepath)
+    end
+    return figure
+end
+
+function plotcoherences(excdemand, ns; savepath=nothing)
+
+    figure = plot(xlabel=latexstring("\$ n \$"), ylabel=latexstring("\$ \\rho\$"))
+        
+    for (i, results) in enumerate(excdemand)
+
+        graphname, data = results
+        
+        col = Plots.palette(:tab10)[i]
+        
+        ρs = data[:, 1]
+
+        notnan = (!isnan).(ρs)
+        
+        scatter!(figure, ns[notnan], ρs[notnan]; markersize=2, c=col, label=graphname)
+
+        plot!(figure, ns[notnan], ρs[notnan]; alpha=0.5, c=col, label=nothing)
+        
+    end
+    
         
     if !isnothing(savepath)
         savefig(figure, savepath)

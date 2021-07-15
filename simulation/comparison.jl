@@ -28,7 +28,7 @@ shocks = Dict(
 )
 
 As, Gs = makestar(nodes)
-Al, Gl = makeline(nodes)
+Al, Gl = makepath(nodes)
 
 results = Dict()
 
@@ -46,14 +46,14 @@ for (shockname, shockmatrices) in shocks
         nodestoplot=[1, 4]
     )
 
-    dfagentline, dfmodelline, modelline = plotfromsteadystate(
+    dfagentpath, dfmodelpath, modelpath = plotfromsteadystate(
         Al, Gl, Tₛ; εpath=εg, 
-        plotpath=joinpath(plotpath, shockname, "line")
+        plotpath=joinpath(plotpath, shockname, "path")
     )
 
     results[shockname] = Dict(
         "star" => (dfagentstar, dfmodelstar, modelstar),
-        "line" => (dfagentline, dfmodelline, modelline)
+        "path" => (dfagentpath, dfmodelpath, modelpath)
     ) 
     
 end
