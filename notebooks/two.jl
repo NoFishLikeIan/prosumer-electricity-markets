@@ -1,8 +1,11 @@
 ### A Pluto.jl notebook ###
-# v0.14.8
+# v0.15.1
 
 using Markdown
 using InteractiveUtils
+
+# ╔═╡ 51fd2e41-3da6-4c42-8f09-eed8cdb4775b
+import Pkg; Pkg.add("JLD")
 
 # ╔═╡ 321f5b93-604c-4ad0-b41c-345cfbfa4f2f
 using Plots
@@ -40,8 +43,8 @@ end
 
 # ╔═╡ 1781deee-e3af-11eb-0651-fbbc9df7a22b
 begin
-	main = ingredients(joinpath(simpath, "src/main.jl"))
-	simulate = ingredients(joinpath(simpath, "simulate.jl"))
+	include(joinpath(simpath, "src/main.jl"))
+	include(joinpath(simpath, "simulate.jl"))
 end
 
 # ╔═╡ 8a855dc7-9301-4262-90f1-1d1749f9c83f
@@ -63,7 +66,7 @@ end
 
 # ╔═╡ 64e04d91-9b0a-4afa-bad1-381a5fe4e0ee
 begin
-	T = 250
+	T = 2_000
 	lowε, highε = last(default_params[:ε])
 end
 
@@ -78,11 +81,12 @@ begin
 	end
 end
 
-# ╔═╡ 4806b941-f97d-407e-b3bf-cb1c983a45bf
-model = main.initializemodel(A, G, default_params; εpath = makeshock(50, 70))
-
 # ╔═╡ f6c51ca8-bf2d-428c-9872-2ab0a8ffe52c
-dfagent, dfmodel = simulatemarket!(model; T = T)
+begin
+	model = initializemodel(A, G, default_params; εpath = makeshock(50, 48))
+	dfagent, dfmodel = simulatemarket!(model; T = T)
+	_ = "Done with simulation"
+end
 
 # ╔═╡ c9580e63-7f3c-4630-80d3-04ef1c78cc19
 begin
@@ -126,13 +130,13 @@ plotproviderbeliefs(dfagent, model)
 # ╠═0a384684-66ff-4c23-8ff5-3bf9074307f8
 # ╠═9c1e1856-7ebf-4330-b4a4-d077cace9fb1
 # ╟─5d095408-ab8f-4209-bd0a-97660b854696
+# ╠═51fd2e41-3da6-4c42-8f09-eed8cdb4775b
 # ╠═4de328e3-21e1-4a98-b69b-3e05471b89e1
 # ╠═1781deee-e3af-11eb-0651-fbbc9df7a22b
 # ╟─8a855dc7-9301-4262-90f1-1d1749f9c83f
 # ╠═d54ae3c4-62cf-4e79-9bfa-8ba7fac06d7a
-# ╠═64e04d91-9b0a-4afa-bad1-381a5fe4e0ee
 # ╠═b53abb61-94df-47ac-b15a-57bd635ab2f0
-# ╠═4806b941-f97d-407e-b3bf-cb1c983a45bf
+# ╠═64e04d91-9b0a-4afa-bad1-381a5fe4e0ee
 # ╠═f6c51ca8-bf2d-428c-9872-2ab0a8ffe52c
 # ╠═c9580e63-7f3c-4630-80d3-04ef1c78cc19
 # ╠═c3ad6d28-3dfe-40c4-a77b-919368366953

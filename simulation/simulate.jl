@@ -2,15 +2,15 @@ Pₛ = [1 0; 0 1]
 
 ρₗ, ρᵤ = .99, 0.5
 
-ε = ([ρₗ 1 - ρₗ; 1 - ρᵤ ρᵤ], [2.0, 20.0])
+ε = ([ρₗ 1 - ρₗ; 1 - ρᵤ ρᵤ], [2.0, 2.5])
 
 default_params = Dict(
     :k => 2.0,
     :β => 0.9, :βprod => 0.9,
-    :M => 1_000, :N => 5,
+    :M => 50, :N => 10,
     :ε => ε)
 
-function simulatemarket!(model; adata=[:pos, :p, :r, :ε, :s, :b, :a],  mdata=[:X, :R], T=100)
+function simulatemarket!(model; adata=[:pos, :p, :r, :ε, :s, :b, :a],  mdata=[:X, :R], T=100, T₀=0)
 
     dfagent, dfmodel = run!(model, agent_step!, model_step!, T; adata, mdata)
 
@@ -18,7 +18,7 @@ function simulatemarket!(model; adata=[:pos, :p, :r, :ε, :s, :b, :a],  mdata=[:
     modelnodes = unique(dfagent.pos)
     Nnodes = length(modelnodes)
 
-    X = reshape(dfmodel.X[end], Nnodes, :)'
+    X = reshape(dfmodel.X[end], Nnodes, :)'[T₀:(T₀ + T), :]
 
     dfmodel.X = [x for x in eachrow(X)]
 
@@ -28,28 +28,20 @@ end
 
 function simulatefromsteady!(model; 
     adata=[:pos, :p, :r, :ε, :s, :b, :a],
-    mdata=[:X, :R], T₀=1_000, T=100)
+    mdata=[:X, :R], T₀=100, T=100)
 
-    ε = model.ε
-    εₛ = (Pₛ, ε[2])
+    if !isnothing(model.εpath)
+        Nnodes = length(model.space.s)
+        constantε = lowε * ones(T₀, Nnodes)
+
+        model.εpath = vcat(constantε, model.εpath) # Append steady state shock
+    end
 
     println("Bringing to steady state...")
-    model.ε = εₛ # Set to steady state Markov chain
     run!(model, agent_step!, model_step!, T₀)
 
     println("Simulating...")
-    model.ε = ε # Set back 
-    dfagent, dfmodel = run!(model, agent_step!, model_step!, T; adata, mdata)
-
-    # Fix bug of carried over X
-    modelnodes = unique(dfagent.pos)
-    Nnodes = length(modelnodes)
-
-    X = reshape(dfmodel.X[end], Nnodes, :)'[(T₀ + 1):end, :]
-
-    dfmodel.X = [x for x in eachrow(X)]
-
-    return dfagent, dfmodel
+    return simulatemarket!(model; adata=adata, mdata=mdata, T=T, T₀=T₀)
 
 end
 
@@ -62,7 +54,7 @@ function plotfromsteadystate(
 )
 
     model = initializemodel(A, G, parameters; εpath=εpath)
-    dfagent, dfmodel = simulatemarket!(model; T=T)
+    dfagent, dfmodel = simulatefromsteady!(model; T=T)
 
     if !isnothing(plotpath)
 

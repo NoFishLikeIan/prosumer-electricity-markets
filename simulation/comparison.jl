@@ -5,7 +5,8 @@ plotpath = "../plots/"
 
 
 T = 200
-Tε = 20:30
+T₀ = 100
+Tε = T₀:(T₀ + 10)
 nodes = 7
 lowε, highε = last(default_params[:ε])
 εshock = lowε * ones(T, nodes)
@@ -14,10 +15,10 @@ lowε, highε = last(default_params[:ε])
 εshockone[Tε, 1] .= highε
 
 εshockfour = copy(εshock)
-εshockfour[Tε, 4] .= highε
+εshockfour[Tε, 3] .= highε
 
 εshockonepermanent = copy(εshock)
-εshockonepermanent[10:end, 3] .= highε
+εshockonepermanent[T₀:end, 3] .= highε
 
 shocks = Dict(
     "constant" => (εshock, εshock),
@@ -43,12 +44,13 @@ for (shockname, shockmatrices) in shocks
     dfagentstar, dfmodelstar, modelstar = plotfromsteadystate(
         As, Gs, Tₛ; εpath=εs, 
         plotpath=joinpath(plotpath, shockname, "star"),
-        nodestoplot=[1, 4]
+        nodestoplot=[1, 3]
     )
 
     dfagentpath, dfmodelpath, modelpath = plotfromsteadystate(
         Al, Gl, Tₛ; εpath=εg, 
-        plotpath=joinpath(plotpath, shockname, "path")
+        plotpath=joinpath(plotpath, shockname, "path"),
+        nodestoplot=[1, 2, 3, 4]
     )
 
     results[shockname] = Dict(

@@ -3,17 +3,18 @@ Producer ramp-up function assuming softplus costs
 """
 function r(s, p, k, β; γ=0.2)
     unitπ = p - k
-
+    
     if unitπ < 0 return -γ * s end
-
+    
+    r̅ = √(unitπ)
     βf = (1 - β) / β
     invβf = inv(βf)
+
+    s̲ = invβf * √(unitπ)
     
-    if s > invβf * √(unitπ)
-        return βf * s - 0.5 * √((2βf * s)^2 - 4unitπ)
-    else
-        return invβf * √(unitπ) - s
-    end 
+    if s < s̲ return r̅ end 
+
+    return βf * s - √((2βf * s)^2 - 4unitπ) / 2
 end
 
 function r(p, producer::Producer, model)

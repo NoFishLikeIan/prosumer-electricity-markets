@@ -9,7 +9,9 @@ Plot the supply and the price in all markets
 """
 function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
 
-    pmax = maximum(filter(!ismissing, dfagent.p))
+    pmin, pmax = extrema(filter(!ismissing, dfagent.p))
+
+    ylower = min(pmin, 0.)
 
     singleplot = (timeaxis, nodedata) -> begin
         dfpros, dfprov, dfprod = nodedata
@@ -25,7 +27,7 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
         fig = plot(
             timeaxis, pricet, 
             title="Node $node", label="price", 
-            color=:blue, ylims=(0, pmax),
+            color=:blue, ylims=(ylower, pmax),
             legend=:topright)
                     
         for (startp, endp) in εperiods

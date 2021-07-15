@@ -24,16 +24,13 @@ function update_belief!(provider::Provider, model; withdecay=true)
 
     T = length(p)
 
-    if ismultipleof(model.step, 15)
+    X = hcat(ones(T), p)
+    W = withdecay ? makeW(T) : I
 
-        X = hcat(ones(T), p)
-        W = withdecay ? makeW(T) : I
+    a, b = inv(X'W * X) * (X'W * R)
 
-        a, b = inv(X'W * X) * (X'W * R)
-
-        provider.a = a
-        provider.b = b
-
-    end
+    provider.a = a
+    provider.b = b
+    
 
 end
