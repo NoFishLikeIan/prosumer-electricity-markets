@@ -27,7 +27,7 @@ where $\sum_{(l, m) \in E}$ is a summation over the row $(i, j)$ of $(2\I + \G)^
     \begin{subfigure}[t]{.4\textwidth}
         \centering
         \includegraphics[width=\linewidth]{\bargpath/line.pdf}
-        \caption{On a sequential graph} \label{fig:linepower}
+        \caption{On a path graph} \label{fig:linepower}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{.4\textwidth}
@@ -61,9 +61,9 @@ This influence value gives a first order approximation of the effect on the netw
 
 \subfile{sections/examples/star.tex}
 
-\subsubsection{Line}
+\subsubsection{Path}
 
-\subfile{sections/examples/line.tex}
+\subfile{sections/examples/path.tex}
 
 \subsubsection{Conclusion}
 
@@ -71,12 +71,12 @@ In Figure \ref{fig:influence} I plotted the influence of each node on different 
 
 \subsection{Contagion simulation}
 
-To understand how price hikes propagate through the network in time, let's compare what happens simulating an equivalent demand shock in the central node of a sequential graph and a star graph (Figure \ref{fig:transshockcen}). In particular in the two figures I plot the evolution of prices and electricity supply after a 10 period shock (shaded area). This exercise brings with it a few interesting insights. First, it shows how relevant the network structure is for propagation. In the star graph, the price hike not only is much more pronounced but it is also sustained for longer. Furthermore, the network structure allows for the price increase to be much more persistent, lasting, in the case of the star graph, almost twice as much as the demand shock. This self-fulfilling behavior persists until electricity production is high enough to push prices back down to their equilibrium levels. Importantly, this has to happen throughout the network, instead of simply in the central node.
+To understand how price hikes propagate through the network in time, let's compare what happens simulating an equivalent demand shock in the central node of a sequential graph and a star graph. In particular, in Figure \ref{fig:transshockcen} I plot the evolution of prices and electricity supply after a 10 period shock starting at time $\tau$ (shaded area). This exercise brings with it a few interesting insights. First, it shows how relevant the network structure is for propagation. In the star graph, the price hike not only is much more pronounced but it is also sustained for longer. Furthermore, the network structure allows for the price increase to be much more persistent, lasting, in the case of the star graph, almost twice as much as the demand shock. This self-fulfilling behavior persists until electricity production is high enough to push prices back down to their equilibrium levels. Importantly, this has to happen throughout the network, instead of simply in the central node.
 
 \begin{figure}[H]
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width = \textwidth]{\plotpath/central/line/pricesupply.pdf}
+        \includegraphics[width = \textwidth]{\plotpath/central/path/pricesupply.pdf}
         \caption{Sequential graph}
     \end{subfigure}
     \hfill
@@ -93,7 +93,7 @@ Another interesting variable to track during the shock is the excess demand in e
 \begin{figure}[H]
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width = \textwidth]{\plotpath/central/line/demand.pdf}
+        \includegraphics[width = \textwidth]{\plotpath/central/path/demand.pdf}
         \caption{Sequential graph}
     \end{subfigure}
     \hfill
@@ -103,4 +103,32 @@ Another interesting variable to track during the shock is the excess demand in e
         \caption{Star graph}
     \end{subfigure}
     \caption{Excess demand $X_{i, t}$ with a transient shock in the central node} \label{fig:profittransshockcen}
+\end{figure}
+
+As the simulation above shows, focusing only on ``blackouts'' in the period immediately after the shock or on the effects of the shock on individual nodes gives a partial view of the effects of demand shock in the cross-border market. A more comprehensive view is given in Figure (\ref{fig:blackout}). Let the standard deviation of the influence of each node on the network, namely
+
+\begin{equation*}
+    \rho(\mathcal{A}) = \sqrt{\Var \left(\sum_{(k, m) \in E} (2\I + \G)^{-1}_{(i, j), (k, m)} -  \sum_{(l, k) \in E} (2\I + \G)^{-1}_{(i, j), (l, k)} \right)},
+\end{equation*}
+
+be the incoherence of a graph. Intuitively, the bigger and denser the graph, the lower $\rho(\mathcal{A})$. This can be seen in Figure (\ref{fig:incoherence}) where I plot $\rho$ for star, path, and binary graphs. If $n = 3$, the graphs are equivalent and the influence is $1$ for the central node and $0.5$ for the peripheral nodes. Hence, for each,
+
+\begin{equation*}
+    \rho = \sqrt{\frac{\left(1 - \frac{2}{3}\right)^2 + 2 \cdot \left(\frac{1}{2} - \frac{2}{3}\right)^2}{3 - 1}} \approx 2.89.
+\end{equation*}
+
+As the number of nodes increases $\rho$ clearly decreases.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{\plotpath/blackouts/rhos.pdf}
+    \caption{$\rho$ for different graphs and sizes} \label{fig:incoherence}
+\end{figure}
+
+Then we can simulate the average blackout, $ \frac{\sum_{t \geq \tau, i} X_{i, t}}{(T - \tau) \cdot n}$, after a given shock for different network structures. Figure (\ref{fig:blackout}) shows how the size of the blackout is decreasing in graph incoherence.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{\plotpath/blackouts/blackoutsim.pdf}
+    \caption{Simulation} \label{fig:blackout}
 \end{figure}
