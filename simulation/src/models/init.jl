@@ -29,6 +29,7 @@ function initializemodel(
 
     # Production data
     parameters[:R] = repeat([0.0], Nnodes)
+    parameters[:S] = repeat([0.0], Nnodes)
     parameters[:p] = repeat([0.0], Nnodes)
     parameters[:X] = repeat([0.0], Nnodes)
     parameters[:profit] = repeat([0.0], Nnodes)
@@ -59,7 +60,7 @@ function initializemodel(
 
         add_agent!(node, Prosumer, model, ε₀)
 
-        p₀ = parameters[:k] + 1e-2 # Start at stable value pₜ = k
+        p₀ = parameters[:k] * 2 # Start at pₜ = 2k
 
         add_agent!(node, Provider, model, α₀, γ₀, η₀, p₀)
 

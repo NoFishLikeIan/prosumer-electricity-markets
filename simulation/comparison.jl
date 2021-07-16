@@ -4,8 +4,8 @@ include("simulate.jl")
 plotpath = "../plots/"
 
 
-T = 100
-T₀ = 1
+T = 200
+T₀ = 75
 Tε = T₀:(T₀ + 10)
 nodes = 7
 lowε, highε = last(default_params[:ε])
@@ -22,10 +22,10 @@ lowε, highε = last(default_params[:ε])
 
 shocks = Dict(
     "constant" => (εshock, εshock),
-    "peripherical" => (εshockfour, εshockone),
     "central" => (εshockone, εshockfour),
-    "random" => (nothing, nothing),
-    "permanent" => (εshockonepermanent, εshockonepermanent)
+    # "peripherical" => (εshockfour, εshockone),
+    # "random" => (nothing, nothing),
+    # "permanent" => (εshockonepermanent, εshockonepermanent)
 )
 
 As, Gs = makestar(nodes)
@@ -39,16 +39,16 @@ for (shockname, shockmatrices) in shocks
 
     εs, εg = shockmatrices
 
-    Tₛ = shockname == "random" ? T * 2 : T
-
-    dfagentstar, dfmodelstar, modelstar = plotfromsteadystate(
-        As, Gs, Tₛ; εpath=εs, 
+    dfagentstar, dfmodelstar, modelstar = plotallsimulation(
+        As, Gs, T; εpath=εs, 
+        fromsteady=true,
         plotpath=joinpath(plotpath, shockname, "star"),
         nodestoplot=[1, 3]
     )
 
-    dfagentpath, dfmodelpath, modelpath = plotfromsteadystate(
-        Al, Gl, Tₛ; εpath=εg, 
+    dfagentpath, dfmodelpath, modelpath = plotallsimulation(
+        Al, Gl, T; εpath=εg, 
+        fromsteady=true,
         plotpath=joinpath(plotpath, shockname, "path"),
         nodestoplot=[1, 2, 3]
     )

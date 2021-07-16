@@ -3,7 +3,7 @@ ismultipleof(x, m) = x > 0 && (x % m) == 0
 """
 Make time exponential decay weighting matrix 
 """
-function makeW(T; alpha=0.1)
+function makeW(T; alpha=1.)
     W = Array{Float64}(undef, T, T)
 
     for t₁ in 1:T, t₂ in 1:T
@@ -21,9 +21,7 @@ function update_belief!(provider::Provider, model; withdecay=true)
 
     Rₜ = getjumpindex(model.R, node, N)
     pₜ = getjumpindex(model.p, node, N)
-    Xₜ = getjumpindex(model.X, node, N)
-
-    Sₜ = Xₜ .- Rₜ
+    Sₜ = getjumpindex(model.S, node, N)
 
     T = length(pₜ)
 

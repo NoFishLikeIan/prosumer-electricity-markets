@@ -1,6 +1,6 @@
 # Defaults
 theme(:vibrant)
-default(size=(800, 600), dpi=300, margin=margin = 5Plots.mm)
+default(size=(297 * 3, 210 * 3), dpi=300, margin=margin = 5Plots.mm)
 Plots.resetfontsizes()
 
 
@@ -52,28 +52,39 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
 end
 
 
-function plotproviderbeliefs(dfagent, model; savepath=nothing)
+function plotproviderbeliefs(dfagent, model; savepath=nothing, nodestoplot=Int64[])
     jointfigure = plotnodes(
         dfagent,
-        (time, nodedata) -> begin
+        (timeaxis, nodedata) -> begin
         dfpros, dfprov, dfprod = nodedata
         node = dfpros[1, :pos]
+
+        cs = Plots.palette(:tab10)
+
+        αlabel = latexstring("\$ \\alpha_t \$")
+        ηlabel = latexstring("\$ \\eta_t \$")
+        γlabel = latexstring("\$ \\gamma_t \$")
         
         εperiods = highdemandperiods(dfpros, model)
             
-        as, bs = eachcol(dfprov[!, [:a, :b]])
+        αs, γs, ηs = eachcol(dfprov[!, [:α, :γ, :η]])
 
-        fig = plot(
-            time, bs, 
-            title="Node $node", label="slope", legend=:topleft)
+        figure = plot(timeaxis, ηs, label=ηlabel, c=cs[1], title="Node $node")
+
+        plot!(figure, timeaxis, γs, label=γlabel, c=cs[2])
+
+        fig = plot!(
+            twinx(figure),
+            timeaxis, αs, 
+            c=cs[3], label=αlabel, legend=:bottomright)
             
-        vspan!(fig, εperiods, color=:red, alpha=0.3, label=nothing)
-
-        plot!(twinx(fig), time, as, label="intercept", color=:red, legend=:bottomright)
+        for (startp, endp) in εperiods
+            vspan!(fig, [startp, endp], color=:red, alpha=0.3, label=nothing)
+        end
             
         return fig
 
-    end)
+    end; nodestoplot=nodestoplot)
 
         if !isnothing(savepath)
         savefig(jointfigure, savepath)
@@ -89,9 +100,9 @@ function plotexcessdemand(dfagent, dfmodel; savepath=nothing)
     X = hcat(dfmodel.X...)'
 
     ∑X = positive.(sum(X, dims=2))
-
+    
     figure = plot(title="Excess demand", xlabel="time", ylabel="X")
-
+    
     for (i, node) in enumerate(modelnodes)
         plot!(figure, time, X[:, i], label="X$node (t)")
     end
@@ -133,7 +144,7 @@ end
 
 
 function plotprofit(dfagent, model; savepath=nothing)
-    g = model.space.graph
+g = model.space.graph
     
     nodelabel = unique(dfagent.pos)
     N = length(nodelabel)
@@ -194,7 +205,7 @@ end
 
 function plotcoherences(excdemand, ns; savepath=nothing)
 
-    figure = plot(xlabel=latexstring("\$ n \$"), ylabel=latexstring("\$ \\rho\$"))
+figure = plot(xlabel=latexstring("\$ n \$"), ylabel=latexstring("\$ \\rho\$"))
         
     for (i, results) in enumerate(excdemand)
 
