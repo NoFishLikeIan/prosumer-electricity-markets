@@ -30,11 +30,11 @@ function update_belief!(provider::Provider, model; withdecay=true)
     Ξ = hcat(ones(T), pₜ, Sₜ)
     W = withdecay ? makeW(T) : I
 
-    aₜ, bₜ, cₜ = inv(Ξ'W * Ξ) * (Ξ'W * Rₜ)
+    αₜ, γₜ, ηₜ = inv(Ξ'W * Ξ) * (Ξ'W * Rₜ)
 
-    provider.a = aₜ
-    provider.b = bₜ
-    provider.c = cₜ
+    provider.α = αₜ
+    provider.γ = γₜ
+    provider.η = ηₜ
     
 
 end

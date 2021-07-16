@@ -29,7 +29,7 @@ function agent_step!(provider::Provider, model)
     
     X = demand - supply
 
-    nextprice = p′(X, provider, model)
+    nextprice = p′(X, supply, provider, model)
 
     provider.p = nextprice
 

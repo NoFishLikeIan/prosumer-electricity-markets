@@ -43,8 +43,8 @@ function initializemodel(
         warn=false, scheduler=byids
     )
 
-    a₀, b₀, c₀ = -5., 0.1, 2. # FIXME: Guess from knowing r
 
+    α₀, γ₀, η₀ = -10., 2., 2.
 
     N = parameters[:N]
     M = parameters[:M]
@@ -61,7 +61,7 @@ function initializemodel(
 
         p₀ = parameters[:k] + 1e-2 # Start at stable value pₜ = k
 
-        add_agent!(node, Provider, model, a₀, b₀, p₀)
+        add_agent!(node, Provider, model, α₀, γ₀, η₀, p₀)
 
         for _ in 1:N
             add_agent!(node, Producer, model, s₀, r₀)

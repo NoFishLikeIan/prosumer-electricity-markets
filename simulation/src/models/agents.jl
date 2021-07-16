@@ -10,9 +10,9 @@ mutable struct Provider <: AbstractAgent
     id::Int
     pos::Int64
 
-    a::Float64 # Forecasting rule intercept
-    b::Float64 # ''               slope price
-    c::Float64 # ''               slope 
+    α::Float64 # Forecasting rule intercept
+    γ::Float64 # ''               slope price
+    η::Float64 # ''               slope 
     p::Float64 # Local price
 end
 
