@@ -137,11 +137,11 @@ Clearly, the ramp-up policy function will depend entirely on the choice of the m
   c(s, r; c_1) \coloneqq \frac{1}{c_1} \ \log \left( 1 + \exp(c_1 \ s \ r) \right)
 \end{equation}
 
-Notice that $c(s, r; c_1) \xrightarrow{} \max \{ 0, s \ r \}$ as $c_1 \xrightarrow{}\infty$. Hence, at the limit $c_1 \xrightarrow{}\infty$, we can determine the policy function $r(s_t, p_t)$ analytically (see \ref{a:limiting}). This ``asymptotic'' policy function is continuous everywhere but fails to be differentiable in two points. The first trivial interval to consider is that where $p_t < k$. Here producers make a loss at each unit sold, or in terms of the first order condition $mc(r; s_t, p_t) > mb(r; s_t, p_t).$. They will then try and reduce production as much as possible, namely \begin{equation*} r(s_t, p_t) = -\gamma \ s_t. \end{equation*} The second interval is that were current electricity production is too low, namely $s_t < \frac{\beta}{1- \beta} \sqrt{p_t - k}$, which implies $mc(r; s_t, p_t) < mb(r; s_t, p_t)$. In this case, ramp-up will be as high as possible $r(s_t, p_t) = \overline{r}$. Finally, the non-trivial case is that of the remaining interval where $mc(r; s_t, p_t) = mb(r; s_t, p_t)$. As shown in Appendix \ref{a:limiting},
+Notice that $c(s, r; c_1) \xrightarrow{} \max \{ 0, s \ r \}$ as $c_1 \xrightarrow{}\infty$. Hence, at the limit $c_1 \xrightarrow{}\infty$, we can determine the policy function $r(s_t, p_t)$ analytically (see \ref{a:limiting}). This ``asymptotic'' policy function is continuous everywhere but fails to be differentiable in two points. The first trivial interval to consider is that where $p_t < k$. Here producers make a loss at each unit sold, or in terms of the first order condition $mc(r; s_t, p_t) > mb(r; s_t, p_t).$. They will then try and reduce production as much as possible, namely \begin{equation*} r(s_t, p_t) = -\gamma \ s_t. \end{equation*} The second interval is that were current electricity production is too low, namely $s_t < \frac{\beta}{1- \beta} \sqrt{p_t - k}$, which implies $mc(r; s_t, p_t) < mb(r; s_t, p_t)$. In this case, ramp-up will be as high as possible $r(s_t, p_t) = \overline{r}$. Finally, the non-trivial case is that of the remaining interval where $mc(r; s_t, p_t) = mb(r; s_t, p_t)$. As shown in Appendix (\ref{a:limiting}),
 
 \begin{equation} \label{rpolicy}
   r(s_t, p_t) =
-  \frac{1 - \beta}{\beta} \ s_t - \frac{1}{2} \sqrt{ \left(\frac{1 - \beta}{\beta} \ 2 s_t \right)^2 - 4 \ \left(p_t - k\right) }.
+  \frac{1 - \beta}{\beta} \ s_t - \sqrt{ \left(\frac{1 - \beta}{\beta} \ s_t \right)^2 - \ \left(p_t - k\right) }.
 \end{equation}
 
 The equation has a few intuitive properties. First of all, there is no ramp-up if there is no unit profit, that is $r(s_t, p_t) = 0$ if $p_t - k = 0$. Second, ramp-up increases in $s_t$ and decreases in $p_t$. The function is plotted in Figure $\ref{fig:r}$.
@@ -217,25 +217,33 @@ This condition requires the provider to always match (sell) the quantity demande
 
 The provider's optimization is then an intertemporal problem that depends on the state $X_{i, t}$ which follows the evolution laid down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, at time $t$, they assumes $\B_{i, t}[e_{i, t+1}] = e_{i, t}$. This assumption is a good approximation in the case of a very persistent process $e_{i, t}$. Second, I assume the provider does not know the ramp-up function of producers in the local market, $r(s_{i, t}, p_{i, t})$, hence they approximate the aggregate ramp-up function by a linear adaptive rule, proportional to the price, namely
 
-\begin{equation*}\B_{i, t} \left[R_{i, t}(p) \right] = a_{i, t} + b_{i, t} \  p. \end{equation*}
+\begin{equation*}
+  \B_{i, t} \left[R_{i, t}(p, S) \right] = \alpha_{i, t} + \gamma_{i, t} \  p + \eta_{i, t} \ S.
+\end{equation*}
 
 
 For now, assume every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$. Given this setup we can specify the optimization problem of the provider. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$), the Bellman  equation can be written as,
 
 \begin{equation*}
+  V(X_t, S_t) = \max_{p_t, \Y_t} \left\{ p_t \  X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \  P^j(\Y_t) + \lambda_t \  \left( X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \right) + \beta \   V(X_{t+1}, S_{t+1}) \right\}
+\end{equation*}
+
+where,
+
+\begin{equation*}
   \begin{split}
-    V(X_t) &= \max_{p_t, \Y_t} \left\{ p_t \  X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \  P^j(\Y_t) + \lambda_t \  \left( X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \right) + \beta \   V(X_{t+1}) \right\} \\
-    X_{t+1} &= X_t - \left( a_t + b_t \  p_t \right)
+    X_{t+1} &= X_t - \B \left[R(p_t, S_t) \right] \\
+    S_{t+1} &= S_t + \B \left[R(p_t, S_t) \right]
   \end{split}
 \end{equation*}
 
 Optimization with respect to the price $p_t$, yields,
 
 \begin{equation}
-  X = \beta \  V^\prime \left(X - \left( a_t + b_t \  p_t \right) \right) \  b_t
+  X_t = \beta \ \gamma_{t} \ \left[\frac{\partial V}{\partial X_{t+1}} - \frac{\partial V}{\partial S_{t+1}}  \right]
 \end{equation}
 
-This first order condition requires that the marginal benefit of exploiting current excess demand $X$ should equal the perceived marginal benefit loss, $\beta \  V^\prime \left(X - \left( a_t + b_t \  p_t \right) \right)$, of reducing excess demand next period, $b_t$. On the other hand, the first order condition with respect to an arbitrary traded quantity $Y^j_t$ is,
+This first order condition requires that the marginal benefit of exploiting current excess demand $X$ should equal the believed marginal benefit loss, $ \beta \left[\frac{\partial V}{\partial X_{t+1}} - \frac{\partial V}{\partial S_{t+1}}  \right] $, of reducing excess demand next period, $\gamma_{t}$. On the other hand, the first order condition with respect to an arbitrary traded quantity $Y^j_t$ is,
 
 \begin{equation}
   \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y_t^j \  P_t^j(\Y_t))}{\partial Y_t^m} = -\lambda_t.
@@ -244,7 +252,7 @@ This first order condition requires that the marginal benefit of exploiting curr
 This equation tells us that in equilibrium providers will allocate the quantities traded with neighbors, $Y^j$, in such a way that marginal benefits are all equal. The optimization yields the policy function for local prices (see Appendix \ref{a:provider_optimization}),
 
 \begin{equation} \label{local_p}
-  p_{t+1} = p_t + \frac{a_t}{b_t} +  \left( \frac{1 - \beta}{\beta} \right) \  \frac{X_t}{b_t} - \lambda_t
+  p_{t+1} = p_t + \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} - \lambda_{t+1}
 \end{equation}
 
 \subsubsection{Bargaining model}
@@ -362,7 +370,7 @@ This equation determines the ratio of $Y^{(i, m)}_t / Y^{(i, n)}_t$ for each ele
 Having derived the budget constraint on the bargained quantity, we can rewrite Equation (\ref{local_p}) as
 
 \begin{equation} \label{local_p_comp}
-  p_{t+1} = p_t + \frac{a_t}{b_t} + \left( \frac{1 - \beta}{\beta} \right) \  \frac{X_t}{b_t} + 2P^m(\matr{Y}_{t})
+  p_{t+1} = p_t + \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} + 2P^m(\matr{Y}_{t})
 \end{equation}
 
 First, this equation establishes a clear relationship between $X_t$ and $p_{t+1}$. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality $X_t > 0$. If the cost of acquiring electricity from abroad, $P^m(\matr{Y}_{t})$, increases the producer will increase the price in the local market, $p_{t+1}$, in order to increase local production. Hence this expression gives a clear mechanism of the transmission between prices in the cross-border market and the regional wholesale market.
@@ -374,26 +382,27 @@ Providers approximate the ramp-up production function of the local producers usi
 % FIXME: Talk about consistency
 
 \begin{equation}
-  \B_t \left[R_{t+1}(p_t) \right] = a_t + b_t \  p_t
+  \B_{t} \left[R(p_t, S_t) \right] = \alpha_{t} + \gamma_{t} \  p + \eta_{t} \ S.
 \end{equation}
 
-I assume that each period providers observe the realization $R_{t+1}(p_t)$ and pick the coefficients $a_{t+1}$ and $b_{t+1}$ via weighted least squares, more precisely
+I assume that each period providers observe the realization $R_{t+1}$ and pick the coefficients $\alpha_{t+1}$, $\gamma_{t+1}$, and $\eta_{t+1}$ via weighted least squares, more precisely
 
 \begin{equation}
   \begin{pmatrix}
-    a_{t+1} \\
-    b_{t+1}
-  \end{pmatrix} = (\matr{p}_{t}^T \matr{W} \matr{p}_{t})^{-1} (\matr{p}_{t}^T \matr{W} \matr{R}_{t+1})
+    \alpha_{t+1} \\
+    \gamma_{t+1} \\
+    \eta_{t+1}
+  \end{pmatrix} = ( \matr{\chi}_{t}^T \matr{W}  \matr{\chi}_{t})^{-1} ( \matr{\chi}_{t}^T \matr{W} \matr{R}_{t+1})
 \end{equation}
 
 where,
 \begin{equation}
-  \matr{p}_{t} = \begin{pmatrix}
-    1      & p_0    \\
-    1      & p_1    \\
-    \vdots & \vdots \\
-    1      & p_{t}
-  \end{pmatrix} \text{ and } \matr{p}_t = \begin{pmatrix}
+  \matr{\chi}_{t} = \begin{pmatrix}
+    1      & p_0    & S_0    \\
+    1      & p_1    & S_1    \\
+    \vdots & \vdots & \vdots \\
+    1      & p_t    & S_t
+  \end{pmatrix} \text{ and } \matr{R}_t = \begin{pmatrix}
     R_{1}  \\
     R_{2}  \\
     \vdots \\

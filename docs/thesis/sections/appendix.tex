@@ -194,29 +194,39 @@ hence,
 First assume that $X_t > 0$. The case for $X_t < 0$ is perfectly symmetric. Let the approximated ramp-up function be,
 
 \begin{equation}
-    \tilde{R}(p) \coloneqq a + b \  p = \E[R(p)]
+    \B[R(p_t, S_t)] = \alpha + \gamma \  p_t + \eta \ S_t.
+\end{equation}
+
+Then let,
+
+\begin{equation}
+    \begin{split}
+        X_{t+1} &= X_t - \B[R(p_t, S_t)] \\
+        S_{t+1} &= S_t + \B[R(p_t, S_t)] \\
+        V_{t+1} &= V(X_{t+1}, S_{t+1})
+    \end{split}
 \end{equation}
 
 Each period the provider faces the problem,
 
 \begin{equation*}
     \begin{split}
-        \mathcal{L}(p, \Y, X) &= p \  X - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t \  P^j(\Y) \\
-        &+ \lambda_t \  \left( X -  \sum_{j} Y_t^j \right) \\
-        &+ \beta \   V\left(X - \tilde{R} (p) \right)
+        \mathcal{L}(p, \Y, X_t, S_t) &= p \  X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j \  P^j(\Y) \\
+        &+ \lambda_t \  \left( X_t -  \sum_{j} Y^j \right) + \beta \ V_{t+1}
     \end{split}
 \end{equation*}
 
-such that $V(X) = \max_{p, \Y} \mathcal{L}(p, \Y, X)$. The first order condition of $\mathcal{L}$ requires that,
+such that $V(X_t, S_t) = \max_{p, \Y} \mathcal{L}(p, \Y, X_t, S_t)$. The first order condition of $\mathcal{L}$ requires that,
 
 \begin{equation} \label{foc_p}
     \begin{split}
-        \frac{\partial}{\partial p} \mathcal{L} &= X - \beta \  V^\prime \left(X - \tilde{R}(p) \right) \  \tilde{R}^\prime(p) = 0 \\
-        X &= \beta \  V^\prime \left(X - \tilde{R}(p) \right) \  \frac{\partial \tilde{R}}{\partial p}(p)
+        \frac{\partial}{\partial p} \mathcal{L} &= X_t + \beta \left[ \frac{\partial V_{t+1}}{\partial X_{t+1}} \frac{\partial X_{t+1}}{\partial p} + \frac{\partial V_{t+1}}{\partial S_{t+1}} \frac{\partial S_{t+1}}{\partial p}  \right] \\
+        &= X_t  + \beta \left[-\gamma \ \frac{\partial V_{t+1}}{\partial X_{t+1}} + \gamma \ \frac{\partial V_{t+1}}{\partial S_{t+1}} \right] \\
+        X_t &= \beta \ \gamma \ \left[\frac{\partial V_{t+1}}{\partial X_{t+1}} - \frac{\partial V_{t+1}}{\partial S_{t+1}}  \right]
     \end{split}
 \end{equation}
 
-This first order condition implies that the benefit of charging a higher price today, which is today's demand $X$, should be equal to the cost of reducing the demand tomorrow, $\beta \  V^\prime \left(X - \tilde{R}(p) \right) \  \frac{\partial \tilde{R}}{\partial p}(p)$. The second first order condition requires that, for each neighbor $m$, 
+This first order condition implies that the benefit of charging a higher price today, which is today's demand $X_t$, should be equal to the cost of reducing the demand tomorrow, $ \beta \ \gamma \ \left[\frac{\partial V_{t+1}}{\partial X_{t+1}} - \frac{\partial V_{t+1}}{\partial S_{t+1}}  \right] $. The second first order condition requires that, for each neighbor $m$, 
 
 \begin{equation} \label{foc_Y}
     \begin{split}
@@ -236,37 +246,50 @@ We can distribute the partial derivative by noting that for each entry in the su
 
 \subsubsection{Envelope}
 
-By the envelope theorem,
+By the envelope theorem, the first order condition with respect to $X_t$
 
-\begin{equation} \label{env}
-    V^\prime(X_t) = p_t + \lambda_t + \beta \  V^\prime(X_{t+1})
+\begin{equation} \label{envX}
+    \begin{split}
+        \frac{\partial V_t}{\partial X_t} &= p_t + \lambda_t + \beta \ \frac{\partial V_{t+1}}{\partial X_{t+1} }\frac{\partial X_{t+1}}{\partial X_t} \\
+        &= p_t + \lambda_t + \beta \ \frac{\partial V_{t+1}}{\partial X_{t+1} },
+    \end{split}
+\end{equation}
+
+and
+
+\begin{equation} \label{envS}
+    \frac{\partial V_t}{\partial S_t} = \beta \ \frac{\partial V_{t+1}}{\partial S_{t+1}}.
 \end{equation}
 
 
-Then combining Equations (\ref{env}) and (\ref{foc_p}), we obtain
+
+Then combining Equations (\ref{envX}), (\ref{envS}), and (\ref{foc_p}), we obtain
 
 \begin{equation}
-    V^\prime(X_t) = p_t + \lambda_t + \frac{X_t}{\frac{\partial \tilde{R}}{\partial p}(p_t)}
+    \begin{split}
+         \frac{\partial V_t}{\partial X_t} - \frac{\partial V_t}{\partial S_t} &= \frac{X_t}{\gamma} + p_t + \lambda_t 
+    \end{split}
 \end{equation}
 
 Iterating forward,
 
 \begin{equation}
-    V^\prime(X_{t+1}) = p_{t+1} + \lambda_{t+1} + \frac{X_{t+1}}{\frac{\partial \tilde{R}}{\partial p}(p_{t+1})}
+    \frac{\partial V_{t+1}}{\partial X_{t+1}} - \frac{\partial V_{t+1}}{\partial S_{t+1}} = \frac{X_{t+1}}{\gamma} + p_{t+1} + \lambda_{t+1} 
 \end{equation}
 
 Using (\ref{foc_p}),
 
 \begin{equation}
-    \frac{X_t}{\beta \  \frac{\partial \tilde{R}}{\partial p}(p_t)} = p_{t+1} + \lambda_{t+1} + \frac{X_{t} - \tilde{R}(p_t)}{\frac{\partial \tilde{R}}{\partial p}(p_{t+1})}
+    \frac{X_t}{\beta \ \gamma} = \frac{X_t - \B\left[R(p_t, S_t)\right]}{\gamma} + p_{t+1} + \lambda_{t+1}
 \end{equation}
 
-Finally, using the linearity of $\tilde{R}$, $\frac{\partial \tilde{R}}{\partial p} = b$,
+Finally, using the definition $\B\left[R(p_t, S_t)\right]$,
 
 \begin{equation}
     \begin{split}
-        \frac{X_t}{\beta \  b} &=  \lambda_{t+1} + p_{t+1} + \frac{X_t}{b} - \frac{a +  b \  p_{t}}{b} \\
-        p_{t+1} &= \left( p_t + \frac{a}{b} \right) +  \left( \frac{1 - \beta}{\beta} \right) \  \frac{X_t}{b} - \lambda_{t+1}
+        \frac{X_t}{\beta \ \gamma} &= \frac{X_t - \alpha - \gamma \  p_t - \eta \ S_t}{\gamma} + p_{t+1} + \lambda_{t+1} \\
+        p_{t+1} &= \frac{X_t}{\beta \ \gamma} - \frac{X_t - \alpha - \gamma \  p_t - \eta \ S_t}{\gamma} - \lambda_{t+1} \\
+        p_{t+1} &= p_t + \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} - \lambda_{t+1}
     \end{split}
 \end{equation} 
 
