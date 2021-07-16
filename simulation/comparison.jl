@@ -4,8 +4,8 @@ include("simulate.jl")
 plotpath = "../plots/"
 
 
-T = 200
-T₀ = 100
+T = 100
+T₀ = 1
 Tε = T₀:(T₀ + 10)
 nodes = 7
 lowε, highε = last(default_params[:ε])
@@ -50,7 +50,7 @@ for (shockname, shockmatrices) in shocks
     dfagentpath, dfmodelpath, modelpath = plotfromsteadystate(
         Al, Gl, Tₛ; εpath=εg, 
         plotpath=joinpath(plotpath, shockname, "path"),
-        nodestoplot=[1, 2, 3, 4]
+        nodestoplot=[1, 2, 3]
     )
 
     results[shockname] = Dict(

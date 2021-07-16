@@ -43,7 +43,7 @@ function initializemodel(
         warn=false, scheduler=byids
     )
 
-    a₀, b₀ = -5., 0.1 # FIXME: Guess from knowing r
+    a₀, b₀, c₀ = -5., 0.1, 2. # FIXME: Guess from knowing r
 
 
     N = parameters[:N]

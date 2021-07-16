@@ -2,12 +2,12 @@ Pₛ = [1 0; 0 1]
 
 ρₗ, ρᵤ = .99, 0.5
 
-ε = ([ρₗ 1 - ρₗ; 1 - ρᵤ ρᵤ], [2.0, 2.5])
+ε = ([ρₗ 1 - ρₗ; 1 - ρᵤ ρᵤ], [0.05, 0.1])
 
 default_params = Dict(
-    :k => 2.0,
-    :β => 0.9, :βprod => 0.9,
-    :M => 50, :N => 10,
+    :k => 1.0,
+    :β => 0.99, :βprod => 0.99,
+    :M => 10_000, :N => 50,
     :ε => ε)
 
 function simulatemarket!(model; adata=[:pos, :p, :r, :ε, :s, :b, :a],  mdata=[:X, :R], T=100, T₀=0)
@@ -39,6 +39,7 @@ function simulatefromsteady!(model;
 
     println("Bringing to steady state...")
     run!(model, agent_step!, model_step!, T₀)
+    print('\n')
 
     println("Simulating...")
     return simulatemarket!(model; adata=adata, mdata=mdata, T=T, T₀=T₀)

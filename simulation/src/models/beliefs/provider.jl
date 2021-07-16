@@ -19,18 +19,22 @@ function update_belief!(provider::Provider, model; withdecay=true)
     node = provider.pos
     N = length(model.space.s)
 
-    R = getjumpindex(model.R, node, N)
-    p = getjumpindex(model.p, node, N)
+    Rₜ = getjumpindex(model.R, node, N)
+    pₜ = getjumpindex(model.p, node, N)
+    Xₜ = getjumpindex(model.X, node, N)
 
-    T = length(p)
+    Sₜ = Xₜ .- Rₜ
 
-    X = hcat(ones(T), p)
+    T = length(pₜ)
+
+    Ξ = hcat(ones(T), pₜ, Sₜ)
     W = withdecay ? makeW(T) : I
 
-    a, b = inv(X'W * X) * (X'W * R)
+    aₜ, bₜ, cₜ = inv(Ξ'W * Ξ) * (Ξ'W * Rₜ)
 
-    provider.a = a
-    provider.b = b
+    provider.a = aₜ
+    provider.b = bₜ
+    provider.c = cₜ
     
 
 end
