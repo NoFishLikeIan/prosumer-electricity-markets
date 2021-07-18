@@ -8,32 +8,78 @@ A more interesting example is that of the star graph, namely each provider has a
     \begin{equation*}
         \begin{split}
             \matr{A} &= \begin{pmatrix}
-                0 & 1 & 1 & 1 \\
-                1 & 0 & 0 & 0 \\
-                1 & 0 & 0 & 0 \\
-                1 & 0 & 0 & 0
+                0      & 1 & 1 & 1 & \ldots \\
+                1      & 0 & 0 & 0 &        \\
+                1      & 0 & 0 &   &        \\
+                1      & 0 &   &   &        \\
+                \vdots &   &   &   & \ddots
             \end{pmatrix} \\
             \vspace{5mm} \\
-            E &= \set{(1, 2), (1, 3), (1, 4)} \\
+            E &= \set{(1, 2), (1, 3), (1, 4), \ldots, (1, n)} \\
             \vspace{5mm} \\
-            \G &= \begin{pmatrix}
-                0 & 1 & 1 \\
-                1 & 0 & 1 \\
-                1 & 1 & 0
+            \G &= \matr{\iota}_n \matr{\iota}_n^T - \I_n =  \begin{pmatrix}
+                0 & 1 & 1 &        \\
+                1 & 0 & 1 &        \\
+                1 & 1 & 0 &        \\
+                  &   &   & \ddots
             \end{pmatrix}
         \end{split}
     \end{equation*}
 \end{minipage}
 \vspace{5mm}
 
-Given the associated line graph, the traded value vector is,
+Given the associated line graph, consider the matrix,
 
-\begin{equation}
-    2 P \circ \Y_t = \begin{pmatrix}
-        0.75  & -0.25 & -0.25 \\
-        -0.25 & 0.75  & -0.25 \\
-        -0.25 & -0.25 & 0.75
-    \end{pmatrix} \Delta_t
-\end{equation}
+\begin{equation*}
+    \begin{split}
+        (2\I_n + \G)^{-1} &= \left( 2\I_n + \matr{\iota}_n \matr{\iota}_n^T - \I_n \right)^{-1}\\
+        &= \left( \I_n + \matr{\iota}_n \matr{\iota}_n^T \right)^{-1} \\
+        &= \I_n - \frac{1}{n + 1} \matr{\iota}_n \matr{\iota}_n^T
+    \end{split}
+\end{equation*}
 
-\textbf{TODO: Work out the effect of bargaining power on network}
+Then we can use this in the bargaining solution,
+
+\begin{equation*}
+    \begin{split}
+        P_t \circ \Y_t &= (2\I_n + \G)^{-1} \Delta_t \\
+        &= \left( \I_n - \frac{1}{n + 1} \matr{\iota}_n \matr{\iota}_n^T \right) \Delta_t \\
+        &= \Delta_t - \frac{\sum_{(i, j)} \Delta^{(i, j)}_t}{n+1} \ \matr{\iota}_n
+    \end{split}
+\end{equation*}
+
+Given the star structure of the network, I will write an edge $(1, j)$ as simply $j$ and I will suppress $t$. Hence, each cross-border price is,
+
+\begin{equation*}
+    P^j = \frac{n\Delta^j - \sum_{m \neq j} \Delta^m }{(n + 1)Y^j}.
+\end{equation*}
+
+Equalization of prices requires that, for each neighbor of $1$,
+
+\begin{equation*}
+    \begin{split}
+        P^j &= P^i \\
+        \frac{n\Delta^j - \sum_{m \neq j} \Delta^m }{Y^j} &= \frac{n\Delta^i - \sum_{l \neq i} \Delta^l}{Y^i} \\
+        \frac{Y^i}{Y^j} &= \frac{\Delta^i - \sum_{l \neq i} \Delta^l / n}{\Delta^j - \sum_{m \neq j} \Delta^m / n}
+    \end{split}
+\end{equation*}
+
+Then, using $X_1 = \sum^n_{j = 2} Y^j$, we can rewrite $Y^2$ as,
+
+\begin{equation*}
+    Y^2 = \sum^n_{l = 2} Y^l \Big/ \sum^n_{l = 2} \frac{Y^l}{Y^2}
+\end{equation*}
+
+Letting the average revenue difference between one and its neighbors be
+
+\begin{equation*}
+    \underline{\Delta}_1 = X_1 p_1 - \frac{1}{n-1} \sum^n_{l = 2} X_l p_l,
+\end{equation*}
+
+we can rewrite the cross-border prices as,
+
+\begin{equation*}
+    P^2 = \frac{n \Delta^2 - \sum_{m \neq 2} \Delta^m}{(n-1) Y^2} = \frac{\underline{\Delta}_1}{2 (n-1) X_1} = P^j \ \forall j.
+\end{equation*}
+
+Notice that if $n = 2$, we obtain back the solution of the two providers case.

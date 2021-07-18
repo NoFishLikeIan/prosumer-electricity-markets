@@ -49,7 +49,9 @@ Using this in the provider's policy function,
   \end{split}
 \end{equation*}
 
-By symmetry, provider two has the same policy function. Stacking vertically we obtain,
+By symmetry, provider two has the same policy function. Letting $p_t \coloneqq \begin{pmatrix}
+    p_{1, t} \\ p_{2, t}
+  \end{pmatrix}$ and doing so with all other variables, we can stack vertically and obtain,
 
 \begin{equation}
   p_{t+1} = \begin{pmatrix}
@@ -58,34 +60,4 @@ By symmetry, provider two has the same policy function. Stacking vertically we o
   \end{pmatrix} p_t + \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \circ S_t \right) \oslash \gamma_t
 \end{equation}
 
-This equation determines the coevolution of the two prices. Consider the case in which there is no excess demand $X_{1, t} = X_{2, t} = 0$ and prices are constant, at levels $\bar{p}$. Then the coevolution equations yields,
-
-\begin{equation} \label{two:const}
-  \bar{p} =
-\end{equation}
-
-Hence, prices are constant and no trade happens as long as the beliefs of the two providers are the same. Note that this is true in a completely symmetric case. Starting from this, consider a positive shock in the excess demand in node two at time $\tau$ ($X_{2, \tau}$ increases due to an increase in $e_{2, \tau}$). Then, using the condition (\ref{two:const}),
-
-\begin{equation}
-  \begin{split}
-    p_{2, \tau + 1} &= p_2 + \frac{1 - \beta}{\beta} \  \frac{X_{2, \tau}}{b} \\
-    p_{1, \tau + 1} &= p_1
-  \end{split}
-\end{equation}
-
-
-\begin{figure}[H]
-  \begin{subfigure}{0.48\textwidth}
-    \centering
-    \includegraphics[width = \textwidth]{\plotpath/two/pricesupply.pdf}
-    \caption{Price and supply in each node}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}{0.48\textwidth}
-    \centering
-    \includegraphics[width = \textwidth]{\plotpath/two/demand.pdf}
-    \caption{Excess demand, $X_{1, t}$ and $X_{2, t}$, and supply shortage, $X_{1, t} + X_{2, t}$.}
-  \end{subfigure}
-  \caption{A demand shock with two providers} \label{fig:two}
-\end{figure}
-
+This equation determines the coevolution of the two prices.
