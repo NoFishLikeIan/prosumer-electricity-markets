@@ -1,5 +1,8 @@
 # Trophic resilience and prosumer electricity markets
 
+![diagram](docs/plots/diagram.PNG)
+
+
 Exploratory code for a (hopefully) upcoming paper on trophic resilience applied to industry networks.
 
 It requires `Julia v1.5.2`. 
