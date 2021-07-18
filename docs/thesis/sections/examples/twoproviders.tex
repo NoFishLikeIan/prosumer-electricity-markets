@@ -40,28 +40,22 @@ Equation (\ref{two:P}) tells us that the influence of each node on the traded pr
   (2 \I_{1} + \G)^{-1} = \left( 2 \begin{pmatrix} 1 \end{pmatrix} + \begin{pmatrix} 0 \end{pmatrix} \right)^{-1} = \frac{1}{2}
 \end{equation}
 
-Using this in the policy function of one we obtain,
+Using this in the provider's policy function,
 
 \begin{equation*}
   \begin{split}
-    p_{1, t+1} &= p_{1, t} + \frac{a_{1, t}}{b_{1, t}} + \frac{1 - \beta}{\beta} \frac{X_{1, t}}{b_{1, t}} + 2P^{(1, 2)} \\
-    &= 2p_{1, t} + p_{2, t} + \frac{a_{1, t}}{b_{1, t}} + \frac{1 - \beta}{\beta} \frac{X_{1, t}}{b_{1, t}}
+    p_{1, t+1} &= p_{1, t} + \frac{1-\beta}{\beta \ \gamma_{1, t}} X_{1, t} + \frac{\alpha_{1, t} + \eta_{1, t} S_{1, t}}{\gamma_{1, t}} + 2P^{(1, 2)} \\
+    &= 2p_{1, t} + p_{2, t} + \frac{1-\beta}{\beta \ \gamma_{1, t}} X_{1, t} + \frac{\alpha_{1, t} + \eta_{1, t} S_{1, t}}{\gamma_{1, t}}
   \end{split}
 \end{equation*}
 
-and, by the same procedure, the policy function of two,
-
-\begin{equation*}
-  p_{2, t+1} = 2 p_{2, t} +  p_{1, t} + \frac{a_{2, t}}{b_{2, t}} + \frac{1 - \beta}{\beta} \frac{X_{2, t}}{b_{2, t}}
-\end{equation*}
-
-Stacking vertically we obtain,
+By symmetry, provider two has the same policy function. Stacking vertically we obtain,
 
 \begin{equation}
   p_{t+1} = \begin{pmatrix}
-    2  & 1 \\
-    -1 & 0
-  \end{pmatrix} p_t + a_t \oslash b_t + \frac{1 - \beta}{\beta} \left( X_t \oslash b_t \right)
+    2 & 1 \\
+    1 & 2
+  \end{pmatrix} p_t + \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \circ S_t \right) \oslash \gamma_t
 \end{equation}
 
 This equation determines the coevolution of the two prices. Consider the case in which there is no excess demand $X_{1, t} = X_{2, t} = 0$ and prices are constant, at levels $\bar{p}$. Then the coevolution equations yields,
