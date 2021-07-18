@@ -2,12 +2,12 @@ Pₛ = [1 0; 0 1]
 
 ρₗ, ρᵤ = .99, 0.5
 
-ε = ([ρₗ 1 - ρₗ; 1 - ρᵤ ρᵤ], [1., 2.])
+ε = ([ρₗ 1 - ρₗ; 1 - ρᵤ ρᵤ], [.5, 1.])
 
 default_params = Dict(
     :k => 1.0,
-    :β => 0.9, :βprod => 0.9,
-    :M => 8_000, :N => 50,
+    :β => 0.99, :βprod => 0.99,
+    :M => 5_000, :N => 50,
     :ε => ε)
 
 adata = [:pos, :p, :r, :ε, :s, :γ, :η, :α]
@@ -29,7 +29,7 @@ function simulatemarket!(model; adata=adata, mdata=mdata, T=100, Tₛ=1)
 end
 
 
-function simulatefromsteady!(model; adata=adata, mdata=mdata, T=100, Tₛ=50)
+function simulatefromsteady!(model; adata=adata, mdata=mdata, T=100, Tₛ=200)
 
     if !isnothing(model.εpath)
         Nnodes = length(model.space.s)
@@ -38,12 +38,21 @@ function simulatefromsteady!(model; adata=adata, mdata=mdata, T=100, Tₛ=50)
         model.εpath = vcat(constantε, model.εpath) # Append steady state shock
     end
 
-    println("Bringing to steady state...")
-    run!(model, agent_step!, model_step!, Tₛ)
-    print('\n')
+    dfagent, dfmodel = run!(model, agent_step!, model_step!, T + Tₛ; adata, mdata)
 
-    println("Simulating...")
-    return simulatemarket!(model; adata=adata, mdata=mdata, T=T, Tₛ=Tₛ)
+    # Fix bug of carried over X
+    modelnodes = unique(dfagent.pos)
+    Nnodes = length(modelnodes)
+
+    dfagent = dfagent[dfagent.step .≥ Tₛ, :]
+    dfmodel = dfmodel[dfmodel.step .≥ Tₛ, :]
+
+    allX = reshape(dfmodel.X[end], Nnodes, :)'
+    X = allX[(Tₛ + 1):end, :]
+
+    dfmodel.X = [x for x in eachrow(X)]
+
+    return dfagent, dfmodel
 
 end
 

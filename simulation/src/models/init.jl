@@ -45,7 +45,7 @@ function initializemodel(
     )
 
 
-    α₀, γ₀, η₀ = -10., 2., 2.
+    α₀, γ₀, η₀ = -100., 2., 2.
 
     N = parameters[:N]
     M = parameters[:M]
