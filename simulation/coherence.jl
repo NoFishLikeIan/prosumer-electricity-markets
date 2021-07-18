@@ -3,7 +3,7 @@ include("simulate.jl")
 
 resultspath = "simresults/data.jld"
 plotpath = "../plots/blackouts"
-CACHE = false
+CACHE = true
 
 makegraphs = Dict(
     "star" => makestar,
@@ -66,7 +66,7 @@ end
 
 T = 250
 T₀ = 150
-ns = 3:30
+ns = 3:127
 
 results = isfile(resultspath) ? JLD.load(resultspath) : Dict()
 excdemand = get(results, "excdemand", nothing)

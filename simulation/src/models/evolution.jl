@@ -80,7 +80,7 @@ function model_step!(model)
         push!(model.X, X)
         push!(model.S, supply)
 
-        if model.step > 3
+        if model.step > 10
             update_belief!(provider, model)
         end
 
