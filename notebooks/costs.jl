@@ -150,8 +150,8 @@ begin
 	boundarylabel = latexstring("\$ s_t = \\frac{\\beta}{1- \\beta} \\sqrt{p_t - k} \$")
 	profitlabel = latexstring("\$ p_t = k \$")
 	
-	upperbound = latexstring("\$ r = \\overline{r} \$")
-	lowerbound = latexstring("\$ r = -\\gamma s \$")
+	upperbound = latexstring("\$ r = \\sqrt{p_t - k} \$")
+	lowerbound = latexstring("\$ r = -\\delta s_t \$")
 	
 	xlabel = latexstring("\$ s_t \$")
 	ylabel = latexstring("\$ p_t \$")
@@ -159,7 +159,7 @@ begin
 	rfigure = contourf(
 		supplyspace, pricespace, 
 		(s, p) -> r(s, p), clim = clims, 
-		levels = range(clims..., length = 20),
+		levels = range(clims..., length = 15),
 		xlims = extrema(supplyspace), ylims=extrema(pricespace),
 		title = latexstring("\$ r \\ (s_t, p_t) \$"),
 		linestyle=:dash, legend = :topleft, c=:lighttemperaturemap,
@@ -173,7 +173,7 @@ begin
 		rfigure, supplyspace, s -> k, legend = :topleft,
 		label = profitlabel, c = :black, linewidth = 2)
 	
-	annotate!(2, pᵤ * 0.75, upperbound)
+	annotate!(2, pᵤ * 0.6, upperbound)
 	annotate!(0.8, k * 0.4, text(lowerbound))
 	
 end
