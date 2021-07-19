@@ -3,7 +3,7 @@
 
 \subsection{Notation introduction}
 
-The model rests on two sources of friction. First, all agents are assumed to be boundedly rational. They do not know the workings of the market but have beliefs over price formations mechanisms and act consistently with them. Second, markets interact on a graph structure. Before describing the model, it is then useful to introduce some notation.
+The model rests on two sources of friction. First, all agents are assumed to be boundedly rational. They do not know the workings of the market but have beliefs over price formations mechanisms and act consistently with them. Second, agents acting in cross-border markets interact on a graph structure. Before describing the model, it is then useful to introduce some notation.
 
 \subsubsection{Beliefs}
 
@@ -11,7 +11,7 @@ To denote beliefs over some future variable $x_{t+1}$ I will use $\B[x_{t+1}]$. 
 
 \subsubsection{Graphs}
 
-Markets operate on a graph $\mathcal{A} = (V, E)$ and can trade between markets occurs only if they share an edge, $(i, j) \in E$. Let the neighbors of a node be the set,
+Graphs are a set of vertices and a set of edges, $\mathcal{A} = (V, E)$, and interactions can happen between markets only if they share an edge, $(i, j) \in E$. Furthermore, the neighbors of a node be the set,
 
 \begin{equation}
   N_{\mathcal{A}}(i) \coloneqq \set{ \ j \in V: \ (i, j) \in E \ }.
@@ -19,14 +19,14 @@ Markets operate on a graph $\mathcal{A} = (V, E)$ and can trade between markets 
 
 % FIXME: Remove outside option
 
-As things happen on the edges $E$, I will simplify the solution by using the directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, giving a positive sign to the edge if the ``outside option'' is that of the first entry and negative if is that of the second entry (e.g. in our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $(2, 7)$ is the outside option of $2$ which is the second entry in $(1, 2)$). For example, consider an arbitrary long sequential graph,
+As things happen between edges, I will simplify the solution by relaying on the notion of directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, giving a positive sign to the edge if the ``outside option'' is that of the first entry and negative if is that of the second entry (e.g. in our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $(2, 7)$ is the outside option of $2$ which is the second entry in $(1, 2)$). For example, consider an arbitrary long sequential graph,
 
 \begin{figure}[H]
   \centering
   \input{sections/diagrams/linemodel.tikz}
 \end{figure}
 
-Such a graph has a symmetric adjacency matrix of size $n$,
+Such a graph has an adjacency matrix of size $n$,
 
 \begin{equation}
   \matr{A} =
@@ -40,7 +40,7 @@ Such a graph has a symmetric adjacency matrix of size $n$,
   \end{pmatrix}
 \end{equation}
 
-Now to construct the corresponding line graph consider the line graph node $(i, i+1)$. The adjacency matrix of the line graph will have then entry $-1$ with the edge $(i+1, i+2)$ since it represents the outside option of the second element and, likewise, $-1$ with the edge $(i-1, i)$. Hence the adjacency matrix $\G,$ is the $(n-1) \times (n-1)$ matrix,
+Now to construct the corresponding line graph consider the sequential graph node $(i, i+1)$. The adjacency matrix of the line graph will have then entry $-1$ with the edge $(i+1, i+2)$ since it represents the outside option of the second element and, likewise, $-1$ with the edge $(i-1, i)$. Hence the adjacency matrix $\G,$ is the $(n-1) \times (n-1)$ matrix,
 
 \begin{equation}
   \G =
@@ -98,10 +98,10 @@ The producer by ramping up production pays $c(s_t, r)$ and increases the costs o
   mb(r; s_t, p_t)  \coloneqq \beta \ \left[p_t - k + \left(\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right) \ r + c(s_t + r, r) \right],
 \end{equation*}
 
-which can be broken up into the price the producer believes they can get for the new production, $\B[p_{t+1}] - k = p_t - k$, the avoided marginal cost tomorrow of having increased production today instead, $r \ \frac{\partial c}{\partial r}(s_t + r, r) + c(s_t + r, r)$, and finally the increased marginal cost brought about by a higher level of production $\frac{\partial c}{\partial s_t}(s_t + r, r)$. Hence, in equilibrium
+which can be broken up into the price the producer believes they can get for the new production, $\B[p_{t+1}] - k = p_t - k$, the avoided marginal cost tomorrow of having increased production today instead, $r \ \frac{\partial c}{\partial r}(s_t + r, r) + c(s_t + r, r)$, and finally the increased marginal cost brought about by a higher level of production $\frac{\partial c}{\partial s_t}(s_t + r, r)$. Hence, in equilibrium $r$ is such that,
 
 \begin{equation} \label{raw_policy_producer}
-  r \text{ such that } mc(r; s_t, p_t) = mb(r; s_t, p_t).
+  mc(r; s_t, p_t) = mb(r; s_t, p_t).
 \end{equation}
 
 \iffalse % TODO: Add quadratic?
@@ -137,14 +137,14 @@ Clearly, the ramp-up policy function will depend entirely on the choice of the m
   c(s, r; c_1) \coloneqq \frac{1}{c_1} \ \log \left( 1 + \exp(c_1 \ s \ r) \right).
 \end{equation}
 
-Notice that $c(s, r; c_1) \xrightarrow{} \max \{ 0, s \ r \}$ as $c_1 \xrightarrow{}\infty$. Hence, at the limit $c_1 \xrightarrow{}\infty$, we can determine the policy function $r(s_t, p_t)$ analytically (see \ref{a:limiting}). This ``asymptotic'' policy function is continuous everywhere but fails to be differentiable in two points. The first trivial interval to consider is that where $p_t < k$. Here producers make a loss at each unit sold, or in terms of the first order condition $mc(r; s_t, p_t) > mb(r; s_t, p_t).$. They will then try and reduce production as much as possible, namely \begin{equation*} r(s_t, p_t) = \underline{r}(s_t). \end{equation*} The second interval is that were current electricity production is too low, namely $s_t < \frac{\beta}{1- \beta} \sqrt{p_t - k}$, which implies $mc(r; s_t, p_t) < mb(r; s_t, p_t)$. In this case, ramp-up will be as high as possible $r(s_t, p_t) = \overline{r}(s_t)$. Finally, the non-trivial case is that of the remaining interval where $mc(r; s_t, p_t) = mb(r; s_t, p_t)$. As shown in Appendix (\ref{a:limiting}),
+Notice that $c(s, r; c_1) \xrightarrow{} \max \{ 0, s \ r \}$ as $c_1 \xrightarrow{}\infty$. In the limit $c_1 \xrightarrow{}\infty$, we can determine the policy function $r(s_t, p_t)$ analytically (see \ref{a:limiting}). This ``asymptotic'' policy function is continuous everywhere but fails to be differentiable in two points. The first trivial interval to consider is that where $p_t < k$. Here producers make a loss at each unit sold, or in terms of the first order condition $mc(r; s_t, p_t) > mb(r; s_t, p_t)$. They will then try and reduce production as much as possible, namely \begin{equation*} r(s_t, p_t) = \underline{r}(s_t). \end{equation*} The second interval is that were current electricity production is too low, namely $s_t < \frac{\beta}{1- \beta} \sqrt{p_t - k}$, which implies $mc(r; s_t, p_t) < mb(r; s_t, p_t)$. In this case, ramp-up will be as high as possible $r(s_t, p_t) = \overline{r}(s_t)$. Finally, the non-trivial case is that of the remaining interval where $mc(r; s_t, p_t) = mb(r; s_t, p_t)$. As shown in Appendix (\ref{a:limiting}),
 
 \begin{equation} \label{rpolicy}
   r(s_t, p_t) =
   \frac{1 - \beta}{\beta} \ s_t - \sqrt{ \left(\frac{1 - \beta}{\beta} \ s_t \right)^2 - \ \left(p_t - k\right) }.
 \end{equation}
 
-The equation has a few intuitive properties. First of all, there is no ramp-up if there is no unit profit, that is $r(s_t, p_t) = 0$ if $p_t - k = 0$. Second, ramp-up increases in $s_t$ and decreases in $p_t$. The function is plotted in Figure $\ref{fig:r}$, where I choose $\underline{r}(s) = - \delta s$ with $\delta \in (0, 1)$ and $\overline{r}(s) = \sqrt{p-k}$.
+The equation has a few intuitive properties. First of all, there is no ramp-up if there is no unit profit, that is $r(s_t, p_t) = 0$ if $p_t - k = 0$. Second, ramp-up increases in $p_t$. The function is plotted in Figure $\ref{fig:r}$, where I choose $\underline{r}(s) = - \delta s$ with $\delta \in (0, 1)$ and $\overline{r}(s) = \sqrt{p-k}$.
 
 \begin{figure}[H]
   \centering
@@ -200,7 +200,7 @@ Electricity providers are monopolists in their own local market and are indexed,
   \Pi_i(p_{i, t}, \Y_{i, t}) = p_{i, t} \  X_{i, t}(p_{i, t-1}) - \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)} \  P_t^{(i, j)},
 \end{equation}
 
-where $p_{i, t} \in \R_{+}$ and
+where $p_{i, t} \in \R$ and
 
 \begin{equation}
   \begin{split}
@@ -319,7 +319,7 @@ with associated Jacobian (see \ref{a:jacobian_p}),
   D_{\Y} P(\Y_t) = -\diag(P(\Y_t) \oslash \Y_t).
 \end{equation}
 
-Equation (\ref{Pmatrix}) shows that the trading prices on an edge, $P^{(i, j)}$, depends only on the state of the edges' two nodes, via $Y^{(i, j)}_t$, the revenue differences across the networks, via $\Delta_t$, and the network structure. This function also highlights a pitfall of the Nash bargaining procedure on networks. In particular, if the graph $\mathcal{A}$ contains a cycle, the matrix $(2\I + \G)^{-1}$ is singular, given that the number of equations at our disposable to determine $P(\Y_t)$ is not sufficient. To see this consider the simple case of adding an extra edge in the graph below (left to right). On the right graph we demand a further unknown, $P^{(2, 3)}$, but we do not provider further equations.
+Equation (\ref{Pmatrix}) shows that the trading prices on an edge, $P^{(i, j)}$, depends only on the state of the edges' two nodes, via $Y^{(i, j)}_t$, the revenue differences across the network, via $\Delta_t$, and the network structure. This function also highlights a pitfall of the Nash bargaining procedure on networks. In particular, if the graph $\mathcal{A}$ contains a cycle, the matrix $(2\I + \G)^{-1}$ is singular, given that the number of equations at our disposable to determine $P(\Y_t)$ is not sufficient. To see this consider the simple case of adding an extra edge in the graph below (left to right). On the right graph we demand a further unknown, $P^{(2, 3)}$, but we do not provider further equations.
 
 \begin{figure}[H]
   \centering
@@ -341,7 +341,7 @@ This can be also seen by looking at the two $\det(2 \I + \G)$,
   \end{pmatrix} = 0.
 \end{equation*}
 
-Because of this limitation, here I will limit the analysis to acyclic (or complete) graphs. Extending this model to cyclical graphs simply requires defining a more general once differentiable function $P: \R^{\abs{E}} \to \R^{\abs{E}}$ that models the bargaining procedure.
+Because of this limitation, here I will limit the analysis to acyclic (or complete) graphs. Extending this model to cyclical graphs simply requires defining a more general once differentiable function $P: \R^{\abs{V}} \to \R^{\abs{E}}$, that models the bargaining procedure.
 
 Now we can use Equations (\ref{Pmatrix}) and (\ref{Pjacobian}), combined with the local optimization, to obtain an explicit expression of the shadow price of the bargaining procedure, $\lambda_t$. Using the fact that $D_{\Y} P(\Y_t)_{e_1, e_2} = 0$ if $e_1 \neq e_2$ and $D_{\Y} P(\Y_t)_{i, j} = \pm 1$ (i.e. no direct dependence between $P^{(i, j)}$ and $P^{(l, m)}$ for $(i, j) \neq (l, m)$), the shadow price of the bargaining procedure (Equation \ref{lambda}) can be written as,
 
