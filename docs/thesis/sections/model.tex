@@ -212,8 +212,8 @@ where $p_{i, t} \in \R$ and
   \end{split}
 \end{equation}
 
-is a vector of traded quantities with the provider's neighbors. Furthermore, each period the optimization is subject to \begin{equation*}X_{i, t}(p_{i, t-1}) =  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}. \end{equation*}
-This condition requires the provider to always match (sell) the quantity demanded (supplied) in the local market by trading with its neighbors. Note that this implies that electricity across the network flows always towards places of scarcity but in doing so it disrupts the pricing across the network. In this way, electricity prices signal both scarcity and bargaining power within the network.
+is a vector of traded quantities with the provider's neighbors. Furthermore, each period the optimization is subject to \begin{equation*}X_{i, t}(p_{i, t-1}) \leq  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}. \end{equation*}
+This condition requires the provider to always match the quantity demanded in the local market by trading with its neighbors. Note that this implies that electricity across the network flows always towards places of scarcity but in doing so it disrupts the pricing across the network. In this way, electricity prices signal both scarcity and bargaining power within the network.
 
 The provider's optimization is then an intertemporal problem that depends on the state $X_{i, t}$ which follows the evolution laid down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, at time $t$, they assumes $\B_{i, t}[e_{i, t+1}] = e_{i, t}$. This assumption is a good approximation in the case of a very persistent process $e_{i, t}$. Second, I assume the provider does not know the ramp-up function of producers in the local market, $r(s_{i, t}, p_{i, t})$, hence they approximate the aggregate ramp-up function by a linear adaptive rule, proportional to the price, namely
 
