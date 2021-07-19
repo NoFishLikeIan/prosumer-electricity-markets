@@ -69,7 +69,9 @@ This equation determines the coevolution of the two prices. To understand how pr
   \caption{Price and supply in each node, with a demand shock with two providers} \label{fig:two}
 \end{figure}
 
-Another interesting variable to track during the shock is the excess demand in each node $X_{i, t}$. In the current simulation the ``perceived'' excess demand has to be fulfilled, namely $\sum_i \B_{i, t-1}\left[X_{i, t}\right] = 0$, since its stems from the optimization problem of the provider. Nevertheless, the realized excess demand might be positive, $\sum_i X_{i, t} > 0$. In Figure \ref{fig:twodemand} I plot the excess demand in the previous simulation. The initial demand shock is not enough to put the system into a ``blackout''. But the feedback loop and increased price volatility causes a demand shock further down the line.
+Another interesting variable to track during the shock is the excess demand in each node $X_{i, t}$. In the current simulation the ``perceived'' excess demand has to be fulfilled, namely $\sum_i \B_{i, t-1}\left[X_{i, t}\right] = 0$, since its stems from the optimization problem of the provider. Nevertheless, the realized excess demand might be positive, $\sum_i X_{i, t} > 0$. In this case a ``blackout'' occurs, namely prices fail to induce enough electricity supply. 
+
+In Figure \ref{fig:twodemand} I plot the excess demand in the previous simulation. The initial demand shock is not enough to put the system into a ``blackout''. But the feedback loop and increased price volatility causes a demand shock further down the line.
 
 \begin{figure}[H]
   \centering
