@@ -17,7 +17,10 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
         dfpros, dfprov, dfprod = nodedata
         node = dfpros[1, :pos]
             
-        εperiods = highdemandperiods(dfpros, model)
+        εperiods = highdemandperiods(dfpros, model)   
+
+        c₁, c₂, c₃ = Plots.palette(:tab10)
+
         pricet = dfprov[!, :p]
 
         supply = combine(
@@ -27,17 +30,20 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
         fig = plot(
             timeaxis, pricet, 
             title="Node $node", label="price", 
-            color=:blue, ylims=(ylower, pmax),
+            color=c₁, ylims=(ylower, pmax),
             legend=:topright)
                     
         for (startp, endp) in εperiods
-            vspan!(fig, [startp, endp], color=:red, alpha=0.3, label=nothing)
+
+            span = [timeaxis[startp], timeaxis[endp]]
+
+            vspan!(fig, span, color=c₂, alpha=0.2, label=nothing)
         end
 
         fig = bar!(
             twinx(fig), timeaxis, supply, alpha=0.2,
             ylims=(0, Inf), 
-            label="supply", color=:green, 
+            label="supply", color=c₃, 
             legend=:right)
             
         return fig
@@ -88,32 +94,31 @@ function plotproviderbeliefs(dfagent, model; savepath=nothing, nodestoplot=Int64
 
         if !isnothing(savepath)
         savefig(jointfigure, savepath)
-    else
-        return jointfigure
     end
+    
+    return jointfigure
 end
 
 function plotexcessdemand(dfagent, dfmodel; savepath=nothing)
     modelnodes = unique(dfagent.pos)
     Tₗ, Tᵤ = extrema(dfmodel.step)
-        time =  Tₗ:Tᵤ
+    time =  Tₗ:Tᵤ
     X = hcat(dfmodel.X...)'
 
     ∑X = positive.(sum(X, dims=2))
     
-    figure = plot(title="Excess demand", xlabel="time", ylabel="X")
+    figure = plot(title="Excess demand", xlabel=latexstring("\$ t \$"))
     
     for (i, node) in enumerate(modelnodes)
-        plot!(figure, time, X[:, i], label="X$node (t)")
+        plot!(figure, time, X[:, i], label=latexstring("\$ X_{$node, t} \$"))
     end
     
-    bar!(figure, time, ∑X, label="∑X > 0", legend=:bottomright, alpha=.5, linecolor=:match)
+    bar!(figure, time, ∑X, label=latexstring("\$ \\sum_i X_{i, t} \$"), legend=:bottomright, alpha=.5, linecolor=:match)
 
     if !isnothing(savepath)
         savefig(figure, savepath)
-    else
-        return figure
     end
+    return figure
 end
 
 computenodesize(N) = 1 / (3 * sqrt(N))
