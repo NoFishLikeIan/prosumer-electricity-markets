@@ -10,14 +10,6 @@ endowments = parameters[:ε]
 
 parameters[:ε] = (first(endowments), (lowε, highε))
 
-makeshock(from, to) = makeshock(from, to, lowε, highε)
-function makeshock(from, to, ε, εₛ)
-    εpath = ε * ones(T + 1, 2)
-    εpath[from:to, 2] .=  εₛ
-
-    return εpath
-end
-
 A = [0 1; 1 0]
 G = makeG(A) # 1x1 matrix with entry 0
 
@@ -25,7 +17,7 @@ T = 150 # Simulation time
 τ = 100 # Shock init
 Δτ = 10 # Shock length
 
-εpath = makeshock(τ, τ + Δτ)
+εpath = makeshock(2, 2, τ, τ + Δτ, lowε, highε)
 
 model = initializemodel(A, G, parameters; εpath=εpath)
 dfagent, dfmodel = simulatefromsteady!(model; T=T, Tₛ=150)

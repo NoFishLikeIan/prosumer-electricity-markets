@@ -3,27 +3,30 @@ include("simulate.jl")
 
 plotpath = "../plots/"
 
-
-T = 200
-T₀ = 75
-Tε = T₀:(T₀ + 10)
+T = 150 # Simulation time
+τ = 70 # Shock init
+Δτ = 10 # Shock length
 nodes = 7
-lowε, highε = last(default_params[:ε])
-εshock = lowε * ones(T, nodes)
 
-εshockone = copy(εshock)
-εshockone[Tε, 1] .= highε
+lowε, highε = 1.5, 5.
+parameters = copy(default_params)
 
-εshockfour = copy(εshock)
-εshockfour[Tε, 3] .= highε
+endowments = parameters[:ε]
 
-εshockonepermanent = copy(εshock)
-εshockonepermanent[T₀:end, 3] .= highε
+parameters[:ε] = (first(endowments), (lowε, highε))
+
+εconstant = constantshock(nodes, lowε)
 
 shocks = Dict(
-    "constant" => (εshock, εshock),
-    "central" => (εshockone, εshockfour),
-    # "peripherical" => (εshockfour, εshockone),
+    "constant" => (εconstant, εconstant),
+    "central" => (
+        makeshock(nodes, 1, τ, τ + Δτ, lowε, highε),
+        makeshock(nodes, 4, τ, τ + Δτ, lowε, highε),
+    ),
+    "peripherical" => (
+        makeshock(nodes, 4, τ, τ + Δτ, lowε, highε), 
+        makeshock(nodes, 1, τ, τ + Δτ, lowε, highε)
+    ),
     # "random" => (nothing, nothing),
     # "permanent" => (εshockonepermanent, εshockonepermanent)
 )
@@ -39,18 +42,22 @@ for (shockname, shockmatrices) in shocks
 
     εs, εg = shockmatrices
 
+    starnodestoplot = shockname == "peripherical" ? [1, 2, 4] : [1, 4]  
+
     dfagentstar, dfmodelstar, modelstar = plotallsimulation(
         As, Gs, T; εpath=εs, 
+        parameters=parameters,
         fromsteady=true,
         plotpath=joinpath(plotpath, shockname, "star"),
-        nodestoplot=[1, 3]
+        nodestoplot=starnodestoplot
     )
 
     dfagentpath, dfmodelpath, modelpath = plotallsimulation(
         Al, Gl, T; εpath=εg, 
+        parameters=parameters,
         fromsteady=true,
         plotpath=joinpath(plotpath, shockname, "path"),
-        nodestoplot=[1, 2, 3]
+        nodestoplot=[1, 2, 3, 4]
     )
 
     results[shockname] = Dict(

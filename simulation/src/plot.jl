@@ -44,7 +44,7 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
             twinx(fig), timeaxis, supply, alpha=0.2,
             ylims=(0, Inf), 
             label="supply", color=c₃, 
-            legend=:right)
+            legend=:topleft)
             
         return fig
     end

@@ -90,3 +90,14 @@ function numtostring(num; digits=3)
         return rounded
     end
 end
+
+function makeshock(nodes, shockn, from, to, ε, εₛ)
+    εpath = ε * ones(T + 1, nodes)
+    εpath[from:to, shockn] .=  εₛ
+
+    return εpath
+end
+
+function constantshock(nodes, ε)
+    makeshock(nodes, 1, 1, 0, ε, ε)
+end

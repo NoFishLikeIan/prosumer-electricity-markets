@@ -3,7 +3,7 @@ include("simulate.jl")
 
 resultspath = "simresults/data.jld"
 plotpath = "../plots/blackouts"
-CACHE = true
+CACHE = false
 
 makegraphs = Dict(
     "star" => makestar,
@@ -11,16 +11,17 @@ makegraphs = Dict(
     "binary" => makebinarytree
 )
 
-function makeshock(n, T, from, to, params::Dict) 
-    lowε, highε = last(params[:ε])
-    makeshock(n, T, from, to, lowε, highε)
-end
-function makeshock(n, T, from, to, ε::Float64, εₛ::Float64)
-    εpath = ε * ones(T + 1, n)
-    εpath[from:to, 1] .=  εₛ 
+T = 150 # Simulation time
+τ = 70 # Shock init
+Δτ = 10 # Shock length
+nodes = 7
 
-    return εpath
-end
+lowε, highε = 0.5, 1.5
+parameters = copy(default_params)
+
+endowments = parameters[:ε]
+
+parameters[:ε] = (first(endowments), (lowε, highε))
 
 """
 Computes coherences across binary tree, path, and star of sizes ns and gets cumulative definicits with T and parameters
@@ -43,7 +44,9 @@ function simulatedemanddeficits(ns, T, parameters; T₀=20)
                 continue
             end
 
-            εpath = makeshock(n, T, T₀, T₀ + 5, parameters)
+            shocknode = gname == "path" ? n ÷ 2 : 1
+
+            εpath = makeshock(n, shocknode, τ, τ + Δτ, lowε, highε)
 
             A, G = makeg(n) 
             simresults[gname][i, 1] = coherence(A, G)
