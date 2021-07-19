@@ -1,4 +1,4 @@
-Consider first the case of two providers drawn below.
+Consider first the simplest case of two providers drawn below.
 
 \vspace{5mm}
 \begin{minipage}{.5\textwidth}
@@ -60,4 +60,11 @@ By symmetry, provider two has the same policy function. Letting $p_t \coloneqq \
   \end{pmatrix} p_t + \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \circ S_t \right) \oslash \gamma_t
 \end{equation}
 
-This equation determines the coevolution of the two prices.
+This equation determines the coevolution of the two prices. To understand how price hikes propagate in the network I simulate the model (starting at an arbitrary initial condition),
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{\plotpath/two/pricesupply.pdf}
+  \caption{Price and supply in each node, with a demand shock with two providers} \label{fig:two}
+\end{figure}
