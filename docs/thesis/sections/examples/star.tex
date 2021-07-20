@@ -95,6 +95,52 @@ Notice that if $n = 2$, we obtain back the solution of the two providers case. U
 
 \subsubsection{Path}
 
+Another fundamental structure to consider is the path graph.
+
+\vspace{5mm}
+\begin{minipage}{.5\textwidth}
+    \resizebox{\textwidth}{!}{\input{sections/diagrams/line.tikz}}
+\end{minipage}
+\begin{minipage}{.5\textwidth}
+    \begin{equation*}
+        \begin{split}
+            \matr{A} &= \begin{pmatrix}
+                0      & 1 & 0 & 0 & \ldots \\
+                1      & 0 & 1 & 0 &        \\
+                0      & 1 & 0 & 1 &        \\
+                0      & 0 & 1 & 0 &        \\
+                \vdots &   &   &   & \ddots
+            \end{pmatrix} \\
+            \vspace{5mm} \\
+            E &= \set{(1, 2), (2, 3), (3, 4), \ldots, (n-1, n)} \\
+            \vspace{5mm} \\
+            \G &= \begin{pmatrix}
+                0      & -1 & 0  & 0  & \ldots \\
+                -1     & 0  & -1 & 0  &        \\
+                0      & -1 & 0  & -1 &        \\
+                0      & 0  & -1 & 0  &        \\
+                \vdots &    &    &    & \ddots
+            \end{pmatrix}
+        \end{split}
+    \end{equation*}
+\end{minipage}
+\vspace{5mm}
+
+(See Appendix \ref{a:linegraphinfluence})
+
+\begin{equation}
+    (\matr{2I_n + \G})^{-1} = \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n
+\end{equation}
+
+Then
+
+\begin{equation}
+    \begin{split}
+        P_t \circ \Y_t &= \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n^T  \Delta_t
+    \end{split}
+\end{equation}
+
+\textbf{TODO: Work out this more..}
 
 \subsubsection{Simulation}
 
