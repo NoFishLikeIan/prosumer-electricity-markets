@@ -1,0 +1,11 @@
+\renewcommand{\arraystretch}{1.5}
+
+\vspace{5mm}
+\begin{tabular}{c || c | c }
+                                                      & \textit{Star}                                                & \textit{Path}                                                             \\
+  \midrule
+  \textit{Redistribution} $(2\I + \G)^{-1}$           & $\I_n \left( \I_n - \frac{\iota \iota^T}{n+1} \right)\I_n^T$ & $\matr{L}_n \left( \I_n - \frac{\iota \iota^T}{n+1} \right) \matr{L}_n^T$ \\
+  \midrule
+  \textit{Individual effect} $(2\I + \G)^{-1}_{i, j}$ & $\mathbbm{1}\{i = j\} - \frac{1}{n+1}$                       & $\min\{i, j\} - \frac{i \cdot j}{n+1}$
+\end{tabular}
+\vspace{5mm}

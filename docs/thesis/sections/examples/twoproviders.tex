@@ -60,7 +60,7 @@ By symmetry, provider two has the same policy function. Letting $p_t \coloneqq \
   \end{pmatrix} p_t + \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \circ S_t \right) \oslash \gamma_t
 \end{equation}
 
-This equation determines the coevolution of the two prices. To understand how price hikes propagate in the network I simulate a demand shock in the steady state model (see \ref{a:initsim} for mode details). Figure \ref{fig:two} shows the time series evolution of prices and electricity supply in the two nodes. At time $\tau \in [250, 260]$ there is an excess demand shock in node two ($e_{2, t = \tau} = 2 e_{2, t \neq \tau}$), shaded in the plot. As expected there is a ``first order'' effect of the demand shock on prices in the second regional market and then the price hike is transmitted to the first node. More interestingly, the shock pushes the model to a regime of higher price volatility and there is a second price hike wave, due to a feedback loop and excess electricity production. (\textbf{TODO: expand on this mechanism})
+This equation determines the coevolution of the two prices. To understand how price hikes propagate in the network I simulate a demand shock in the steady state model (see \ref{a:initsim} for mode details). Figure \ref{fig:two} shows the time series evolution of prices and electricity supply in the two nodes. At time $\tau \in [250, 260]$ there is an excess demand shock in node two ($e_{2, t = \tau} = 2 e_{2, t \neq \tau}$), shaded in the plot. As expected there is a ``first order'' effect of the demand shock on prices in the second regional market and then the price hike is transmitted to the first node. More interestingly, the shock pushes the model to a regime of higher price volatility and there is a second price hike wave, due to a feedback loop and excess electricity production.
 
 
 \begin{figure}[H]
@@ -69,12 +69,12 @@ This equation determines the coevolution of the two prices. To understand how pr
   \caption{Price and supply in each node, with a demand shock with two providers} \label{fig:two}
 \end{figure}
 
-Another interesting variable to track during the shock is the excess demand in each node $X_{i, t}$. In the current simulation the ``perceived'' excess demand has to be fulfilled, namely $\sum_i \B_{i, t-1}\left[X_{i, t}\right] = 0$, since its stems from the optimization problem of the provider. Nevertheless, the realized excess demand might be positive, $\sum_i X_{i, t} > 0$. In this case a ``blackout'' occurs, namely prices fail to induce enough electricity supply. 
-
-In Figure \ref{fig:twodemand} I plot the excess demand in the previous simulation. The initial demand shock is not enough to put the system into a ``blackout''. But the feedback loop and increased price volatility causes a demand shock further down the line.
+Another interesting variable to track during the shock is the excess demand in each node $X_{i, t}$. In the current simulation the ``perceived'' excess demand has to be fulfilled, namely $\sum_i \B_{i, t-1}\left[X_{i, t}\right] = 0$, since its stems from the optimization problem of the provider. Nevertheless, the realized excess demand might be positive, $\sum_i X_{i, t} > 0$. In this case a ``blackout'' occurs, namely prices fail to induce enough electricity supply.  In Figure \ref{fig:twodemand} I plot the excess demand in the previous simulation. The initial demand shock is not enough to put the system into a ``blackout''. But the feedback loop and increased price volatility causes one twenty periods later. The price imbalance between the two markets is sustained thereafter.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{\plotpath/two/demand.pdf}
   \caption{Excess demand} \label{fig:twodemand}
 \end{figure}
+
+In North America and Europe, financial markets, government intervention, and regulations play a crucial role in building excess supply, stabilizing the system, and screening consumers from oscillation of prices (\cite{Cicala2017, Mulder2019}). Hence, blackouts are more likely to be due to supply shocks. Nevertheless, the model highlights a purely economic mechanism by which two perfectly integrated markets need not to converge to equalized prices.

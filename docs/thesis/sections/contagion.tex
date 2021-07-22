@@ -57,34 +57,5 @@ This influence value gives a first order approximation of the effect on the netw
 
 \subsection{Star and Path}
 
-\subfile{sections/examples/star.tex}
+\subfile{sections/examples/starpath.tex}
 
-\subsection{Contagion simulation}
-
-A more comprehensive view is given in Figure (\ref{fig:blackout}). Let the standard deviation of the influence of each node on the network, namely
-
-\begin{equation*}
-  \rho(\mathcal{A}) = \sqrt{\Var \left(\sum_{(k, m) \in E} (2\I + \G)^{-1}_{(i, j), (k, m)} -  \sum_{(l, k) \in E} (2\I + \G)^{-1}_{(i, j), (l, k)} \right)},
-\end{equation*}
-
-be the incoherence of a graph. Intuitively, the bigger and denser the graph, the lower $\rho(\mathcal{A})$. This can be seen in Figure (\ref{fig:incoherence}) where I plot $\rho$ for star, path, and binary graphs. If $n = 3$, the graphs are equivalent and the influence is $1$ for the central node and $0.5$ for the peripheral nodes. Hence, for each,
-
-\begin{equation*}
-  \rho = \sqrt{\frac{\left(1 - \frac{2}{3}\right)^2 + 2 \  \left(\frac{1}{2} - \frac{2}{3}\right)^2}{3 - 1}} \approx 2.89.
-\end{equation*}
-
-As the number of nodes increases $\rho$ clearly decreases.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{\plotpath/blackouts/rhos.pdf}
-  \caption{$\rho$ for different graphs and sizes} \label{fig:incoherence}
-\end{figure}
-
-Then we can simulate the average blackout, $ \frac{\sum_{t \geq \tau, i} X_{i, t}}{(T - \tau) \  n}$, after a given shock for different network structures. Figure (\ref{fig:blackout}) shows how the size of the blackout is decreasing in graph incoherence.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{\plotpath/blackouts/blackoutsim.pdf}
-  \caption{Simulation} \label{fig:blackout}
-\end{figure}

@@ -1,0 +1,208 @@
+A more interesting example is that of the star graph, where each provider neighbors only provider one. Assume there are $n + 1$ providers/markets as below, one central and $n$ peripheral.
+
+\vspace{5mm}
+\begin{minipage}{.5\textwidth}
+  \resizebox{\textwidth}{!}{\input{sections/diagrams/star.tikz}}
+\end{minipage}
+\begin{minipage}{.5\textwidth}
+  \begin{equation*}
+    \begin{split}
+      \matr{A} &= \begin{pmatrix}
+        0      & 1 & 1 & 1 & \ldots \\
+        1      & 0 & 0 & 0 &        \\
+        1      & 0 & 0 &   &        \\
+        1      & 0 &   &   &        \\
+        \vdots &   &   &   & \ddots
+      \end{pmatrix} \\
+      \vspace{5mm} \\
+      E &= \set{(1, 2), (1, 3), (1, 4), \ldots, (1, n)} \\
+      \vspace{5mm} \\
+      \G &= \matr{\iota}_n \matr{\iota}_n^T - \I_n =  \begin{pmatrix}
+        0 & 1 & 1 &        \\
+        1 & 0 & 1 &        \\
+        1 & 1 & 0 &        \\
+          &   &   & \ddots
+      \end{pmatrix}
+    \end{split}
+  \end{equation*}
+\end{minipage}
+\vspace{5mm}
+
+Notice that $\abs{E} = n$. Given the associated line graph, consider the matrix,
+
+\begin{equation*}
+  \begin{split}
+    (2\I_n + \G)^{-1} &= \left( 2\I_n + \matr{\iota}_n \matr{\iota}_n^T - \I_n \right)^{-1}\\
+    &= \left( \I_n + \matr{\iota}_n \matr{\iota}_n^T \right)^{-1} \\
+    &= \I_n - \frac{1}{n + 1} \matr{\iota}_n \matr{\iota}_n^T
+  \end{split}
+\end{equation*}
+
+Then we can use this in the bargaining solution,
+
+\begin{equation*}
+  \begin{split}
+    P_t \circ \Y_t &= (2\I_n + \G)^{-1} \Delta_t \\
+    &= \left( \I_n - \frac{1}{n + 1} \matr{\iota}_n \matr{\iota}_n^T \right) \Delta_t \\
+    &= \Delta_t - \frac{\sum_{(i, j)} \Delta^{(i, j)}_t}{n+1} \ \matr{\iota}_n
+  \end{split}
+\end{equation*}
+
+Given the star structure of the network, I will write an edge $(1, j)$ as simply $j$ and I will suppress $t$. Hence, each cross-border price is,
+
+\begin{equation*}
+  P^j = \frac{n\Delta^j - \sum_{m \neq j} \Delta^m }{(n + 1)Y^j}.
+\end{equation*}
+
+Equalization of prices requires that, for each neighbor of $1$,
+
+\begin{equation*}
+  \begin{split}
+    P^j &= P^i \\
+    \frac{n\Delta^j - \sum_{m \neq j} \Delta^m }{Y^j} &= \frac{n\Delta^i - \sum_{l \neq i} \Delta^l}{Y^i} \\
+    \frac{Y^i}{Y^j} &= \frac{\Delta^i - \sum_{l \neq i} \Delta^l / n}{\Delta^j - \sum_{m \neq j} \Delta^m / n}
+  \end{split}
+\end{equation*}
+
+Then, using $X_1 = \sum^n_{j = 2} Y^j$, we can rewrite $Y^2$ as,
+
+\begin{equation*}
+  Y^2 = \sum^n_{l = 2} Y^l \Big/ \sum^n_{l = 2} \frac{Y^l}{Y^2}
+\end{equation*}
+
+Letting the average revenue difference between one and its neighbors be
+
+\begin{equation*}
+  \underline{\Delta}_1 = X_1 p_1 - \frac{1}{n-1} \sum^n_{l = 2} X_l p_l,
+\end{equation*}
+
+we can rewrite the cross-border prices as,
+
+\begin{equation*}
+  P^2 = \frac{n \Delta^2 - \sum_{m \neq 2} \Delta^m}{(n-1) Y^2} = \frac{\underline{\Delta}_1}{2 (n-1) X_1} = P^j \ \forall j.
+\end{equation*}
+
+Notice that if $n = 2$, we obtain back the solution of the two providers case. Using this in the policy function of the central node,
+
+\begin{equation*}
+  p_{1, t+1} = p_{1, t} + \frac{1-\beta}{\beta \ \gamma_{1, t}} X_{1, t} + \frac{\alpha_{1, t} + \eta_{1, t} S_{1, t}}{\gamma_{1, t}} + \frac{\underline{\Delta}_{1, t}}{(n-1) X_{1, t}}
+\end{equation*}
+
+This function
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{\plotpath/pricing.pdf}
+  \caption{Policy function of the central node in the star graph}
+  \label{fig:p}
+\end{figure}
+
+\textbf{TODO: How can I expand this?}
+
+Another fundamental structure to consider is the path graph.
+
+\vspace{5mm}
+\begin{minipage}{.5\textwidth}
+  \resizebox{\textwidth}{!}{\input{sections/diagrams/line.tikz}}
+\end{minipage}
+\begin{minipage}{.5\textwidth}
+  \begin{equation*}
+    \begin{split}
+      \matr{A} &= \begin{pmatrix}
+        0      & 1 & 0 & 0 & \ldots \\
+        1      & 0 & 1 & 0 &        \\
+        0      & 1 & 0 & 1 &        \\
+        0      & 0 & 1 & 0 &        \\
+        \vdots &   &   &   & \ddots
+      \end{pmatrix} \\
+      \vspace{5mm} \\
+      E &= \set{(1, 2), (2, 3), (3, 4), \ldots, (n-1, n), (n, n+1)} \\
+      \vspace{5mm} \\
+      \G &= \begin{pmatrix}
+        0      & -1 & 0  & 0  & \ldots \\
+        -1     & 0  & -1 & 0  &        \\
+        0      & -1 & 0  & -1 &        \\
+        0      & 0  & -1 & 0  &        \\
+        \vdots &    &    &    & \ddots
+      \end{pmatrix}
+    \end{split}
+  \end{equation*}
+\end{minipage}
+\vspace{5mm}
+
+Letting $\matr{L}_n$ be the lower triangular matrix with unity entries, we can rewrite the bargaining influence matrix as (See Appendix \ref{a:linegraphinfluence}),
+
+\begin{equation}
+  (\matr{2I_n + \G})^{-1} = \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n^T
+\end{equation}
+
+Then,
+
+\begin{equation*}
+  \begin{split}
+    P_t \circ \Y_t &= \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n^T  \Delta_t \\
+  \end{split}
+\end{equation*}
+
+Now focusing once again on the central node $m = \frac{n+1}{2}$, assuming $n+1$ is odd, we obtain the following ratio of exchanged quantities (see $\ref{a:pol_path}$),
+
+\begin{equation}
+  Y_r(\Delta) \coloneqq \frac{Y^{(m, m+1)}}{Y^{(m-1, m)}}
+  = \frac{
+    \overbrace{\frac{1}{2} \sum_{j < m} j \Delta^{(j, j+1)} + \frac{n+1}{2}\sum_{j \geq m} \left(1 - \frac{j}{n+1}\right) \Delta^{j, j+1}}^{\text{Revenue differences through the path weighted by distance to } m}
+  }{
+    \underbrace{\left(\frac{1}{2} + \frac{1}{n+1}\right) \sum_{j < m-1} j \Delta^{j, j+1}+ \frac{n-1}{2} \sum_{j \geq m-1} \left(1 - \frac{j}{n+1}\right) \Delta^{j, j+1}}_{\text{Revenue differences through the path weighted by distance to } m-1}
+  }
+\end{equation}
+
+and, using price equalization, we get the following cross-border price,
+
+\begin{equation*}
+  2 P(X_{m, t}, p_{m, t}, \Delta_t) = \left( \frac{1 + 1 / Y_r(\Delta_t)}{X_m} \right) \left[ \overbrace{\sum_{j < m} j \Delta^{(j, j + 1)}}^{\text{distance of nodes before } m} +  \underbrace{\sum_{j \geq m}\left(n + 1 - j\right) \Delta^{(j, j + 1)}}_{\text{distance of nodes after } m} \right]
+\end{equation*}
+
+
+\subsection{Comparing influence matrix}
+
+These two fundamental graphs show the extreme
+
+\begin{table}[H]
+  \centering
+  \input{sections/tables/influence.tex}
+  \caption{Influence matrix between the star and path graphs}
+  \label{table:influence}
+\end{table}
+
+\subsubsection{Simulation}
+
+To understand how price hikes propagate through the network, as before, I simulate a shock to a regional demand from a situation of steady state. In particular, I simulate, as before, a shock in the demand of a regional market in the star graph. Figure \ref{fig:transshockcen_star} shows the price and supply evolution around the shock (shaded area) in the central node. The shock tilts the system out of equilibrium and induces strong price volatility. As opposed to the two node case, the price hike not only is much more pronounced but it is also sustained for longer.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{\plotpath/central/star/pricesupply.pdf}
+  \caption{Price and supply evolution after a transient shock in the central node (1) in a star graph} \label{fig:transshockcen_star}
+\end{figure}
+
+This creates strong and sustained blackouts (Figure \ref{fig:demandtransshockcen_star}). This figure, once again, delivers both a trivial and a more surprising insight. Trivially, the shock in excess demand causes in both graphs a ``blackout'', which is more pronounced in the case of the sequential graph due to a weaker price transmission and a weaker supply adjustment. Surprisingly, the shock brings in the long term a long period of oscillating production which leads to periodic ``blackouts''. This phenomenon arises due to the ``naive'' view that providers have of the pricing mechanism process. In the star graph, the price hike propagates throughout the network immediately, since all nodes are linked to the central node. This causes production to increase in all peripheral nodes, which in turn generates a excess electricity supply. This overshooting creates strong downward pressure on prices, via cross-border prices and expectations of providers, which keeps supply artificially low for a sustained time period.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{\plotpath/central/star/demand.pdf}
+  \caption{Excess demand $X_{i, t}$ after a transient shock in the central node (1) in a star graph} \label{fig:demandtransshockcen_star}
+\end{figure}
+
+Furthermore, the network structure allows for the price increase to be much more persistent. This self-fulfilling behavior persists until electricity production is high enough to push prices back down to their equilibrium levels. Importantly, this has to happen throughout the network, instead of simply in the central node. On the other hand, if the shock happens in a peripheral node (4) the system is much more stable and price hikes are quickly absorbed by the network (Figure \ref{fig:transshockper_star}) and there are no blackouts (Figure \ref{fig:demandtransshockper_star})
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{\plotpath/peripherical/star/pricesupply.pdf}
+  \caption{Price and supply evolution after a transient shock in a peripheral node (4) in a star graph} \label{fig:transshockper_star}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{\plotpath/peripherical/star/demand.pdf}
+  \caption{Excess demand $X_{i, t}$ after a transient shock in a peripheral node (4) in a star graph} \label{fig:demandtransshockper_star}
+\end{figure}
+
+

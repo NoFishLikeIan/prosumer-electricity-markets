@@ -1,0 +1,47 @@
+\documentclass[../thesis.tex]{subfiles}
+\section{Policy implications}
+
+As the simulation above shows, focusing only on ``blackouts'' in the period immediately after the shock or on the effects of the shock on individual nodes gives a partial view of the effects of demand shock in the cross-border market. In order to identify potential interventions that minimize the risk of blackouts, I will rely on simulating equivalent shocks and using the cumulative number of blackout days as a target metric.
+
+\subsection{The case for a denser network}
+
+A common policy suggestion in the literature is that of further market integration between regional markets. \citein{Newbery2016} estimate a significant efficiency gain from further material interconnection. Such material interconnection can be modeled in our framework as a denser network. Let $\mu_{2\I + \G}$ and $\sigma_{2\I + \G}$ be the mean and standard deviation of the influence of each node in the network,
+
+\begin{equation*}
+    \sum_{(k, m) \in E} (2\I + \G)^{-1}_{(i, j), (k, m)} -  \sum_{(l, k) \in E} (2\I + \G)^{-1}_{(i, j), (l, k)}
+\end{equation*}
+
+Then, we can define $\rho(\mathcal{A}) = \left(\frac{\sigma}{\mu}\right)_{2\I + \G}$ be the coherence of a graph. Intuitively, the bigger and denser the graph, the higher $\rho(\mathcal{A})$. This can be seen in Figure (\ref{fig:incoherence}) where I plot $\rho$ for star and path graphs. In the case of the star graph, the denser the network
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{\plotpath/blackouts/rhos.pdf}
+    \caption{$\rho(\mathcal{A})$ for different graphs and sizes} \label{fig:incoherence}
+\end{figure}
+
+For each size and graph, I simulate an equivalent demand shock in the central node. In Figure (\ref{fig:blackout}) I plot the number of periods in blackout in each simulation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{\plotpath/blackouts/blackoutsim.pdf}
+    \caption{Simulation} \label{fig:blackout}
+\end{figure}
+
+\subsection{Price caps}
+
+Another common policy tool discussed in the literature (\cite{Fraser1994, Yao2007}) and used in practice (e.g. in Italy, UK, and West US in emergency situations) is that of a price control mechanism. These mostly come as a price cap. This can be modeled in our framework by rewriting the policy function of providers as,
+
+\begin{equation}
+    p_{t+1} = \min\left\{ p_t + \Delta p(X_t, S_t, \lambda_t), \overline{p} \right\}
+\end{equation}
+
+where $\overline{p}$ is price cap. In Figure \ref{fig:pricecapdemand} I plot ``blackouts'' after the same shock of Figure \ref{fig:demandtransshockcen_star} but with a price cap. The price cap prevents price adjustments to induce enough supply and yields stronger and longer ``blackout'' periods.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{\plotpath/cap/central/star/demand.pdf}
+    \caption{Excess demand after transient shock in star graph with price caps}
+    \label{fig:pricecapdemand}
+\end{figure}
+
+Hence, in the current framework, price caps can protect consumers from sudden price hikes but introduce too much rigidity for the system to compensate demand shocks.
