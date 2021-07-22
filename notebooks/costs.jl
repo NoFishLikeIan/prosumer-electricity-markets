@@ -162,7 +162,7 @@ begin
 		levels = range(clims..., length = 15),
 		xlims = extrema(supplyspace), ylims=extrema(pricespace),
 		title = latexstring("\$ r \\ (s_t, p_t) \$"),
-		linestyle=:dash, legend = :topleft, c=:lighttemperaturemap,
+		linestyle=:dash, legend = :topleft,
 		xlabel = xlabel, ylabel = ylabel, size = (800, 600))
 	
 	plot!(

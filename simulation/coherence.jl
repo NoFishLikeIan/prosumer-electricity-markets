@@ -3,20 +3,18 @@ include("simulate.jl")
 
 resultspath = "simresults/data.jld"
 plotpath = "../plots/blackouts"
-CACHE = false
+CACHE = true
 
 makegraphs = Dict(
     "star" => makestar,
-    "path" => makepath,
-    "binary" => makebinarytree
+    "path" => makepath
 )
 
-T = 150 # Simulation time
-τ = 70 # Shock init
+T = 100 # Simulation time
+τ = 10 # Shock init
 Δτ = 10 # Shock length
-nodes = 7
 
-lowε, highε = 0.5, 1.5
+lowε, highε = 2, 4.
 parameters = copy(default_params)
 
 endowments = parameters[:ε]
@@ -26,7 +24,7 @@ parameters[:ε] = (first(endowments), (lowε, highε))
 """
 Computes coherences across binary tree, path, and star of sizes ns and gets cumulative definicits with T and parameters
 """
-function simulatedemanddeficits(ns, T, parameters; T₀=20)
+function simulatedemanddeficits(ns, T, parameters)
 
     simresults = Dict(
         keys(makegraphs) .=> [
@@ -38,45 +36,33 @@ function simulatedemanddeficits(ns, T, parameters; T₀=20)
         println("Simulation for $gname...")
         @threads for i in 1:length(ns)
             n = ns[i]
+            A, G = makeg(n)
+            shockn = gname == "path" ? ceil(Int64, n / 2) : 1
+            εpath = makeshock(n, shockn, τ, τ + Δτ, lowε, highε)
 
-            if !isrepresentable(n) && gname == "binary"
-                simresults[gname][i, :] = [NaN, NaN, NaN]
-                continue
-            end
-
-            shocknode = gname == "path" ? n ÷ 2 : 1
-
-            εpath = makeshock(n, shocknode, τ, τ + Δτ, lowε, highε)
-
-            A, G = makeg(n) 
             simresults[gname][i, 1] = coherence(A, G)
 
             model = initializemodel(A, G, parameters; εpath=εpath)
-            _, dfmodel = simulatemarket!(model; T=T)
 
-            X = hcat(dfmodel.X...)'[T₀:end, :]
+            _, dfmodel = simulatefromsteady!(model; T=T)
+
+            X = hcat(dfmodel.X...)'[τ + Δτ:end, :]
             ∑X = sum(X, dims=2)
-            ∑Xₚ = @. positive(∑X) / n
-
-            simresults[gname][i, 2] = mean(∑Xₚ)
-            simresults[gname][i, 3] = std(∑Xₚ)
+            simresults[gname][i, 2] = count(∑X .> 0)
         end
     end
-
-
-    return simresults
+return simresults
 end
 
-T = 250
-T₀ = 150
-ns = 3:127
 
 results = isfile(resultspath) ? JLD.load(resultspath) : Dict()
 excdemand = get(results, "excdemand", nothing)
 
+ns = 5:60
+
 if !CACHE || isnothing(excdemand) 
 
-    excdemand = simulatedemanddeficits(ns, T, default_params; T₀=T₀)
+    excdemand = simulatedemanddeficits(ns, T, parameters)
 
     JLD.save(resultspath, "excdemand", excdemand)
 else
@@ -85,4 +71,4 @@ end
 
 figρ = plotcoherences(excdemand, ns; savepath=joinpath(plotpath, "rhos.pdf"))
 
-figblack = compareblackout(excdemand; savepath=joinpath(plotpath, "blackoutsim.pdf"))
+figblack = compareblackout(excdemand, ns; savepath=joinpath(plotpath, "blackoutsim.pdf"))

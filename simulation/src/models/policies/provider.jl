@@ -1,7 +1,7 @@
 """
 Provider's local price setting
 """
-function p′(X, S, provider::Provider, model; d=0.8)
+function p′(X, S, provider::Provider, model; d=1., cap=5_000)
 
     i = provider.pos
     E = keys(model.P) |> collect
@@ -17,5 +17,5 @@ function p′(X, S, provider::Provider, model; d=0.8)
 
     Δp = ∂x * X + intercept - λ
 
-    return provider.p + Δp * d
+    return min(provider.p + Δp * d, cap)
 end

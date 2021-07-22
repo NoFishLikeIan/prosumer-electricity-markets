@@ -1,14 +1,14 @@
 include("src/main.jl")
 include("simulate.jl")
 
-plotpath = "../plots/"
+plotpath = "../plots/cap/"
 
 T = 150 # Simulation time
 τ = 70 # Shock init
 Δτ = 10 # Shock length
 nodes = 7
 
-lowε, highε = 1.5, 5.
+lowε, highε = 2., 3.
 parameters = copy(default_params)
 
 endowments = parameters[:ε]
@@ -23,10 +23,10 @@ shocks = Dict(
         makeshock(nodes, 1, τ, τ + Δτ, lowε, highε),
         makeshock(nodes, 4, τ, τ + Δτ, lowε, highε),
     ),
-    "peripherical" => (
-        makeshock(nodes, 4, τ, τ + Δτ, lowε, highε), 
-        makeshock(nodes, 1, τ, τ + Δτ, lowε, highε)
-    ),
+    # "peripherical" => (
+    #     makeshock(nodes, 4, τ, τ + Δτ, lowε, highε), 
+    #     makeshock(nodes, 1, τ, τ + Δτ, lowε, highε)
+    # ),
     # "random" => (nothing, nothing),
     # "permanent" => (εshockonepermanent, εshockonepermanent)
 )
@@ -42,7 +42,7 @@ for (shockname, shockmatrices) in shocks
 
     εs, εg = shockmatrices
 
-    starnodestoplot = shockname == "peripherical" ? [1, 2, 4] : [1, 4]  
+    starnodestoplot = shockname == "peripherical" ? [1, 2, 3, 4] : [1, 4]  
 
     dfagentstar, dfmodelstar, modelstar = plotallsimulation(
         As, Gs, T; εpath=εs, 

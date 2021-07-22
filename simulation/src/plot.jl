@@ -177,11 +177,11 @@ g = model.space.graph
 
 end
 
-function compareblackout(excdemand; savepath=nothing)
-	blackoutlabel = latexstring("\$ \\frac{\\sum_{t \\geq \\tau, i} X_{i, t}}{T - \\tau} \$")
-    coherencelabel = latexstring("\$ \\rho\\left( \\mathcal{A} \\right)\$")
+function compareblackout(excdemand, ns; savepath=nothing)
+	blackoutlabel = latexstring("\$\\{t: t \\geq \\tau, \\sum_{i} X_{i, t} > 0 \\} \$")
+    coherencelabel = latexstring("\$ n \$")
     
-    figure = plot(xlabel=coherencelabel, ylabel=blackoutlabel)
+    figure = plot(xlabel=coherencelabel, ylabel=blackoutlabel, yticks=0:1:10,)
         
     for (i, results) in enumerate(excdemand)
 
@@ -191,15 +191,15 @@ function compareblackout(excdemand; savepath=nothing)
 
         presentrows = any((!isnan).(data), dims=2) |> vec
 
-        ρs, cumulativeblackout, σ = eachcol(data[presentrows, :])
+        _, blk = eachcol(data[presentrows, :])
 
-        srt = sortperm(ρs)
+        cumulativeblackout = floor.(Int64, blk)
 
         scatter!(
-            figure, ρs[srt], cumulativeblackout[srt]; markersize=2,
+            figure, ns, cumulativeblackout; markersize=2,
             c=col, label=graphname)
         
-        plot!(figure, ρs[srt], cumulativeblackout[srt]; c=col, label=nothing)
+        plot!(figure, ns, cumulativeblackout; c=col, label=nothing)
     end
         
     if !isnothing(savepath)
@@ -211,7 +211,7 @@ end
 function plotcoherences(excdemand, ns; savepath=nothing)
 
 figure = plot(xlabel=latexstring("\$ n \$"), ylabel=latexstring("\$ \\rho\$"))
-        
+            
     for (i, results) in enumerate(excdemand)
 
         graphname, data = results
@@ -222,7 +222,7 @@ figure = plot(xlabel=latexstring("\$ n \$"), ylabel=latexstring("\$ \\rho\$"))
 
         notnan = (!isnan).(ρs)
         
-        scatter!(figure, ns[notnan], ρs[notnan]; markersize=2, c=col, label=graphname)
+        scatter!(figure, ns[notnan], ρs[notnan]; markersize=2, c=col, label=graphname, legend = :topleft)
 
         plot!(figure, ns[notnan], ρs[notnan]; alpha=0.5, c=col, label=nothing)
         

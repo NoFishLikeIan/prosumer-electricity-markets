@@ -7,8 +7,35 @@ using InteractiveUtils
 # ╔═╡ 1cff0acc-19aa-430e-8b79-1e34a7905d67
 using Plots, LaTeXStrings
 
+# ╔═╡ c160e2ed-b354-4cdd-9084-15dba3ba7b30
+using LinearAlgebra, Statistics, Polynomials
+
+
+# ╔═╡ 4f5bc759-4819-4359-9a70-1c17645453e3
+using Random
+
+# ╔═╡ cd083bdd-bcdc-43d1-9fd7-168bf525f4a6
+function xs_by_sum_ratio(sumX::Float64, ratios::Vector{Float64})
+	n = length(ratios)
+	xₙ = sumX / sum(ratios)
+	
+	return xₙ .* ratios
+	
+end
+
+# ╔═╡ 0074be84-f217-4d5e-9bb9-a5873b5990a7
+rng =  Random.seed!(11148705)
+
 # ╔═╡ 1ef00bb5-db8e-4e9d-93a0-b3bf56310335
 plotpath = "../plots"
+
+# ╔═╡ 2ec38a9c-6040-4280-85c5-414ba2db7b61
+function heatmatrix(A; args...)
+    heatmap(reverse(A, dims=1); 
+		display_ratio = 1,
+		xticks = nothing, yticks = nothing, legend = :none, size = (600, 600),
+		args...)
+end
 
 # ╔═╡ 4dda2793-49e1-4acd-852f-9121f981a8c6
 md"""
@@ -25,53 +52,155 @@ end
 md"""
 ## Constructing...
 
-$p_{t+1} - p_t = \Delta p = \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} - \lambda_t$
+$p_{t+1} - p_t = \Delta p = \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} + \frac{\underline{\Delta}_{t}}{(n-1) X_{t}}$
 
 
-assuming $S_t = 1000 - X_t$
+assuming $S_t = 400$
 
 """
 
-# ╔═╡ 77e5310c-0cc9-4101-8cf5-3d12d2452eaf
-Sₜ(Xₜ) = 1000
-
 # ╔═╡ 6cf141cc-e6e5-11eb-2977-e9dfee50446f
-function makeΔp(α, η, γ)
-	function Δp(Xₜ, λₜ)
-		∂ = (1 - β) / (β * γ) # Slope of X
-		p₀ = (α + η * Sₜ(Xₜ)) / γ # Intercept
-		
-		return ∂ * Xₜ + p₀ - λₜ
-	end
+function L(Xₜ, Sₜ)
+	∂ = (1 - β) / (β * γ) # Slope of X
+	p₀ = (α + η * Sₜ) / γ # Intercept
+
+	return ∂ * Xₜ + p₀
 end
 
-# ╔═╡ e39234c8-1287-43eb-85c1-a8e6bbf76ec3
-Δp = makeΔp(α, η, γ)
+
+# ╔═╡ e155dd1d-c508-4a6c-8345-003f69778091
+function Δ(X₁, p₁, X⃗ₒ, p⃗ₒ, n)
+	
+	n = length(X⃗ₒ) + 1
+	
+	return X₁ * p₁ - (X⃗ₒ'p⃗ₒ)/(n - 1)
+end
+
+# ╔═╡ ff36d1c3-10a3-4cd9-8859-bb424e18d513
+function Pᵐ(X₁, p₁, X⃗ₒ, p⃗ₒ)
+	n = length(X⃗ₒ) + 1
+	
+	Δ(X₁, p₁, X⃗ₒ, p⃗ₒ, n) / ((n-1)*X₁)
+end
 
 # ╔═╡ 3f62c834-2a62-4929-96cd-870f46d0fedc
 md"""
 
-## Visualizing $\Delta p(X_t, S_t)$...
+## Visualizing $p_{t+1}$ in the star graph...
 
 """
 
 # ╔═╡ 6a555982-2c8c-4c4b-b04b-9a6766b63b57
 begin
-	λₜ = range(-1000, 0, length = 2001)
+	pₛ = range(2., 20., length = 1001)
 	Xₛ = range(-1000, 1000, length = 2001)
+		
+	n = 17
+	X⃗ₒ(Xₘ) = - ones(n-1) .* (Xₘ) / (n-1)
+	p⃗ₒ = rand(n-1) .+ 2.
+	Sₜ = 400
+end
+
+# ╔═╡ e4c1ef16-0618-43d3-94c3-73c2aedbae9b
+ε = rand(rng, n)
+
+# ╔═╡ 50ea2c00-637d-42ed-bd0c-22e520b56cd3
+md"""
+## Constructing...
+
+$p_{t+1} - p_t = \Delta p = \frac{1-\beta}{\beta \ \gamma} X_t + P^m$
+
+
+assuming $S_t = 400$
+
+"""
+
+# ╔═╡ 5d73464b-3c16-439a-ae17-95b8064a667a
+function Δₜ(X⃗, p⃗)
+	nᵥ = length(X⃗)
+	Δ = zeros(nᵥ - 1)
+	
+	for i in 1:(nᵥ - 1), j in 2:nᵥ
+		Δ[i] = X⃗[i] * p⃗[i] - X⃗[j] * p⃗[j]
+	end
+	
+	return Δ
+end
+
+# ╔═╡ 3e3abf49-2514-4572-93ac-9b04db859ed7
+function Yᵣ(Δ, n)
+
+	
+	if !isodd(n) throw(DomainError("n = $n has to be odd!")) end
+	
+	m = (n + 1) ÷ 2
+		
+	
+	Yfrom = (
+		sum(j*Δ[j] for j in 1:m-1) 
+		+ sum((n+1-j)*Δ[j] for j in m:(n-1))
+	) / 2
+	
+	Yto = sum(j * Δ[j] for j in 1:(m-2))*(0.5 + 1 / (n+1))
+		+ sum((1 - j/(n+1))*Δ[j] for j in (m-1):(n-1))
+	
+	return Yfrom / Yto
+	
+	
+end
+
+# ╔═╡ c3d13b71-dd49-44aa-8cf3-aeef681b683c
+function constrvectors(Xₘ, pₘ, n)
+	if !isodd(n) throw(DomainError("n = $n has to be odd!")) end
+	
+	m = (n + 1) ÷ 2
+
+	ratios = [abs(i-m)/m for i in 1:n]
+		
+	X⃗ = [i == m ? Xₘ : -Xₘ / (n-1) for i in 1:n] .+ ε
+	p⃗ = [i == m ? pₘ : 3. for i in 1:n]  .+ ε
+	
+	return X⃗, p⃗
+	
+end
+
+# ╔═╡ 0ac6c6ce-2be2-404f-9675-e5a1aef00ecc
+function Pᵐ(X⃗, p⃗)
+	
+	Δ = Δₜ(X⃗, p⃗)
+	n = length(X⃗)
+	
+	m = (n + 1) ÷ 2
+	
+	Xₘ = X⃗[m]
+	fct = (1 + inv(Yᵣ(Δ, n))) / Xₘ 
+	
+	left = sum(j*Δ[j] for j in 1:(m-1))
+	right = sum((n + 1 - j)*Δ[j] for j in m:(n-1))
+	
+	return fct*(right + left)
+	
+end
+
+# ╔═╡ e39234c8-1287-43eb-85c1-a8e6bbf76ec3
+function p′(Sₜ, Xₜ, pₜ, X⃗ₒ, p⃗ₒ)
+	p′ = pₜ + L(Xₜ, Sₜ) + Pᵐ(Xₜ, pₜ, X⃗ₒ, p⃗ₒ)
 end
 
 # ╔═╡ ed2c178e-9d91-41b5-979b-d73e8ddd4d17
 begin
 	
 	Xlabel = latexstring("\$ X_t \$")
-	Slabel = latexstring("\$\\lambda_t \$")
-	plabel = latexstring("\$ \\Delta p \\ (X_t, \\lambda_t; S_t = $(Sₜ(0)))\$")
+	Slabel = latexstring("\$ p_t \$")
+	plabel = latexstring("\$ \\ p_{t+1} = p_t + L(X_t; S_t) + \\Delta_{t} / (n-1) X_t \$")
+
 	
 	pfigure = contourf(
-		Xₛ, λₜ, Δp,
+		Xₛ, pₛ, 
+		(X, p) -> p′(Sₜ, X, p, X⃗ₒ(X), p⃗ₒ),
 		title = plabel,
 		xlabel = Xlabel, ylabel = Slabel,
+		zlabel=latexstring("\$ p_{t+1} \$"),
 		size = (800, 600)
 	)
 	
@@ -81,55 +210,32 @@ end
 # ╔═╡ 32140e21-56ab-44a1-afa4-1db7889b109c
 savefig(pfigure, joinpath(plotpath, "pricing.pdf"))
 
-# ╔═╡ 96c1b616-4397-4194-8bcc-4946014c231b
-md"""
-## The effects of...
-
-The parameters $\alpha = 60, \eta, \gamma$ on $\Delta p$.
-
-"""
-
-# ╔═╡ 64c8e31f-a155-4fef-841e-2d1cce58c9a4
+# ╔═╡ abae85c1-0c6c-48a3-b799-bafe34a4d842
 begin
-	γₛ = range(0., 0.25, length = 1000)
-	ηₛ = range(-0.25, 0., length = 1000)
-	X₀ = 0
-	λ₀ = 1_000
+	Xₘ, pₘ = 150, 4.
+	X⃗, p⃗ = constrvectors(Xₘ, pₘ, n)
 end
 
-# ╔═╡ 846db1ea-2020-41ea-a61e-f270164fec6e
-paramΔp(η, γ) = makeΔp(α, η, γ)(X₀, λ₀)
+# ╔═╡ 2f7d59c6-d8c7-48a2-a2af-9409a1ed2774
+ Pᵐ(X⃗, p⃗)
 
-# ╔═╡ 9c5d4a8f-f70f-47cc-b4d0-1f5f43c71190
-begin
-	
-	alabel = latexstring("\$  \\eta_t \$")
-	elabel = latexstring("\$ \\gamma_t \$")
-	
-	title = latexstring("\$ \\Delta p \\ (X_t = $X₀, \\lambda_t = $λ₀) \$")
-		
-	paramfigure = contourf(
-		ηₛ, γₛ, paramΔp,
-		c = :coolwarm,
-		title = title,
-		xlabel = alabel, ylabel = elabel
-	)
-	
-	paramfigure
-end
-
-# ╔═╡ 50ea2c00-637d-42ed-bd0c-22e520b56cd3
-
+# ╔═╡ c5be4eb9-6131-4d1e-996f-b4b9dc36281e
+plot(X⃗)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+Polynomials = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
 LaTeXStrings = "~1.2.1"
 Plots = "~1.19.2"
+Polynomials = "~2.0.14"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -239,6 +345,11 @@ git-tree-sha1 = "1402e52fcda25064f51c77a9655ce8680b76acf0"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
 version = "2.2.7+6"
 
+[[ExprTools]]
+git-tree-sha1 = "b7e3d17636b348f005f11040025ae8c6f645fe92"
+uuid = "e2ba6199-217a-4e67-a87a-7c52f15ade04"
+version = "0.1.6"
+
 [[FFMPEG]]
 deps = ["FFMPEG_jll"]
 git-tree-sha1 = "b57e3acbe22f8484b4b5ff66a7499717fe1a9cc8"
@@ -280,6 +391,10 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "0d20aed5b14dd4c9a2453c1b601d08e1149679cc"
 uuid = "559328eb-81f9-559d-9380-de523a88c83c"
 version = "1.0.5+6"
+
+[[Future]]
+deps = ["Random"]
+uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 
 [[GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pkg", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll"]
@@ -338,6 +453,12 @@ version = "0.5.0"
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
+[[Intervals]]
+deps = ["Dates", "Printf", "RecipesBase", "Serialization", "TimeZones"]
+git-tree-sha1 = "323a38ed1952d30586d0fe03412cde9399d3618b"
+uuid = "d8418881-c3e1-53bb-8760-2df7ec849ed5"
+version = "1.5.0"
+
 [[IterTools]]
 git-tree-sha1 = "05110a2ab1fc5f932622ffea2a003221f4782c18"
 uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
@@ -388,6 +509,12 @@ deps = ["Formatting", "InteractiveUtils", "LaTeXStrings", "MacroTools", "Markdow
 git-tree-sha1 = "a4b12a1bd2ebade87891ab7e36fdbce582301a92"
 uuid = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
 version = "0.15.6"
+
+[[LazyArtifacts]]
+deps = ["Pkg"]
+git-tree-sha1 = "4bb5499a1fc437342ea9ab7e319ede5a457c0968"
+uuid = "4af54fe1-eca0-43a8-85a7-787d91b784e3"
+version = "1.3.0"
 
 [[LibGit2]]
 deps = ["Printf"]
@@ -493,6 +620,18 @@ version = "1.0.0"
 [[Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
+[[Mocking]]
+deps = ["ExprTools"]
+git-tree-sha1 = "916b850daad0d46b8c71f65f719c49957e9513ed"
+uuid = "78c3b35d-d492-501b-9361-3d52fe80e533"
+version = "0.7.1"
+
+[[MutableArithmetics]]
+deps = ["LinearAlgebra", "SparseArrays", "Test"]
+git-tree-sha1 = "3927848ccebcc165952dc0d9ac9aa274a87bfe01"
+uuid = "d8a4904e-b15c-11e9-3269-09a3773c0cb0"
+version = "0.2.20"
+
 [[NaNMath]]
 git-tree-sha1 = "bfe47e760d60b82b66b61d2d44128b62e3a369fb"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
@@ -565,6 +704,12 @@ deps = ["Base64", "Contour", "Dates", "FFMPEG", "FixedPointNumbers", "GR", "Geom
 git-tree-sha1 = "f3d4d35b8cb87adc844c05c722f505776ac29988"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 version = "1.19.2"
+
+[[Polynomials]]
+deps = ["Intervals", "LinearAlgebra", "MutableArithmetics", "RecipesBase"]
+git-tree-sha1 = "0bbfdcd8cda81b8144de4be8a67f5717e959a005"
+uuid = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
+version = "2.0.14"
 
 [[Preferences]]
 deps = ["TOML"]
@@ -695,6 +840,12 @@ version = "1.4.4"
 [[Test]]
 deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[[TimeZones]]
+deps = ["Dates", "Future", "LazyArtifacts", "Mocking", "Pkg", "Printf", "RecipesBase", "Serialization", "Unicode"]
+git-tree-sha1 = "81753f400872e5074768c9a77d4c44e70d409ef0"
+uuid = "f269a46b-ccf7-5d73-abea-4c690281aa53"
+version = "1.5.6"
 
 [[URIs]]
 git-tree-sha1 = "97bbe755a53fe859669cd907f2d96aee8d2c1355"
@@ -915,21 +1066,31 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╠═1cff0acc-19aa-430e-8b79-1e34a7905d67
+# ╠═c160e2ed-b354-4cdd-9084-15dba3ba7b30
+# ╠═4f5bc759-4819-4359-9a70-1c17645453e3
+# ╠═cd083bdd-bcdc-43d1-9fd7-168bf525f4a6
+# ╠═0074be84-f217-4d5e-9bb9-a5873b5990a7
 # ╠═1ef00bb5-db8e-4e9d-93a0-b3bf56310335
+# ╠═2ec38a9c-6040-4280-85c5-414ba2db7b61
+# ╠═e4c1ef16-0618-43d3-94c3-73c2aedbae9b
 # ╟─4dda2793-49e1-4acd-852f-9121f981a8c6
 # ╠═f6ea973f-1474-403a-9279-d97bf930a895
 # ╟─cbe861d0-dcb8-4d5f-abd5-4dccf0e86724
-# ╠═77e5310c-0cc9-4101-8cf5-3d12d2452eaf
 # ╠═6cf141cc-e6e5-11eb-2977-e9dfee50446f
+# ╠═e155dd1d-c508-4a6c-8345-003f69778091
+# ╠═ff36d1c3-10a3-4cd9-8859-bb424e18d513
 # ╠═e39234c8-1287-43eb-85c1-a8e6bbf76ec3
 # ╟─3f62c834-2a62-4929-96cd-870f46d0fedc
 # ╠═6a555982-2c8c-4c4b-b04b-9a6766b63b57
 # ╠═ed2c178e-9d91-41b5-979b-d73e8ddd4d17
 # ╠═32140e21-56ab-44a1-afa4-1db7889b109c
-# ╟─96c1b616-4397-4194-8bcc-4946014c231b
-# ╠═64c8e31f-a155-4fef-841e-2d1cce58c9a4
-# ╠═846db1ea-2020-41ea-a61e-f270164fec6e
-# ╠═9c5d4a8f-f70f-47cc-b4d0-1f5f43c71190
-# ╠═50ea2c00-637d-42ed-bd0c-22e520b56cd3
+# ╟─50ea2c00-637d-42ed-bd0c-22e520b56cd3
+# ╠═5d73464b-3c16-439a-ae17-95b8064a667a
+# ╠═3e3abf49-2514-4572-93ac-9b04db859ed7
+# ╠═c3d13b71-dd49-44aa-8cf3-aeef681b683c
+# ╠═0ac6c6ce-2be2-404f-9675-e5a1aef00ecc
+# ╠═abae85c1-0c6c-48a3-b799-bafe34a4d842
+# ╠═2f7d59c6-d8c7-48a2-a2af-9409a1ed2774
+# ╠═c5be4eb9-6131-4d1e-996f-b4b9dc36281e
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

@@ -12,7 +12,7 @@ function nodepower(A, G)
 
     ∑ρ = sum(ρ, dims=2) ./ sum(ρ)
     
-    getnodepower(n) = ∑ρ[findall(e -> n ∈ e, E)] |> sum
+    getnodepower(n) = ∑ρ[findall(e -> n ∈ e, E)] / 2 |> sum
 
 	nodepower = map(getnodepower, vertices(g))
 
@@ -21,8 +21,10 @@ end
 
 function coherence(A, G)
     powers = nodepower(A, G)   
-    
-    return std(powers)
+    μ = mean(powers)
+    σ = std(powers)
+
+    return σ / μ
 end
 
 """
