@@ -11,7 +11,7 @@ To denote beliefs over some future variable $x_{t+1}$ I will use $\B[x_{t+1}]$. 
 
 \subsubsection{Graphs}
 
-Graphs are a set of vertices and a set of edges, $\mathcal{A} = (V, E)$, and interactions can happen between markets only if they share an edge, $(i, j) \in E$. Furthermore, the neighbors of a node be the set,
+Graphs are a set of vertices and a set of edges, $\mathcal{A} = (V, E)$, and interactions can happen between markets only if they share an edge, $(i, j) \in E$. Furthermore, let the neighbors of a node be the set,
 
 \begin{equation}
   N_{\mathcal{A}}(i) \coloneqq \set{ \ j \in V: \ (i, j) \in E \ }.
@@ -19,7 +19,7 @@ Graphs are a set of vertices and a set of edges, $\mathcal{A} = (V, E)$, and int
 
 % FIXME: Remove outside option
 
-As things happen between edges, I will simplify the solution by relaying on the notion of directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, giving a positive sign to the edge if the ``outside option'' is that of the first entry and negative if is that of the second entry (e.g. in our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $(2, 7)$ is the outside option of $2$ which is the second entry in $(1, 2)$). For example, consider an arbitrary long sequential graph,
+As cross-border markets interactions happen between edges, I will simplify the solution by relying on the notion of a directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, I give a positive sign to the edge if the ``outside option'' is that of the first entry and negative if is that of the second entry (e.g. in our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $(2, 7)$ is the outside option of $2$ which is the second entry in $(1, 2)$). For example, consider an arbitrary long sequential graph,
 
 \begin{figure}[H]
   \centering
@@ -68,7 +68,7 @@ Now to construct the corresponding line graph consider the sequential graph node
   \label{tikz:wholesale}
 \end{figure}
 
-The model (see Figure \ref{tikz:wholesale}) is composed of two market types (wholesale and cross-border) and three agent types (prosumers, providers, and producers). Each regional wholesale market contains $M$ homogenous prosumers, with perfectly inelastic demand, and $N$ heterogenous producers, who compete locally in quantity. The monopolist provider sets the local wholesale price, at which it sells to prosumers and buys from producers. In case of excess demand (supply) in the wholesale market, the provider acquires (sells) electricity in the cross-border market. Such market is assumed to function via bilateral trading in a network between providers. Possibility of trading is contingent on the presence of an edge between two regional markets.
+The model (see Figure \ref{tikz:wholesale}) is composed of two market types (wholesale and cross-border) and three agent types (prosumers, providers, and producers). Each regional wholesale market contains $M$ homogenous prosumers, with perfectly inelastic demand, and $N$ heterogenous producers, who compete locally in quantity. The monopolist provider sets the local wholesale price, at which it sells to prosumers and buys from producers. In case of excess demand (supply) in the wholesale market, the provider acquires (sells) electricity in the cross-border market. Such a market is assumed to function via bilateral trading in a network between providers. Possibility of trading is contingent on the presence of an edge between two regional markets.
 
 \subsection{Prosumers}
 
@@ -76,7 +76,7 @@ Prosumers are endowed an electricity quantity from renewable energy and have a c
 
 \subsection{Producers}
 
-Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost and with a one period delay. Electricity is then sold on the local market at a price $p$, set by electricity providers, and costs $k$ to maintain at a given production level $s$. Furthermore, they are naive about the price formation mechanism and assume prices to be constant, $\B \left[p_{t+1}\right] = p_{t}$,  hence independent of their production decisions. Let $c(s, r)$ the cost of ramping up or turning down production next period by $r$ when currently at production level $s$. I assume $r$ is bounded between two values $\underline{r}(s_t)$ and $\overline{r}(s_t)$. This setup leads to the following optimization problem,
+Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost and with a one period delay. Electricity is then sold on the local market at a price $p$, set by electricity providers, and costs $k$ to maintain at a given production level $s$. Furthermore, they are naive about the price formation mechanism and assume prices to be constant, $\B \left[p_{t+1}\right] = p_{t}$,  hence independent of their production decisions. Let $c(s, r)$ be the cost of ramping up or turning down production next period by $r$ when currently at production level $s$. I assume $r$ is bounded between two values $\underline{r}(s_t)$ and $\overline{r}(s_t)$. This setup leads to the following optimization problem,
 
 \begin{equation} \label{bellman_prod}
   \begin{split}
@@ -86,7 +86,7 @@ Electricity producers operate power plants and can generate electricity by rampi
   \end{split}
 \end{equation}
 
-This optimization problem (see \ref{a:producer_optimization}) determines $r$ as a function of $s$ and $p$. In particular, $r$ is such that the marginal costs and marginal benefits of ramping up production are the same. The former, are given by
+This optimization problem (see \ref{a:producer_optimization}) determines $r$ as a function of $s$ and $p$. In particular, $r$ is such that the marginal costs and marginal benefits of ramping up production are the same. The former are given by
 
 \begin{equation*}
   mc(r; s_t, p_t) \coloneqq r \ \frac{\partial c}{\partial r}(s_t, r)  + c(s_t, r).
@@ -137,14 +137,14 @@ Clearly, the ramp-up policy function will depend entirely on the choice of the m
   c(s, r; c_1) \coloneqq \frac{1}{c_1} \ \log \left( 1 + \exp(c_1 \ s \ r) \right).
 \end{equation}
 
-Notice that $c(s, r; c_1) \xrightarrow{} \max \{ 0, s \ r \}$ as $c_1 \xrightarrow{}\infty$. In the limit $c_1 \xrightarrow{}\infty$, we can determine the policy function $r(s_t, p_t)$ analytically (see \ref{a:limiting}). This ``asymptotic'' policy function is continuous everywhere but fails to be differentiable in two points. The first trivial interval to consider is that where $p_t < k$. Here producers make a loss at each unit sold, or in terms of the first order condition $mc(r; s_t, p_t) > mb(r; s_t, p_t)$. They will then try and reduce production as much as possible, namely \begin{equation*} r(s_t, p_t) = \underline{r}(s_t). \end{equation*} The second interval is that were current electricity production is too low, namely $s_t < \frac{\beta}{1- \beta} \sqrt{p_t - k}$, which implies $mc(r; s_t, p_t) < mb(r; s_t, p_t)$. In this case, ramp-up will be as high as possible $r(s_t, p_t) = \overline{r}(s_t)$. Finally, the non-trivial case is that of the remaining interval where $mc(r; s_t, p_t) = mb(r; s_t, p_t)$. As shown in Appendix (\ref{a:limiting}),
+Notice that $c(s, r; c_1) \xrightarrow{} \max \{ 0, s \ r \}$ as $c_1 \xrightarrow{}\infty$. In the limit $c_1 \xrightarrow{}\infty$, we can determine the policy function $r(s_t, p_t)$ analytically (see \ref{a:limiting}). This ``asymptotic'' policy function is continuous everywhere but fails to be differentiable in two points. The first trivial interval to consider is that where $p_t < k$. Here producers make a loss at each unit sold, or in terms of the first order condition $mc(r; s_t, p_t) > mb(r; s_t, p_t)$. They will then try and reduce production as much as possible, namely \begin{equation*} r(s_t, p_t) = \underline{r}(s_t). \end{equation*} The second interval is that where current electricity production is too low, namely $s_t < \frac{\beta}{1- \beta} \sqrt{p_t - k}$, which implies $mc(r; s_t, p_t) < mb(r; s_t, p_t)$. In this case, ramp-up will be as high as possible $r(s_t, p_t) = \overline{r}(s_t)$. Finally, the non-trivial case is that of the remaining interval where $mc(r; s_t, p_t) = mb(r; s_t, p_t)$. As shown in Appendix (\ref{a:limiting}),
 
 \begin{equation} \label{rpolicy}
   r(s_t, p_t) =
   \frac{1 - \beta}{\beta} \ s_t - \sqrt{ \left(\frac{1 - \beta}{\beta} \ s_t \right)^2 - \ \left(p_t - k\right) }.
 \end{equation}
 
-The equation has a few intuitive properties. First of all, there is no ramp-up if there is no unit profit, that is $r(s_t, p_t) = 0$ if $p_t - k = 0$. Second, ramp-up increases in $p_t$. The function is plotted in Figure $\ref{fig:r}$, where I choose $\underline{r}(s) = - \delta s$ with $\delta \in (0, 1)$ and $\overline{r}(s) = \sqrt{p-k}$.
+This equation has a few intuitive properties. First of all, there is no ramp-up if there is no unit profit, that is $r(s_t, p_t) = 0$ if $p_t - k = 0$. Second, ramp-up increases in $p_t$. The function is plotted in Figure $\ref{fig:r}$, where I choose $\underline{r}(s) = - \delta s$ with $\delta \in (0, 1)$ and $\overline{r}(s) = \sqrt{p-k}$.
 
 \begin{figure}[H]
   \centering
@@ -155,7 +155,7 @@ The equation has a few intuitive properties. First of all, there is no ramp-up i
 
 \subsubsection{Local demand}
 
-Given any ramp-up policy function $r(s, p)$, it is possible to find the \textit{excess} demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers and has to be then acquired in the cross-border market. First, let $R_t$ be the aggregated ramp-up function,
+Given any ramp-up policy function $r(s, p)$, it is possible to find the \textit{excess} demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers and has to then be acquired in the cross-border market. First, let $R_t$ be the aggregated ramp-up function,
 
 \begin{equation}
   R(p_t, s_{1, t}, \ldots, s_{N, t}) \coloneqq \sum^N_{i = 1} r(s_{i, t}, p_t)
@@ -215,7 +215,7 @@ where $p_{i, t} \in \R$ and
 is a vector of traded quantities with the provider's neighbors. Furthermore, each period the optimization is subject to \begin{equation*}X_{i, t}(p_{i, t-1}) \leq  \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)}. \end{equation*}
 This condition requires the provider to always match the quantity demanded in the local market by trading with its neighbors. Note that this implies that electricity across the network flows always towards places of scarcity but in doing so it disrupts the pricing across the network. In this way, electricity prices signal both scarcity and bargaining power within the network.
 
-The provider's optimization is then an intertemporal problem that depends on the state $X_{i, t}$ which follows the evolution laid down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, at time $t$, they assumes $\B_{i, t}[e_{i, t+1}] = e_{i, t}$. This assumption is a good approximation in the case of a very persistent process $e_{i, t}$. Second, I assume the provider does not know the ramp-up function of producers in the local market, $r(s_{i, t}, p_{i, t})$, hence they approximate the aggregate ramp-up function by a linear adaptive rule, proportional to the price, namely
+The provider's optimization is then an intertemporal problem that depends on the state $X_{i, t}$ which follows the evolution laid down in equation (\ref{x_true}). The provider is assumed to make two simplifying assumptions on this evolution. First, at time $t$, they assume $\B_{i, t}[e_{i, t+1}] = e_{i, t}$. This assumption is a good approximation in the case of a very persistent process $e_{i, t}$. Second, I assume the provider does not know the ramp-up function of producers in the local market, $r(s_{i, t}, p_{i, t})$, hence they approximate the aggregate ramp-up function by a linear adaptive rule, proportional to the price, namely
 
 \begin{equation*}
   \B_{i, t} \left[R_{i, t}(p, S) \right] = \alpha_{i, t} + \gamma_{i, t} \  p + \eta_{i, t} \ S.
@@ -379,7 +379,7 @@ We can rewrite this to find the price increase equation, $\Delta p_t = p_{t+1} -
   \Delta p_t (X_t, S_t, \matr{Y}_t) = \frac{1}{\gamma_t} \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \ S_t \right) + 2P^m(\matr{Y}_{t}).
 \end{equation*}
 
-First, this equation establishes a clear relationship between $X_t$ and price increases. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality $X_t > 0$. If the cost of acquiring electricity from abroad, $P^m(\matr{Y}_{t})$, increases the producer will increase the price in the local market, $\Delta p_{t} > 0$, in order to increase local production. Hence this expression gives a clear mechanism of the transmission between prices in the cross-border market and the regional wholesale market.
+First, this equation establishes a clear relationship between $X_t$ and price increases. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality, $X_t > 0$. If the cost of acquiring electricity from abroad, $P^m(\matr{Y}_{t})$, increases the producer will increase the price in the local market, $\Delta p_{t} > 0$, in order to increase local production. Hence this expression gives a clear mechanism of the transmission between prices in the cross-border market and the regional wholesale market.
 
 \begin{figure}[H]
   \centering
