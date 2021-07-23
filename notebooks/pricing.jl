@@ -95,10 +95,10 @@ begin
 	pₛ = range(2., 20., length = 1001)
 	Xₛ = range(-1000, 1000, length = 2001)
 		
-	n = 17
+	n = 131
 	X⃗ₒ(Xₘ) = - ones(n-1) .* (Xₘ) / (n-1)
-	p⃗ₒ = rand(n-1) .+ 2.
-	Sₜ = 400
+	p⃗ₒ = ones(n-1) * 3.
+	Sₜ = 500
 end
 
 # ╔═╡ e4c1ef16-0618-43d3-94c3-73c2aedbae9b
@@ -108,11 +108,11 @@ end
 md"""
 ## Constructing...
 
-$p_{t+1} - p_t = \Delta p = \frac{1-\beta}{\beta \ \gamma} X_t + P^m$
+$p_{t+1} - p_t = \Delta p = L(X_t; S_t) + P^m$
 
+where,
 
-assuming $S_t = 400$
-
+$P^m = \left( \frac{1 + 1 / Y_r(\Delta_t)}{X_m} \right) \left[\sum_{j < m} j \Delta^{(j, j + 1)} + \sum_{j \geq m}\left(n + 1 - j\right) \Delta^{(j, j + 1)} \right]$
 """
 
 # ╔═╡ 5d73464b-3c16-439a-ae17-95b8064a667a
@@ -157,8 +157,8 @@ function constrvectors(Xₘ, pₘ, n)
 
 	ratios = [abs(i-m)/m for i in 1:n]
 		
-	X⃗ = [i == m ? Xₘ : -Xₘ / (n-1) for i in 1:n] .+ ε
-	p⃗ = [i == m ? pₘ : 3. for i in 1:n]  .+ ε
+	X⃗ = [i == m ? Xₘ : -Xₘ / (n-1) for i in 1:n]
+	p⃗ = [i == m ? pₘ : 3. for i in 1:n] 
 	
 	return X⃗, p⃗
 	
@@ -184,7 +184,14 @@ end
 
 # ╔═╡ e39234c8-1287-43eb-85c1-a8e6bbf76ec3
 function p′(Sₜ, Xₜ, pₜ, X⃗ₒ, p⃗ₒ)
-	p′ = pₜ + L(Xₜ, Sₜ) + Pᵐ(Xₜ, pₜ, X⃗ₒ, p⃗ₒ)
+	pₜ + L(Xₜ, Sₜ) + Pᵐ(Xₜ, pₜ, X⃗ₒ, p⃗ₒ)
+end
+
+# ╔═╡ c5be4eb9-6131-4d1e-996f-b4b9dc36281e
+function p′(Sₜ, Xₜ, pₜ, n::Int64)
+	X⃗, p⃗ = constrvectors(Xₜ, pₜ, n)
+	return pₜ + L(Xₜ, Sₜ) + Pᵐ(X⃗, p⃗)
+	
 end
 
 # ╔═╡ ed2c178e-9d91-41b5-979b-d73e8ddd4d17
@@ -201,6 +208,7 @@ begin
 		title = plabel,
 		xlabel = Xlabel, ylabel = Slabel,
 		zlabel=latexstring("\$ p_{t+1} \$"),
+		legend=:none,
 		size = (800, 600)
 	)
 	
@@ -210,17 +218,25 @@ end
 # ╔═╡ 32140e21-56ab-44a1-afa4-1db7889b109c
 savefig(pfigure, joinpath(plotpath, "pricing.pdf"))
 
-# ╔═╡ abae85c1-0c6c-48a3-b799-bafe34a4d842
+# ╔═╡ 0dda0f22-c1b5-4b51-a81c-3fb4599806b6
 begin
-	Xₘ, pₘ = 150, 4.
-	X⃗, p⃗ = constrvectors(Xₘ, pₘ, n)
+	ppathlabel = latexstring("\$ \\ p_{t+1} = p_t + L(X_t; S_t) + P \\ (\\Delta_t, X_t)\$")
+	
+	ppathfigure = contourf(
+		Xₛ, pₛ, 
+		(X, p) -> p′(Sₜ, X, p, n),
+		title = ppathlabel,
+		xlabel = Xlabel, ylabel = Slabel,
+		zlabel=latexstring("\$ p_{t+1} \$"),
+		legend=:none,
+		size = (800, 600)
+	)
+	
+	ppathfigure
 end
 
-# ╔═╡ 2f7d59c6-d8c7-48a2-a2af-9409a1ed2774
- Pᵐ(X⃗, p⃗)
-
-# ╔═╡ c5be4eb9-6131-4d1e-996f-b4b9dc36281e
-plot(X⃗)
+# ╔═╡ 508ae0d4-2bee-43a3-97e0-c7bc16b08a03
+savefig(ppathfigure, joinpath(plotpath, "pricingpath.pdf"))
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1084,13 +1100,13 @@ version = "0.9.1+5"
 # ╠═6a555982-2c8c-4c4b-b04b-9a6766b63b57
 # ╠═ed2c178e-9d91-41b5-979b-d73e8ddd4d17
 # ╠═32140e21-56ab-44a1-afa4-1db7889b109c
-# ╟─50ea2c00-637d-42ed-bd0c-22e520b56cd3
-# ╠═5d73464b-3c16-439a-ae17-95b8064a667a
-# ╠═3e3abf49-2514-4572-93ac-9b04db859ed7
-# ╠═c3d13b71-dd49-44aa-8cf3-aeef681b683c
-# ╠═0ac6c6ce-2be2-404f-9675-e5a1aef00ecc
-# ╠═abae85c1-0c6c-48a3-b799-bafe34a4d842
-# ╠═2f7d59c6-d8c7-48a2-a2af-9409a1ed2774
+# ╠═50ea2c00-637d-42ed-bd0c-22e520b56cd3
+# ╟─5d73464b-3c16-439a-ae17-95b8064a667a
+# ╟─3e3abf49-2514-4572-93ac-9b04db859ed7
+# ╟─c3d13b71-dd49-44aa-8cf3-aeef681b683c
+# ╟─0ac6c6ce-2be2-404f-9675-e5a1aef00ecc
 # ╠═c5be4eb9-6131-4d1e-996f-b4b9dc36281e
+# ╠═0dda0f22-c1b5-4b51-a81c-3fb4599806b6
+# ╠═508ae0d4-2bee-43a3-97e0-c7bc16b08a03
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

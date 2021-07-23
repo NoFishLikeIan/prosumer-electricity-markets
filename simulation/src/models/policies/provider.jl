@@ -1,7 +1,7 @@
 """
 Provider's local price setting
 """
-function p′(X, S, provider::Provider, model; d=1., cap=5_000)
+function p′(X, S, provider::Provider, model; d=1., cap=Inf)
 
     i = provider.pos
     E = keys(model.P) |> collect

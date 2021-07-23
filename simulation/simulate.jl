@@ -61,14 +61,18 @@ function plotallsimulation(
     parameters=default_params, 
     εpath=nothing, 
     plotpath=nothing,
-    fromsteady=false,
+    Tₛ=0,
     nodestoplot=Int64[]
 )
-
-    simfunction! = fromsteady ? simulatefromsteady! : simulatemarket!
-
+    
     model = initializemodel(A, G, parameters; εpath=εpath)
-    dfagent, dfmodel = simfunction!(model; T=T)
+
+    if Tₛ > 0
+        dfagent, dfmodel = simulatefromsteady!(model; T=T, Tₛ=Tₛ)
+    else
+        dfagent, dfmodel = simulatemarket!(model; T=T)
+    end
+
 
     if !isnothing(plotpath)
 
