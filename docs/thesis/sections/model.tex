@@ -1,64 +1,6 @@
 \documentclass[../thesis.tex]{subfiles}
 \section{Model}
 
-\subsection{Notation introduction}
-
-The model rests on two sources of friction. First, all agents are assumed to be boundedly rational. They do not know the workings of the market but have beliefs over price formations mechanisms and act consistently with them. Second, agents acting in cross-border markets interact on a graph structure. Before describing the model, it is then useful to introduce some notation.
-
-\subsubsection{Beliefs}
-
-To denote beliefs over some future variable $x_{t+1}$ I will use $\B[x_{t+1}]$. If beliefs are based on information up to time $t$, I will use $\B_t[x_{t+1}]$
-
-\subsubsection{Graphs}
-
-Graphs are a set of vertices and a set of edges, $\mathcal{A} = (V, E)$, and interactions can happen between markets only if they share an edge, $(i, j) \in E$. Furthermore, let the neighbors of a node be the set,
-
-\begin{equation}
-  N_{\mathcal{A}}(i) \coloneqq \set{ \ j \in V: \ (i, j) \in E \ }.
-\end{equation}
-
-% FIXME: Remove outside option
-
-As cross-border markets interactions happen between edges, I will simplify the solution by relying on the notion of a directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, I give a positive sign to the edge if the ``outside option'' is that of the first entry and negative if is that of the second entry (e.g. in our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $(2, 7)$ is the outside option of $2$ which is the second entry in $(1, 2)$). For example, consider an arbitrary long sequential graph,
-
-\begin{figure}[H]
-  \centering
-  \input{sections/diagrams/linemodel.tikz}
-\end{figure}
-
-Such a graph has an adjacency matrix of size $n$,
-
-\begin{equation}
-  \matr{A} =
-  \begin{pmatrix}
-    {0} & {1} & {0} & {}       & {}  & {}  \\
-    {1} & {0} & {1} & {}       & {}  & {}  \\
-    {0} & {1} & {0} & {}       & {}  & {}  \\
-    {}  & {}  & {}  & {\ddots} & {}  & {}  \\
-    {}  & {}  & {}  & {}       & {0} & {1} \\
-    {}  & {}  & {}  & {}       & {1} & {0}
-  \end{pmatrix}
-\end{equation}
-
-Now to construct the corresponding line graph consider the sequential graph node $(i, i+1)$. The adjacency matrix of the line graph will have then entry $-1$ with the edge $(i+1, i+2)$ since it represents the outside option of the second element and, likewise, $-1$ with the edge $(i-1, i)$. Hence the adjacency matrix $\G,$ is the $(n-1) \times (n-1)$ matrix,
-
-\begin{equation}
-  \G =
-  \begin{pmatrix}
-    {0}  & {-1} & {0}  & {}       & {}   & {}   \\
-    {-1} & {0}  & {-1} & {}       & {}   & {}   \\
-    {0}  & {-1} & {0}  & {}       & {}   & {}   \\
-    {}   & {}   & {}   & {\ddots} & {}   & {}   \\
-    {}   & {}   & {}   & {}       & {0}  & {-1} \\
-    {}   & {}   & {}   & {}       & {-1} & {0}
-  \end{pmatrix}
-\end{equation}
-
-\begin{figure}[H]
-  \centering
-  \input{sections/diagrams/lineassocmodel.tikz}
-\end{figure}
-
 \subsection{Model introduction}
 
 \begin{figure}[H]
@@ -373,7 +315,7 @@ Having derived the budget constraint on the bargained quantity, we can rewrite E
   p_{t+1} = p_t +\underbrace{\frac{1}{\gamma_t} \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \ S_t \right)}_{\text{local }  L_t(X_t, S_t) } + \underbrace{2P^m(\matr{Y}_{t})}_{\text{global}}
 \end{equation}
 
-First, this equation establishes a local relationship between $X_t$ and price increases. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality, $X_t > 0$. If the cost of acquiring electricity from abroad, $P^m(\matr{Y}_{t})$, increases the producer will increase the price in the local market, $\Delta p_{t} > 0$, in order to increase local production. Hence this expression gives a clear mechanism of the transmission between prices in the cross-border market and the regional wholesale market. 
+First, this equation establishes a local relationship between $X_t$ and price increases. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality, $X_t > 0$. If the cost of acquiring electricity from abroad, $P^m(\matr{Y}_{t})$, increases the producer will increase the price in the local market, $\Delta p_{t} > 0$, in order to increase local production. Hence this expression gives a clear mechanism of the transmission between prices in the cross-border market and the regional wholesale market.
 
 \subsubsection{Belief update}
 
