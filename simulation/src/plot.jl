@@ -238,3 +238,30 @@ figure = plot(xlabel=latexstring("\$ n \$"), ylabel=latexstring("\$ \\rho\$"))
     end
     return figure
 end
+
+
+function plotstabilityβ(prices, βs; node = 1, savepath = nothing)
+
+    pmin, pmax = extrema(prices[:, :, 1])
+    bound = min(abs(pmin), abs(pmax))
+
+    T = size(prices, 2)
+
+    βfig = plot(title = "Stability with respect to β")
+
+    for (idx, β) in enumerate(βs)
+        plot!(βfig, 1:T, prices[idx, :, node], 
+        label = latexstring("\$ \\beta = $β \$"), 
+        xlabel = latexstring("\$ t \$"),
+        ylabel = latexstring("\$ p_t \$"), ylims = bound,
+        c=Plots.palette(:tab10)[idx])
+    end
+
+
+    if !isnothing(savepath)
+        savefig(βfig, savepath)
+    end 
+
+    return βfig
+
+end

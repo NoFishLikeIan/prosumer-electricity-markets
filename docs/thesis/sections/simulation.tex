@@ -1,3 +1,29 @@
 \documentclass[../thesis.tex]{subfiles}
 
-\subsection{Simulation reproduction} \label{a:initsim}
+\section{Simulation} \label{a:initsim}
+
+The code for the simulation, including all of its iterations, is hosted at \url{github.com/NoFishLikeIan/prosumer-electricity-markets}. It requires at least \verb_Julia 1.5.2_. and the package \verb_Agents.jl_ (\cite{Agents.jl})
+
+Parameter choice in agent based models is a notoriously tricky matter (see for example \cite{Fagiolo2007}). In this case I focused simply on picking a stable set of parameters and ran a set of robustness checks. The relevant parameters are,
+
+\begin{equation}
+    \set{N, M, k, \beta, e_t, e_{\tau}}.
+\end{equation}
+
+All but $\beta$ simply change the scale of the problem. For example increasing market size $M$ in all markets simply increases the demand. As long as there is convergence, the system will satisfy that demand in the steady state. On the other hand $\beta$ has implications for the policy function of the agents. In Figure (\ref{fig:beta_stable}) I simulate the two providers case with a range of values of $\beta \in [0.9, 0.99]$. The qualitative feature of the model remain invariant, yet for lower values of $\beta$, the model is knocked off of stability sooner. To err on the side of caution I pick the most stable value of $\beta$, namely $0.99$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{\plotpath/stability/stability.pdf}
+    \caption{Price simulation in two provider case with different values of $\beta$}
+    \label{fig:beta_stable}
+\end{figure}
+
+The parameter set used for most of the simulations is reported in Table \ref{table:parameters}.
+
+\begin{table}[H]
+    \centering
+    \input{sections/tables/parameters.tex}
+    \caption{Simulation parameters}
+    \label{table:parameters}
+\end{table}
