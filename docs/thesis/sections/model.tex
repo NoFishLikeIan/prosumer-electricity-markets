@@ -1,8 +1,6 @@
 \documentclass[../thesis.tex]{subfiles}
 \section{Model}
 
-\subsection{Model introduction}
-
 \begin{figure}[H]
   \centering
   \input{sections/diagrams/timing.tikz}
@@ -91,13 +89,13 @@ This equation has a few intuitive properties. First of all, there is no ramp-up 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{\plotpath/rfunction.pdf}
-  \caption{Ramp-up function}
+  \caption{The ramp-up function $r$ of a producer given its current electricity production level $s_t$ and the electricity price $p_t$}
   \label{fig:r}
 \end{figure}
 
-\subsubsection{Local demand}
+\subsection{Local demand}
 
-Given any ramp-up policy function $r(s, p)$, it is possible to find the \textit{excess} demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers and has to then be acquired in the cross-border market. First, let $R_t$ be the aggregated ramp-up function,
+Given any ramp-up policy function $r(s, p)$, it is possible to find the excess demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers and has to then be acquired in the cross-border market. First, let $R_t$ be the aggregated ramp-up function,
 
 \begin{equation}
   R(p_t, s_{1, t}, \ldots, s_{N, t}) \coloneqq \sum^N_{i = 1} r(s_{i, t}, p_t)
@@ -196,8 +194,6 @@ This equation tells us that in equilibrium providers will allocate the quantitie
 \begin{equation} \label{local_p}
   p_{t+1} = p_t + \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} - \lambda_{t+1}
 \end{equation}
-
-\subsubsection{Bargaining model}
 
 Given the evolution of the local price (\ref{local_p}), it is necessary to solve the bargaining model between providers (which determines the shadow price of acquiring outside electricity $\lambda_t$). To do so I first impose a ``direction'' of trade, namely a traded quantity $Y^{(i, j)}$ enters positively in $j$ and negatively in $i$, such that
 
@@ -306,9 +302,6 @@ Note that $\lambda_t$ needs to be the same for every neighbor, such that, for tw
 
 This equation determines the ratio of $Y^{(i, m)}_t / Y^{(i, n)}_t$ for each element of the vector of $\matr{Y}_t$. Furthermore, to satisfy the resource constraint, it needs to be true that, $\sum_{j} Y^{(i, j)}_t = X_{i, t}$. These two equations allow to fully determine the vector $\matr{Y}_t(X_t, p_t)$.
 
-
-\subsubsection{Making sense of the policy function}
-
 Having derived the budget constraint on the bargained quantity, we can rewrite Equation (\ref{local_p}) as
 
 \begin{equation} \label{local_p_comp}
@@ -316,8 +309,6 @@ Having derived the budget constraint on the bargained quantity, we can rewrite E
 \end{equation}
 
 First, this equation establishes a local relationship between $X_t$ and price increases. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on data at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality, $X_t > 0$. If the cost of acquiring electricity from abroad, $P^m(\matr{Y}_{t})$, increases the producer will increase the price in the local market, $\Delta p_{t} > 0$, in order to increase local production. Hence this expression gives a clear mechanism of the transmission between prices in the cross-border market and the regional wholesale market.
-
-\subsubsection{Belief update}
 
 Providers approximate the ramp-up production function of the local producers using a linear rule,
 
@@ -357,6 +348,8 @@ and $\matr{W}$ is a weighting matrix of time exponential decay with entries,
 \begin{equation}
   \matr{W}_{t_1, t_2} = \exp(-\abs{t_1 - t_2})
 \end{equation}
+
+% TODO: Do beliefs converge?
 
 To recap the belief structure of the model,
 

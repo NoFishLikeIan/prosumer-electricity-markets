@@ -676,12 +676,21 @@ and
     \frac{\partial r}{\partial s_t} = \frac{1 - \beta}{\beta} - \frac{2 \left( \frac{1 - \beta}{\beta}\right)^2 s_t}{\sqrt{ \left(\frac{1 - \beta}{\beta} \ s_t \right)^2 - \ \left(p_t - k\right) }}.
 \end{equation}
 
-Then the Taylor expansion about $(s_t, p_t) = (s_0, k)$ is, 
+As an indicative proxy for the convergence of the beliefs we can compute the Taylor expansion about $(s_t, p_t) = (s_0, k)$. This gives,
 
 \begin{equation}
-    r(s_t, p_t) \approx \frac{1}{2 \frac{1 - \beta}{\beta} s_0} (p_t - k)
+    r(s_t, p_t) \approx \frac{\beta}{2 (1- \beta) s_0} (p_t - k)
 \end{equation}
 
+This implies that we expect, in absence of shocks, if $p_t \approx k$ and $S_t$ is approximately constant,
 
+\begin{equation}
+    \begin{split}
+        \alpha_t \xrightarrow{t \rightarrow \infty} \ \ &\frac{-k \beta}{2 (1-\beta) s_0} \\
+        \eta_t \xrightarrow{t \rightarrow \infty} \ \ &0\\
+        \gamma_t \xrightarrow{t \rightarrow \infty} \ \ & \frac{\beta}{2 (1-\beta) s_0} p_t
+    \end{split}
+\end{equation}
 
-\subsection{Initial condition of simulation} \label{a:initsim}
+We can see this happening by plotting the behavior of $\alpha_t$, $\eta_t$, and $\gamma_t$ in a without shocks.
+

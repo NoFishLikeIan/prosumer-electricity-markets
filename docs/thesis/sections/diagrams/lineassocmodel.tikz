@@ -9,7 +9,7 @@
     dashed, line width=0pt
 ]
 
-\begin{tikzpicture}[-, thick, fontscale=0.8]
+\begin{tikzpicture}[{Latex[scale=1]}-, thick, fontscale=0.8]
 
     \node [node] (12) {(1, 2)};
     \node [node, right = 2cm of 12] (23) {(2, 3)};

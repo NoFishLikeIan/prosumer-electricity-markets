@@ -34,7 +34,7 @@ Satisfaction of the constraint requires that, $X_{1, t} = - X_{2, t} = Y^{(1, 2)
   \end{split}
 \end{equation}
 
-Equation (\ref{two:P}) tells us that the influence of each node on the traded price is simply $1 / 2$. Note that in this is consistent with the influence matrix,
+Equation (\ref{two:P}) tells us that the influence of each node on the traded price is simply $1 / 2$. Note that in this is consistent with the bargaining power matrix,
 
 \begin{equation}
   (2 \I_{1} + \G)^{-1} = \left( 2 \begin{pmatrix} 1 \end{pmatrix} + \begin{pmatrix} 0 \end{pmatrix} \right)^{-1} = \frac{1}{2}
@@ -60,7 +60,7 @@ By symmetry, provider two has the same policy function. Letting $p_t \coloneqq \
   \end{pmatrix} p_t + \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \circ S_t \right) \oslash \gamma_t
 \end{equation}
 
-This equation determines the coevolution of the two prices. To understand how price hikes propagate in the network I simulate a demand shock in the steady state model (see \ref{a:initsim} for mode details). Figure \ref{fig:two} shows the time series evolution of prices and electricity supply in the two nodes. At time $\tau \in [250, 260]$ there is an excess demand shock in node two ($e_{2, t = \tau} = 2 e_{2, t \neq \tau}$), shaded in the plot. As expected there is a ``first order'' effect of the demand shock on prices in the second regional market and then the price hike is transmitted to the first node. More interestingly, the shock pushes the model to a regime of higher price volatility and there is a second price hike wave, due to a feedback loop and excess electricity production.
+This equation determines the coevolution of the two prices. To understand how price hikes propagate in the network I simulate a demand shock in the steady state model (see \ref{a:initsim} for mode details). Figure \ref{fig:two} shows the time series evolution of prices and electricity supply in the two nodes. At time $\tau \in [600, 610]$ there is an excess demand shock in node two ($e_{2, t = \tau} > e_{2, t \neq \tau}$), shaded in the plot. As expected there is a ``first order'' effect of the demand shock on prices in the second regional market and then the price hike is transmitted to the first node. More interestingly, the shock pushes the model to a regime of higher price volatility and there is a second price hike wave, due to a feedback loop and excess electricity production.
 
 
 \begin{figure}[H]

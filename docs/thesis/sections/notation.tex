@@ -6,47 +6,47 @@ First, to denote beliefs over some future variable $x_{t+1}$ I will use $\B[x_{t
 Second, graphs are defined as a tuple of a set of vertices and a set of edges, $\mathcal{A} = (V, E)$. Vertices are integers $V = \set{1, 2, 3, \ldots, n}$ and edges are ordered pairs of vertices \begin{equation*}E = \set{(i, j) : i, j \in V \text{ and } i < j}\end{equation*}  Interactions can happen between markets (vertices) only if they share an edge, $(i, j) \in E$. The set of nodes a node $i$ shares an edge with (i.e. its neighbors) is denoted as,
 
 \begin{equation}
-    N_{\mathcal{A}}(i) \coloneqq \set{ \ j \in V: \ (i, j) \in E \ }.
+  N_{\mathcal{A}}(i) \coloneqq \set{ \ j \in V: \ (i, j) \in E \ }.
 \end{equation}
 
 % FIXME: Remove outside option
 
-As cross-border markets interactions happen between edges, I will simplify the solution by relying on the notion of a directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, I give a positive sign to the edge in $L(\mathcal{A})$ if the common vertex occupies the same position in both edges and negative if that is not the case. In our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $2$ occupies different positions in the two edges. Similarly, the edges $(1, 2), (1, 3)$ and $(2, 4), (1, 4)$ will have the same sign in $L(\mathcal{A})$. To elucidate this procedure, consider an arbitrary long sequential graph,
+As cross-border markets interactions happen between edges, I will simplify the solution by relying on the notion of a directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, I give a positive sign to the edge in $L(\mathcal{A})$ if the common vertex occupies the same position in both edges and negative if that is not the case. In our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $2$ occupies different positions in the two edges. Similarly, the edges $(1, 2), (1, 3)$ and $(2, 4), (1, 4)$ will have the same sign in $L(\mathcal{A})$. To elucidate this procedure, consider an arbitrary long path graph,
 
 \begin{figure}[H]
-    \centering
-    \input{sections/diagrams/linemodel.tikz}
+  \centering
+  \input{sections/diagrams/linemodel.tikz}
 \end{figure}
 
 Such a graph has an adjacency matrix of size $n$,
 
 \begin{equation}
-    \matr{A} =
-    \begin{pmatrix}
-        {0} & {1} & {0} & {}       & {}  & {}  \\
-        {1} & {0} & {1} & {}       & {}  & {}  \\
-        {0} & {1} & {0} & {}       & {}  & {}  \\
-        {}  & {}  & {}  & {\ddots} & {}  & {}  \\
-        {}  & {}  & {}  & {}       & {0} & {1} \\
-        {}  & {}  & {}  & {}       & {1} & {0}
-    \end{pmatrix}
+  \matr{A} =
+  \begin{pmatrix}
+    {0} & {1} & {0} & {}       & {}  & {}  \\
+    {1} & {0} & {1} & {}       & {}  & {}  \\
+    {0} & {1} & {0} & {}       & {}  & {}  \\
+    {}  & {}  & {}  & {\ddots} & {}  & {}  \\
+    {}  & {}  & {}  & {}       & {0} & {1} \\
+    {}  & {}  & {}  & {}       & {1} & {0}
+  \end{pmatrix}
 \end{equation}
 
-Now to construct the corresponding line graph consider the sequential graph node $(i, i+1)$. The adjacency matrix of the line graph will have then entry $-1$ with the edge $(i+1, i+2)$ since $i+1$ occupies different positions in the two edges and, likewise, $-1$ with the edge $(i-1, i)$. Hence the adjacency matrix $\G,$ is the $(n-1) \times (n-1)$ matrix,
+Now to construct the corresponding line graph consider the path graph node $(i, i+1)$. The adjacency matrix of the line graph will have then entry $-1$ with the edge $(i+1, i+2)$ since $i+1$ occupies different positions in the two edges and, likewise, $-1$ with the edge $(i-1, i)$. Hence the adjacency matrix $\G,$ is the $(n-1) \times (n-1)$ matrix,
 
 \begin{equation}
-    \G =
-    \begin{pmatrix}
-        {0}  & {-1} & {0}  & {}       & {}   & {}   \\
-        {-1} & {0}  & {-1} & {}       & {}   & {}   \\
-        {0}  & {-1} & {0}  & {}       & {}   & {}   \\
-        {}   & {}   & {}   & {\ddots} & {}   & {}   \\
-        {}   & {}   & {}   & {}       & {0}  & {-1} \\
-        {}   & {}   & {}   & {}       & {-1} & {0}
-    \end{pmatrix}
+  \G =
+  \begin{pmatrix}
+    {0}  & {-1} & {0}  & {}       & {}   & {}   \\
+    {-1} & {0}  & {-1} & {}       & {}   & {}   \\
+    {0}  & {-1} & {0}  & {}       & {}   & {}   \\
+    {}   & {}   & {}   & {\ddots} & {}   & {}   \\
+    {}   & {}   & {}   & {}       & {0}  & {-1} \\
+    {}   & {}   & {}   & {}       & {-1} & {0}
+  \end{pmatrix}
 \end{equation}
 
 \begin{figure}[H]
-    \centering
-    \input{sections/diagrams/lineassocmodel.tikz}
+  \centering
+  \input{sections/diagrams/lineassocmodel.tikz}
 \end{figure}
