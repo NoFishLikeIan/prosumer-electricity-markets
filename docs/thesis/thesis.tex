@@ -10,6 +10,16 @@
     \usepackage{amsmath, amssymb, mathtools, bbm}
     \usepackage{bm}
 
+    \usepackage{hyperref}
+    \hypersetup{
+        colorlinks=true,
+        linkcolor=blue,
+        filecolor=magenta,      
+        urlcolor=cyan,
+        pdftitle={Overleaf Example},
+        pdfpagemode=FullScreen,
+    }
+
     \usepackage{graphicx}
     \usepackage{wrapfig}
     \usepackage{tikz} 
@@ -108,8 +118,10 @@
 % \nocite{*}
 \printbibliography
 \pagenumbering{gobble} % stop page numbering
-\newpage \appendix \subfile{sections/appendix.tex}
-
+\newpage
+\appendix
+\subfile{sections/appendix.tex}
+\subfile{sections/simulation.tex}
 
 
 \end{document}
