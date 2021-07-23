@@ -10,11 +10,14 @@ makegraphs = Dict(
     "path" => makepath
 )
 
-T = 100 # Simulation time
-τ = 10 # Shock init
-Δτ = 10 # Shock length
 
-lowε, highε = 2, 4.
+T = 150 # Simulation time
+τ = 100 # Shock init
+Δτ = 10 # Shock length
+Tₛ = 200 # Steady state periods
+nodes = 7
+
+lowε, highε = 2., 10.
 parameters = copy(default_params)
 
 endowments = parameters[:ε]
@@ -44,7 +47,7 @@ function simulatedemanddeficits(ns, T, parameters)
 
             model = initializemodel(A, G, parameters; εpath=εpath)
 
-            _, dfmodel = simulatefromsteady!(model; T=T)
+            _, dfmodel = simulatefromsteady!(model; T=T, Tₛ=Tₛ)
 
             X = hcat(dfmodel.X...)'[τ + Δτ:end, :]
             ∑X = sum(X, dims=2)

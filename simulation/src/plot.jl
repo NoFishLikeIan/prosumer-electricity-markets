@@ -88,7 +88,8 @@ function plotproviderbeliefs(dfagent, model; savepath=nothing, nodestoplot=Int64
             c=cs[3], label=αlabel, legend=:bottomright)
             
         for (startp, endp) in εperiods
-            vspan!(fig, [startp, endp], color=:red, alpha=0.3, label=nothing)
+            span = [timeaxis[startp], timeaxis[endp]]
+            vspan!(fig, span, color=:red, alpha=0.3, label=nothing)
         end
             
         return fig
@@ -116,7 +117,7 @@ function plotexcessdemand(dfagent, dfmodel; savepath=nothing)
         plot!(figure, time, X[:, i], label=latexstring("\$ X_{$node, t} \$"))
     end
     
-    bar!(figure, time, ∑X, label=latexstring("\$ \\sum_i X_{i, t} \$"), legend=:bottomright, alpha=.5, linecolor=:match)
+    bar!(figure, time, ∑X, label=latexstring("\$ \\sum_i X_{i, t} \$"), legend=:topleft, alpha=.5, linecolor=:match)
 
     if !isnothing(savepath)
         savefig(figure, savepath)
