@@ -9,14 +9,14 @@ minimum size=10pt]
 \begin{tikzpicture}[-, thick]
 
     \node [agent] (one) {Prov. $1$};
-    \node [agent, right = 3cm of one] (two) {Prov. $2$};
-    \node [agent, right = 3cm of two] (three) {Prov. $3$};
-    \node [agent, right = 3cm of three] (four) {Prov. $n$};
+    \node [agent, below right = 2cm and 2cm of one] (two) {Prov. $2$};
+    \node [agent, below right = 2cm and 2cm of two] (three) {Prov. $3$};
+    \node [agent, below right = 2cm and 2cm of three] (four) {Prov. $n$};
 
 
     \path
-    (one) edge [] node [above] {$Y^{(1, 2)}$} (two)
-    (two) edge [] node [above] {$Y^{(2, 3)}$} (three)
-    (three) edge [dashed] node [above] {} (four);
+    (one) edge [] node [below left] {$Y^{(1, 2)}$} (two)
+    (two) edge [] node [below left] {$Y^{(2, 3)}$} (three)
+    (three) edge [dashed] node [below left] {} (four);
 
 \end{tikzpicture}

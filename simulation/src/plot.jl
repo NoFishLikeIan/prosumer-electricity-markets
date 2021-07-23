@@ -11,7 +11,7 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
 
     pmin, pmax = extrema(filter(!ismissing, dfagent.p))
 
-    ylower = min(pmin, 0.)
+    bound = min(abs(pmin), abs(pmax))
 
     singleplot = (timeaxis, nodedata) -> begin
         dfpros, dfprov, dfprod = nodedata
@@ -30,7 +30,9 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
         fig = plot(
             timeaxis, pricet, 
             title="Node $node", label="price", 
-            color=c₁, ylims=(ylower, pmax),
+            color=c₁, ylims=(-bound, bound),
+            ylabel = latexstring("\$ p_{$node, t} \$"),
+            xlabel=latexstring("\$ t \$"),
             legend=:topright)
                     
         for (startp, endp) in εperiods
@@ -43,6 +45,7 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
         fig = bar!(
             twinx(fig), timeaxis, supply, alpha=0.2,
             ylims=(0, Inf), 
+            ylabel = latexstring("\$ S_{$node, t} \$"),
             label="supply", color=c₃, 
             legend=:topleft)
             
