@@ -19,13 +19,13 @@ Consider first the simplest case of two providers drawn below.
 \end{minipage}
 \vspace{5mm}
 
-Using the bargaining solution, equation (\ref{bargaining_solution}), we obtain the trading price,
+Using the bargaining solution, equation (\ref{bargaining_solution}), we obtain the trading price
 
 \begin{equation}
   P^{(1, 2)}_t = \frac{X_{1, t} \  p_{1, t} - X_{2, t} \  p_{2, t}}{2 Y^{(1, 2)}_t}
 \end{equation}
 
-Satisfaction of the constraint requires that, $X_{1, t} = - X_{2, t} = Y^{(1, 2)}_t$, hence,
+Satisfaction of the constraint requires that, $X_{1, t} = - X_{2, t} = Y^{(1, 2)}_t$, hence
 
 \begin{equation} \label{two:P}
   \begin{split}
@@ -34,13 +34,13 @@ Satisfaction of the constraint requires that, $X_{1, t} = - X_{2, t} = Y^{(1, 2)
   \end{split}
 \end{equation}
 
-Equation (\ref{two:P}) tells us that the influence of each node on the traded price is simply $1 / 2$. Note that in this is consistent with the bargaining power matrix,
+Equation (\ref{two:P}) tells us that the influence of each node on the traded price is simply $1 / 2$. Note that in this is consistent with the bargaining power matrix
 
 \begin{equation}
   (2 \I_{1} + \G)^{-1} = \left( 2 \begin{pmatrix} 1 \end{pmatrix} + \begin{pmatrix} 0 \end{pmatrix} \right)^{-1} = \frac{1}{2}
 \end{equation}
 
-Using this in the provider's policy function,
+Using this in the provider's policy function
 
 \begin{equation*}
   \begin{split}
@@ -51,7 +51,7 @@ Using this in the provider's policy function,
 
 By symmetry, provider two has the same policy function. Letting $p_t \coloneqq \begin{pmatrix}
     p_{1, t} \\ p_{2, t}
-  \end{pmatrix}$ and doing so with all other variables, we can stack vertically and obtain,
+  \end{pmatrix}$ and doing so with all other variables, we can stack vertically and obtain
 
 \begin{equation}
   p_{t+1} = \begin{pmatrix}

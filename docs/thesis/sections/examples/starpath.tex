@@ -28,7 +28,7 @@ More generally, we can study the behavior in the two ``limiting'' acyclic graphs
 \end{minipage}
 \vspace{5mm}
 
-Notice that the number of edges is then $\abs{E} = n$. Given the associated line graph $\G$, to solve the model we need to consider the bargaining power matrix,
+Notice that the number of edges is then $\abs{E} = n$. Given the associated line graph $\G$, to solve the model we need to consider the bargaining power matrix
 
 \begin{equation*}
   \begin{split}
@@ -38,7 +38,7 @@ Notice that the number of edges is then $\abs{E} = n$. Given the associated line
   \end{split}
 \end{equation*}
 
-Then we can use this in the bargaining solution (\ref{matrix_bargaining_solution}) to obtain,
+Then we can use this in the bargaining solution (\ref{matrix_bargaining_solution}) to obtain
 
 \begin{equation*}
   \begin{split}
@@ -47,19 +47,19 @@ Then we can use this in the bargaining solution (\ref{matrix_bargaining_solution
   \end{split}
 \end{equation*}
 
-Now focusing on the policy function of the central node, we can leverage the fact that cross-border prices are forming always in edges $(1, j)$ and therefore all have to be equal. Denoting the edge $(1, j)$ as simply $j$ and suppressing $t$, each cross-border price is,
+Now focusing on the policy function of the central node, we can leverage the fact that cross-border prices are forming always in edges $(1, j)$ and therefore all have to be equal. Denoting the edge $(1, j)$ as simply $j$ and suppressing $t$, each cross-border price is
 
 \begin{equation*}
   P^j = \frac{n\Delta^j - \sum_{m \neq j} \Delta^m }{(n + 1)Y^j}.
 \end{equation*}
 
-Equalization of prices, $P^j = P^i$, implies that, for each neighbor of $1$,
+Equalization of prices, $P^j = P^i$, implies that, for each neighbor of $1$
 
 \begin{equation*}
   \frac{Y^i}{Y^j} = \frac{\Delta^i - \sum_{l \neq i} \Delta^l / n}{\Delta^j - \sum_{m \neq j} \Delta^m / n}
 \end{equation*}
 
-Then, using the feasibility constraint $X_1 = \sum^n_{j = 2} Y^j$, we can rewrite $Y^2$ as,
+Then, using the feasibility constraint $X_1 = \sum^n_{j = 2} Y^j$, we can rewrite $Y^2$ as
 
 \begin{equation*}
   Y^2 = \sum^n_{l = 2} Y^l \Big/ \sum^n_{l = 2} \frac{Y^l}{Y^2}
@@ -71,13 +71,13 @@ Letting the average revenue difference between one and its neighbors be
   \underline{\Delta}_1 = X_1 p_1 - \frac{1}{n-1} \sum^n_{l = 2} X_l p_l,
 \end{equation*}
 
-we can rewrite the cross-border prices as,
+we can rewrite the cross-border prices as
 
 \begin{equation*}
   P^2 = \frac{n \Delta^2 - \sum_{m \neq 2} \Delta^m}{(n-1) Y^2} = \frac{\underline{\Delta}_1}{2 (n-1) X_1} = P^j \ \forall j.
 \end{equation*}
 
-Notice that if $n = 2$, we obtain back the solution of the two providers case. Using this in the policy function of the central node,
+Notice that if $n = 2$, we obtain back the solution of the two providers case. Using this in the policy function of the central node
 
 \begin{equation} \label{policy_star}
   p_{1, t+1} = p_{1, t} + L(X_{1, t}, S_{1, t}) + \frac{\underline{\Delta}_{1, t}}{(n-1) X_{1, t}}
@@ -114,13 +114,13 @@ The second fundamental structure to consider is the path graph.
 \end{minipage}
 \vspace{5mm}
 
-Letting $\matr{L}_n$ be the lower triangular matrix with unity entries, we can rewrite the bargaining influence matrix (\ref{a:linegraphinfluence}) as,
+Letting $\matr{L}_n$ be the lower triangular matrix with unity entries, we can rewrite the bargaining influence matrix (\ref{a:linegraphinfluence}) as
 
 \begin{equation}
   (\matr{2I_n + \G})^{-1} = \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n^T
 \end{equation}
 
-Then,
+Then
 
 \begin{equation*}
   \begin{split}
@@ -128,7 +128,7 @@ Then,
   \end{split}
 \end{equation*}
 
-Now focusing once again on the central node $m = \frac{n+1}{2}$, assuming $n+1$ is odd, we obtain the following ratio of exchanged quantities (\ref{a:pol_path}),
+Now focusing once again on the central node $m = \frac{n+1}{2}$, assuming $n+1$ is odd, we obtain the following ratio of exchanged quantities (\ref{a:pol_path})
 
 \begin{equation}
   Y_r(\Delta) \coloneqq \frac{Y^{(m, m+1)}}{Y^{(m-1, m)}}
@@ -139,7 +139,7 @@ Now focusing once again on the central node $m = \frac{n+1}{2}$, assuming $n+1$ 
   }
 \end{equation}
 
-and, using price equalization, we get the following cross-border price,
+and, using price equalization, we get the following cross-border price
 
 \begin{equation} \label{policy_path}
   \begin{split}
@@ -178,7 +178,7 @@ The star and path graph are the two extreme cases in the class of acyclic graphs
 
 
 
-To understand how price hikes propagate through the network, as before, I simulate a shock to a regional demand from a situation of steady state. Consider a positive shock in the demand of the central market in the star graph. Figure \ref{fig:transshockcen_star} shows the price and supply evolution around the shock (shaded area) in the central node and a peripheral node. The shock tilts the system out of equilibrium and induces strong price volatility. As opposed to the two node case, the price hike not only is much more pronounced but it is also sustained for longer. On the other hand, after the equivalent shock in the path graph the central provider does not increase prices as much, due to its lower bargaining power, and the price hike is less pronounced throughout the graph (Figure \ref{fig:transshockcen_path})
+To understand how price hikes propagate through the network, as before, I simulate a shock to a regional demand from a situation of steady state. Consider a positive shock in the demand of the central market in the star graph. Figure \ref{fig:transshockcen_star} shows the price and supply evolution around the shock (shaded area) in the central node and a peripheral node. The shock tilts the system out of equilibrium and induces strong price volatility. As opposed to the two node case, the price hike not only is much more pronounced but it is also sustained for longer. On the other hand, after the equivalent shock in the path graph the central provider does not increase prices as much, due to its lower bargaining power, and the price hike is less pronounced throughout the graph (Figure \ref{fig:transshockcen_path}).
 
 \newpage
 \begin{figure}[H]

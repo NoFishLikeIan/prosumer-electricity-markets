@@ -6,13 +6,13 @@ Now that the groundwork has been layed down, we can focus on the object of our i
   (2\I + \G)^{-1}_{(k, l), (i, j)}
 \end{equation*}
 
-This implies that a provider with a stronger bargaining position reacts more strongly to price changes, captures higher revenue, which leads to higher prices in the local market. Intuitively that a more equal distribution of bargaining power leads to lower revenues for providers and lower price hikes. To formalize this, consider the entry $(i, j)$ in $P(\Y_t)$,
+This implies that a provider with a stronger bargaining position reacts more strongly to price changes, captures higher revenue, which leads to higher prices in the local market. Intuitively that a more equal distribution of bargaining power leads to lower revenues for providers and lower price hikes. To formalize this, consider the entry $(i, j)$ in $P(\Y_t)$
 
 \begin{equation*}
   P^{(i, j)}_t = \frac{\sum_{(l, m) \in E} \Delta^{(l, m)}_t \  (2\I + \G)^{-1}_{(i, j), (l, m)}}{Y^{(i, j)}_t},
 \end{equation*}
 
-where $\sum_{(l, m) \in E}$ is a summation over the row $(i, j)$ of $(2\I + \G)^{-1}$. Now assume there is some demand shock in a node $k$. We would like to understand the effect this has on prices today, $P^{(i, j)}_t$, and tomorrow, $P^{(i, j)}_{t+1}$. To do so we can first note that the current traded quantity between the two nodes $i$ and $j$, $Y^{(i, j)}_t$, is not affected by a change in $X_{k, t}$ since it will only affect current prices and future quantities between $i$ and $j$ ($X_{k, t} \rightarrow P^{(i, j)}_{t} \rightarrow p_{i, t} \rightarrow X_{i, t+1}$), hence $\partial Y^{(i, j)}_t / \partial X_{k, t} = 0$. This is of course not true for $Y^{(i, j)}_{t+1}$. Then,
+where $\sum_{(l, m) \in E}$ is a summation over the row $(i, j)$ of $(2\I + \G)^{-1}$. Now assume there is some demand shock in a node $k$. We would like to understand the effect this has on prices today, $P^{(i, j)}_t$, and tomorrow, $P^{(i, j)}_{t+1}$. To do so we can first note that the current traded quantity between the two nodes $i$ and $j$, $Y^{(i, j)}_t$, is not affected by a change in $X_{k, t}$ since it will only affect current prices and future quantities between $i$ and $j$ ($X_{k, t} \rightarrow P^{(i, j)}_{t} \rightarrow p_{i, t} \rightarrow X_{i, t+1}$), hence $\partial Y^{(i, j)}_t / \partial X_{k, t} = 0$. This is of course not true for $Y^{(i, j)}_{t+1}$. Then
 
 \begin{equation}
   \begin{split}

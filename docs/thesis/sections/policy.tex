@@ -3,7 +3,7 @@
 
 As the simulation above shows, focusing only on ``blackouts'' in the period immediately after the shock or on the effects of the shock on individual nodes gives a partial view of the effects of demand shock in the cross-border market. In order to identify potential interventions that minimize the risk of blackouts, I will rely on simulating equivalent shocks and using the cumulative number of blackout days as a target metric
 
-A common policy suggestion in the literature is that of further market integration between regional markets. \citein{Newbery2016} estimate a significant efficiency gain from further material interconnection. Such material interconnection can be modeled in our framework as a network with a more diffuse bargaining power. Let $\mu_{2\I + \G}$ and $\sigma_{2\I + \G}$ be the mean and standard deviation of the influence of each node in the network,
+A common policy suggestion in the literature is that of further market integration between regional markets. \citein{Newbery2016} estimate a significant efficiency gain from further material interconnection. Such material interconnection can be modeled in our framework as a network with a more diffuse bargaining power. Let $\mu_{2\I + \G}$ and $\sigma_{2\I + \G}$ be the mean and standard deviation of the influence of each node in the network
 
 \begin{equation*}
     \sum_{(k, m) \in E} (2\I + \G)^{-1}_{(i, j), (k, m)} -  \sum_{(l, k) \in E} (2\I + \G)^{-1}_{(i, j), (l, k)}
@@ -18,7 +18,7 @@ Then, we can define $\rho(\mathcal{A}) = \left( \sigma / \mu \right)_{2\I + \G}$
     \caption{$\rho(\mathcal{A})$ for different graphs and sizes} \label{fig:incoherence}
 \end{figure}
 
-For each size and graph, I simulate an equivalent demand shock in the central node. In Figure (\ref{fig:blackout}) I plot the number of periods of blackout in each simulation, that is,
+For each size and graph, I simulate an equivalent demand shock in the central node. In Figure (\ref{fig:blackout}) I plot the number of periods of blackout in each simulation, that is
 
 \begin{equation}
     \left\lvert\set{t: \ t \geq \tau, \sum_{i} X_{i, t} > 0}\right\rvert.
@@ -32,7 +32,7 @@ First, notice that the path graph never experiences a blackout under the same co
     \caption{Simulation} \label{fig:blackout}
 \end{figure}
 
-Another common policy tool discussed in the literature (\cite{Fraser1994, Yao2007}) and used in practice (e.g. in Italy, UK, and West US in emergency situations) is that of a price control mechanism. These mostly come in the form of a price cap. This can be modeled in our framework by rewriting the policy function of providers as,
+Another common policy tool discussed in the literature (\cite{Fraser1994, Yao2007}) and used in practice (e.g. in Italy, UK, and West US in emergency situations) is that of a price control mechanism. These mostly come in the form of a price cap. This can be modeled in our framework by rewriting the policy function of providers as
 
 \begin{equation}
     p_{t+1} = \min\left\{ p_t + L(X_t, S_t) + P(\Y_t), \overline{p} \right\}
