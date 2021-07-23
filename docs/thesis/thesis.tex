@@ -36,8 +36,6 @@
     \setlength{\fboxsep}{1em}
     \newcommand\headercell[1]{\smash[b]{\begin{tabular}[t]{@{}c@{}} #1 \end{tabular}}}
 
-    \usepackage[margin=0.5in]{geometry}
-
     % Graphs
     \usetikzlibrary{positioning, arrows.meta, calc, decorations.markings, math, matrix, fit, backgrounds}
 
@@ -101,11 +99,11 @@
 
 \subfile{sections/policy.tex}
 
-\subfile{sections/results.tex}
+\subfile{sections/conclusion.tex}
 
 
 \newpage
-\nocite{*}
+% \nocite{*}
 \printbibliography
 \pagenumbering{gobble} % stop page numbering
 \newpage \appendix \subfile{sections/appendix.tex}

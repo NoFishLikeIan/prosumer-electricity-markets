@@ -5,13 +5,14 @@ As the simulation above shows, focusing only on ``blackouts'' in the period imme
 
 \subsection{The case for a denser network}
 
-A common policy suggestion in the literature is that of further market integration between regional markets. \citein{Newbery2016} estimate a significant efficiency gain from further material interconnection. Such material interconnection can be modeled in our framework as a denser network. Let $\mu_{2\I + \G}$ and $\sigma_{2\I + \G}$ be the mean and standard deviation of the influence of each node in the network,
+A common policy suggestion in the literature is that of further market integration between regional markets. \citein{Newbery2016} estimate a significant efficiency gain from further material interconnection. Such material interconnection can be modeled in our framework as a network with a more diffuse bargaining power. Let $\mu_{2\I + \G}$ and $\sigma_{2\I + \G}$ be the mean and standard deviation of the influence of each node in the network,
 
 \begin{equation*}
     \sum_{(k, m) \in E} (2\I + \G)^{-1}_{(i, j), (k, m)} -  \sum_{(l, k) \in E} (2\I + \G)^{-1}_{(i, j), (l, k)}
 \end{equation*}
 
-Then, we can define $\rho(\mathcal{A}) = \left(\frac{\sigma}{\mu}\right)_{2\I + \G}$ be the coherence of a graph. Intuitively, the bigger and denser the graph, the higher $\rho(\mathcal{A})$. This can be seen in Figure (\ref{fig:incoherence}) where I plot $\rho$ for star and path graphs. In the case of the star graph, the denser the network
+Then, we can define $\rho(\mathcal{A}) = \left(\frac{\sigma}{\mu}\right)_{2\I + \G}$ be the concentration of bargaining power of a graph. Intuitively, as an edge is added to the node, if the node's power is equally distributed $\rho(\mathcal{A})$ stays constant, otherwise it grows.. This can be seen in Figure (\ref{fig:incoherence}) where I plot $\rho$ for star and path graphs. In the case of the star graph, once a node is added to a $n+1$ graph, the bargaining power of each peripheral edge is multiplied by $\frac{n}{n+1}$, hence $\rho$ grows in $n$. On the other hand, when a node is added to the path graph, the ``new'' bargaining power is redistributed throughout the graph, maintaining proportions constants.
+
 
 \begin{figure}[H]
     \centering
@@ -19,7 +20,11 @@ Then, we can define $\rho(\mathcal{A}) = \left(\frac{\sigma}{\mu}\right)_{2\I + 
     \caption{$\rho(\mathcal{A})$ for different graphs and sizes} \label{fig:incoherence}
 \end{figure}
 
-For each size and graph, I simulate an equivalent demand shock in the central node. In Figure (\ref{fig:blackout}) I plot the number of periods in blackout in each simulation.
+For each size and graph, I simulate an equivalent demand shock in the central node. In Figure (\ref{fig:blackout}) I plot the number of periods of blackout in each simulation, that is,
+
+\begin{equation}
+    \left\lvert\set{t: \ t \geq \tau, \sum_{i} X_{i, t} > 0}\right\rvert
+\end{equation}
 
 \begin{figure}[H]
     \centering
@@ -29,13 +34,13 @@ For each size and graph, I simulate an equivalent demand shock in the central no
 
 \subsection{Price caps}
 
-Another common policy tool discussed in the literature (\cite{Fraser1994, Yao2007}) and used in practice (e.g. in Italy, UK, and West US in emergency situations) is that of a price control mechanism. These mostly come as a price cap. This can be modeled in our framework by rewriting the policy function of providers as,
+Another common policy tool discussed in the literature (\cite{Fraser1994, Yao2007}) and used in practice (e.g. in Italy, UK, and West US in emergency situations) is that of a price control mechanism. These mostly come in the form of a price cap. This can be modeled in our framework by rewriting the policy function of providers as,
 
 \begin{equation}
     p_{t+1} = \min\left\{ p_t + \Delta p(X_t, S_t, \lambda_t), \overline{p} \right\}
 \end{equation}
 
-where $\overline{p}$ is price cap. In Figure \ref{fig:pricecapdemand} I plot ``blackouts'' after the same shock of Figure \ref{fig:demandtransshockcen_star} but with a price cap. The price cap prevents price adjustments to induce enough supply and yields stronger and longer ``blackout'' periods.
+where $\overline{p}$ is price cap. In Figure \ref{fig:pricecapdemand} I plot ``blackouts'' after the same shock of Figure \ref{fig:demandshock_star} but with a price cap. The price cap prevents price adjustments to induce enough supply and yields stronger and longer ``blackout'' periods.
 
 \begin{figure}[H]
     \centering
