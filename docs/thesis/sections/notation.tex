@@ -1,9 +1,5 @@
 \section{Notation}
-The model rests on two theoretical structures. First, all agents are assumed to be boundedly rational. They do not know the workings of the market but have beliefs over price formations mechanisms and act consistently with them. Second, agents acting in cross-border markets interact on a graph structure. Before describing the model, it is then useful to introduce some notation.
-
-First, to denote an agent's beliefs over some future variable $x_{t+1}$ I will use $\B[x_{t+1}]$. If beliefs are based on information up to time $t$, I will use $\B_t[x_{t+1}]$
-
-Second, graphs are defined as a tuple of a set of vertices and a set of edges, $\mathcal{A} = (V, E)$. Vertices are integers $V = \set{1, 2, 3, \ldots, n}$ and edges are ordered pairs of vertices \begin{equation*}E = \set{(i, j) : i, j \in V \text{ and } i < j}\end{equation*}  Interactions can happen between markets (vertices) only if they share an edge, $(i, j) \in E$. The set of neighbors (i.e. nodes a node $i$ shares an edge with) is denoted as
+The model rests on two theoretical structures. First, all agents are assumed to be boundedly rational. They do not know the workings of the market but have beliefs over price formations mechanisms and act consistently with them. Second, agents acting in cross-border markets interact on a graph structure. Before describing the model, it is then useful to introduce some notation. First, to denote an agent's beliefs over some future variable $x_{t+1}$ I will use $\B[x_{t+1}]$. If beliefs are based on information up to time $t$, I will use $\B_t[x_{t+1}]$. Second, graphs are defined as a tuple of a set of vertices and a set of edges, $\mathcal{A} = (V, E)$. Vertices are integers $V = \set{1, 2, 3, \ldots, n}$ and edges are ordered (directed) pairs of vertices \begin{equation*}E = \set{(i, j) : i, j \in V \text{ and } i < j}\end{equation*}  Interactions can happen between markets (vertices) only if they share an edge, $(i, j) \in E$. The set of neighbors (i.e. nodes a node $i$ shares an edge with) is denoted as
 
 \begin{equation}
   N_{\mathcal{A}}(i) \coloneqq \set{ \ j \in V: \ (i, j) \in E \ }.
@@ -11,7 +7,13 @@ Second, graphs are defined as a tuple of a set of vertices and a set of edges, $
 
 % FIXME: Remove outside option
 
-As cross-border markets interactions happen between edges, I will simplify the solution by relying on the notion of a directed line graph, $L(\mathcal{A})$, associated with the original graph, with adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, I give a positive sign to the edge in $L(\mathcal{A})$ if the common vertex occupies the same position in both edges and negative if that is not the case. In our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $2$ occupies different positions in the two edges. Similarly, the edges $(1, 2), (1, 3)$ and $(2, 4), (1, 4)$ will have both positive sign $+1$ in $L(\mathcal{A})$. To elucidate this procedure, consider an arbitrary long path graph,
+As cross-border markets interactions happen between edges, I will simplify the solution by relying on the notion of a line graph, $L(\mathcal{A})$, associated with the original graph. $L$ is an operator that maps from and to the space of directed graphs
+\begin{equation}
+  L: (V, E) \to (E, A) \text{ where } A \subseteq V
+\end{equation}
+
+
+and has adjacency matrix $\G \in \R^{\abs{E}\times \abs{E}}$. $L(\mathcal{A})$ can be constructed by mapping each edge of $\mathcal{A}$ to a vertex of $L(\mathcal{A})$ and drawing an edge between two nodes of $L(\mathcal{A})$ if the two share a node in the original graph (e.g. $(1, 2)$ and $(2, 7)$ would share an edge because they both share the node $2$ in $\mathcal{A}$). Finally, give a positive sign to the edge in $L(\mathcal{A})$ if the common vertex occupies the same position in both edges and negative if that is not the case. In our prior example, the edge between $(1, 2)$ and $(2, 7)$ has sign $-1$ because $2$ occupies different positions in the two edges. Similarly, the edges $(1, 2), (1, 3)$ and $(2, 4), (1, 4)$ will have both positive sign $+1$ in $L(\mathcal{A})$. To elucidate this procedure, consider an arbitrary long path graph,
 
 \begin{figure}[H]
   \centering
@@ -24,11 +26,11 @@ Such a graph has an adjacency matrix of size $n$
   \matr{A} =
   \begin{pmatrix}
     {0} & {1} & {0} & {}       & {}  & {}  \\
-    {1} & {0} & {1} & {}       & {}  & {}  \\
-    {0} & {1} & {0} & {}       & {}  & {}  \\
+    {0} & {0} & {1} & {}       & {}  & {}  \\
+    {0} & {0} & {0} & {}       & {}  & {}  \\
     {}  & {}  & {}  & {\ddots} & {}  & {}  \\
     {}  & {}  & {}  & {}       & {0} & {1} \\
-    {}  & {}  & {}  & {}       & {1} & {0}
+    {}  & {}  & {}  & {}       & {0} & {0}
   \end{pmatrix}
 \end{equation}
 

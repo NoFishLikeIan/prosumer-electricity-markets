@@ -8,7 +8,7 @@
     dashed, line width=0pt
 ]
 
-\begin{tikzpicture}[-, thick, fontscale=0.8]
+\begin{tikzpicture}[-{Latex[scale=1]}, thick, fontscale=0.8]
 
     \node [node] (one) {Prov. $1$};
     \node [node, left = 3cm of one] (two) {Prov. $2$};
