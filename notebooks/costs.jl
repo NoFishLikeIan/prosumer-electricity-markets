@@ -16,6 +16,24 @@ begin
 	Plots.reset_defaults(); Plots.resetfontsizes()
 end
 
+# ╔═╡ fbe8d871-aefc-435e-abf0-5d688dc4757e
+function annotatewithbox!(
+		fig::Plots.Plot,
+		text::Plots.PlotText,
+		x::Real, y::Real, Δx::Real, Δy::Real = Δx;
+		kwargs...)
+	
+	box = Plots.Shape(:rect)
+	
+	Plots.scale!(box, Δx, Δy)
+	Plots.translate!(box, x, y)
+
+	Plots.plot!(fig, box, c = :white, linestroke = :black, label = false; kwargs...)
+	Plots.annotate!(fig, x, y, text)
+	
+	fig
+end
+
 # ╔═╡ 805018be-7695-45ae-a671-2f8d8cc4a858
 plotpath = "../plots"
 
@@ -124,8 +142,8 @@ function r(s, p)
     
     if unitπ < 0 return -γ * s end
     
-    r̅ = √(unitπ)
-    ∂β = (1 - β) / β
+	∂β = (1 - β) / β
+	r̅ = ∂β * √(unitπ)
     
     if inv(∂β) * s < √(unitπ) 
         return r̅ 
@@ -146,35 +164,44 @@ end
 # ╔═╡ 9dbece0b-2aaf-475e-b45a-4e60c8557a87
 begin
 	
-	clims = (-sᵤ , sᵤ )
-	boundarylabel = latexstring("\$ s_t = \\frac{\\beta}{1- \\beta} \\sqrt{p_t - k} \$")
-	profitlabel = latexstring("\$ p_t = k \$")
+	default(legendfontsize = 12, xtickfontsize=10, ytickfontsize=10, xguidefontsize=12, yguidefontsize=12, dpi=100, size=(1200,1000))
 	
-	upperbound = latexstring("\$ r = \\sqrt{p_t - k} \$")
-	lowerbound = latexstring("\$ r = -\\delta s_t \$")
+	clims = (-sᵤ , sᵤ )
+	profitlabel = latexstring("\$ p_t = k \$")
+	boundarylabel = latexstring("\$ s_t = \\frac{\\beta}{1- \\beta} \\sqrt{p_t - k} \$")
+	
+	upperbound = latexstring("\$ mb > mc \$")
+	lowerbound = latexstring("\$ mc < mb \$")
+	middle = latexstring("\$ mc = mb \$")
 	
 	xlabel = latexstring("\$ s_t \$")
 	ylabel = latexstring("\$ p_t \$")
 	
-	rfigure = contourf(
+	∂β = β / (1-β)
+	
+	rfigure = contour(
 		supplyspace, pricespace, 
 		(s, p) -> r(s, p), clim = clims, 
-		levels = range(clims..., length = 15),
+		levels = range(clims..., length = 50),
+		linewidth = 2,
 		xlims = extrema(supplyspace), ylims=extrema(pricespace),
-		title = latexstring("\$ r \\ (s_t, p_t) \$"),
-		linestyle=:dash, legend = :topleft,
-		xlabel = xlabel, ylabel = ylabel, size = (800, 600))
-	
-	plot!(
-		rfigure, supplyspace, s -> (s*β/(1 - β))^2 + k, legend = :topleft,
-		label = boundarylabel, c = :black, linewidth = 2)
+		title = latexstring("\$ r \\ (s_t, p_t) \$"), legend = :topleft,
+		xlabel = xlabel, ylabel = ylabel, size = (1000, 800))
 	
 	plot!(
 		rfigure, supplyspace, s -> k, legend = :topleft,
-		label = profitlabel, c = :black, linewidth = 2)
+		legendfontsize=12,
+		label = profitlabel, c = :black, linewidth = 3)
 	
-	annotate!(2, pᵤ * 0.6, upperbound)
-	annotate!(0.8, k * 0.4, text(lowerbound))
+	plot!(
+		rfigure, supplyspace, s -> ∂β * (s)^2 + k, legend = :topleft,
+		label = boundarylabel, c = :black, linewidth = 3, linestyle=:dash)
+	
+	recsize = (1., 3.5)
+	
+	annotatewithbox!(rfigure, text(upperbound), 2, pᵤ * 0.42, recsize...)
+	annotatewithbox!(rfigure, text(lowerbound), 2, k * 0.5, recsize...)
+	annotatewithbox!(rfigure, text(middle), 8.1, pᵤ * 0.42, recsize...)
 	
 end
 
@@ -1111,6 +1138,7 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╠═d24cee46-d3f2-11eb-0f8c-93119645edd9
 # ╠═4509a0c9-374e-4f0f-a5dd-5671f0c67bb4
+# ╠═fbe8d871-aefc-435e-abf0-5d688dc4757e
 # ╠═805018be-7695-45ae-a671-2f8d8cc4a858
 # ╠═4412cc25-bb76-4453-9727-5cf097a883e1
 # ╠═e572d85f-1839-48e5-b1e2-2ee1123ef22e

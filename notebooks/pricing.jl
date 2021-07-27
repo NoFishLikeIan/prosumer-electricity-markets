@@ -14,6 +14,24 @@ using LinearAlgebra, Statistics, Polynomials
 # ╔═╡ 4f5bc759-4819-4359-9a70-1c17645453e3
 using Random
 
+# ╔═╡ 8138259c-c163-4a35-97e5-5249f7dc1c2d
+function annotatewithbox!(
+		fig::Plots.Plot,
+		text::Plots.PlotText,
+		x::Real, y::Real, Δx::Real, Δy::Real = Δx;
+		kwargs...)
+	
+	box = Plots.Shape(:rect)
+	
+	Plots.scale!(box, Δx, Δy)
+	Plots.translate!(box, x, y)
+
+	Plots.plot!(fig, box, c = :white, linestroke = :black, label = false; kwargs...)
+	Plots.annotate!(fig, x, y, text)
+	
+	fig
+end
+
 # ╔═╡ cd083bdd-bcdc-43d1-9fd7-168bf525f4a6
 function xs_by_sum_ratio(sumX::Float64, ratios::Vector{Float64})
 	n = length(ratios)
@@ -206,6 +224,7 @@ begin
 		Xₛ, pₛ, 
 		(X, p) -> p′(Sₜ, X, p, X⃗ₒ(X), p⃗ₒ),
 		title = plabel,
+		c=:coolwarm,
 		xlabel = Xlabel, ylabel = Slabel,
 		zlabel=latexstring("\$ p_{t+1} \$"),
 		legend=:none,
@@ -228,7 +247,7 @@ begin
 		title = ppathlabel,
 		xlabel = Xlabel, ylabel = Slabel,
 		zlabel=latexstring("\$ p_{t+1} \$"),
-		legend=:none,
+		legend=:none, c=:coolwarm,
 		size = (800, 600)
 	)
 	
@@ -1084,6 +1103,7 @@ version = "0.9.1+5"
 # ╠═1cff0acc-19aa-430e-8b79-1e34a7905d67
 # ╠═c160e2ed-b354-4cdd-9084-15dba3ba7b30
 # ╠═4f5bc759-4819-4359-9a70-1c17645453e3
+# ╠═8138259c-c163-4a35-97e5-5249f7dc1c2d
 # ╠═cd083bdd-bcdc-43d1-9fd7-168bf525f4a6
 # ╠═0074be84-f217-4d5e-9bb9-a5873b5990a7
 # ╠═1ef00bb5-db8e-4e9d-93a0-b3bf56310335

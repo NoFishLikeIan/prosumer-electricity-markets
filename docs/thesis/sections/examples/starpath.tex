@@ -114,7 +114,7 @@ The second fundamental structure to consider is the path graph.
 \end{minipage}
 \vspace{5mm}
 
-Letting $\matr{L}_n$ be the lower triangular matrix with unity entries, we can rewrite the bargaining influence matrix (\ref{a:linegraphinfluence}) as
+Letting $\matr{L}_n$ be the lower triangular matrix with unity entries, we can rewrite the bargaining influence matrix (see \ref{a:linegraphinfluence}) as
 
 \begin{equation}
   (\matr{2I_n + \G})^{-1} = \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n^T
@@ -128,7 +128,7 @@ Then
   \end{split}
 \end{equation*}
 
-Now focusing once again on the central node $m = \frac{n+1}{2}$, assuming $n+1$ is odd, we obtain the following ratio of exchanged quantities (\ref{a:pol_path})
+Now focusing once again on the central node $m = \frac{n+1}{2}$, assuming $n+1$ is odd, we obtain the following ratio of exchanged quantities (see \ref{a:pol_path})
 
 \begin{equation}
   Y_r(\Delta) \coloneqq \frac{Y^{(m, m+1)}}{Y^{(m-1, m)}}
@@ -148,7 +148,7 @@ and, using price equalization, we get the following cross-border price
   \end{split}
 \end{equation}
 
-The star and path graph are the two extreme cases in the class of acyclic graphs, as far as our problem is concerned. By plotting, \textit{ceteris paribus}, the policy function for the central provider of the star graph (\ref{policy_star}) and the path graph (\ref{policy_path}) (Figure \ref{fig:p}), one can notice how the bargaining power within the graph plays a crucial role. In particular, the provider in the central role of the star graph reacts more strongly to changes in its own excess demand. On the other hand, the central provider of the path graph has a weaker reaction to shocks given its lower bargaining power.
+The star and path graph are the two extreme cases in the class of acyclic graphs, since all other acyclic graphs can be constructed as a combination of the two. By plotting, \textit{ceteris paribus}, the policy function for the central provider of the star graph, provider one, (\ref{policy_star}) and the path graph, provider $(n+1) / 2$, (\ref{policy_path}) (Figure \ref{fig:p}), one can notice how the bargaining power within the graph plays a crucial role. In particular, the provider in the central role of the star graph reacts more strongly to changes in its own excess demand. On the other hand, the central provider of the path graph has a weaker reaction to shocks given its lower bargaining power.
 
 \begin{center}
   \begin{figure}[H]
@@ -163,7 +163,7 @@ The star and path graph are the two extreme cases in the class of acyclic graphs
       \includegraphics[width=\textwidth]{\plotpath/pricingpath.pdf}
       \caption{Path graph}
     \end{subfigure}
-    \caption{Policy function of the central provider}
+    \caption{Contour map of the function $p_{t+1}(p_t, X_t; S_t)$ where warmer colors correspond to higher prices}
     \label{fig:p}
   \end{figure}
 
@@ -176,9 +176,7 @@ The star and path graph are the two extreme cases in the class of acyclic graphs
   \end{table}
 \end{center}
 
-
-
-To understand how price hikes propagate through the network, as before, I simulate a shock to a regional demand from a situation of steady state. Consider a positive shock in the demand of the central market in the star graph. Figure \ref{fig:transshockcen_star} shows the price and supply evolution around the shock (shaded area) in the central node and a peripheral node. The shock tilts the system out of equilibrium and induces strong price volatility. As opposed to the two node case, the price hike not only is much more pronounced but it is also sustained for longer. On the other hand, after the equivalent shock in the path graph the central provider does not increase prices as much, due to its lower bargaining power, and the price hike is less pronounced throughout the graph (Figure \ref{fig:transshockcen_path}).
+To understand how price hikes propagate through the network, as before, I simulate a shock to a regional demand from a situation of steady state. Consider a positive shock in the demand of the central market in the star graph. Figure \ref{fig:transshockcen_star} shows the price and supply evolution around the shock (shaded area) in the central node and a peripheral node. The shock tilts the system out of equilibrium and induces strong price volatility. This price volatility arises because an increase in the price of the central node, induces an increase in the price of all peripheral nodes, which in turn strongly pushes up supply across the networks. This puts downward pressure on all prices. Because of this, as opposed to the two node case, the price hike not only is much more pronounced but it is also sustained for longer. On the other hand, after the equivalent shock in the path graph the central provider does not increase prices as much, due to its lower bargaining power, and the price hike is less pronounced throughout the graph (Figure \ref{fig:transshockcen_path}).
 
 \newpage
 \begin{figure}[H]
@@ -194,7 +192,7 @@ To understand how price hikes propagate through the network, as before, I simula
 \end{figure}
 \newpage
 
-Figure \ref{fig:demandshock} shows the excess demand associated with this shock in the two graphs. The simulation once again, delivers both a trivial and a more surprising insight. Trivially, the shock in excess demand causes in both graphs a sudden shrinkage of excess demand, which is less pronounced in the case of the path graph due to a smoother price transmission and a less concentrated bargaining power. Surprisingly, the shock brings the system into a long period of oscillating production which leads to a ``blackout'' further down the line. This phenomenon arises due to the myopic view that providers have of the pricing mechanism process. In the star graph, the price hike propagates throughout the network immediately, since all nodes are linked to the central node. This causes production to increase in all peripheral nodes, which in turn generates a excess electricity supply. This overshooting creates strong downward pressure on prices, via cross-border prices and expectations of providers, which keeps supply artificially low for a sustained time period. Finally, the network structure allows for the price increase to be much more persistent. The self-fulfilling behavior persists until electricity production is high enough to push prices back down to their equilibrium levels. Importantly, this has to happen throughout the network, instead of simply in the central node.
+Figure \ref{fig:demandshock} shows the excess demand associated with this shock in the two graphs. The simulation once again, delivers both a trivial and a more surprising insight. Trivially, the shock in excess demand causes in both graphs a sudden shrinkage of excess demand, which is less pronounced in the case of the path graph due to a smoother price transmission and a less concentrated bargaining power. Surprisingly, the shock brings the system into a long period of oscillating production which leads to a ``blackout'' further down the line. This phenomenon arises due to the myopic view that providers have of the pricing mechanism process. In the star graph, the price hike propagates throughout the network immediately, since all nodes are linked to the central node. This causes production to increase in all peripheral nodes, which in turn generates a excess electricity supply. This overshooting creates strong downward pressure on prices, via cross-border prices and expectations of providers, which keeps supply artificially low for a sustained time period. Finally, the network structure allows for the price increase to be much more persistent. The self-fulfilling behavior persists until electricity production is high enough to push prices back down to their equilibrium levels. Importantly, a return to steady state prices happens only if the excess demand is once again satisfied throughout the network.
 
 \begin{center}
   \begin{figure}[H]

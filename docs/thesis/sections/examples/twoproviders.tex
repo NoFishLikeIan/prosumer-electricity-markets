@@ -34,7 +34,7 @@ Satisfaction of the constraint requires that, $X_{1, t} = - X_{2, t} = Y^{(1, 2)
   \end{split}
 \end{equation}
 
-Equation (\ref{two:P}) tells us that the influence of each node on the traded price is simply $1 / 2$. Note that in this is consistent with the bargaining power matrix
+Equation (\ref{two:P}) tells us that the influence of each node on the traded price is simply $1 / 2$. Note that this is consistent with the bargaining power matrix
 
 \begin{equation}
   (2 \I_{1} + \G)^{-1} = \left( 2 \begin{pmatrix} 1 \end{pmatrix} + \begin{pmatrix} 0 \end{pmatrix} \right)^{-1} = \frac{1}{2}
@@ -60,16 +60,16 @@ By symmetry, provider two has the same policy function. Letting $p_t \coloneqq \
   \end{pmatrix} p_t + \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \circ S_t \right) \oslash \gamma_t
 \end{equation}
 
-This equation determines the coevolution of the two prices. To understand how price hikes propagate in the network I simulate a demand shock in the steady state model (see \ref{a:initsim} for mode details). Figure \ref{fig:two} shows the time series evolution of prices and electricity supply in the two nodes. At time $\tau \in [600, 610]$ (shaded in the plot) there is an excess demand shock in node two ($e_{2, t = \tau} = \overline{e}$ and $e_{2, t \neq \tau} = \underline{e}$). As expected there is a ``first order'' effect of the demand shock on prices in the second regional market and then the price hike is transmitted to the first node. More interestingly, the shock pushes the model to a regime of higher price volatility and there is a second price hike wave, due to a feedback loop and excess electricity production.
+This equation determines the coevolution of the two prices. To understand how price hikes propagate in the network I simulate a demand shock from the steady state model (see \ref{a:initsim} for mode details). Figure \ref{fig:two} shows the time series evolution of prices and electricity supply in the two nodes. At time $\tau \in [600, 610]$ (shaded in the plot) there is an excess demand shock in node two ($e_{2, t = \tau} = \overline{e}$ and $e_{2, t \neq \tau} = \underline{e}$). As expected there is an immediate effect of the demand shock on prices in the second regional market and then the price hike is transmitted to the first node. More interestingly, the shock pushes the model to a regime of higher price volatility and there is a second price hike wave, due to an excess electricity production.
 
 
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{\plotpath/two/pricesupply.pdf}
-  \caption{Price and supply in each node, with a demand shock with two providers} \label{fig:two}
+  \caption{Price (line) and supply (bar) in each node, with a demand shock with two providers} \label{fig:two}
 \end{figure}
 
-Another interesting variable to track during the shock is the excess demand in each node $X_{i, t}$. In the current simulation the ``perceived'' excess demand has to be fulfilled, namely $\sum_i \B_{i, t-1}\left[X_{i, t}\right] = 0$, since its stems from the optimization problem of the provider. Nevertheless, the realized excess demand might be positive, $\sum_i X_{i, t} > 0$. In this case a ``blackout'' occurs, namely prices fail to induce enough electricity supply.  In Figure \ref{fig:twodemand} I plot the excess demand in the previous simulation. The initial demand shock is not enough to put the system into a ``blackout''. But the feedback loop and increased price volatility causes one twenty periods later. The price imbalance between the two markets is sustained thereafter.
+Another interesting variable to track during the shock is the excess demand in each node $X_{i, t}$. In the current simulation the ``perceived'' excess demand has to be fulfilled, namely $\sum_i \B_{i, t-1}\left[X_{i, t}\right] = 0$, since its stems from the optimization problem of the provider. Hence, providers at time $t$, consistently with their beliefs $\B_{i, t-1}$, attempt to avoid excess demand. Yet, in case of a sudden demand shock, the electricity produced throughout the network might not be enough to respect the condition $\sum_i X_{i, t} < 0$ and a ``blackout'' occurs, namely prices fail to induce enough electricity supply.  In Figure \ref{fig:twodemand} I plot this excess demand in the previous simulation. The initial demand shock is not enough to put the system into a ``blackout''. But the increased price volatility causes one twenty periods later. The price imbalance between the two markets is sustained thereafter.
 
 \begin{figure}[H]
   \centering
@@ -77,4 +77,4 @@ Another interesting variable to track during the shock is the excess demand in e
   \caption{Excess demand} \label{fig:twodemand}
 \end{figure}
 
-In North America and Europe, financial markets, government intervention, and regulations play a crucial role in building excess supply, stabilizing the system, and screening consumers from oscillation of prices (\cite{Cicala2017, Mulder2019}). Hence, blackouts are more likely to be due to supply shocks. Nevertheless, the model highlights a purely economic mechanism by which two perfectly integrated markets need not to converge to equalized prices.
+In North America and Europe, financial markets, government intervention, and regulations play a crucial role in building excess supply, stabilizing the system, and screening consumers from oscillation of prices (\cite{Cicala2017, Mulder2019}). Hence, blackouts are more likely to be due to supply shocks. Nevertheless, the model highlights a purely economic mechanism by which two perfectly integrated markets need not to converge to equalized prices. % TODO: Show where in the graph

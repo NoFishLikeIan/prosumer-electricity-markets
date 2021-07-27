@@ -1,7 +1,7 @@
 include("src/main.jl")
 include("simulate.jl")
 
-plotpath = "../plots/"
+plotpath = "../plots"
 
 T = 150 # Simulation time
 τ = 100 # Shock init

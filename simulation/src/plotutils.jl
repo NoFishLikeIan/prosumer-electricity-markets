@@ -58,14 +58,16 @@ end
 end
 
 palette = Dict(
-    :red      => [0.870588, 0.101961, 0.101961],
-    :sand     => [0.94902, 0.827451, 0.596078],
-    :magnolia => [0.909804, 0.921569, 0.968627],
-    :orange   => [0.843137, 0.521569, 0.129412],
-    :blue     => [0.615686274509804, 0.7294117647058823, 1.0]
+    :blue       => [0, 49, 83, 255],
+    :lightblue  => [130, 218, 224, 255],
+    :red        => [255, 0, 0, 120],
+    :siena      => [204, 102, 0, 255],
+    :cobalto    => [88, 177, 196, 255],
+    :canary     => [255, 255, 102, 255],
+    :orange     => [255, 180, 0, 255]   
 )
     
 function makecolor(colorsymbol)
-    r, g, b = palette[colorsymbol]
-    colorfn(α=1.) = RGBA(r, g, b, α)
+    r, g, b, α = palette[colorsymbol] ./ 255
+    (α = α) -> RGBA(r, g, b, α)
 end

@@ -19,7 +19,9 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
             
         εperiods = highdemandperiods(dfpros, model)   
 
-        c₁, c₂, c₃ = Plots.palette(:tab10)
+        c₁ = makecolor(:blue)()
+        c₂ = makecolor(:cobalto)()
+        c₃ = makecolor(:siena)()
 
         pricet = dfprov[!, :p]
 
@@ -27,27 +29,30 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
             groupby(dfprod, [:step]), :s => sum
         )[!, :s_sum]
 
-        fig = plot(
-            timeaxis, pricet, 
-            title="Node $node", label="price", 
-            color=c₁, ylims=(-bound, bound),
-            ylabel = latexstring("\$ p_{$node, t} \$"),
-            xlabel=latexstring("\$ t \$"),
-            legend=:topright)
-                    
+        fig = plot(title="Node $node", xlabel=latexstring("\$ t \$"))
+        
+        bar!(
+            fig, timeaxis, supply,
+            ylims=(0, Inf), 
+            linewidth=0, linecolor=c₂,
+            ylabel=latexstring("\$ S_{$node, t} \$"),
+            label="supply", color=c₂, alpha=0.57,
+            legend=:topleft)
+
         for (startp, endp) in εperiods
 
             span = [timeaxis[startp], timeaxis[endp]]
 
-            vspan!(fig, span, color=c₂, alpha=0.2, label=nothing)
+            vspan!(fig, span, color=c₃, label=nothing)
         end
 
-        fig = bar!(
-            twinx(fig), timeaxis, supply, alpha=0.2,
-            ylims=(0, Inf), 
-            ylabel = latexstring("\$ S_{$node, t} \$"),
-            label="supply", color=c₃, 
-            legend=:topleft)
+        plot!(
+            twinx(fig),
+            timeaxis, pricet, 
+            label="price", 
+            color=c₁, ylims=(-bound, bound),
+            ylabel=latexstring("\$ p_{$node, t} \$"),
+            legend=:topright)
             
         return fig
     end
@@ -103,55 +108,86 @@ function plotproviderbeliefs(dfagent, model; savepath=nothing, nodestoplot=Int64
     return jointfigure
 end
 
-function plotexcessdemand(dfagent, dfmodel; savepath=nothing)
-    modelnodes = unique(dfagent.pos)
+function plotexcessdemand(dfagent, dfmodel; savepath=nothing, othernodes=[])   
+    
+    cᵪ = makecolor(:siena)()
+    cₚ = makecolor(:cobalto)()
+    cₐ = makecolor(:orange)()
+    
+    εₕ = filter(!ismissing, dfagent.ε) |> maximum
+    
+    
+    othernodes = isempty(othernodes) ? unique(dfagent.pos) : pthernodes
+    
     Tₗ, Tᵤ = extrema(dfmodel.step)
     time =  Tₗ:Tᵤ
     X = hcat(dfmodel.X...)'
 
+    idx, τdx  = findall(ε -> !ismissing(ε) && ε == εₕ, dfagent.ε) |> extrema
+
+    shocknode = dfagent[idx, :pos]
+    shocktime = dfagent[τdx, :step]
+
+    lowerbound = minimum(X[1:(shocktime - Tₗ), :])
+
     ∑X = positive.(sum(X, dims=2))
+
+    figure = plot(
+        ylims=(lowerbound, Inf),
+        gridalpha=1, grid=:y,
+        xlabel=latexstring("\$ t \$")
+    )
     
-    figure = plot(title="Excess demand", xlabel=latexstring("\$ t \$"))
+    plot!(figure,
+        time, X[:, shocknode], c=cᵪ, 
+        label=latexstring("\$ X_{$shocknode, t} \$"))
     
-    for (i, node) in enumerate(modelnodes)
-        plot!(figure, time, X[:, i], label=latexstring("\$ X_{$node, t} \$"))
+    for (i, node) in enumerate(filter(n -> n != shocknode, othernodes))
+        label = i == 1 ? latexstring("\$ X_{$node, t} \$") : false
+        plot!(figure, time, X[:, node], c=cₚ, label=label)
     end
     
-    bar!(figure, time, ∑X, label=latexstring("\$ \\sum_i X_{i, t} \$"), legend=:topleft, alpha=.5, linecolor=:match)
-
+    bar!(
+        figure, 
+        time, ∑X, 
+        c=cₐ,
+        linewidth=0, linecolor=cₐ, 
+        label=latexstring("\$ \\sum_i X_{i, t} \$"), 
+        legend=:topleft)
+    
     if !isnothing(savepath)
         savefig(figure, savepath)
     end
     return figure
 end
 
-computenodesize(N) = 1 / (3 * sqrt(N))
+    computenodesize(N) = 1 / (3 * sqrt(N))
 
 function plotpricevariance(dfagent, model; savepath=nothing)
     g = model.space.graph  
     N = length(g)
     
     pricevariance = getpricevariance(dfagent, model)
-        
+    
     nodelabel = [
         "σₚ($i) = $( @sprintf "%.0f" σ )" for (i, σ) in enumerate(pricevariance)]
-        
+    
     alphas = rescaleto(pricevariance, 0.5, 1.0)
-
+    
     nodefillc = map(makecolor(:blue), alphas)
-
+    
     context = gplot(
     g, nodefillc=nodefillc, 
         nodelabel=nodelabel,
         NODESIZE=computenodesize(N),
         layout=circular_layout)
-
+    
     if !isnothing(savepath) draw(PDF(savepath, 32cm, 32cm), context) end
-
+    
     return context
-end
+    end
 
-
+    
 function plotprofit(dfagent, model; savepath=nothing)
 g = model.space.graph
     
@@ -159,16 +195,16 @@ g = model.space.graph
     N = length(nodelabel)
     
     profit = sum(reshape(model.profit, length(nodelabel), :), dims=2) |> vec
-
+    
     alphas = rescaleto(profit, 0.1, 1.0)
-
+    
     nodefillc = map(makecolor(:blue), alphas)
-
-       
+    
+    
     nodelabel = [
         "π($i) = $(@sprintf "%.2E" prof)" 
         for (i, prof) in enumerate(profit)]
-
+    
     context = gplot(
         g, nodefillc=nodefillc, 
         nodelabel=nodelabel, 
@@ -176,22 +212,24 @@ g = model.space.graph
         layout=circular_layout)
     
     if !isnothing(savepath) draw(PDF(savepath, 32cm, 32cm), context) end
-
+    
     return context
-
-end
+    
+    end
+    
+coherencecolors = [makecolor(:cobalto)(), makecolor(:orange)()]
 
 function compareblackout(excdemand, ns; savepath=nothing)
 	blackoutlabel = latexstring("\$\\{t: t \\geq \\tau, \\sum_{i} X_{i, t} > 0 \\} \$")
     coherencelabel = latexstring("\$ n \$")
     
-    figure = plot(xlabel=coherencelabel, ylabel=blackoutlabel, yticks=0:1:10,)
-        
+    figure = plot(xlabel=coherencelabel, ylabel=blackoutlabel, yticks=0:1:10, )
+    
     for (i, results) in enumerate(excdemand)
 
         graphname, data = results
         
-        col = Plots.palette(:tab10)[i]
+        col = coherencecolors[i]
 
         presentrows = any((!isnan).(data), dims=2) |> vec
 
@@ -199,40 +237,42 @@ function compareblackout(excdemand, ns; savepath=nothing)
 
         cumulativeblackout = floor.(Int64, blk)
 
-        scatter!(
-            figure, ns, cumulativeblackout; markersize=2,
+        bar!(
+            figure, ns, cumulativeblackout;
+            linewidth=0, linecolor=col,
             c=col, label=graphname)
-        
-        plot!(figure, ns, cumulativeblackout; c=col, label=nothing)
+    
     end
-        
+    
     if !isnothing(savepath)
         savefig(figure, savepath)
     end
     return figure
 end
 
-function plotcoherences(excdemand, ns; savepath=nothing)
 
-figure = plot(xlabel=latexstring("\$ n \$"), ylabel=latexstring("\$ \\rho\$"))
-            
+    function plotcoherences(excdemand, ns; savepath=nothing)
+
+
+    figure = plot(xlabel=latexstring("\$ n \$"), ylabel=latexstring("\$ \\rho\$"))
+    
     for (i, results) in enumerate(excdemand)
 
         graphname, data = results
         
-        col = Plots.palette(:tab10)[i]
+        col = coherencecolors[i]
         
         ρs = data[:, 1]
 
         notnan = (!isnan).(ρs)
         
-        scatter!(figure, ns[notnan], ρs[notnan]; markersize=2, c=col, label=graphname, legend = :topleft)
+        scatter!(figure, ns[notnan], ρs[notnan]; markersize=4, c=col, label=graphname, legend=:topleft)
 
         plot!(figure, ns[notnan], ρs[notnan]; alpha=0.5, c=col, label=nothing)
-        
+    
     end
     
-        
+    
     if !isnothing(savepath)
         savefig(figure, savepath)
     end
@@ -240,28 +280,28 @@ figure = plot(xlabel=latexstring("\$ n \$"), ylabel=latexstring("\$ \\rho\$"))
 end
 
 
-function plotstabilityβ(prices, βs; node = 1, savepath = nothing)
-
+    function plotstabilityβ(prices, βs; node=1, savepath=nothing)
+    
     pmin, pmax = extrema(prices[:, :, 1])
     bound = min(abs(pmin), abs(pmax))
-
+    
     T = size(prices, 2)
-
-    βfig = plot(title = "Stability with respect to β")
-
+    
+    βfig = plot(title="Stability with respect to β")
+    
     for (idx, β) in enumerate(βs)
         plot!(βfig, 1:T, prices[idx, :, node], 
-        label = latexstring("\$ \\beta = $β \$"), 
-        xlabel = latexstring("\$ t \$"),
-        ylabel = latexstring("\$ p_t \$"), ylims = bound,
+        label=latexstring("\$ \\beta = $β \$"), 
+        xlabel=latexstring("\$ t \$"),
+        ylabel=latexstring("\$ p_t \$"), ylims=bound,
         c=Plots.palette(:tab10)[idx])
     end
 
-
+    
     if !isnothing(savepath)
-        savefig(βfig, savepath)
+    savefig(βfig, savepath)
     end 
-
+    
     return βfig
 
-end
+    end
