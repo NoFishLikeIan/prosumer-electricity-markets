@@ -44,7 +44,7 @@ which can be broken up into the profit the producer believes they can get for th
   mc(r; s_t, p_t) = mb(r; s_t, p_t).
 \end{equation}
 
-Clearly, the ramp-up policy function will depend entirely on the choice of the marginal cost function, $c(s, r)$. A function of electricity production level and ramp-up levels is too tight of a structure to summarize the complex decision process behind the cycling (starting up and shutting down) of traditional power plants (\cite{Kumar2012, VandenBergh2015}). To do so, I assume that ramp-down of electricity production has no marginal costs, namely $c(s, r) = 0$ if $r < 0$. Furthermore, I assume increasing marginal costs both in scale of supply, $\partial c / \partial s > 0$, and in ramp-up level, $\partial c / \partial r > 0$. A differentiable function with (asymptotically) this feature is
+Clearly, the ramp-up policy function will depend entirely on the choice of the marginal cost function, $c(s, r)$. A function of electricity production level and ramp-up levels is too tight of a structure to summarize the complex decision process behind the cycling (starting up and shutting down) of traditional power plants (\cite{Kumar2012, VandenBergh2015}). To approximate it, I assume that ramp-down of electricity production has no marginal costs, namely $c(s, r) = 0$ if $r < 0$. Furthermore, I assume increasing marginal costs both in scale of supply, $\partial c / \partial s > 0$, and in ramp-up level, $\partial c / \partial r > 0$. A differentiable function with (asymptotically) this feature is
 
 \begin{equation}
   c(s, r; c_1) \coloneqq \frac{1}{c_1} \ \log \left( 1 + \exp(c_1 \ s \ r) \right).
@@ -211,13 +211,13 @@ I assume that the bargaining does not take into account individual market expect
 \end{equation}
 
 
-which yields (see \ref{a:barsol}), for every edge $(i, j) \in E$ (which is equivalent to $a_{i, j} \neq 0$)
+which yields (see \ref{a:barsol}), for every neighbor $(i, j) \in E$
 
 \begin{equation} \label{bargaining_solution}
   \begin{split}
     P_t^{(i, j)} = \frac{1}{2\  Y_t^{(i, j)}} \Biggl( &\underbrace{X_{i, t} \  p_{i, t} - X_{j, t} \  p_{j, t}}_{\text{revenue difference }}
-    \\  + &\underbrace{\sum_{m\in N\setminus \set{i}} a_{j, m} \  Y_t^{(j, m)} \  P_t^{(j, m)}}_{\text{outside option of } j}
-    \\ - & \underbrace{\sum_{m \in N\setminus \set{j}} a_{i, m} \  Y_t^{(i, m)} \  P_t^{(i, m)}}_{\text{outside option of } i} \Biggr).
+    \\  + &\underbrace{\sum_{m\in N_{\mathcal{A}}(j)} Y_t^{(j, m)} \  P_t^{(j, m)}}_{\text{outside option of } j}
+    \\ - & \underbrace{\sum_{m \in N_{\mathcal{A}}(i)} Y_t^{(i, m)} \  P_t^{(i, m)}}_{\text{outside option of } i} \Biggr).
   \end{split}
 \end{equation}
 
