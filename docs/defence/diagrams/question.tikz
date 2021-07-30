@@ -1,0 +1,38 @@
+\tikzstyle{basic} = [
+draw,circle,
+minimum size=10pt
+]
+
+\tikzstyle{core} = [
+draw,circle,
+minimum size=10pt,
+prosumer,
+fill=prosumer,
+text=black
+]
+
+
+\begin{tikzpicture}[-{Latex[scale=1]}, thick]
+
+    \node [core] (1) {Prosumers};
+    \node [basic, above left = 0.5cm and 1cm of 1] (1-1) {\makecell[c]{Bounded \\ rationality}};
+    \node [basic, below left = 0.5cm and 1cm of 1] (1-2) {\makecell[c]{Renewable \\ uncertainty}};
+    \node [basic, above right = 0.5cm and 2cm of 1] (2-1) {$\V(\text{demand})$};
+    \node [basic, below right = 0.5cm and 2cm of 1] (2-2) {$\V(\text{supply})$};
+    \node [basic, below = 1cm of 2-2] (4) {\makecell[c]{Bargaining \\ power}};
+    \node [core, left = 2cm of 4] (3) {\makecell[c]{Network \\ providers}};
+    \node [basic, above right = 0.5cm and 2cm of 2-2] (5) {Prices};
+
+
+    \path
+    (1-1) edge (1)
+    (1-2) edge (1)
+    (1) edge (2-1)
+    (1) edge (2-2)
+    (3) edge (4)
+    (4) edge (2-2)
+    (2-2) edge (5)
+    (2-1) edge (5)
+    ;
+
+\end{tikzpicture}
