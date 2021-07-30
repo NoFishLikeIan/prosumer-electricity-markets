@@ -47,6 +47,9 @@
 \newcommand{\G}{\matr{G}}
 \newcommand{\T}{\matr{T}}
 
+\newcommand{\V}{\mathbb{V}}
+
+
 \title{How directed is a directed network?}
 \author{Andrea Titton}
 \title{Thesis defence}
@@ -59,25 +62,13 @@
 \frame{\titlepage}
 
 \begin{frame}{Motivation}
-    Green energy transition and advent of prosumers
+    Green energy transition and advent of \textbf{prosumers}
     \vspace{2em}
-    \begin{itemize}\setlength\itemsep{1.5em}
-        \item \textbf{Electricity production} becomes prerogative of households
-        \item \textbf{Local quasi-monopolies} energy providers (e.g. ERCOT case in Texas) and decentralized prosumers
-        \item Weather shocks lead to \textbf{uncertainty} among risk averse consumers
+    \begin{itemize} \setlength\itemsep{1.5em}
+              \pause \item Risk of \textit{local} demand shocks
+              \pause \item \textbf{Local quasi-monopolies} energy providers (e.g. ERCOT case in Texas) and decentralized prosumers
+              \pause \item Weather shocks lead to \textbf{uncertainty} among risk averse consumers
     \end{itemize}
-\end{frame}
-
-\begin{frame}{Research question}
-
-    Prosumers induce three sources of uncertainty: bounded rationality, risk aversion, and renewable energy volatility
-
-    \begin{itemize} \setlength{\itemsep}{1em}
-        \item \textit{What are the consequences for stability and prices in the wholesale cross-border daily electricity market?}
-        \item \textit{Is the current strategy of further integration (EU and USA) the best one?}
-        \item \textit{Can the system be stable without ``traditional'' producers?}
-    \end{itemize}
-
 \end{frame}
 
 \begin{frame}{Lack of price convergence}
@@ -86,6 +77,107 @@
         \caption{\cite{Report2019}}
     \end{figure}
 \end{frame}
+
+\begin{frame}{Research question}
+
+    Prosumers induce three sources of uncertainty: bounded rationality, risk aversion, and renewable energy volatility
+
+    \begin{itemize} \setlength{\itemsep}{1em}
+        \item \textit{How do exogenous and unexpected demand shocks affect the price formation mechanism?} \pause
+        \item \textit{How do shock in prices transmit to the cross-border market?} \pause
+        \item \textit{Hysteresis: can this shock produce sustained price imbalances?} \pause
+        \item \textit{Are current policies effective in this framework?}
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{What is new?}
+
+    Comparison with previous ABM (\cite{Weidlich2008})
+    \vfill
+
+    \visible<1->{\begin{minipage}{0.4\textwidth}
+            \resizebox{\textwidth}{!}{\input{diagrams/previous.tikz}}
+        \end{minipage}}
+    \hfill
+    \visible<2->{\begin{minipage}{0.55\textwidth}
+            \resizebox{\textwidth}{!}{\input{diagrams/question.tikz}}
+        \end{minipage}}
+\end{frame}
+
+\begin{frame}{Model outline}
+    \centering
+    \only<1>{
+        \resizebox{\textwidth}{!}{\input{diagrams/timing.tikz}}}
+    \only<2>{
+        \resizebox{\textwidth}{!}{\input{diagrams/focusonlocal.tikz}}}
+\end{frame}
+
+\begin{frame}{Prosumers}
+    \begin{itemize} \setlength\itemsep{1.5em}
+        \item M producer pre local market \pause
+        \item All with the same ``demand endowment'' $e_t$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Producers setup}
+    Main modelling assumption \vspace{5mm}
+    \begin{itemize} \setlength\itemsep{1.5em}
+        \item Price takers $p_t$ and oligopolist \pause
+        \item Produce electricity $s_t$ at fixed marginal cost $k$ \pause
+        \item Can ramp-up or down production with a period delay by $r_t \in [\underline{r}, \overline{r}]$ \pause
+        \item This costs them $c(s_t, r_t)$
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Producers optimization}
+    \begin{equation*}
+        V(s_t, p_t) = \max_{r_t} \left\{ s_t \ \underbrace{(p_t - k)}_{\text{unit profit}} - \underbrace{ c(s_t, r_t) \  r_t }_{\text{ramp-up costs}} + \beta \  V(s_{t+1}, p_{t+1}) \right\}
+    \end{equation*}
+    \vspace{5mm}
+    \visible<2>{\begin{itemize} \setlength\itemsep{1.5em}
+            \item $s_{t+1} = s_t + r_t$
+            \item Providers are naive: $\B[p_{t+1}] = p_t$
+        \end{itemize}}
+\end{frame}
+
+\begin{frame}
+
+    \visible<1->{
+        \begin{equation*}
+            mc = \overbrace{c(s_t, r)}^{\text{cost you pay today}} + \overbrace{r \frac{\partial c}{\partial r}(s_t, r)}^{\text{moved to new cost level}}
+        \end{equation*}
+    }
+
+    \visible<2>{
+        \begin{equation*}
+            \begin{split}
+                \frac{mb}{\beta} &= \overbrace{(p_t - k)}^{\text{unit profit}} + \overbrace{\left(\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right)}^{\text{moved to a new level of costs tomorrow}} \ r + \\
+                & + \underbrace{c(s_t + r, r)}_{\text{costs you do not pay tomorrow}}
+            \end{split}
+        \end{equation*}
+    }
+
+\end{frame}
+
+\begin{frame}
+    \begin{figure}
+        \includegraphics[width = 0.8 \textwidth]{../../plots/rfunction.pdf}
+    \end{figure}
+\end{frame}
+
+\iffalse
+    % CB market
+    \begin{frame}{Model outline}
+        \centering
+        \only<1>{
+            \resizebox{\textwidth}{!}{\input{diagrams/focusoncb.tikz}}}
+        \only<2>{
+            \resizebox{!}{0.7\textheight}{\input{../thesis/sections/diagrams/overview.tikz}}}
+    \end{frame}
+\fi
+
 
 \begin{frame}[allowframebreaks]{Bibliography}
     \printbibliography
