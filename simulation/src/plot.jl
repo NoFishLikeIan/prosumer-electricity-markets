@@ -35,9 +35,8 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
             fig, timeaxis, supply,
             ylims=(0, Inf), 
             linewidth=0, linecolor=c₂,
-            ylabel=latexstring("\$ S_{$node, t} \$"),
-            label="supply", color=c₂, alpha=0.57,
-            legend=:topleft)
+            label=latexstring("\$ S_{$node, t} \\ (left) \$"), color=c₂, alpha=0.57,
+            legend=(0.1, 0.8))
 
         for (startp, endp) in εperiods
 
@@ -49,10 +48,9 @@ function pricesupplyplot(dfagent, model; savepath=nothing, nodestoplot=Int64[])
         plot!(
             twinx(fig),
             timeaxis, pricet, 
-            label="price", 
             color=c₁, ylims=(-bound, bound),
-            ylabel=latexstring("\$ p_{$node, t} \$"),
-            legend=:topright)
+            label=latexstring("\$ p_{$node, t} \\ (right) \$"),
+            legend=(0.1, 0.9))
             
         return fig
     end
