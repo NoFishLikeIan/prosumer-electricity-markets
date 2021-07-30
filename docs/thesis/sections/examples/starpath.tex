@@ -148,7 +148,19 @@ and, using price equalization, we get the following cross-border price
   \end{split}
 \end{equation}
 
-The star and path graph are the two extreme cases in the class of acyclic graphs, since all other acyclic graphs can be constructed as a combination of the two. By plotting, \textit{ceteris paribus}, the policy function for the central provider of the star graph, provider one, (\ref{policy_star}) and the path graph, provider $(n+1) / 2$, (\ref{policy_path}) (Figure \ref{fig:p}), one can notice how the bargaining power within the graph plays a crucial role. In particular, the provider in the central role of the star graph reacts more strongly to changes in its own excess demand. On the other hand, the central provider of the path graph has a weaker reaction to shocks given its lower bargaining power.
+The star and path graph are the two extreme cases in the class of acyclic graphs, since all other acyclic graphs can be constructed as a combination of the two. This can be seen by comparing the two bargaining power matrices (Table \ref{table:influence}). In particular, the influence of an edge on each other is proportional to the distance in the associated line graph, $L(\mathcal{A})$. Given that the associated line graph of the star graph is the complete graph, each edge has distance one to each other (i.e. node one), hence the influence is $1 / (n+1)$. On the other hand, the associated line graph of the path graph is also a path graph. Hence the influence depends both on the position of the two edges in $L(\mathcal{A})$ and their relative distance.
+
+\begin{center}
+  \begin{table}[H]
+    \centering
+    \input{sections/tables/influence.tex}
+    \caption{Influence matrix in the star and path graphs for $n > 3$.}
+    \label{table:influence}
+  \end{table}
+\end{center}
+
+
+Furthermore, by plotting the policy function for the central provider of the star graph, provider one, (\ref{policy_star}) and the path graph, provider $(n+1) / 2$, (\ref{policy_path}) (Figure \ref{fig:p}), one can notice how the bargaining power within the graph plays a crucial role. On the one hand, the provider in the central role of the star graph reacts more strongly to changes in its own excess demand. On the other hand, the central provider of the path graph has a weaker reaction to shocks given its lower bargaining power.
 
 \begin{center}
   \begin{figure}[H]
@@ -166,14 +178,6 @@ The star and path graph are the two extreme cases in the class of acyclic graphs
     \caption{Contour map of the function $p_{t+1}(p_t, X_t; S_t)$ where warmer colors correspond to higher prices}
     \label{fig:p}
   \end{figure}
-
-
-  \begin{table}[H]
-    \centering
-    \input{sections/tables/influence.tex}
-    \caption{Influence matrix in the star and path graphs}
-    \label{table:influence}
-  \end{table}
 \end{center}
 
 To understand how price hikes propagate through the network, as before, I simulate a shock to a regional demand from a situation of steady state. Consider a positive shock in the demand of the central market in the star graph. Figure \ref{fig:transshockcen_star} shows the price and supply evolution around the shock (shaded area) in the central node and a peripheral node. The shock tilts the system out of equilibrium and induces strong price volatility. This price volatility arises because an increase in the price of the central node, induces an increase in the price of all peripheral nodes, which in turn strongly pushes up supply across the networks. This puts downward pressure on all prices. Because of this, as opposed to the two node case, the price hike not only is much more pronounced but it is also sustained for longer. On the other hand, after the equivalent shock in the path graph the central provider does not increase prices as much, due to its lower bargaining power, and the price hike is less pronounced throughout the graph (Figure \ref{fig:transshockcen_path}).
