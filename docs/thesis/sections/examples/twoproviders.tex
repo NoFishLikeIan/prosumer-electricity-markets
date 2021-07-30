@@ -60,13 +60,13 @@ By symmetry, provider two has the same policy function. Letting $p_t \coloneqq \
   \end{pmatrix} p_t + \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \circ S_t \right) \oslash \gamma_t
 \end{equation}
 
-This equation determines the coevolution of the two prices. To understand how price hikes propagate in the network I simulate a demand shock from the steady state model (see \ref{a:initsim} for mode details). Figure \ref{fig:two} shows the time series evolution of prices and electricity supply in the two nodes. At time $\tau \in [600, 610]$ (shaded in the plot) there is an excess demand shock in node two ($e_{2, t = \tau} = \overline{e}$ and $e_{2, t \neq \tau} = \underline{e}$). As expected there is an immediate effect of the demand shock on prices in the second regional market and then the price hike is transmitted to the first node. More interestingly, the shock pushes the model to a regime of higher price volatility and there is a second price hike wave, due to an excess electricity production.
+This equation determines the coevolution of the two prices. To understand how price hikes propagate in the network I simulate a demand shock from the steady state model (see \ref{a:initsim} for mode details). Figure \ref{fig:two} shows the time series evolution of prices and electricity supply in the two nodes. At time $\tau \in [600, 610]$ (shaded in red in the plot) there is an excess demand shock in node two ($e_{2, t = \tau} = \overline{e}$ and $e_{2, t \neq \tau} = \underline{e}$). As expected there is an immediate effect of the demand shock on prices in the second regional market and then the price hike is transmitted to the first node. More interestingly, the shock pushes the model to a regime of higher price volatility and there is a second price hike wave, due to an excess electricity production.
 
 
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{\plotpath/two/pricesupply.pdf}
-  \caption{Price (line) and supply (bar) in each node, with a demand shock with two providers} \label{fig:two}
+  \caption{Price (line, left axis) and supply (bar, right axis) in each node, with a demand shock with two providers} \label{fig:two}
 \end{figure}
 
 Another interesting variable to track during the shock is the excess demand in each node $X_{i, t}$. In the current simulation the ``perceived'' excess demand has to be fulfilled, namely $\sum_i \B_{i, t-1}\left[X_{i, t}\right] = 0$, since its stems from the optimization problem of the provider. Hence, providers at time $t$, consistently with their beliefs $\B_{i, t-1}$, attempt to avoid excess demand. Yet, in case of a sudden demand shock, the electricity produced throughout the network might not be enough to respect the condition $\sum_i X_{i, t} < 0$ and a ``blackout'' occurs, namely prices fail to induce enough electricity supply.  In Figure \ref{fig:twodemand} I plot this excess demand in the previous simulation. The initial demand shock is not enough to put the system into a ``blackout''. But the increased price volatility causes one twenty periods later. The price imbalance between the two markets is sustained thereafter.
