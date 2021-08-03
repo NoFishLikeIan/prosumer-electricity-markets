@@ -257,6 +257,92 @@ end
 # ╔═╡ 508ae0d4-2bee-43a3-97e0-c7bc16b08a03
 savefig(ppathfigure, joinpath(plotpath, "pricingpath.pdf"))
 
+# ╔═╡ 17b9fb97-b0e5-4ace-8851-3f5b45a4fec5
+md"""
+
+### Constructing a non-binding... 
+
+$p_{t+1} = p_t + L(X_t; S_t)$
+
+"""
+
+# ╔═╡ d7f30579-0fa8-4245-bafd-eb93b006844e
+begin	
+	nbfigure = contourf(
+		Xₛ, pₛ, 
+		(X, p) -> p + L(X, Sₜ),
+		title = latexstring("\$ \\ p_{t+1} = p_{t} + L(X_{t}; S_{t}) \$"),
+		xlabel = Xlabel, ylabel = Slabel,
+		zlabel=latexstring("\$ p_{t+1} \$"),
+		legend=:none, c=:coolwarm,
+		size = (800, 600)
+	)
+	
+	nbfigure
+end
+
+# ╔═╡ ec4948d0-1c4b-49c9-90ed-0e3438b356c5
+savefig(nbfigure, joinpath(plotpath, "pricingnonbinding.pdf"))
+
+# ╔═╡ 76920a25-6396-4e56-8632-3076757c222d
+md"""
+## Bargaining power plots
+"""
+
+# ╔═╡ 0a9138e3-443f-47f5-a91d-8d23f8e497fa
+makeperrange(s, n; padding = 5) = vcat(repeat([s], padding), s:n, reverse(s:(n-1)), repeat([s], padding))
+
+# ╔═╡ a7a81776-e56e-4c8b-8c6e-8a76e8a281d5
+ind(cond) = cond ? 1 : 0 
+
+# ╔═╡ 03200b07-6ba5-476d-937a-c3620dcc1a9b
+begin
+	ρstar(i, j, n) = ind(i == j) - 1 / (n+1)
+	ρpath(i, j, n) = min(i, j) - (i*j)/(n+1)
+end
+
+# ╔═╡ 040d3b92-5504-4642-9c8c-a0d9b47b079d
+function plotρ(ρ, nρ)
+	
+	ilabel = latexstring("\$ i \$")
+	jlabel = latexstring("\$ i \$")
+	lims = (1, nρ)
+		
+	is = js = 1:nρ
+	
+	ρfig = plot(
+		xlabel = ilabel, ylabel = jlabel, 
+		legend = :none, aspect_ratio = :equal,
+		xlims = lims, ylims = lims
+	)
+		
+	heatmap!(ρfig, is, js, (i, j) -> ρ(i, j, nρ), c=:heat)
+	
+	return ρfig
+	
+end
+
+# ╔═╡ 38c2605a-92dd-4dcd-bbcf-c1a8df695d17
+function plotρcompare(n)
+	title = latexstring("\$ (2 \\mathbf{I} + \\mathbf{G})^{-1}, \\ n=$n \$")
+	
+	plot(plotρ(ρstar, n), plotρ(ρpath, n), size = (1300, 600), title = title, legend=:none)
+end
+
+# ╔═╡ 40ed2d18-942f-4a00-8eb4-6095548d8600
+plotρ(ρstar, 10)
+
+# ╔═╡ a3815e92-30cb-488b-9e15-a17762eb37cf
+plotρcompare(20)
+
+# ╔═╡ 2020fcbc-a7ac-453b-baee-631727c62583
+begin
+	anim = @animate for n ∈ makeperrange(2, 120)
+		plotρcompare(n)
+	end
+	gif(anim, fps = 10)
+end
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -1120,7 +1206,7 @@ version = "0.9.1+5"
 # ╠═6a555982-2c8c-4c4b-b04b-9a6766b63b57
 # ╠═ed2c178e-9d91-41b5-979b-d73e8ddd4d17
 # ╠═32140e21-56ab-44a1-afa4-1db7889b109c
-# ╠═50ea2c00-637d-42ed-bd0c-22e520b56cd3
+# ╟─50ea2c00-637d-42ed-bd0c-22e520b56cd3
 # ╟─5d73464b-3c16-439a-ae17-95b8064a667a
 # ╟─3e3abf49-2514-4572-93ac-9b04db859ed7
 # ╟─c3d13b71-dd49-44aa-8cf3-aeef681b683c
@@ -1128,5 +1214,17 @@ version = "0.9.1+5"
 # ╠═c5be4eb9-6131-4d1e-996f-b4b9dc36281e
 # ╠═0dda0f22-c1b5-4b51-a81c-3fb4599806b6
 # ╠═508ae0d4-2bee-43a3-97e0-c7bc16b08a03
+# ╟─17b9fb97-b0e5-4ace-8851-3f5b45a4fec5
+# ╠═d7f30579-0fa8-4245-bafd-eb93b006844e
+# ╠═ec4948d0-1c4b-49c9-90ed-0e3438b356c5
+# ╟─76920a25-6396-4e56-8632-3076757c222d
+# ╠═0a9138e3-443f-47f5-a91d-8d23f8e497fa
+# ╠═a7a81776-e56e-4c8b-8c6e-8a76e8a281d5
+# ╠═03200b07-6ba5-476d-937a-c3620dcc1a9b
+# ╠═040d3b92-5504-4642-9c8c-a0d9b47b079d
+# ╠═38c2605a-92dd-4dcd-bbcf-c1a8df695d17
+# ╠═40ed2d18-942f-4a00-8eb4-6095548d8600
+# ╠═a3815e92-30cb-488b-9e15-a17762eb37cf
+# ╠═2020fcbc-a7ac-453b-baee-631727c62583
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
