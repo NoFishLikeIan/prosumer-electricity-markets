@@ -1,7 +1,9 @@
 \documentclass{beamer}
 
 \setlength{\unitlength}{1cm} 
-\usetheme{Madrid}
+\usetheme{Frankfurt}
+\useoutertheme{infolines}
+
 
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -59,7 +61,21 @@
 
 \begin{document}
 
+\AtBeginSubsection[]
+{
+    \begin{frame}
+        \frametitle{Table of Contents}
+        \tableofcontents[currentsection,currentsubsection]
+    \end{frame}
+}
+
 \frame{\titlepage}
+
+\begin{frame}
+    \tableofcontents
+\end{frame}
+
+\section{Introduction}
 
 \begin{frame}{Motivation}
     Green energy transition and advent of \textbf{prosumers}
@@ -105,6 +121,8 @@
         \end{minipage}}
 \end{frame}
 
+\section{Model}
+
 \begin{frame}{Model outline}
     \centering
     \only<1>{
@@ -112,6 +130,8 @@
     \only<2>{
         \resizebox{\textwidth}{!}{\input{diagrams/focusonlocal.tikz}}}
 \end{frame}
+
+\subsection{Local market}
 
 \begin{frame}{Prosumers}
     \begin{itemize} \setlength\itemsep{1.5em}
@@ -125,8 +145,8 @@
     \begin{itemize} \setlength\itemsep{1.5em}
         \item Price takers $p_t$ and oligopolist \pause
         \item Produce electricity $s_t$ at fixed marginal cost $k$ \pause
-        \item Can ramp-up or down production with a period delay by $r_t \in [\underline{r}, \overline{r}]$ \pause
-        \item This costs them $c(s_t, r_t)$
+        \item Can ramp-up or down production with a one period delay by $r_t \in [\underline{r}, \overline{r}]$ \pause
+        \item $r_t$ costs $c(s_t, r_t) = \max \{0, s_t \ r_t \}$ per unit
     \end{itemize}
 \end{frame}
 
@@ -142,15 +162,17 @@
         \end{itemize}}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Marginal costs and benefits}
 
-    \visible<1->{
+    The policy function $r(p_t, s_t)$ is such that $mc(r) = mb(r)$.
+
+    \visible<2->{
         \begin{equation*}
-            mc = \overbrace{c(s_t, r)}^{\text{cost you pay today}} + \overbrace{r \frac{\partial c}{\partial r}(s_t, r)}^{\text{moved to new cost level}}
+            mc = \overbrace{c(s_t, r)}^{\text{cost you pay today}} + \overbrace{r \ \frac{\partial c}{\partial r}(s_t, r)}^{\text{moved to new cost level}}
         \end{equation*}
     }
 
-    \visible<2>{
+    \visible<3->{
         \begin{equation*}
             \begin{split}
                 \frac{mb}{\beta} &= \overbrace{(p_t - k)}^{\text{unit profit}} + \overbrace{\left(\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right)}^{\text{moved to a new level of costs tomorrow}} \ r + \\
@@ -161,22 +183,128 @@
 
 \end{frame}
 
+\begin{frame}{Policy $r$}
+    \visible<1->{
+        If equality is possible
+        \begin{equation*} \label{rpolicy}
+            r(s_t, p_t) =
+            \frac{1 - \beta}{\beta} \ s_t - \sqrt{ \left(\frac{1 - \beta}{\beta} \ s_t \right)^2 - \ \left(p_t - k\right) }.
+        \end{equation*}
+
+        \begin{itemize}
+            \item $r(s_t, p_t) \xrightarrow{} 0$ as $p_t \xrightarrow{} k$
+            \item Decreasing in $s_t$ and increasing in $p_t$
+        \end{itemize}
+    }
+
+    \vfill
+
+    \visible<2->{
+        There are two \textit{regions} where equality is not possible:
+        \begin{itemize}
+            \item If $p_t \leq k$ there are no unit profits, $mc(r) > mb(r)$
+            \item If $s_t \leq \frac{\beta}{1-\beta} \sqrt{p_t - k}$ production is too low, $mc(r) < mb(r)$
+        \end{itemize}
+    }
+\end{frame}
+
+
 \begin{frame}
     \begin{figure}
         \includegraphics[width = 0.8 \textwidth]{../../plots/rfunction.pdf}
     \end{figure}
 \end{frame}
 
-\iffalse
-    % CB market
-    \begin{frame}{Model outline}
-        \centering
-        \only<1>{
-            \resizebox{\textwidth}{!}{\input{diagrams/focusoncb.tikz}}}
-        \only<2>{
-            \resizebox{!}{0.7\textheight}{\input{../thesis/sections/diagrams/overview.tikz}}}
-    \end{frame}
-\fi
+\begin{frame}{Demand}
+    Let $R_t = \sum^N_{i = 1} r_t$, \\
+    then the \textbf{excess demand} in the local market changes as,
+
+    \vspace{0.2\textheight}
+
+    \begin{equation*}
+        X_{t+1} - X_t = \underbrace{M \left(e_{t+1} - e_t \right)}_{\text{Increases in demand shocks}} - \underbrace{R_t}_{\text{Decreases in ramp-up}}
+    \end{equation*}
+\end{frame}
+
+\begin{frame}{Provider local problem}
+    \visible<1->{
+        The provider $i$ needs to,
+
+        \begin{enumerate}
+            \item Pick $p_{t}$ which induces $X_{i, t}$
+            \item Trade with its neighbors $N_{\mathcal{A}}(i)$ the quantities $Y^{(i, j)}$ so that $X_{i, t} \leq \sum_j Y^{(i, j)}$
+        \end{enumerate}
+    }
+
+    \visible<2->{
+        \begin{equation*}
+            \begin{split}
+                V(X_{i, t}, S_{i, t}) = \max_{p_{i, t}, Y^{(i, j)}_t} \Bigg\{ &\overbrace{p_{i, t} \  X_{i, t} - \sum_{j \in N_{\mathcal{A}}(i)} Y^{(i, j)}_t \  P^{(i, j)}(\Y_t)}^{\text{Instantaneous profits}} \\
+                &+ \underbrace{\lambda_{i, t} \  \left( X_{i, t} - \sum_{j \in N_{\mathcal{A}}(i)} Y^{(i, j)}_t \right)}_{\text{Constraint}} \\
+                &+ \beta \   V(X_{i, t+1}, S_{i, t+1}) \Bigg\}
+            \end{split}
+        \end{equation*}
+    }
+
+
+\end{frame}
+
+
+\begin{frame}{Provider's beliefs}
+
+    There are two state variables $X_{i, t}$ and $S_{i, t}$,
+
+    \begin{equation*}
+        \begin{split}
+            X_{i, t+1} &= X_{i, t} - \B_{i, t} \left[R(p_{i, t}, S_{i, t}) \right] \\
+            S_{i, t+1} &= S_{i, t} + \B_{i, t} \left[R(p_{i, t}, S_{i, t}) \right]
+        \end{split}
+    \end{equation*}
+
+    where,
+
+    \begin{minipage}{.45\textwidth}
+        \begin{equation*}
+            \begin{split}
+                &\B_{i, t} \left[R(p_{i, t}, S_{i, t}) \right] = \\
+                &\alpha_{i, t} + \gamma_{i, t} \  p_{i, t} + \eta_{i, t} \ S_{i, t}
+            \end{split}
+        \end{equation*}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{.45\textwidth}
+        \begin{figure}
+            \includegraphics[height = 0.4\textheight]{../../plots/constant/star/ols.pdf}
+        \end{figure}
+    \end{minipage}
+
+\end{frame}
+
+\begin{frame}
+
+    The optimization problem determines the \textbf{local price evolution}
+    \begin{equation*}
+        p_{i, t+1} = p_{i, t} + \underbrace{\frac{1}{\gamma_{i, t}} \left( \frac{1-\beta}{\beta } X_{i, t} + \alpha_{i, t} + \eta_{i, t} S_{i, t} \right)}_{\text{influence of local market } L_{i, t}(X_{i, t}, S_{i, t})} - \underbrace{\lambda_{i, t}}_{\text{influence of cross-border market}}
+    \end{equation*}
+
+\end{frame}
+
+\subsection{Cross-border market}
+
+% CB market
+\begin{frame}{Cross-border market}
+    \centering
+    \resizebox{\textwidth}{!}{\input{diagrams/overview.tikz}}
+\end{frame}
+
+
+\section{Simulation}
+
+\section{Policy}
+
+\section{Conclusion}
+
+
 
 
 \begin{frame}[allowframebreaks]{Bibliography}

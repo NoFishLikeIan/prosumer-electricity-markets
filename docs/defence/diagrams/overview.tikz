@@ -1,0 +1,48 @@
+\tikzstyle{var} = [
+draw,circle,
+prosumer,
+fill=prosumer,
+text=black,
+minimum size=10pt]
+
+\tikzstyle{agent} = [
+draw, circle,
+fill=blue!30,
+minimum size=10pt]
+
+\tikzstyle{onnode} = [
+    draw, circle, fill=white
+]
+
+\tikzstyle{time} = [
+draw=gray, rectangle,
+dashed,
+thick,
+inner sep=5pt]
+
+\tikzstyle{market} = [
+draw=gray, circle,
+dashed,
+thick,
+inner sep=5pt]
+
+\begin{tikzpicture}[-{Latex}, thick, every text node part/.style={align=center, fontscale=0.8}]
+
+    % Placing providers
+    \foreach \x/\y [count=\j] in {1/1, -1/1, 1/-1, -1/-1}
+        % Draw provider
+        {
+            \node [agent]  (\j) at (2*\x, 2*\y) [] {Provider \j};
+            \node [market] (\j-mkt) at (6*\x, 2*\y) [] {Wholesale \\ market \j};
+            \path 
+                (\j-mkt) edge [bend right] node [onnode] {$X_{\j}$} (\j)
+                (\j) edge [dashed, bend right] node [onnode, dashed] {$p_{\j}$} (\j-mkt)
+            ;
+        }
+
+    \path
+    (1) edge [] node [above] {$Y^{(1, 2)}$} (2)
+    (1) edge [] node [right] {$Y^{(1, 3)}$} (3)
+    (3) edge [] node [above] {$Y^{(3, 4)}$} (4);
+
+\end{tikzpicture}
