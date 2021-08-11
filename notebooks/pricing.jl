@@ -5,7 +5,7 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 1cff0acc-19aa-430e-8b79-1e34a7905d67
-using Plots, LaTeXStrings
+using Plots, LaTeXStrings, Printf
 
 # ╔═╡ c160e2ed-b354-4cdd-9084-15dba3ba7b30
 using LinearAlgebra, Statistics, Polynomials
@@ -302,10 +302,10 @@ begin
 end
 
 # ╔═╡ 040d3b92-5504-4642-9c8c-a0d9b47b079d
-function plotρ(ρ, nρ)
+function plotρ(ρ, nρ; kwargs...)
 	
 	ilabel = latexstring("\$ i \$")
-	jlabel = latexstring("\$ i \$")
+	jlabel = latexstring("\$ j \$")
 	lims = (1, nρ)
 		
 	is = js = 1:nρ
@@ -316,7 +316,7 @@ function plotρ(ρ, nρ)
 		xlims = lims, ylims = lims
 	)
 		
-	heatmap!(ρfig, is, js, (i, j) -> ρ(i, j, nρ), c=:heat)
+	heatmap!(ρfig, is, js, (i, j) -> ρ(i, j, nρ), c=:heat; kwargs...)
 	
 	return ρfig
 	
@@ -329,9 +329,6 @@ function plotρcompare(n)
 	plot(plotρ(ρstar, n), plotρ(ρpath, n), size = (1300, 600), title = title, legend=:none)
 end
 
-# ╔═╡ 40ed2d18-942f-4a00-8eb4-6095548d8600
-plotρ(ρstar, 10)
-
 # ╔═╡ a3815e92-30cb-488b-9e15-a17762eb37cf
 plotρcompare(20)
 
@@ -343,6 +340,25 @@ begin
 	gif(anim, fps = 10)
 end
 
+# ╔═╡ 40ed2d18-942f-4a00-8eb4-6095548d8600
+begin
+	np = 30
+	title = latexstring("\$ Star \\ graph, \\ (2 \\mathbf{I} + \\mathbf{G})^{-1} \$")
+	starfig = plotρ(ρstar, np, title=title)
+end
+
+# ╔═╡ b24851ce-752e-4afa-842d-97f5d6067135
+begin
+	pathtitle = latexstring("\$ Path \\ graph, \\ (2 \\mathbf{I} + \\mathbf{G})^{-1} \\ n=$np \$")
+	pathfig = plotρ(ρpath, np, title=pathtitle)
+end
+
+# ╔═╡ 8a1aa9b0-101c-475c-ae78-1f1001f4cf1f
+begin
+	savefig(pathfig, joinpath(plotpath, "bargmatrices", "path.png"))
+	savefig(starfig, joinpath(plotpath, "bargmatrices", "star.png"))
+end
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -350,6 +366,7 @@ LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 Polynomials = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
@@ -1223,8 +1240,10 @@ version = "0.9.1+5"
 # ╠═03200b07-6ba5-476d-937a-c3620dcc1a9b
 # ╠═040d3b92-5504-4642-9c8c-a0d9b47b079d
 # ╠═38c2605a-92dd-4dcd-bbcf-c1a8df695d17
-# ╠═40ed2d18-942f-4a00-8eb4-6095548d8600
 # ╠═a3815e92-30cb-488b-9e15-a17762eb37cf
 # ╠═2020fcbc-a7ac-453b-baee-631727c62583
+# ╠═40ed2d18-942f-4a00-8eb4-6095548d8600
+# ╠═b24851ce-752e-4afa-842d-97f5d6067135
+# ╠═8a1aa9b0-101c-475c-ae78-1f1001f4cf1f
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

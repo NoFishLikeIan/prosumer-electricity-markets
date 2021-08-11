@@ -51,6 +51,10 @@
 
 \newcommand{\V}{\mathbb{V}}
 
+% PATHS
+
+\newcommand{\outdiag}{../thesis/sections/diagrams}
+
 
 \title{How directed is a directed network?}
 \author{Andrea Titton}
@@ -122,6 +126,25 @@
 \end{frame}
 
 \section{Model}
+
+\begin{frame}{Notation: beliefs $\B$}
+    \begin{itemize} \setlength\itemsep{1.5em}
+        \item Agents have beliefs over processes $x_t$, denoted by $\B[x_{t+1}]$
+        \item These can be dependent on the information available to agents up to time $t$, denoted $\B_t[\cdot]$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Notation: graphs}
+    \begin{itemize} \setlength\itemsep{1.5em}
+        \item A graph $\mathcal{A}$ is a set of $V$ vertex and $E$, with adjacency matrix $\matr{A}$ \pause
+        \item $L(\mathcal{A}) = (V_L, E_L)$ is the associated \textbf{line graph}, with adjacency matrix $\matr{G}$ \pause
+        \item $V_L \subseteq V$ and $E_L \subseteq E$ \pause
+    \end{itemize}
+    \begin{center}
+        \resizebox{!}{0.4\textheight}{\input{diagrams/linegraphex.tikz}}
+    \end{center}
+\end{frame}
+
 
 \begin{frame}{Model outline}
     \centering
@@ -297,12 +320,146 @@
     \resizebox{\textwidth}{!}{\input{diagrams/overview.tikz}}
 \end{frame}
 
+\begin{frame}[allowframebreaks]{Nash-bargaining}
+    Conditional on $\matr{X}_t$ and $\matr{p}_t$ being determined,
 
-\section{Simulation}
+    \begin{equation*}
+        \begin{split}
+            P_t^{(i, j)} &= \arg \max_{P_t^{(i, j)}} \left\{\Pi_{i, t} \  \Pi_{j, t} \right\} \\
+            &= \frac{1}{2\  Y_t^{(i, j)}} \times \\
+            &\times \left( \underbrace{\Delta^{(i, j)}_t}_{\text{revenue difference }}
+            + \underbrace{\sum_{m\in N_{\mathcal{A}}(j)} Y_t^{(j, m)} \  P_t^{(j, m)}}_{\text{outside option of } j}
+            - \underbrace{\sum_{m \in N_{\mathcal{A}}(i)} Y_t^{(i, m)} \  P_t^{(i, m)}}_{\text{outside option of } i} \right)
+        \end{split}
+    \end{equation*}
+    \newpage
+    Stacking in vectors,
 
-\section{Policy}
+    \begin{equation*}
+        \begin{split}
+            2(P_t \circ \Y_t) &= \Delta_t  - \G \left( P_t \circ \Y_t \right) \\
+            (2\I + \G) (P_t \circ \Y_t) &= \Delta_t  \\
+            (P_t \circ \Y_t) &= (2\I + \G)^{-1} \Delta_t \\
+            P(\Y_t) &= \left((2\I + \G)^{-1} \Delta_t \right) \oslash \Y_t
+        \end{split}
+    \end{equation*}
+\end{frame}
 
-\section{Conclusion}
+\begin{frame}{Back to the first order condition}
+    The optimization problem for a neighboring quantity $Y^{(i, m)}$ (suppressing $i$) we obtain,
+
+    \begin{equation*}
+        \begin{split}
+            -\lambda_t &= \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y_t^j \  P_t^j(\Y_t))}{\partial Y_t^m} \\
+            &= P_t^m(\Y_t) + \sum_{j \in N_{\mathcal{A}}(i) \setminus \set{m}} Y_t^j \  \frac{\partial P_t^j(\Y_t)}{\partial Y_t^m}
+        \end{split}
+    \end{equation*}
+    Using the price just derived we can write $-\lambda_t = 2 P_t^m(\Y_t) $.
+
+\end{frame}
+
+\begin{frame}{Recap}
+    \renewcommand{\arraystretch}{3}
+    \resizebox{\linewidth}{!}{
+        \begin{tabular}{c  c | c }
+            Agent            & Actual process                                                                                               & Perceived process                                                                 \\
+            \midrule
+            \boxed{Provider} & $R_t = \sum^N_{i = 1} r(s_{i, t}, p_t)$                                                                      & $ \B_{t} \left[R_{t+1} \right] = \alpha_{t} + \gamma_{t} \  p_t + \eta_{t} \ S_t$ \\
+                             & $M \  \left(e_{t+1} - e_t \right)$                                                                           & $\B\left[ M \  \left(e_{t+1} - e_t \right)\right] = 0$                            \\
+            \midrule
+            \boxed{Producer} & $p_{t+1} = p_t + \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} + 2P^m(\matr{Y}_{t})$ & $\B\left[p_{t+1}\right] = p_t$
+        \end{tabular}
+    }
+\end{frame}
+
+\section{Contagion}
+
+\begin{frame}{Bargaining influence matrix}
+
+    Contagion is determined, via $P(\Y_t)$, by
+
+    \begin{equation*}
+        (2\I + \G)^{-1}
+    \end{equation*}
+
+    called here \textit{bargaining influence matrix}
+
+\end{frame}
+
+\iffalse
+    \begin{frame}{Two}
+
+        \visible<1->{
+            Consider the simplest case, two providers, \resizebox{0.4\textwidth}{!}{\input{diagrams/two.tikz}}}
+
+        \visible<2->{
+            \begin{equation*}
+                \G = \begin{pmatrix}
+                    0
+                \end{pmatrix}
+            \end{equation*}
+        }
+
+        \visible<3->{
+            \begin{equation*}
+                (2\I + \G)^{-1} = 1 / 2
+            \end{equation*}
+            $\implies$ bargaining power is equally divided
+        }
+
+    \end{frame}
+\fi
+
+
+\begin{frame}[allowframebreaks]{Star}
+
+    If $\mathcal{A}$ (\textit{left}) is a star graph then $L(\mathcal{A})$ (\textit{right}) is a complete graph. \vspace{5mm}
+
+    \begin{columns}[T,onlytextwidth]
+
+        \begin{column}{.46\textwidth}
+            \resizebox{\linewidth}{!}{\input{\outdiag/star.tikz}}
+        \end{column}
+
+        \hfill
+
+        \begin{column}{.46\textwidth}
+            \resizebox{\linewidth}{!}{\input{diagrams/assocstar.tikz}}
+        \end{column}
+    \end{columns}
+
+    then
+
+    \begin{equation*}
+        (2\I + \G)^{-1} =
+    \end{equation*}
+
+    \begin{columns}
+        \begin{column}{.46\textwidth}
+            \begin{figure}
+                \includegraphics[width = \linewidth]{../../plots/bargmatrices/star.png}
+            \end{figure}
+        \end{column}
+
+        \hfill
+
+        \begin{column}{.46\textwidth}
+            \begin{figure}
+                \includegraphics[width = \linewidth]{../../plots/bargmatrices/path.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
+
+
+\end{frame}
+
+
+
+\iffalse
+    \section{Policy}
+
+    \section{Conclusion}
+\fi
 
 
 

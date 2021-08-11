@@ -1,0 +1,18 @@
+\tikzstyle{var} = [
+draw,circle,
+minimum size=10pt]
+
+\tikzstyle{agent} = [
+draw, circle,
+minimum size=10pt]
+
+\begin{tikzpicture}[-{Latex[scale=1]}, thick]
+
+    \node [agent] (one) {Prov. $1$};
+    \node [agent, right = 5cm of one] (two) {Prov. $2$};
+
+
+    \path
+    (one) edge [] node [above] {$Y^{(1, 2)}$} (two);
+
+\end{tikzpicture}

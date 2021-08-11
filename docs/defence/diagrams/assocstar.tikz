@@ -1,0 +1,25 @@
+\tikzstyle{var} = [
+draw,circle,
+minimum size=10pt]
+
+\tikzstyle{agent} = [
+draw, circle,
+minimum size=10pt]
+
+\begin{tikzpicture}[-, thick]
+
+    \node [agent] (one-two) {$(1, 2)$};
+    \node [agent, above right = 1cm and 1cm of one-two] (one-three) {$(1, 3)$};
+    \node [agent, below right = 1cm and 1cm of one-three] (one-four) {$(1, 4)$};
+    \node [agent, below right = 1cm and 1cm of one-two] (one-n) {$(1, n)$};
+
+
+    \path
+    (one-two) edge [] node {} (one-three)
+    (one-two) edge [] node {} (one-four)
+    (one-three) edge [] node {} (one-four)
+    (one-two) edge [] node {} (one-n)
+    (one-three) edge [] node {} (one-n)
+    (one-four) edge [] node {} (one-n);
+
+\end{tikzpicture}

@@ -1,0 +1,41 @@
+\tikzstyle{var} = [
+draw, dashed,
+minimum size=40pt]
+
+\tikzstyle{agent} = [
+draw, circle,
+minimum size=40pt]
+
+\begin{tikzpicture}[-{Latex[scale=1]}, thick]
+
+
+    \node [agent] (one) {$1$};
+    \node [agent, below = 2cm of one] (five) {$5$};
+    \node [agent, left = 2cm of one] (two) {$2$};
+    \node [agent, below = 2cm of two] (three) {$3$};
+    \node [agent, left = 2cm of three] (four) {$4$};
+
+    
+    \path
+        (one) edge [above] node {$(1, 2)$} (two)
+        (one) edge [left] node {$(1, 4)$} (five)
+        (two) edge [right] node {$(2, 3)$} (three)
+        (three) edge [below] node {$(3, 4)$} (four);
+
+    \node [var, left = 2cm of two] (A) {$\mathcal{A}$};
+
+    % Second group
+    \node [agent, right = 4cm of one] (one-two) {$(1, 2)$};
+    \node [agent, below right = 1cm and 1cm of one-two] (one-five) {$(1, 5)$};
+    \node [agent, below left = 1cm and 1cm of one-two] (two-three) {$(2, 3)$};
+    \node [agent, below = 1cm of two-three] (three-four) {$(3, 4)$};
+
+    \path
+        (one-two) edge [above right] node {$1$} (one-five)
+        (two-three) edge [above left] node {$2$} (one-two)
+        (three-four) edge [left] node {$3$} (two-three);
+
+    \node [var, below = 1cm of one-five] (LA) {$L(\mathcal{A})$};
+        
+
+\end{tikzpicture}
