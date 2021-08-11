@@ -4,7 +4,7 @@
 Now that the groundwork has been layed down, we can focus on the object of our inquiry: demand shocks and price contagions. As equation (\ref{local_p_comp}) shows, price contagion depends, via $P(\matr{Y})$, linearly on the matrix $(2\I + \G)^{-1}$. We can call this the ``bargaining power'' matrix, since it allocates the excess revenues, $\Delta_t$, among providers in the network. For example, in the case of a positive demand shock and an increase in the local price of electricity of a given node, the excess demand will be partially absorbed by all other nodes in the network which, in turn, causes a contagion of local price hikes. Hence, the spread of the price hikes depends on the bargaining power of nodes in the matrix. Sticking with our example, if $X_{i, t}$ increases suddenly, $\Delta^{(i, j)}_t$ increases, and the cross-border price on another edge $(k, l)$ increases by
 
 \begin{equation*}
-  (2\I + \G)^{-1}_{(k, l), (i, j)}
+  (2\I + \G)^{-1}_{(k, l), (i, j)}.
 \end{equation*}
 
 This implies that a provider with a stronger bargaining position reacts more strongly to price changes, captures higher revenue, which leads to higher prices in the local market. Hence a more equal distribution of bargaining power leads to lower revenues for providers and lower price hikes. To formalize this, consider the entry $(i, j)$ in $P(\Y_t)$
@@ -19,7 +19,7 @@ where $\sum_{(l, m) \in E}$ is a summation over the row $(i, j)$ of $(2\I + \G)^
   \begin{split}
     \frac{\partial P^{(i, j)}_{t}}{\partial X_{k, t}}
     &= \frac{1}{Y^{(i, j)}_t} \left( p_{k, t} \  \sum_{(k, m) \in E} (2\I + \G)^{-1}_{(i, j), (k, m)} - p_{k, t} \  \sum_{(l, k) \in E} (2\I + \G)^{-1}_{(i, j), (l, k)} \right) - \frac{P^{(i, j)}_t}{ Y_t^{(i, j)}} \\
-    &= \frac{p_{k, t}}{Y^{(i, j)}_t} \underbrace{\left(\sum_{(k, m) \in E} (2\I + \G)^{-1}_{(i, j), (k, m)} -  \sum_{(l, k) \in E} (2\I + \G)^{-1}_{(i, j), (l, k)} \right)}_{\text{bargaining power of $k$ on the network}} - \frac{P^{(i, j)}_t}{ Y_t^{(i, j)}}
+    &= \frac{p_{k, t}}{Y^{(i, j)}_t} \underbrace{\left(\sum_{(k, m) \in E} (2\I + \G)^{-1}_{(i, j), (k, m)} -  \sum_{(l, k) \in E} (2\I + \G)^{-1}_{(i, j), (l, k)} \right)}_{\text{bargaining power of $k$ on the network}} - \frac{P^{(i, j)}_t}{ Y_t^{(i, j)}}.
   \end{split}
 \end{equation*}
 

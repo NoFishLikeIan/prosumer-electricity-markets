@@ -9,19 +9,19 @@
     dashed, line width=0pt
 ]
 
-\begin{tikzpicture}[{Latex[scale=1]}-, thick, fontscale=0.8]
+\begin{tikzpicture}[-, thick, fontscale=0.8]
 
     \node [node] (12) {(1, 2)};
     \node [node, right = 2cm of 12] (23) {(2, 3)};
     \node [node, right = 2cm of 23] (34) {(3, 4)};
     \node [dots, right = 2cm of 34] (dots) {$\ldots$};
-    \node [node, right = 2cm of dots] (last) {(n-1, n)};
+    \node [node, right = 2cm of dots] (last) {($n-1$, $n$)};
 
 
     \path
     (12) edge [] node [above] {2} (23)
     (23) edge [] node [above] {3} (34)
     (34) edge [] node [above] {5} (dots)
-    (dots) edge [] node [above] {n-1} (last);
+    (dots) edge [] node [above] {$n-1$} (last);
 
 \end{tikzpicture}

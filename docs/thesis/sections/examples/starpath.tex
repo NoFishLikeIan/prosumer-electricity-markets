@@ -34,7 +34,7 @@ Notice that the number of edges is then $\abs{E} = n$. Given the associated line
   \begin{split}
     (2\I_n + \G)^{-1} &= \left( 2\I_n + \matr{\iota}_n \matr{\iota}_n^T - \I_n \right)^{-1}\\
     &= \left( \I_n + \matr{\iota}_n \matr{\iota}_n^T \right)^{-1} \\
-    &= \I_n - \frac{1}{n + 1} \matr{\iota}_n \matr{\iota}_n^T
+    &= \I_n - \frac{1}{n + 1} \matr{\iota}_n \matr{\iota}_n^T.
   \end{split}
 \end{equation*}
 
@@ -43,7 +43,7 @@ Then we can use this in the bargaining solution (\ref{matrix_bargaining_solution
 \begin{equation*}
   \begin{split}
     P_t \circ \Y_t &= (2\I_n + \G)^{-1} \Delta_t = \left( \I_n - \frac{1}{n + 1} \matr{\iota}_n \matr{\iota}_n^T \right) \Delta_t \\
-    &= \Delta_t - \frac{\sum_{(i, j)} \Delta^{(i, j)}_t}{n+1} \ \matr{\iota}_n
+    &= \Delta_t - \frac{\sum_{(i, j)} \Delta^{(i, j)}_t}{n+1} \ \matr{\iota}_n.
   \end{split}
 \end{equation*}
 
@@ -53,16 +53,16 @@ Now focusing on the policy function of the central node, we can leverage the fac
   P^j = \frac{n\Delta^j - \sum_{m \neq j} \Delta^m }{(n + 1)Y^j}.
 \end{equation*}
 
-Equalization of prices, $P^j = P^i$, implies that, for each neighbor of $1$
+Equality of prices, $P^j = P^i$, implies that, for each neighbor of $1$,
 
 \begin{equation*}
-  \frac{Y^i}{Y^j} = \frac{\Delta^i - \sum_{l \neq i} \Delta^l / n}{\Delta^j - \sum_{m \neq j} \Delta^m / n}
+  \frac{Y^i}{Y^j} = \frac{\Delta^i - \sum_{l \neq i} \Delta^l / n}{\Delta^j - \sum_{m \neq j} \Delta^m / n}.
 \end{equation*}
 
 Then, using the feasibility constraint $X_1 = \sum^n_{j = 2} Y^j$, we can rewrite $Y^2$ as
 
 \begin{equation*}
-  Y^2 = \sum^n_{l = 2} Y^l \Big/ \sum^n_{l = 2} \frac{Y^l}{Y^2}
+  Y^2 = \sum^n_{l = 2} Y^l \Big/ \sum^n_{l = 2} \frac{Y^l}{Y^2}.
 \end{equation*}
 
 Letting the average revenue difference between one and its neighbors be
@@ -80,7 +80,7 @@ we can rewrite the cross-border prices as
 Notice that if $n = 2$, we obtain back the solution of the two providers case. Using this in the policy function of the central node
 
 \begin{equation} \label{policy_star}
-  p_{1, t+1} = p_{1, t} + L(X_{1, t}, S_{1, t}) + \frac{\underline{\Delta}_{1, t}}{(n-1) X_{1, t}}
+  p_{1, t+1} = p_{1, t} + L(X_{1, t}, S_{1, t}) + \frac{\underline{\Delta}_{1, t}}{(n-1) X_{1, t}}.
 \end{equation}
 
 The second fundamental structure to consider is the path graph.
@@ -117,18 +117,16 @@ The second fundamental structure to consider is the path graph.
 Letting $\matr{L}_n$ be the lower triangular matrix with unity entries, we can rewrite the bargaining influence matrix (see \ref{a:linegraphinfluence}) as
 
 \begin{equation}
-  (\matr{2I_n + \G})^{-1} = \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n^T
+  (\matr{2I_n + \G})^{-1} = \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n^T.
 \end{equation}
 
 Then
 
 \begin{equation*}
-  \begin{split}
-    P_t \circ \Y_t &= \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n^T  \Delta_t \\
-  \end{split}
+  P_t \circ \Y_t = \matr{L}_n  \left(\I - \frac{1}{n+1} \matr{\iota_n \iota_n}^T\right) \matr{L}_n^T  \Delta_t.
 \end{equation*}
 
-Now focusing once again on the central node $m = \frac{n+1}{2}$, assuming $n+1$ is odd, we obtain the following ratio of exchanged quantities (see \ref{a:pol_path})
+Now focusing once again on the central node $m = \frac{n+1}{2}$, assuming $n+1$ is odd, we obtain (see \ref{a:pol_path}) the ratio of exchanged quantities
 
 \begin{equation}
   Y_r(\Delta) \coloneqq \frac{Y^{(m, m+1)}}{Y^{(m-1, m)}}
@@ -139,12 +137,12 @@ Now focusing once again on the central node $m = \frac{n+1}{2}$, assuming $n+1$ 
   }
 \end{equation}
 
-and, using price equalization, we get the following cross-border price
+and, using price equality, we get the following cross-border price
 
 \begin{equation} \label{policy_path}
   \begin{split}
     2 P(X_{m, t}, p_{m, t}, \Delta_t) &= \left( \frac{1 + 1 / Y_r(\Delta_t)}{X_m} \right) \times  \\
-    &\times \left[ \overbrace{\sum_{j < m} j \Delta^{(j, j + 1)}}^{\text{distance of nodes before } m} +  \underbrace{\sum_{j \geq m}\left(n + 1 - j\right) \Delta^{(j, j + 1)}}_{\text{distance of nodes after } m} \right]
+    &\times \left[ \overbrace{\sum_{j < m} j \Delta^{(j, j + 1)}}^{\text{distance of nodes before } m} +  \underbrace{\sum_{j \geq m}\left(n + 1 - j\right) \Delta^{(j, j + 1)}}_{\text{distance of nodes after } m} \right].
   \end{split}
 \end{equation}
 

@@ -8,7 +8,7 @@
   \label{tikz:wholesale}
 \end{figure}
 
-The model is composed of two market types (wholesale and cross-border) and three agent types (prosumers, providers, and producers) (see Figure \ref{tikz:wholesale}). Each regional wholesale market contains $M$ homogenous prosumers, with perfectly inelastic demand, and $N$ heterogenous producers, who compete locally in quantity. The monopolist provider sets the local wholesale price, at which it sells to prosumers and buys from producers. In case of excess demand (supply) in the wholesale market, the provider acquires (sells) electricity in the cross-border market. Such a market is assumed to function via bilateral trading in a network between providers. Possibility of trading is contingent on the presence of an edge between two regional markets.
+To address price contagion we first need to model price formation in the local wholesale market and in the cross-border market. In the former, electricity is produced by producers, consumed by prosumers, and the market is cleared by providers. In the latter, electricity is only traded by providers (see Figure \ref{tikz:wholesale}). Each regional wholesale market contains $M$ homogenous prosumers, with perfectly inelastic demand, and $N$ heterogenous producers, who compete locally in quantity. The monopolist provider sets the local wholesale price, at which it sells to prosumers and buys from producers. In case of excess demand (supply) in the wholesale market, the provider acquires (sells) electricity in the cross-border market. Such a market is assumed to function via bilateral trading in a network between providers. Possibility of trading is contingent on the presence of an edge between two regional markets.
 
 \subsection{Prosumers}
 
@@ -16,7 +16,11 @@ All prosumers in the same region are endowed an electricity quantity from renewa
 
 \subsection{Producers}
 
-Electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost and with a one period delay. Electricity is then sold on the local market, at time $t$, at a price $p_t$, set by electricity providers, and costs a fixed marginal value $k$ to maintain at a given production level $s_t$. Furthermore, they are naive about the price formation mechanism and assume prices to be constant, $\B \left[p_{t+1}\right] = p_{t}$,  hence independent of their production decisions. Let $c(s, r)$ be the cost of ramping up or turning down production next period by $r$ when currently at production level $s$. I assume $r$ is bounded between two values $\underline{r}(s_t)$ and $\overline{r}(s_t)$. This setup leads to the following optimization problem
+Electricity production involves a complicated decision process which stems from the high frequency of the electricity market and the inability to ramp-up electricity production instantaneously (\cite{Kumar2012, VandenBergh2015}). The model attempts to capture these features by relying on a one-period offset between the production decision and its attainment, namely, electricity producers operate power plants and can generate electricity by ramping up or down production at a certain cost and with a one period delay. Electricity is then sold on the local market, at time $t$, at a price $p_t$, set by electricity providers, and costs a fixed marginal value $k$ to maintain at a given production level $s_t$. Let $c(s, r)$ be the cost of ramping up or turning down production next period by $r$ when currently at production level $s$. I assume $r$ is bounded between two values $\underline{r}(s_t)$ and $\overline{r}(s_t)$.
+
+The delayed production decision requires producers to form beliefs over the price formation mechanism. Here I assume the belief is that prices will not change between one period and another, $\B_t[p_{t+1}] = p_t$. As we will see later, in the current framework such a belief is correct in equilibrium.
+
+This setup leads to the following optimization problem
 
 \begin{equation} \label{bellman_prod}
   \begin{split}
@@ -68,10 +72,10 @@ This equation has a few intuitive properties. First of all, there is no ramp-up 
 
 \subsection{Local demand}
 
-Given any ramp-up policy function $r(s, p)$, it is possible to find the excess demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers and has to then be acquired in the cross-border market. First, let $R_t$ be the aggregated ramp-up function
+Given any ramp-up policy function $r(s, p)$, it is possible to find the excess demand of electricity in the local market, that is, the electricity demanded in the local market by local prosumers that it is not satisfied by local producers and has to then be acquired in the cross-border market. First, let $R_t$ be the aggregated ramp-up function,
 
 \begin{equation}
-  R(p_t, s_{1, t}, \ldots, s_{N, t}) \coloneqq \sum^N_{i = 1} r(s_{i, t}, p_t)
+  R(p_t, s_{1, t}, \ldots, s_{N, t}) \coloneqq \sum^N_{i = 1} r(s_{i, t}, p_t),
 \end{equation}
 
 and $S_t = \sum^N_{i = 1} s_{i, t}$ be the aggregate supply at time $t$. Assuming that the local market is composed of $N$ producers and $M$ prosumers, the aggregate supply of electricity at time $t$, can be written as
@@ -79,14 +83,14 @@ and $S_t = \sum^N_{i = 1} s_{i, t}$ be the aggregate supply at time $t$. Assumin
 \begin{equation} \label{s_evol}
   \begin{split}
     \sum^N_{i = 1} s_{i, t+1} &= \sum^N_{i = 1} \left( s_{i, t} +  r(s_{i, t}, p_t) \right)\\
-    S_{t+1} &= S_t + R_t
+    S_{t+1} &= S_t + R_t.
   \end{split}
 \end{equation}
 
 The electricity demanded by $M$ prosumers is determined by the exogenous endowment $e_t$ and it is assumed to be completely inelastic, namely prosumers will buy electricity at any price from providers or directly from producers. Hence the excess electricity demand at time $t$ is simply the difference between the demand and the supply
 
 \begin{equation} \label{x_inst}
-  X_{t} = M e_{t} - S_{t}
+  X_{t} = M e_{t} - S_{t}.
 \end{equation}
 
 Note that if $S_t > M e_t$, there is an excess supply ($X_t < 0$) of electricity in the local market that the local provider can use to sell abroad. Given equation (\ref{s_evol}) and (\ref{x_inst}), we obtain the evolution of the process $X_t$ (see \ref{a:ev_demand})
@@ -104,10 +108,9 @@ Note that if $S_t > M e_t$, there is an excess supply ($X_t < 0$) of electricity
   \label{tikz:cb}
 \end{figure}
 
+The link between local markets and cross-border markets is represented by electricity providers. They are modelled as monopolists in their own local market and are indexed by $i$. They set the local price $p_{i, t}$ at which they sell (purchase) the excess demand (supply) of electricity in the local market $X_{i, t}$. On the one hand, if there is excess demand in the market, $X_{i, t} > 0$, providers sell electricity to prosumers at price $p_{i, t}$. On the other hand, if there is excess supply, $X_{i, t} < 0$, they buy electricity off of prosumers and producers at price $p_{i, t}$. The excess demand (supply) is satisfied (sold) by trading with other providers in the network. Hence, providers trade electricity $Y^{(i, j)}$, at a bargained price $P^{(i, j)}$, with neighboring providers. $Y^{(i, j)} > 0$ if $i$ is buying from $j$ and the other way around for $Y^{(i, j)} < 0$. This also implies that $Y^{(i, j)} = -Y^{(j, i)}$. This framework assigns the role of market makers to providers. This decision serves the purpose of condensing the diffuse and heterogenous interactions that one observes in the cross-border markets into a single agent thereby giving a stylized mechanism of cross-border price formation.
 
-% FIXME: This paragraph
-
-Electricity providers are monopolists in their own local market and are indexed, as is their local market, by $i$. They set the local price $p_{i, t}$ at which they sell (purchase) the excess demand (supply) of electricity in the local market $X_{i, t}$. On the one hand, if there is excess demand in the market, $X_{i, t} > 0$, providers sell electricity to prosumers at price $p_{i, t}$. On the other hand, if there is excess supply, $X_{i, t} < 0$, they buy electricity off of prosumers and producers at price $p_{i, t}$. The excess demand (supply) is satisfied (sold) by trading with other providers in the network. Hence, providers trade electricity $Y^{(i, j)}$, at a bargained price $P^{(i, j)}$, with neighboring providers. $Y^{(i, j)} > 0$ if $i$ is buying from $j$ and the other way around for $Y^{(i, j)} < 0$. This also implies that $Y^{(i, j)} = -Y^{(j, i)}$. Hence, within the model, electricity providers have the role of market makers. Assuming for now that every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$, the instantaneous payoff of provider $i$ is
+Assuming for now that every pairwise price on the network, $P^{(i, j)}$, is determined only by the vector of traded quantities, $\Y$, the instantaneous payoff of provider $i$ is
 
 \begin{equation}
   \Pi_i(p_{i, t}, \Y_{i, t}) = p_{i, t} \  X_{i, t}(p_{i, t-1}) - \sum_{j \in N_{\mathcal{A}}(i)} Y_t^{(i, j)} \  P_t^{(i, j)},
@@ -141,10 +144,11 @@ Each period providers observe the realization $R_{i, t+1}$ and pick the coeffici
     \alpha_{i, t+1} \\
     \gamma_{i, t+1} \\
     \eta_{i, t+1}
-  \end{pmatrix} = ( \matr{\chi}_{t}^T \matr{W}  \matr{\chi}_{t})^{-1} ( \matr{\chi}_{t}^T \matr{W} \matr{R}_{i, t+1})
+  \end{pmatrix} = ( \matr{\chi}_{t}^T \matr{W}  \matr{\chi}_{t})^{-1} ( \matr{\chi}_{t}^T \matr{W} \matr{R}_{i, t+1}),
 \end{equation}
 
-where,
+where
+
 \begin{equation}
   \matr{\chi}_{t} = \begin{pmatrix}
     1      & p_{i, 0} & S_{i, 0} \\
@@ -162,7 +166,7 @@ where,
 and $\matr{W}$ is a weighting matrix of time exponential decay with entries
 
 \begin{equation}
-  \matr{W}_{t_1, t_2} = \exp(-\abs{t_1 - t_2})
+  \matr{W}_{t_1, t_2} = \exp(-\abs{t_1 - t_2}).
 \end{equation}
 
 Given this setup we can specify the optimization problem of the provider. Suppressing $i$ for convenience (i.e. $Y^j \coloneqq Y^{(i, j)}$) and using the Lagrangian formulation, with Lagrange multiplier $\lambda_t$, the Bellman equation can be written as
@@ -177,13 +181,13 @@ where
   \begin{split}
     X_{t+1} &= X_t - \B \left[R(p_t, S_t) \right] \\
     S_{t+1} &= S_t + \B \left[R(p_t, S_t) \right]
-  \end{split}
+  \end{split}.
 \end{equation*}
 
 Optimization with respect to the price $p_t$, yields
 
 \begin{equation}
-  X_t = \beta \ \gamma_{t} \ \left[\frac{\partial V}{\partial X_{t+1}} - \frac{\partial V}{\partial S_{t+1}}  \right]
+  X_t = \beta \ \gamma_{t} \ \left[\frac{\partial V}{\partial X_{t+1}} - \frac{\partial V}{\partial S_{t+1}}  \right].
 \end{equation}
 
 This first order condition requires that the marginal benefit of exploiting current excess demand $X_t$ should equal the marginal benefit loss, $ \beta \left[\frac{\partial V}{\partial X_{t+1}} - \frac{\partial V}{\partial S_{t+1}}  \right] $, of the estimated reduction in demand next period, $\gamma_{t}$. On the other hand, the first order condition with respect to an arbitrary traded quantity $Y^j_t$ is
@@ -195,13 +199,13 @@ This first order condition requires that the marginal benefit of exploiting curr
 This equation tells us that in equilibrium providers will allocate the quantities traded with neighbors, $Y^j$, in such a way that marginal benefits are all equal. The optimization yields the policy function for local prices (see Appendix \ref{a:provider_optimization})
 
 \begin{equation} \label{local_p}
-  p_{t+1} = p_t + \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} - \lambda_t
+  p_{t+1} = p_t + \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} - \lambda_t.
 \end{equation}
 
 Given the evolution of the local price (\ref{local_p}), it is necessary to solve the bargaining model between providers (which determines the shadow price of acquiring outside electricity $\lambda_t$). To do so I first impose a ``direction'' of trade, namely a traded quantity $Y^{(i, j)}$ enters positively in $j$ and negatively in $i$, such that
 
 \begin{equation}
-  Y^{(i, j)} = -Y^{(j, i)}
+  Y^{(i, j)} = -Y^{(j, i)}.
 \end{equation}
 
 I assume that the bargaining does not take into account individual market expectations and that it happens after the demand is already determined, such that $P^j_t$ is a function of $p_t$ only via $\Y^j_t$. The Nash bargaining solution (\cite{Rubinstein1992}) is such that
@@ -225,7 +229,7 @@ which yields (see \ref{a:barsol}), for every neighbor $(i, j) \in E$
 In the bargaining problem we have a set of ordered edges $E$. On each edge a bargaining price and a transferred quantity is determined. This defines the two vectors $P, \ Y \in \R^{\abs{E}}$. Now, let $\Delta_t$ in $\R^{\abs{E}}$ be the vector of revenue difference in the respective local markets with entries
 
 \begin{equation}
-  \Delta^{(i, j)}_t \coloneqq X_{i, t} \  p_{i, t} - X_{j, t} \  p_{j, t}
+  \Delta^{(i, j)}_t \coloneqq X_{i, t} \  p_{i, t} - X_{j, t} \  p_{j, t}.
 \end{equation}
 
 At each step $t$, given the adjacency matrix of $L(\mathcal{A})$, $\G$, and $\Delta^{(i, j)}_t$, equation (\ref{bargaining_solution}) can be written as
@@ -258,21 +262,6 @@ Equation (\ref{Pmatrix}) shows that the trading prices on an edge, $P^{(i, j)}$,
   \resizebox{\linewidth}{!}{\input{sections/diagrams/cycleissue.tikz}}
 \end{figure}
 
-This can also be seen by looking at the two $\det(2 \I + \G)$,
-
-\begin{equation*}
-  \text{the first, }
-  \det \begin{pmatrix}
-    2 & 1 \\
-    1 & 2
-  \end{pmatrix}  = 3 \text{ and the second, }
-  \det \begin{pmatrix}
-    2  & 1 & -1 \\
-    1  & 2 & 1  \\
-    -1 & 1 & 2
-  \end{pmatrix} = 0.
-\end{equation*}
-
 Because of this limitation, here I will limit the analysis to acyclic (or complete) graphs. Extending this model to cyclical graphs simply requires defining a more general once differentiable function $P: \R^{\abs{V}} \to \R^{\abs{E}}$, that models the bargaining procedure.
 
 Now we can use Equations (\ref{Pmatrix}) and (\ref{Pjacobian}), combined with the local optimization (\ref{shadow_price_local}), to obtain an explicit expression of the shadow price of the bargaining procedure, $\lambda_t$. Using the fact that for two different entries $e_1$ and $e_2$, $D_{\Y} P(\Y_t)_{e_1, e_2} = 0$ and $D_{\Y} P(\Y_t)_{i, j} = \pm 1$ (i.e. no direct dependence between $P^{(i, j)}$ and $P^{(l, m)}$ for $(i, j) \neq (l, m)$), the shadow price of the bargaining procedure (\ref{shadow_price_local}) can be written as
@@ -281,7 +270,7 @@ Now we can use Equations (\ref{Pmatrix}) and (\ref{Pjacobian}), combined with th
 \begin{equation} \label{shadow_price_gen}
   \begin{split}
     -\lambda_t &= P^m(\Y_t) + \sum_{j \in N_{\mathcal{A}}(i)} Y_t^j \  D_{\Y} P(\Y_t)_{j, m} \\
-    &= 2 P^m(\Y_t)
+    &= 2 P^m(\Y_t).
   \end{split}
 \end{equation}
 
@@ -290,7 +279,7 @@ Note that, again by (\ref{shadow_price_local}), $\lambda_t$ needs to be the same
 \begin{equation}
   \begin{split}
     2 P^m(\Y_t) &= 2 P^n(\Y_t) \\
-    \frac{P^n(\Y_t)}{P^m(\Y_t)} &= 1
+    \frac{P^n(\Y_t)}{P^m(\Y_t)} &= 1.
   \end{split}
 \end{equation}
 
@@ -301,7 +290,7 @@ This equation determines the ratio of $Y^{(i, m)}_t / Y^{(i, n)}_t$ for each ele
 Having derived the shadow price on the bargained quantity (\ref{shadow_price_gen}), we can break up the policy function (\ref{local_p}) into a local effect $L_t(X_t, S_t)$ and a global effect $2P^m(\matr{Y}_{t})$, namely
 
 \begin{equation} \label{local_p_comp}
-  p_{t+1} = p_t +\underbrace{\frac{1}{\gamma_t} \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \ S_t \right)}_{\text{local }  L_t(X_t, S_t) } + \underbrace{2P^m(\matr{Y}_{t})}_{\text{global}}
+  p_{t+1} = p_t +\underbrace{\frac{1}{\gamma_t} \left( \frac{1-\beta}{\beta} X_t + \alpha_t + \eta_t \ S_t \right)}_{\text{local }  L_t(X_t, S_t) } + \underbrace{2P^m(\matr{Y}_{t})}_{\text{global}}.
 \end{equation}
 
 First, this equation establishes a local relationship between $X_t$ and price increases. If there is excess demand in the local market, $X_t > 0$, then an increase in its magnitude yields an increase of the price in order to increase production. Likewise, if $X_t < 0$, an increase in the excess supply leads to a decrease in the price to lower electricity production. It is important to notice that the provider sets the price $p_{t+1}$, based on observed values at time $t$, which affects the electricity production at time $t+1$. Second, assume without loss of generality, $X_t > 0$. If the cost of acquiring electricity from abroad, $P^m(\matr{Y}_{t})$, increases the producer will increase the price in the local market, $p_{t+1} >  p_{t}$, in order to increase local production. Hence this expression gives a clear mechanism of the transmission between prices in the cross-border market and the regional wholesale market.
