@@ -19,8 +19,8 @@
     \usepackage{booktabs}
     \usepackage{subcaption}
     \usepackage{float}
-    \usepackage{multirow}   
-
+    \usepackage{multirow}  
+    
     % Refs
     \usepackage{hyperref}
     \usepackage{cleveref}
@@ -31,9 +31,6 @@
         citecolor = blue 
       }      
 
-
-    \usepackage{blindtext} % FIXME: Remove for dummy text
-
     \usepackage{subfiles} % Load last
 
     % Paths
@@ -42,8 +39,6 @@
     \newcommand{\bargpath}{../../plots/barg}
 
     % Formatting
-    \setlength{\parindent}{0em}
-    \setlength{\parskip}{0.5em}
     \setlength{\fboxsep}{1em}
     \newcommand\headercell[1]{\smash[b]{\begin{tabular}[t]{@{}c@{}} #1 \end{tabular}}}
 
@@ -53,7 +48,6 @@
     \tikzset{fontscale/.style = {font=\relscale{#1}}}
 
     \definecolor{prosumer}{cmyk}{0,0.816,0.408,0}
-    
     % Math commands
     \newcommand{\E}{\mathbb{E}}
     \newcommand{\R}{\mathbb{R}}
@@ -89,13 +83,34 @@
         
     \newcommand{\citein}[1]{\citeauthor{#1} (\citeyear{#1})}
 
-    \author{Andrea Titton}
-    \title{Contagion of Electricity Prices}
-    \subtitle{A Dynamic Game of Price Hikes Propagation}
+    % Make title page
+
+    \author{Andrea Titton \\[0.5cm]{\large Supervised by \\ Dr. ir. F.O.O. Wagener \& Prof. dr. C.G.H. Diks}}
+    \title{Demand Shocks and Price Contagion in Electricity Markets}
+    \subtitle{M.Phil. Thesis - Tinbergen Institute}
     
 \begin{document}
 
-\maketitle
+\makeatletter
+\begin{titlepage}
+    \begin{center}
+        \includegraphics[width=0.7\linewidth]{ti_logoblok.jpg}\\[12ex]
+        {\huge \bfseries  \@title }\\[4ex]
+        {\large \bfseries \@subtitle}\\[8ex]
+        {\LARGE  \@author}\\[50ex]
+        {\large \@date}
+    \end{center}
+\end{titlepage}
+\makeatother
+
+\thispagestyle{empty}
+\newpage
+
+\setcounter{page}{1}
+
+\begin{abstract}
+    As households start producing electricity using renewable energy, electricity markets are left vulnerable to local demand shocks. In this paper, by means of a theoretical model, I show how demand shocks can lead to persistent imbalances in prices in cross-border markets. This results invalidates the idea that further material integration of regional electricity markets is sufficient to shield consumers from electricity price volatility.
+\end{abstract}
 
 \subfile{sections/introduction.tex}
 
