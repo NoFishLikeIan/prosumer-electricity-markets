@@ -304,8 +304,8 @@ end
 # ╔═╡ 040d3b92-5504-4642-9c8c-a0d9b47b079d
 function plotρ(ρ, nρ; kwargs...)
 	
-	ilabel = latexstring("\$ i \$")
-	jlabel = latexstring("\$ j \$")
+	ilabel = latexstring("\$ edge_i \$")
+	jlabel = latexstring("\$ edge_j \$")
 	lims = (1, nρ)
 		
 	is = js = 1:nρ
@@ -342,8 +342,8 @@ end
 
 # ╔═╡ 40ed2d18-942f-4a00-8eb4-6095548d8600
 begin
-	np = 30
-	title = latexstring("\$ Star \\ graph, \\ (2 \\mathbf{I} + \\mathbf{G})^{-1} \$")
+	np = 15
+	title = latexstring("\$ Star \\ graph, \\ (2 \\mathbf{I} + \\mathbf{G})^{-1} \\ n=$np \$")
 	starfig = plotρ(ρstar, np, title=title)
 end
 

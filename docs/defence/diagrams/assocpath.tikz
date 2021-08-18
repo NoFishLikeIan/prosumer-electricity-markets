@@ -1,0 +1,22 @@
+\tikzstyle{var} = [
+draw,circle,
+minimum size=10pt]
+
+\tikzstyle{agent} = [
+draw, circle,
+minimum size=10pt]
+
+\begin{tikzpicture}[-{Latex[scale=1]}, thick]
+
+    \node [agent] (one-two) {$(1, 2)$};
+    \node [agent, below right = 2cm and 2cm of one-two] (two-three) {$(2, 3)$};
+    \node [agent, below right = 2cm and 2cm of two-three] (three-four) {$(3, 4)$};
+    \node [agent, below right = 2cm and 2cm of three-four] (last) {$(n, n-1)$};
+
+
+    \path
+    (one-two) edge [] node [below left] {Prov. $2$} (two-three)
+    (two-three) edge [] node [below left] {Prov. $3$} (three-four)
+    (three-four) edge [dashed] (last);
+
+\end{tikzpicture}
