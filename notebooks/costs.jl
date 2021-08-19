@@ -171,7 +171,7 @@ begin
 	boundarylabel = latexstring("\$ s_t = \\frac{\\beta}{1- \\beta} \\sqrt{p_t - k} \$")
 	
 	upperbound = latexstring("\$ mb > mc \$")
-	lowerbound = latexstring("\$ mc < mb \$")
+	lowerbound = latexstring("\$ mc > mb \$")
 	middle = latexstring("\$ mc = mb \$")
 	
 	xlabel = latexstring("\$ s_t \$")
