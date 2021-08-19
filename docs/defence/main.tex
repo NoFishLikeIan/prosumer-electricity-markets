@@ -54,6 +54,7 @@
 % PATHS
 
 \newcommand{\outdiag}{../thesis/sections/diagrams}
+\newcommand{\plotpath}{../../plots}
 
 
 \title{How directed is a directed network?}
@@ -79,17 +80,7 @@
     \tableofcontents
 \end{frame}
 
-\section{Introduction}
-
-\begin{frame}{Motivation}
-    Green energy transition and advent of \textbf{prosumers}
-    \vspace{2em}
-    \begin{itemize} \setlength\itemsep{1.5em}
-              \pause \item Risk of \textit{local} demand shocks
-              \pause \item \textbf{Local quasi-monopolies} energy providers (e.g. ERCOT case in Texas) and decentralized prosumers
-              \pause \item Weather shocks lead to \textbf{uncertainty} among risk averse consumers
-    \end{itemize}
-\end{frame}
+\section{Motivation}
 
 \begin{frame}{Lack of price convergence}
     \begin{figure}
@@ -98,15 +89,46 @@
     \end{figure}
 \end{frame}
 
+\begin{frame}{Empirical: \citeauthor{Bockers2014} (\citeyear{Bockers2014})}
+    \textbf{Empirical analysis of convergence between 2004 and 2011}
+
+    \begin{itemize} \setlength\itemsep{1.5em}
+              \pause \item Only partial convergence (mostly Germany-Austria)
+              \pause \item Lack of convergence is not due to supply shocks
+              \pause \item No theoretical model of \textit{effects of shocks in some countries on energy markets in neighboring countries.}
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Theoretical: \citeauthor{Gebhardt2013} (\citeyear{Gebhardt2013})}
+    \textbf{Why is there no convergence in EU local electricity prices?}
+
+    \begin{itemize} \setlength\itemsep{1.5em}
+              \pause \item Rational producers and traders
+              \pause \item Information asymmetries between local markets
+              \pause \item Traders do not engage in trade
+              \pause \item \textit{our results highlight an additional advantage of ``market coupling``, i.e., integrating the national wholesale markets}
+              \pause \item \textit{we assumed that (...) cross-border trades do not influence the spot prices}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{This paper}
+    \begin{itemize} \setlength\itemsep{1.5em}
+        \item Link between cross-border and local prices (network structure)
+        \item Agent based model (bounded rationality)
+        \item Role of demand shocks (prosumers)
+    \end{itemize}
+\end{frame}
+
+\section{Overview}
+
 \begin{frame}{Research question}
 
-    Prosumers induce three sources of uncertainty: bounded rationality, risk aversion, and renewable energy volatility
-
     \begin{itemize} \setlength{\itemsep}{1em}
-        \item \textit{How do exogenous and unexpected demand shocks affect the price formation mechanism?} \pause
-        \item \textit{How do shock in prices transmit to the cross-border market?} \pause
-        \item \textit{Hysteresis: can this shock produce sustained price imbalances?} \pause
-        \item \textit{Are current policies effective in this framework?}
+        \item How do exogenous and unexpected demand shocks affect the price formation mechanism? \pause
+        \item How do shock in prices transmit to the cross-border market? \pause
+        \item Can this shock produce sustained price imbalances? \pause
+        \item Are current policies effective in this framework?
     \end{itemize}
 
 \end{frame}
@@ -125,13 +147,18 @@
         \end{minipage}}
 \end{frame}
 
+\begin{frame}{Results}
+    \begin{itemize} \setlength\itemsep{1.5em}
+              \pause \item Bargaining power determines price contagion (bigger and more ``central'' markets)
+              \pause \item Demand shocks cause \textbf{hysteresis}: sustained price imbalances
+              \pause \item This implies: markets integration are not sufficient
+    \end{itemize}
+\end{frame}
+
 \section{Model}
 
 \begin{frame}{Notation: beliefs $\B$}
-    \begin{itemize} \setlength\itemsep{1.5em}
-        \item Agents have beliefs over processes $x_t$, denoted by $\B[x_{t+1}]$
-        \item These can be dependent on the information available to agents up to time $t$, denoted $\B_t[\cdot]$
-    \end{itemize}
+    Agents have beliefs over processes $x_t$, denoted by $\B_t[x_{t+1}]$
 \end{frame}
 
 \begin{frame}{Notation: graphs}
@@ -419,34 +446,32 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}
+
+\begin{frame} {Star: from $(2\I + \G)^{-1}$ to $p_{t+1}$ }
 
     \begin{columns}
-        \begin{column}{.46\textwidth}
+        \begin{column}{.47\textwidth}
             \begin{figure}
-                \includegraphics[width = \linewidth]{../../plots/bargmatrices/star.png}
+                \includegraphics[width = \linewidth]{../../plots/bargmatrices/star.pdf}
             \end{figure}
         \end{column}
-
-        \hfill
-
-        \begin{column}{.46\textwidth}
-            \begin{figure}
-                \includegraphics[width = \linewidth]{../../plots/bargmatrices/path.png}
-            \end{figure}
-        \end{column}
-    \end{columns}
-
-    \begin{columns}
-        \begin{column}{.46\textwidth}
+        \begin{column}{.47\textwidth}
             \begin{figure}
                 \includegraphics[width = \linewidth]{../../plots/pricing.pdf}
             \end{figure}
         \end{column}
+    \end{columns}
 
-        \hfill
+\end{frame}
 
-        \begin{column}{.46\textwidth}
+\begin{frame} {Path: from $(2\I + \G)^{-1}$ to $p_{t+1}$ }
+    \begin{columns}
+        \begin{column}{.47\textwidth}
+            \begin{figure}
+                \includegraphics[width = \linewidth]{../../plots/bargmatrices/path.pdf}
+            \end{figure}
+        \end{column}
+        \begin{column}{.47\textwidth}
             \begin{figure}
                 \includegraphics[width = \linewidth]{../../plots/pricingpath.pdf}
             \end{figure}
@@ -454,12 +479,44 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}{Star: central demand shock simulation}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height = 0.8\textheight]{\plotpath/central/star/pricesupply.pdf}
+    \end{figure}
 
-\iffalse
-    \section{Policy}
+\end{frame}
 
-    \section{Conclusion}
-\fi
+\begin{frame} {Path: central demand shock simulation}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height = 0.8\textheight]{\plotpath/central/path/pricesupply.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame} {Excess demand $X_{i, t}$ in simulation}
+    \begin{center}
+        \begin{figure}[H]
+            \begin{subfigure}{0.475\textwidth}
+                \centering
+                \includegraphics[width = \textwidth]{\plotpath/central/star/demand.pdf}
+                \caption{In a star graph} \label{fig:demandshock_star}
+            \end{subfigure} \hfill
+            \begin{subfigure}{0.475\textwidth}
+                \centering
+                \includegraphics[width = \textwidth]{\plotpath/central/path/demand.pdf}
+                \caption{In a path graph} \label{fig:demandshock_path}
+            \end{subfigure}
+        \end{figure}
+    \end{center}
+\end{frame}
+
+\section{Policy}
+
+
+\section{Conclusion}
+
+\section{Limitations and Going Forward}
 
 
 
