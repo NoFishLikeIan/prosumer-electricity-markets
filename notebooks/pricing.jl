@@ -14,6 +14,12 @@ using LinearAlgebra, Statistics, Polynomials
 # ╔═╡ 4f5bc759-4819-4359-9a70-1c17645453e3
 using Random
 
+# ╔═╡ b4714dc0-e358-4ef3-9404-1eba72bc1fc1
+begin
+	Plots.resetfontsizes()
+	Plots.scalefontsizes(1.3)
+end
+
 # ╔═╡ 8138259c-c163-4a35-97e5-5249f7dc1c2d
 function annotatewithbox!(
 		fig::Plots.Plot,
@@ -313,10 +319,10 @@ function plotρ(ρ, nρ; kwargs...)
 	ρfig = plot(
 		xlabel = ilabel, ylabel = jlabel, 
 		legend = :none, aspect_ratio = :equal,
-		xlims = lims, ylims = lims
+		xlims = lims, ylims = lims; kwargs...
 	)
 		
-	heatmap!(ρfig, is, js, (i, j) -> ρ(i, j, nρ), c=:heat; kwargs...)
+	heatmap!(ρfig, is, js, (i, j) -> ρ(i, j, nρ), c=:heat)
 	
 	return ρfig
 	
@@ -343,20 +349,20 @@ end
 # ╔═╡ 40ed2d18-942f-4a00-8eb4-6095548d8600
 begin
 	np = 15
-	title = latexstring("\$ Star \\ graph, \\ (2 \\mathbf{I} + \\mathbf{G})^{-1} \\ n=$np \$")
-	starfig = plotρ(ρstar, np, title=title)
+	title = latexstring("\$(2 \\mathbf{I} + \\mathbf{G})^{-1} \\ n=$np \$")
+	starfig = plotρ(ρstar, np, title=title, dpi = 150)
 end
 
 # ╔═╡ b24851ce-752e-4afa-842d-97f5d6067135
 begin
-	pathtitle = latexstring("\$ Path \\ graph, \\ (2 \\mathbf{I} + \\mathbf{G})^{-1} \\ n=$np \$")
-	pathfig = plotρ(ρpath, np, title=pathtitle)
+	pathtitle = latexstring("\$(2 \\mathbf{I} + \\mathbf{G})^{-1} \\ n=$np \$")
+	pathfig = plotρ(ρpath, np, title=pathtitle, dpi = 150)
 end
 
 # ╔═╡ 8a1aa9b0-101c-475c-ae78-1f1001f4cf1f
 begin
-	savefig(pathfig, joinpath(plotpath, "bargmatrices", "path.png"))
-	savefig(starfig, joinpath(plotpath, "bargmatrices", "star.png"))
+	savefig(pathfig, joinpath(plotpath, "bargmatrices", "path.pdf"))
+	savefig(starfig, joinpath(plotpath, "bargmatrices", "star.pdf"))
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -1206,6 +1212,7 @@ version = "0.9.1+5"
 # ╠═1cff0acc-19aa-430e-8b79-1e34a7905d67
 # ╠═c160e2ed-b354-4cdd-9084-15dba3ba7b30
 # ╠═4f5bc759-4819-4359-9a70-1c17645453e3
+# ╠═b4714dc0-e358-4ef3-9404-1eba72bc1fc1
 # ╠═8138259c-c163-4a35-97e5-5249f7dc1c2d
 # ╠═cd083bdd-bcdc-43d1-9fd7-168bf525f4a6
 # ╠═0074be84-f217-4d5e-9bb9-a5873b5990a7
