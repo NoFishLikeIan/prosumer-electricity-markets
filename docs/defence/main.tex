@@ -57,12 +57,11 @@
 \newcommand{\plotpath}{../../plots}
 
 
-\title{How directed is a directed network?}
-\author{Andrea Titton}
+\author[Andrea Titton]{Andrea Titton\\[1ex]  {\small Dr. ir. F.O.O. Wagener \& Prof. dr. C.G.H. Diks}}
 \title{Thesis defence}
-\subtitle{Contagion of Electricity Prices \\ A Dynamic Game of Price Hikes Propagation}
+\subtitle{Demand Shocks and Price Contagion in Electricity Markets}
 \institute{Tinbergen Institute}
-\date{04/12/2020}
+\date{30/08/2021}
 
 \begin{document}
 
@@ -150,239 +149,139 @@
 \begin{frame}{Results}
     \begin{itemize} \setlength\itemsep{1.5em}
               \pause \item Bargaining power determines price contagion (bigger and more ``central'' markets)
-              \pause \item Demand shocks cause \textbf{hysteresis}: sustained price imbalances
-              \pause \item This implies: markets integration are not sufficient
+              \pause \item Demand shocks cause \textbf{hysteresis}: sustained price imbalances - implications for prosumers
+              \pause \item This implies: markets integration is not sufficient
     \end{itemize}
 \end{frame}
 
 \section{Model}
 
-\begin{frame}{Notation: beliefs $\B$}
-    Agents have beliefs over processes $x_t$, denoted by $\B_t[x_{t+1}]$
-\end{frame}
-
-\begin{frame}{Notation: graphs}
-    \begin{itemize} \setlength\itemsep{1.5em}
-        \item A graph $\mathcal{A}$ is a set of $V$ vertex and $E$, with adjacency matrix $\matr{A}$ \pause
-        \item $L(\mathcal{A}) = (V_L, E_L)$ is the associated \textbf{line graph}, with adjacency matrix $\matr{G}$ \pause
-        \item $V_L \subseteq V$ and $E_L \subseteq E$ \pause
-    \end{itemize}
-    \begin{center}
-        \resizebox{!}{0.4\textheight}{\input{diagrams/linegraphex.tikz}}
-    \end{center}
-\end{frame}
-
-
 \begin{frame}{Model outline}
     \centering
-    \only<1>{
-        \resizebox{\textwidth}{!}{\input{diagrams/timing.tikz}}}
-    \only<2>{
-        \resizebox{\textwidth}{!}{\input{diagrams/focusonlocal.tikz}}}
+    \resizebox{\textwidth}{!}{\input{diagrams/timing.tikz}}
 \end{frame}
 
-\subsection{Local market}
-
-\begin{frame}{Prosumers}
+\begin{frame}
+    Prosumers...
     \begin{itemize} \setlength\itemsep{1.5em}
-        \item M producer pre local market \pause
-        \item All with the same ``demand endowment'' $e_t$
+              \pause \item ...demand $e_t$ which can be either low ($\underline{e}$) or high ($\overline{e}$)
+              \pause \item ...a ``demand shock'' is a period of $\overline{e}$
     \end{itemize}
-\end{frame}
-
-\begin{frame}{Producers setup}
-    Main modelling assumption \vspace{5mm}
-    \begin{itemize} \setlength\itemsep{1.5em}
-        \item Price takers $p_t$ and oligopolist \pause
-        \item Produce electricity $s_t$ at fixed marginal cost $k$ \pause
-        \item Can ramp-up or down production with a one period delay by $r_t \in [\underline{r}, \overline{r}]$ \pause
-        \item $r_t$ costs $c(s_t, r_t) = \max \{0, s_t \ r_t \}$ per unit
-    \end{itemize}
-\end{frame}
-
-
-\begin{frame}{Producers optimization}
-    \begin{equation*}
-        V(s_t, p_t) = \max_{r_t} \left\{ s_t \ \underbrace{(p_t - k)}_{\text{unit profit}} - \underbrace{ c(s_t, r_t) \  r_t }_{\text{ramp-up costs}} + \beta \  V(s_{t+1}, p_{t+1}) \right\}
-    \end{equation*}
-    \vspace{5mm}
-    \visible<2>{\begin{itemize} \setlength\itemsep{1.5em}
-            \item $s_{t+1} = s_t + r_t$
-            \item Providers are naive: $\B[p_{t+1}] = p_t$
-        \end{itemize}}
-\end{frame}
-
-\begin{frame}{Marginal costs and benefits}
-
-    The policy function $r(p_t, s_t)$ is such that $mc(r) = mb(r)$.
-
-    \visible<2->{
-        \begin{equation*}
-            mc = \overbrace{c(s_t, r)}^{\text{cost you pay today}} + \overbrace{r \ \frac{\partial c}{\partial r}(s_t, r)}^{\text{moved to new cost level}}
-        \end{equation*}
-    }
-
-    \visible<3->{
-        \begin{equation*}
-            \begin{split}
-                \frac{mb}{\beta} &= \overbrace{(p_t - k)}^{\text{unit profit}} + \overbrace{\left(\frac{\partial c}{\partial r}(s_t + r, r) - \frac{\partial c}{\partial s_t}(s_t + r, r)\right)}^{\text{moved to a new level of costs tomorrow}} \ r + \\
-                & + \underbrace{c(s_t + r, r)}_{\text{costs you do not pay tomorrow}}
-            \end{split}
-        \end{equation*}
-    }
-
-\end{frame}
-
-\begin{frame}{Policy $r$}
-    \visible<1->{
-        If equality is possible
-        \begin{equation*} \label{rpolicy}
-            r(s_t, p_t) =
-            \frac{1 - \beta}{\beta} \ s_t - \sqrt{ \left(\frac{1 - \beta}{\beta} \ s_t \right)^2 - \ \left(p_t - k\right) }.
-        \end{equation*}
-
-        \begin{itemize}
-            \item $r(s_t, p_t) \xrightarrow{} 0$ as $p_t \xrightarrow{} k$
-            \item Decreasing in $s_t$ and increasing in $p_t$
-        \end{itemize}
-    }
-
-    \vfill
-
-    \visible<2->{
-        There are two \textit{regions} where equality is not possible:
-        \begin{itemize}
-            \item If $p_t \leq k$ there are no unit profits, $mc(r) > mb(r)$
-            \item If $s_t \leq \frac{\beta}{1-\beta} \sqrt{p_t - k}$ production is too low, $mc(r) < mb(r)$
-        \end{itemize}
-    }
 \end{frame}
 
 
 \begin{frame}
-    \begin{figure}
-        \includegraphics[width = 0.8 \textwidth]{../../plots/rfunction.pdf}
-    \end{figure}
+    \begin{columns}[T,onlytextwidth]
+
+        \begin{column}{.35\textwidth}
+            Producers...
+            \begin{itemize} \setlength\itemsep{1.5em}
+                      \pause \item ...make delayed production decision $s_{t+1} = s_t + \underbrace{r_t(s_t, p_t)}_{\text{policy}}$
+                      \pause \item ...believe price to be constant $\B_t[p_{t+1}] = p_t$
+                      \pause \item ...unit production cost $k$ and marginal cost of ramp-up $\max\{0, s_t \ r_t\}$
+            \end{itemize}
+        \end{column}
+
+        \hfill
+
+        \begin{column}{.64\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{../../plots/rfunction.pdf}
+            \end{figure}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{Demand}
-    Let $R_t = \sum^N_{i = 1} r_t$, \\
-    then the \textbf{excess demand} in the local market changes as,
-
-    \vspace{0.2\textheight}
-
-    \begin{equation*}
-        X_{t+1} - X_t = \underbrace{M \left(e_{t+1} - e_t \right)}_{\text{Increases in demand shocks}} - \underbrace{R_t}_{\text{Decreases in ramp-up}}
-    \end{equation*}
-\end{frame}
-
-\begin{frame}{Provider local problem}
+\begin{frame}
     \visible<1->{
-        The provider $i$ needs to,
+        Local markets can have \textbf{excess demand} $X$ which evolves as,
 
-        \begin{enumerate}
-            \item Pick $p_{t}$ which induces $X_{i, t}$
-            \item Trade with its neighbors $N_{\mathcal{A}}(i)$ the quantities $Y^{(i, j)}$ so that $X_{i, t} \leq \sum_j Y^{(i, j)}$
-        \end{enumerate}
+        \begin{equation*}
+            X_{t+1} - X_t = \overbrace{M (e_{t+1} - e_t)}^{\text{change in demand}} - \overbrace{R_t}^{\text{change in supply }\sum_{i, t} r_{i, t}}
+        \end{equation*}
     }
 
     \visible<2->{
+        Providers form believes over
+
         \begin{equation*}
-            \begin{split}
-                V(X_{i, t}, S_{i, t}) = \max_{p_{i, t}, Y^{(i, j)}_t} \Bigg\{ &\overbrace{p_{i, t} \  X_{i, t} - \sum_{j \in N_{\mathcal{A}}(i)} Y^{(i, j)}_t \  P^{(i, j)}(\Y_t)}^{\text{Instantaneous profits}} \\
-                &+ \underbrace{\lambda_{i, t} \  \left( X_{i, t} - \sum_{j \in N_{\mathcal{A}}(i)} Y^{(i, j)}_t \right)}_{\text{Constraint}} \\
-                &+ \beta \   V(X_{i, t+1}, S_{i, t+1}) \Bigg\}
-            \end{split}
-        \end{equation*}
+            \B_t \left[R_t(p_t, S_t) \right] = \alpha_t + \gamma_t \ \overbrace{p_t}^{\text{local price}} + \eta_t \ \overbrace{S_t}^{\text{local supply}}
+        \end{equation*} updated via WLS.
     }
-
-
 \end{frame}
 
 
-\begin{frame}{Provider's beliefs}
 
-    There are two state variables $X_{i, t}$ and $S_{i, t}$,
-
-    \begin{equation*}
-        \begin{split}
-            X_{i, t+1} &= X_{i, t} - \B_{i, t} \left[R(p_{i, t}, S_{i, t}) \right] \\
-            S_{i, t+1} &= S_{i, t} + \B_{i, t} \left[R(p_{i, t}, S_{i, t}) \right]
-        \end{split}
-    \end{equation*}
-
-    where,
-
-    \begin{minipage}{.45\textwidth}
-        \begin{equation*}
-            \begin{split}
-                &\B_{i, t} \left[R(p_{i, t}, S_{i, t}) \right] = \\
-                &\alpha_{i, t} + \gamma_{i, t} \  p_{i, t} + \eta_{i, t} \ S_{i, t}
-            \end{split}
-        \end{equation*}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{.45\textwidth}
-        \begin{figure}
-            \includegraphics[height = 0.4\textheight]{../../plots/constant/star/ols.pdf}
-        \end{figure}
-    \end{minipage}
-
+% CB market
+\begin{frame}{Providers: link between local and cross-border markets}
+    \centering
+    \resizebox{\textwidth}{!}{\input{diagrams/overview.tikz}}
 \end{frame}
 
 \begin{frame}
 
     The optimization problem determines the \textbf{local price evolution}
     \begin{equation*}
-        p_{i, t+1} = p_{i, t} + \underbrace{\frac{1}{\gamma_{i, t}} \left( \frac{1-\beta}{\beta } X_{i, t} + \alpha_{i, t} + \eta_{i, t} S_{i, t} \right)}_{\text{influence of local market } L_{i, t}(X_{i, t}, S_{i, t})} - \underbrace{\lambda_{i, t}}_{\text{influence of cross-border market}}
+        p_{i, t+1} - p_{i, t} = \underbrace{L_{i, t}(X_{i, t}, S_{i, t})}_{\text{optimization in local market}} + \overbrace{2 P(\Y_t)}^{\text{influence of cross-border market}}
     \end{equation*}
 
+    \begin{itemize} \setlength\itemsep{1.5em}
+        \item Cross-border and local markets link (addressing \citeauthor{Gebhardt2013})
+        \item Determines: shock of neighbor $\xrightarrow{}$ local prices (addressing \citeauthor{Bockers2014})
+    \end{itemize}
+
 \end{frame}
 
-\subsection{Cross-border market}
-
-% CB market
-\begin{frame}{Cross-border market}
-    \centering
-    \resizebox{\textwidth}{!}{\input{diagrams/overview.tikz}}
+\begin{frame}{Local policy: $L_{i, t}(X_{i, t}, S_{i, t})$}
+    $L_{i, t}$ for ``true'' beliefs $(\alpha_t, \gamma_t, \eta_t)$
+    \begin{figure}
+        \includegraphics[width=0.7\linewidth]{../../plots/pricingnonbinding.pdf}
+    \end{figure}
 \end{frame}
 
-\begin{frame}{Nash-bargaining}
-    Conditional on $\matr{X}_t$ and $\matr{p}_t$ being determined,
+\begin{frame}{Nash-bargaining in the cross-border market: $P(\Y_t)$}
+    Given $X_{i, t}$ and $p_{i, t}$, Nash-bargaining solution of trading price
 
     \begin{equation*}
-        \begin{split}
-            P_t^{(i, j)} &= \arg \max_{P_t^{(i, j)}} \left\{\Pi_{i, t} \  \Pi_{j, t} \right\} \\
-            &= \frac{1}{2\  Y_t^{(i, j)}} \times \\
-            &\times \left( \underbrace{\Delta^{(i, j)}_t}_{\text{revenue difference }}
-            + \underbrace{\sum_{m\in N_{\mathcal{A}}(j)} Y_t^{(j, m)} \  P_t^{(j, m)}}_{\text{outside option of } j}
-            - \underbrace{\sum_{m \in N_{\mathcal{A}}(i)} Y_t^{(i, m)} \  P_t^{(i, m)}}_{\text{outside option of } i} \right)
-        \end{split}
+        P_t^{(i, j)} = \arg \max \{  \text{joint profits of $i$ and $j$} \}
     \end{equation*}
+
+    Depends on
+
+    \begin{itemize} \setlength\itemsep{1.5em}
+        \item Revenue difference $\Delta^{(i, j)}_t = X_{i, t} p_{i, t} - X_{j, t} p_{j, t} $
+        \item Outside options of $i$ $\sum_m Y_t^{(i, m)} P_t^{(i, m)}$ and $j$ $\sum_l Y_t^{(j, l)} P_t^{(j, l)}$
+    \end{itemize}
+
 \end{frame}
 
-\begin{frame}{Back to the first order condition}
-    The optimization problem for a neighboring quantity $Y^{(i, m)}$ (suppressing $i$) we obtain,
+\begin{frame}
 
     \begin{equation*}
-        \begin{split}
-            -\lambda_t &= \sum_{j \in N_{\mathcal{A}}(i)} \frac{\partial (Y_t^j \  P_t^j(\Y_t))}{\partial Y_t^m} \\
-            &= P_t^m(\Y_t) + \sum_{j \in N_{\mathcal{A}}(i) \setminus \set{m}} Y_t^j \  \frac{\partial P_t^j(\Y_t)}{\partial Y_t^m}
-        \end{split}
+        P_t^{(i, j)} = \frac{1}{2 \ Y_t^{(i, j)}}  \left(\Delta^{(i, j)}_t + \underbrace{\sum_{m} Y_t^{(j, m)} \  P_t^{(j, m)}}_{\text{outside option of } j} - \underbrace{\sum_{l} Y_t^{(i, l)} \  P_t^{(i, l)}}_{\text{outside option of } i} \right)
     \end{equation*}
-    Using the price just derived we can write $-\lambda_t = 2 P_t^m(\Y_t) $.
+
+
+    Takeaways for demand shocks...
+
+    \begin{itemize} \setlength\itemsep{1.5em}
+              \pause \item Contemporaneous: $X_{j, t} \xrightarrow{} \Delta^{(i, j)}_t \xrightarrow{} P_t^{(i, j)} \xrightarrow{} p_{i, t}$
+              \pause \item Delayed: $p_{i, t}  \xrightarrow{} X_{i, t+1} \xrightarrow{} \Y_t$
+              \pause \item Network structure of outside options
+    \end{itemize}
 
 \end{frame}
+
 
 \begin{frame}{Recap}
     \renewcommand{\arraystretch}{3}
     \resizebox{\linewidth}{!}{
         \begin{tabular}{c  c | c }
-            Agent            & Actual process                                                                                               & Perceived process                                                                 \\
+            Agent            & Actual process                                     & Perceived process                                                                 \\
             \midrule
-            \boxed{Provider} & $R_t = \sum^N_{i = 1} r(s_{i, t}, p_t)$                                                                      & $ \B_{t} \left[R_{t+1} \right] = \alpha_{t} + \gamma_{t} \  p_t + \eta_{t} \ S_t$ \\
+            \boxed{Provider} & $R_t = \sum^N_{i = 1} r(s_{i, t}, p_t)$            & $ \B_{t} \left[R_{t+1} \right] = \alpha_{t} + \gamma_{t} \  p_t + \eta_{t} \ S_t$ \\
             \midrule
-            \boxed{Producer} & $p_{t+1} = p_t + \frac{1-\beta}{\beta \ \gamma} X_t + \frac{\alpha + \eta S_t}{\gamma} + 2P^m(\matr{Y}_{t})$ & $\B\left[p_{t+1}\right] = p_t$
+            \boxed{Producer} & $p_{t+1} = p_t + L_t(X_t, S_t) + 2P(\matr{Y}_{t})$ & $\B\left[p_{t+1}\right] = p_t$
         \end{tabular}
     }
 \end{frame}
@@ -513,10 +412,27 @@
 
 \section{Conclusion}
 
-\begin{frame}{In hindsight...}
+\begin{frame}{Takeaways}
     \begin{itemize} \setlength\itemsep{1.5em}
-        \item Bipartite graph with buyers and sellers
-        \item Same dynamics with simpler producers
+        \item Market power and rational expectations are not adequate frameworks \pause
+        \item Demand shocks can create sustained imbalances (prosumers) \pause
+        \item Further market integration needs to address ``bargaining power''
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{What's next}
+    \begin{itemize} \setlength\itemsep{1.5em}
+        \item Further questions: \pause
+              \begin{itemize} \setlength\itemsep{1em}
+                  \item What if prosumers sell electricity ($e_t < 0$)? \pause
+                  \item What if markets have different sizes ($M$ and $N$)? \pause
+              \end{itemize}
+        \item Model improvements: \pause
+              \begin{itemize} \setlength\itemsep{1em}
+                  \item Bipartite graphs of buyers and seller \pause
+                  \item Simplify producers further and focus on providers bargaining procedure \pause
+              \end{itemize}
+        \item Model calibration
     \end{itemize}
 \end{frame}
 

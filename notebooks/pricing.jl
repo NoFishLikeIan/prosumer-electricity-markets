@@ -274,13 +274,13 @@ $p_{t+1} = p_t + L(X_t; S_t)$
 
 # ╔═╡ d7f30579-0fa8-4245-bafd-eb93b006844e
 begin	
+	
+	Sₛ = copy(Xₛ)
 	nbfigure = contourf(
-		Xₛ, pₛ, 
-		(X, p) -> p + L(X, Sₜ),
-		title = latexstring("\$ \\ p_{t+1} = p_{t} + L(X_{t}; S_{t}) \$"),
-		xlabel = Xlabel, ylabel = Slabel,
-		zlabel=latexstring("\$ p_{t+1} \$"),
-		legend=:none, c=:coolwarm,
+		Xₛ, Sₛ, L,
+		title = latexstring("\$ \\ L_{i, t}(X_{t}; S_{t}) \$"),
+		xlabel = Xlabel, ylabel = latexstring("\$ S_t \$"),
+		clims = (-1300, 1300),
 		size = (800, 600)
 	)
 	
