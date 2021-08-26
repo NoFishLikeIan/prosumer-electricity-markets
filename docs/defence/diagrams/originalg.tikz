@@ -1,0 +1,18 @@
+\tikzstyle{node} = [
+draw,circle,
+minimum size=40pt]
+
+\begin{tikzpicture}[-{Latex[scale=1]}, thick, baseline={([yshift=-.5ex]current bounding box.center)}]
+
+    \node [node] (one) {$1$};
+    \node [node, right = 2cm of one] (two) {$2$};
+    \node [node, right = 2cm of two] (three) {$3$};
+
+
+    \path
+    (one) edge [] node [above] (onetwo) {$(1, 2)$} (two)
+    (two) edge [] node [above] (twothree) {$(2, 3)$} (three)
+    ;
+    
+
+\end{tikzpicture}

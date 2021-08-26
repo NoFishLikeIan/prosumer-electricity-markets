@@ -1,0 +1,28 @@
+\tikzstyle{var} = [
+draw,circle,
+minimum size=10pt]
+
+\tikzstyle{agent} = [
+draw, circle,
+minimum size=10pt]
+
+\begin{tikzpicture}[-{Latex[scale=1]}, thick]
+
+    \node [agent] (one) {Prov. $1$};
+    \node [agent, right = 2cm of one] (two) {Prov. $2$};
+    \node [agent, left = 2cm of one] (three) {Prov. $3$};
+    \node [agent, below = 2cm of one] (four) {Prov. $4$};
+
+    \node [agent, left = 2cm of four] (five) {Prov. $5$};
+
+
+    \path
+    (one) edge (two)
+    (one) edge (three)
+    (one) edge (four);
+
+    \path
+    (five) edge [dashed] node [below] {$\rho$ decreases} (four)
+    (five) edge [dashed] node [above left] {$\rho$ increases} (one);
+
+\end{tikzpicture}

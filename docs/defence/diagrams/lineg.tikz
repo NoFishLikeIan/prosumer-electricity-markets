@@ -1,0 +1,13 @@
+\tikzstyle{node} = [
+draw,circle,
+minimum size=40pt]
+
+\begin{tikzpicture}[-{Latex[scale=1]}, thick, baseline={([yshift=-.5ex]current bounding box.center)}]
+
+    \node [node, below = 1cm of onetwo] (one-two) {$(1, 2)$};
+    \node [node, below = 1cm of twothree] (two-three) {$(2, 3)$};
+
+    \path (one-two) edge [] node [above] {$2$} (two-three);
+    
+
+\end{tikzpicture}

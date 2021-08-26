@@ -33,7 +33,7 @@ inner sep=5pt]
         % Draw provider
         {
             \node [agent]  (\j) at (2*\x, 2*\y) [] {Provider \j};
-            \node [market] (\j-mkt) at (6*\x, 2*\y) [] {Wholesale \\ market \j};
+            \node [market] (\j-mkt) at (4*\x, 4*\y) [] {Wholesale \\ market \j};
             \path 
                 (\j-mkt) edge [bend right] node [onnode] {$X_{\j}$} (\j)
                 (\j) edge [dashed, bend right] node [onnode, dashed] {$p_{\j}$} (\j-mkt)

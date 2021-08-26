@@ -81,10 +81,14 @@
 
 \section{Motivation}
 
+\begin{frame}
+    Do demand shocks cause price imbalances between electricity markets?
+\end{frame}
+
 \begin{frame}{Lack of price convergence}
     \begin{figure}
         \includegraphics[height = 0.7\textheight]{figures/convergence.PNG}
-        \caption{\cite{Report2019}}
+        \\ Source: \cite{Report2019}
     \end{figure}
 \end{frame}
 
@@ -94,21 +98,50 @@
     \begin{itemize} \setlength\itemsep{1.5em}
               \pause \item Only partial convergence (mostly Germany-Austria)
               \pause \item Lack of convergence is not due to supply shocks
-              \pause \item No theoretical model of \textit{effects of shocks in some countries on energy markets in neighboring countries.}
+              \pause \item ``No theoretical model of effects of shocks in some countries on energy markets in neighboring countries''
     \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Theoretical: \citeauthor{Gebhardt2013} (\citeyear{Gebhardt2013})}
+\begin{frame}{Rational Expectations: \citeauthor{Gebhardt2013} (\citeyear{Gebhardt2013})}
     \textbf{Why is there no convergence in EU local electricity prices?}
 
     \begin{itemize} \setlength\itemsep{1.5em}
               \pause \item Rational producers and traders
               \pause \item Information asymmetries between local markets
-              \pause \item Traders do not engage in trade
-              \pause \item \textit{our results highlight an additional advantage of ``market coupling``, i.e., integrating the national wholesale markets}
-              \pause \item \textit{we assumed that (...) cross-border trades do not influence the spot prices}
+              \pause \item $\implies$ traders fail to engage and equalize prices \pause
     \end{itemize}
+
+    Issues with the model...
+
+    \begin{itemize} \setlength\itemsep{1.5em}
+        \item ``our results highlight an additional advantage of \textit{market coupling}, i.e., integrating the national wholesale markets''
+        \item ``we assumed that (...) cross-border trades do not influence the spot prices''
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{ABM: \citeauthor{Weidlich2008} (\citeyear{Weidlich2008})}
+
+    \begin{columns}[T,onlytextwidth]
+
+        \begin{column}{.4\textwidth}
+            \begin{itemize} \setlength\itemsep{1.5em}
+                \item Fixed demand side \pause
+                \item Focus on market power \pause
+                \item Agents ``learn'' the price mechanism \pause
+                \item Neglected cross-border markets
+            \end{itemize}
+        \end{column}
+
+        \hfill
+
+        \begin{column}{.6\textwidth}
+            \centering
+            \resizebox{0.7\textwidth}{!}{\input{diagrams/previous.tikz}}
+        \end{column}
+    \end{columns}
+
 \end{frame}
 
 \begin{frame}{This paper}
@@ -117,6 +150,28 @@
         \item Agent based model (bounded rationality)
         \item Role of demand shocks (prosumers)
     \end{itemize}
+\end{frame}
+
+\begin{frame}{What is new?}
+
+    Comparison with previous ABM (\cite{Weidlich2008})
+    \vfill
+
+    \begin{columns}[T,onlytextwidth]
+
+        \begin{column}{.4\textwidth}
+            \centering
+            \resizebox{\textwidth}{!}{\input{diagrams/previous.tikz}}
+        \end{column}
+
+        \hfill
+
+        \begin{column}{.57\textwidth}
+            \centering
+            \resizebox{\textwidth}{!}{\input{diagrams/question.tikz}}
+        \end{column}
+    \end{columns}
+
 \end{frame}
 
 \section{Overview}
@@ -132,19 +187,6 @@
 
 \end{frame}
 
-\begin{frame}{What is new?}
-
-    Comparison with previous ABM (\cite{Weidlich2008})
-    \vfill
-
-    \visible<1->{\begin{minipage}{0.4\textwidth}
-            \resizebox{\textwidth}{!}{\input{diagrams/previous.tikz}}
-        \end{minipage}}
-    \hfill
-    \visible<2->{\begin{minipage}{0.55\textwidth}
-            \resizebox{\textwidth}{!}{\input{diagrams/question.tikz}}
-        \end{minipage}}
-\end{frame}
 
 \begin{frame}{Results}
     \begin{itemize} \setlength\itemsep{1.5em}
@@ -171,25 +213,22 @@
 
 
 \begin{frame}
-    \begin{columns}[T,onlytextwidth]
 
-        \begin{column}{.35\textwidth}
-            Producers...
-            \begin{itemize} \setlength\itemsep{1.5em}
-                      \pause \item ...make delayed production decision $s_{t+1} = s_t + \underbrace{r_t(s_t, p_t)}_{\text{policy}}$
-                      \pause \item ...believe price to be constant $\B_t[p_{t+1}] = p_t$
-                      \pause \item ...unit production cost $k$ and marginal cost of ramp-up $\max\{0, s_t \ r_t\}$
-            \end{itemize}
-        \end{column}
+    Producers...
+    \begin{itemize} \setlength\itemsep{1.5em}
+              \pause \item ...make delayed production decision $s_{t+1} = s_t + \underbrace{r_t(s_t, p_t)}_{\text{policy}}$
+              \pause \item ...believe price to be constant $\B_t[p_{t+1}] = p_t$
+              \pause \item ...unit production cost $k$ and marginal cost of ramp-up $\max\{0, s_t r_t\}$
+    \end{itemize}
 
-        \hfill
+\end{frame}
 
-        \begin{column}{.64\textwidth}
-            \begin{figure}
-                \includegraphics[width=\linewidth]{../../plots/rfunction.pdf}
-            \end{figure}
-        \end{column}
-    \end{columns}
+\begin{frame}
+    If $mc = mb$, $\frac{\partial r}{\partial p_t} \propto \sqrt{p_t}$ and $\frac{\partial r}{\partial s_t} \propto - s_t$
+
+    \begin{figure}
+        \includegraphics[width=0.75\linewidth]{../../plots/rfunction.pdf}
+    \end{figure}
 \end{frame}
 
 \begin{frame}
@@ -205,18 +244,39 @@
         Providers form believes over
 
         \begin{equation*}
-            \B_t \left[R_t(p_t, S_t) \right] = \alpha_t + \gamma_t \ \overbrace{p_t}^{\text{local price}} + \eta_t \ \overbrace{S_t}^{\text{local supply}}
+            \B_t[e_{t+1}] = e_t
+        \end{equation*} and
+
+        \begin{equation*}
+            \B_t \left[R_t(p_t, S_t) \right] = \alpha_t + \gamma_t \ \underbrace{p_t}_{\text{local price}} + \eta_t \ \underbrace{S_t}_{\text{local supply}}
         \end{equation*} updated via WLS.
     }
 \end{frame}
 
-
-
 % CB market
 \begin{frame}{Providers: link between local and cross-border markets}
-    \centering
-    \resizebox{\textwidth}{!}{\input{diagrams/overview.tikz}}
+    \begin{columns}[T,onlytextwidth]
+
+        \begin{column}{.4\textwidth}
+            \begin{equation*}
+                \begin{split}
+                    &V(X_t, S_t) = \max_{p_t, \Y_t} \\
+                    & \overbrace{p_t X_t}^{\text{local revenue}} -  \overbrace{\sum_{j \in N_{\mathcal{A}}(i)} Y^j_t P^j(\Y_t)}^{\text{cost of buying abroad}} + \\
+                    &\lambda_t \underbrace{\left( X_t - \sum_{j \in N_{\mathcal{A}}(i)} Y^j_t\right)}_{\text{matching constraint}}  + \beta  V(X_{t+1}, S_{t+1})
+                \end{split}
+            \end{equation*}
+        \end{column}
+
+        \hfill
+
+        \begin{column}{.5\textwidth}
+            \centering
+            \resizebox{\textwidth}{!}{\input{diagrams/overview.tikz}}
+        \end{column}
+
+    \end{columns}
 \end{frame}
+
 
 \begin{frame}
 
@@ -267,26 +327,27 @@
     \begin{itemize} \setlength\itemsep{1.5em}
               \pause \item Contemporaneous: $X_{j, t} \xrightarrow{} \Delta^{(i, j)}_t \xrightarrow{} P_t^{(i, j)} \xrightarrow{} p_{i, t}$
               \pause \item Delayed: $p_{i, t}  \xrightarrow{} X_{i, t+1} \xrightarrow{} \Y_t$
-              \pause \item Network structure of outside options
+              \pause \item \textbf{Network structure}, via the outside options, crucial for \textbf{contagion}
     \end{itemize}
 
 \end{frame}
 
-
-\begin{frame}{Recap}
-    \renewcommand{\arraystretch}{3}
-    \resizebox{\linewidth}{!}{
-        \begin{tabular}{c  c | c }
-            Agent            & Actual process                                     & Perceived process                                                                 \\
-            \midrule
-            \boxed{Provider} & $R_t = \sum^N_{i = 1} r(s_{i, t}, p_t)$            & $ \B_{t} \left[R_{t+1} \right] = \alpha_{t} + \gamma_{t} \  p_t + \eta_{t} \ S_t$ \\
-            \midrule
-            \boxed{Producer} & $p_{t+1} = p_t + L_t(X_t, S_t) + 2P(\matr{Y}_{t})$ & $\B\left[p_{t+1}\right] = p_t$
-        \end{tabular}
-    }
-\end{frame}
-
 \section{Contagion}
+
+\begin{frame}{Looking at $P$ as a whole}
+    Stack all variables in vectors of size $\lvert edges \rvert$. Use the line-graph operator of the original network $L(network)$ with adjacency matrix $\matr{G}$.
+
+    \begin{equation*}
+        \begin{split}
+            network &= (nodes, edges) \\
+            L(network) &= (edges, \subseteq nodes)
+        \end{split}
+    \end{equation*}
+
+    \begin{equation*}
+        L\Big(  \resizebox{0.3\linewidth}{!}{\input{diagrams/originalg.tikz}} \Big) = \resizebox{0.3\linewidth}{!}{\input{diagrams/lineg.tikz}}
+    \end{equation*}
+\end{frame}
 
 \begin{frame}{Bargaining influence matrix}
 
@@ -346,33 +407,37 @@
 \end{frame}
 
 
-\begin{frame} {Star: from $(2\I + \G)^{-1}$ to $p_{t+1}$ }
+\begin{frame} {Bargaining influence matrix: $(2\I + \G)^{-1}$ }
 
     \begin{columns}
         \begin{column}{.47\textwidth}
             \begin{figure}
                 \includegraphics[width = \linewidth]{../../plots/bargmatrices/star.pdf}
+                \\ ...in the star graph
             \end{figure}
         \end{column}
         \begin{column}{.47\textwidth}
             \begin{figure}
-                \includegraphics[width = \linewidth]{../../plots/pricing.pdf}
+                \includegraphics[width = \linewidth]{../../plots/bargmatrices/path.pdf}
+                \\ ...in the path graph
             \end{figure}
         \end{column}
     \end{columns}
 
 \end{frame}
 
-\begin{frame} {Path: from $(2\I + \G)^{-1}$ to $p_{t+1}$ }
+\begin{frame} {Policy function $p_{t+1}$ of the central node}
     \begin{columns}
         \begin{column}{.47\textwidth}
             \begin{figure}
-                \includegraphics[width = \linewidth]{../../plots/bargmatrices/path.pdf}
+                \includegraphics[width = \linewidth]{../../plots/pricing.pdf}
+                \\ ...in the star graph
             \end{figure}
         \end{column}
         \begin{column}{.47\textwidth}
             \begin{figure}
                 \includegraphics[width = \linewidth]{../../plots/pricingpath.pdf}
+                \\ ...in the path graph
             \end{figure}
         \end{column}
     \end{columns}
@@ -393,21 +458,33 @@
     \end{figure}
 \end{frame}
 
-\begin{frame} {Excess demand $X_{i, t}$ in simulation}
-    \begin{center}
-        \begin{figure}[H]
-            \begin{subfigure}{0.475\textwidth}
-                \centering
-                \includegraphics[width = \textwidth]{\plotpath/central/star/demand.pdf}
-                \caption{In a star graph} \label{fig:demandshock_star}
-            \end{subfigure} \hfill
-            \begin{subfigure}{0.475\textwidth}
-                \centering
-                \includegraphics[width = \textwidth]{\plotpath/central/path/demand.pdf}
-                \caption{In a path graph} \label{fig:demandshock_path}
-            \end{subfigure}
-        \end{figure}
-    \end{center}
+\begin{frame}{Policy evaluation: ``market coupling''}
+    \begin{itemize}
+        \item Market coupling works only if it reduces bargaining power concentration \pause
+        \item ``Flatten the policy function'' \pause
+    \end{itemize}
+
+    Let the spread of bargaining power be defined as
+
+    \begin{equation*}
+        \rho = \left(\frac{\sigma}{\mu}\right)_{(2\I + \G)^{-1}}
+    \end{equation*}
+
+    A low $\rho$ implies diffuse bargaining power and ``flat'' policy function
+\end{frame}
+
+\begin{frame}[allowframebreaks]{More path, less star}
+
+    \centering
+    \resizebox{0.7\textwidth}{!}{\input{diagrams/rho.tikz}}
+
+
+
+    \begin{figure}
+        \includegraphics[width = 0.8\linewidth]{\plotpath/blackouts/rhos.pdf}
+        \\ $\rho$ for different graphs and sizes
+    \end{figure}
+
 \end{frame}
 
 \section{Conclusion}
