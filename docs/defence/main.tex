@@ -58,8 +58,7 @@
 
 
 \author[Andrea Titton]{Andrea Titton\\[1ex]  {\small Dr. ir. F.O.O. Wagener \& Prof. dr. C.G.H. Diks}}
-\title{Thesis defence}
-\subtitle{Demand Shocks and Price Contagion in Electricity Markets}
+\title{Demand Shocks and Price Contagion in Electricity Markets}
 \institute{Tinbergen Institute}
 \date{30/08/2021}
 
@@ -108,9 +107,10 @@
 
     \begin{itemize} \setlength\itemsep{1.5em}
               \pause \item Rational producers and traders
-              \pause \item Information asymmetries between local markets
-              \pause \item $\implies$ traders fail to engage and equalize prices \pause
+              \pause \item Information asymmetries between local markets \pause
     \end{itemize}
+
+    $\implies$ traders fail to engage and equalize prices
 
     Issues with the model...
 
@@ -288,6 +288,7 @@
     \begin{itemize} \setlength\itemsep{1.5em}
         \item Cross-border and local markets link (addressing \citeauthor{Gebhardt2013})
         \item Determines: shock of neighbor $\xrightarrow{}$ local prices (addressing \citeauthor{Bockers2014})
+        \item Note that if $L_{i, t} = 0$ and $P = 0$, then $\B_t[p_{t+1}] = p_t = p_{t+1}$
     \end{itemize}
 
 \end{frame}
@@ -309,8 +310,8 @@
     Depends on
 
     \begin{itemize} \setlength\itemsep{1.5em}
-        \item Revenue difference $\Delta^{(i, j)}_t = X_{i, t} p_{i, t} - X_{j, t} p_{j, t} $
-        \item Outside options of $i$ $\sum_m Y_t^{(i, m)} P_t^{(i, m)}$ and $j$ $\sum_l Y_t^{(j, l)} P_t^{(j, l)}$
+        \item Local revenue difference $\Delta^{(i, j)}_t = X_{i, t} p_{i, t} - X_{j, t} p_{j, t} $
+        \item Outside options of $i$ and $j$, respectively $\sum_m Y_t^{(i, m)} P_t^{(i, m)}$ and $j$ $\sum_l Y_t^{(j, l)} P_t^{(j, l)}$
     \end{itemize}
 
 \end{frame}
@@ -325,8 +326,8 @@
     Takeaways for demand shocks...
 
     \begin{itemize} \setlength\itemsep{1.5em}
-              \pause \item Contemporaneous: $X_{j, t} \xrightarrow{} \Delta^{(i, j)}_t \xrightarrow{} P_t^{(i, j)} \xrightarrow{} p_{i, t}$
-              \pause \item Delayed: $p_{i, t}  \xrightarrow{} X_{i, t+1} \xrightarrow{} \Y_t$
+              \pause \item Contemporaneous effect analytically: $X_{j, t} \xrightarrow{} \Delta^{(i, j)}_t \xrightarrow{} P_t^{(i, j)} \xrightarrow{} p_{i, t}$
+              \pause \item Delayed effect via simulation: $p_{i, t}  \xrightarrow{} X_{i, t+1} \xrightarrow{} \Y_t$
               \pause \item \textbf{Network structure}, via the outside options, crucial for \textbf{contagion}
     \end{itemize}
 
