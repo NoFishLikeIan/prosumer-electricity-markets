@@ -128,6 +128,43 @@ end
 # ╔═╡ e4c1ef16-0618-43d3-94c3-73c2aedbae9b
 ε = rand(rng, n)
 
+# ╔═╡ fe844444-2094-4b36-bc3e-2bda55c785cf
+md"""
+## Colormap...
+"""
+
+# ╔═╡ f282258a-391a-4d9d-831d-e130964fda29
+begin
+	nc = 100
+	grade = range(0, 1, length = nc) |> x -> reshape(x, (1, nc))
+	
+	colormap = heatmap(
+		grade, 
+		xaxis = nothing, yaxis = nothing,
+		size = (nc * 10, 100),
+		color = :coolwarm, legend = :none
+	)
+	
+	
+	annotate!(
+		colormap, 1.5, 1, 
+		text(latexstring("p_{t+1} < p_t"), 30, :white, :left)
+	)
+	
+	annotate!(
+		colormap, nc - 1.5, 1, 
+		text(latexstring("p_{t+1} > p_t"), 30, :white, :right)
+	)
+	
+	
+	savefig(colormap, joinpath(plotpath, "colors.pdf"))
+	
+	colormap
+end
+
+# ╔═╡ 86f8e0f4-1fc7-42c1-acc0-500a9b0f3d59
+
+
 # ╔═╡ 50ea2c00-637d-42ed-bd0c-22e520b56cd3
 md"""
 ## Constructing...
@@ -253,7 +290,7 @@ begin
 		title = ppathlabel,
 		xlabel = Xlabel, ylabel = Slabel,
 		zlabel=latexstring("\$ p_{t+1} \$"),
-		legend=:none, c=:coolwarm,
+		c=:coolwarm, legend = :none,
 		size = (800, 600)
 	)
 	
@@ -262,6 +299,9 @@ end
 
 # ╔═╡ 508ae0d4-2bee-43a3-97e0-c7bc16b08a03
 savefig(ppathfigure, joinpath(plotpath, "pricingpath.pdf"))
+
+# ╔═╡ 45c03083-f03d-4338-9f48-19bc9bbddef2
+
 
 # ╔═╡ 17b9fb97-b0e5-4ace-8851-3f5b45a4fec5
 md"""
@@ -280,7 +320,7 @@ begin
 		Xₛ, Sₛ, L,
 		title = latexstring("\$ \\ L_{i, t}(X_{t}; S_{t}) \$"),
 		xlabel = Xlabel, ylabel = latexstring("\$ S_t \$"),
-		clims = (-500, 500),
+		clims = (-500, 500), color=:coolwarm, 
 		size = (800, 600)
 	)
 	
@@ -316,23 +356,25 @@ function plotρ(ρ, nρ; kwargs...)
 		
 	is = js = 1:nρ
 	
+	B = zeros(nρ, nρ)
+	
+	
+	
 	ρfig = plot(
 		xlabel = ilabel, ylabel = jlabel, 
 		legend = :none, aspect_ratio = :equal,
 		xlims = lims, ylims = lims; kwargs...
 	)
 		
-	heatmap!(ρfig, is, js, (i, j) -> ρ(i, j, nρ), c=:heat)
+	heatmap!(ρfig, is, js, (i, j) -> ρ(i, j, nρ), c=:heat, yflip = true)
 	
 	return ρfig
 	
 end
 
 # ╔═╡ 38c2605a-92dd-4dcd-bbcf-c1a8df695d17
-function plotρcompare(n)
-	title = latexstring("\$ (2 \\mathbf{I} + \\mathbf{G})^{-1}, \\ n=$n \$")
-	
-	plot(plotρ(ρstar, n), plotρ(ρpath, n), size = (1300, 600), title = title, legend=:none)
+function plotρcompare(n)	
+	plot(plotρ(ρstar, n), plotρ(ρpath, n), size = (1300, 600), legend=:none)
 end
 
 # ╔═╡ a3815e92-30cb-488b-9e15-a17762eb37cf
@@ -348,21 +390,46 @@ end
 
 # ╔═╡ 40ed2d18-942f-4a00-8eb4-6095548d8600
 begin
-	np = 15
-	title = latexstring("\$(2 \\mathbf{I} + \\mathbf{G})^{-1} \\ n=$np \$")
-	starfig = plotρ(ρstar, np, title=title, dpi = 150)
+	np = 20
+	starfig = plotρ(ρstar, np, dpi = 150)
 end
 
 # ╔═╡ b24851ce-752e-4afa-842d-97f5d6067135
 begin
-	pathtitle = latexstring("\$(2 \\mathbf{I} + \\mathbf{G})^{-1} \\ n=$np \$")
-	pathfig = plotρ(ρpath, np, title=pathtitle, dpi = 150)
+	pathfig = plotρ(ρpath, np, dpi = 150)
 end
 
 # ╔═╡ 8a1aa9b0-101c-475c-ae78-1f1001f4cf1f
 begin
 	savefig(pathfig, joinpath(plotpath, "bargmatrices", "path.pdf"))
 	savefig(starfig, joinpath(plotpath, "bargmatrices", "star.pdf"))
+end
+
+# ╔═╡ ab72d517-7dd7-4394-9f38-2d4cf85243c5
+begin
+	bargrade = range(0, 1, length = nc) |> x -> reshape(x, (1, nc))
+	
+	barcolormap = heatmap(
+		bargrade, 
+		xaxis = nothing, yaxis = nothing,
+		c=:heat,
+		size = (nc * 10, 100), legend = :none
+	)
+	
+	
+	annotate!(
+		barcolormap, 1.5, 1, 
+		text(latexstring("0"), 30, :black, :left)
+	)
+	
+	annotate!(
+		barcolormap, nc - 1.5, 1, 
+		text(latexstring("1"), 30, :white, :right)
+	)
+	
+	savefig(barcolormap, joinpath(plotpath, "bargmatrices", "color.pdf"))
+	
+	barcolormap
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -1230,6 +1297,9 @@ version = "0.9.1+5"
 # ╠═6a555982-2c8c-4c4b-b04b-9a6766b63b57
 # ╠═ed2c178e-9d91-41b5-979b-d73e8ddd4d17
 # ╠═32140e21-56ab-44a1-afa4-1db7889b109c
+# ╟─fe844444-2094-4b36-bc3e-2bda55c785cf
+# ╠═f282258a-391a-4d9d-831d-e130964fda29
+# ╠═86f8e0f4-1fc7-42c1-acc0-500a9b0f3d59
 # ╟─50ea2c00-637d-42ed-bd0c-22e520b56cd3
 # ╟─5d73464b-3c16-439a-ae17-95b8064a667a
 # ╟─3e3abf49-2514-4572-93ac-9b04db859ed7
@@ -1238,6 +1308,7 @@ version = "0.9.1+5"
 # ╠═c5be4eb9-6131-4d1e-996f-b4b9dc36281e
 # ╠═0dda0f22-c1b5-4b51-a81c-3fb4599806b6
 # ╠═508ae0d4-2bee-43a3-97e0-c7bc16b08a03
+# ╠═45c03083-f03d-4338-9f48-19bc9bbddef2
 # ╟─17b9fb97-b0e5-4ace-8851-3f5b45a4fec5
 # ╠═d7f30579-0fa8-4245-bafd-eb93b006844e
 # ╠═ec4948d0-1c4b-49c9-90ed-0e3438b356c5
@@ -1252,5 +1323,6 @@ version = "0.9.1+5"
 # ╠═40ed2d18-942f-4a00-8eb4-6095548d8600
 # ╠═b24851ce-752e-4afa-842d-97f5d6067135
 # ╠═8a1aa9b0-101c-475c-ae78-1f1001f4cf1f
+# ╠═ab72d517-7dd7-4394-9f38-2d4cf85243c5
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

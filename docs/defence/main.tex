@@ -58,7 +58,7 @@
 
 
 \author[Andrea Titton]{Andrea Titton\\[1ex]  {\small Dr. ir. F.O.O. Wagener \& Prof. dr. C.G.H. Diks}}
-\title{Demand Shocks and Price Contagion in Electricity Markets}
+\title[Thesis Defence]{Demand Shocks and Price Contagion in Electricity Markets}
 \institute{Tinbergen Institute}
 \date{30/08/2021}
 
@@ -73,10 +73,6 @@
 }
 
 \frame{\titlepage}
-
-\begin{frame}
-    \tableofcontents
-\end{frame}
 
 \section{Motivation}
 
@@ -130,7 +126,7 @@
                 \item Fixed demand side \pause
                 \item Focus on market power \pause
                 \item Agents ``learn'' the price mechanism \pause
-                \item Neglected cross-border markets
+                \item Neglected cross-border markets \pause
             \end{itemize}
         \end{column}
 
@@ -178,6 +174,10 @@
 
 \begin{frame}{Research question}
 
+    Do demand shocks cause price imbalances between electricity markets?
+
+    \hfill
+
     \begin{itemize} \setlength{\itemsep}{1em}
         \item How do exogenous and unexpected demand shocks affect the price formation mechanism? \pause
         \item How do shock in prices transmit to the cross-border market? \pause
@@ -191,7 +191,7 @@
 \begin{frame}{Results}
     \begin{itemize} \setlength\itemsep{1.5em}
               \pause \item Bargaining power determines price contagion (bigger and more ``central'' markets)
-              \pause \item Demand shocks cause \textbf{hysteresis}: sustained price imbalances - implications for prosumers
+              \pause \item Demand shocks cause \textbf{sustained price} imbalances - implications for prosumers
               \pause \item This implies: markets integration is not sufficient
     \end{itemize}
 \end{frame}
@@ -410,6 +410,8 @@
 
 \begin{frame} {Bargaining influence matrix: $(2\I + \G)^{-1}$ }
 
+    Plotting the matrix $(2\I + \G)^{-1}$,
+
     \begin{columns}
         \begin{column}{.47\textwidth}
             \begin{figure}
@@ -424,6 +426,13 @@
             \end{figure}
         \end{column}
     \end{columns}
+
+    \hfill
+
+    \begin{figure}
+        \centering
+        \includegraphics[width = 0.5\linewidth]{../../plots/bargmatrices/color.pdf}
+    \end{figure}
 
 \end{frame}
 
@@ -442,6 +451,14 @@
             \end{figure}
         \end{column}
     \end{columns}
+
+    \hfill
+
+    \begin{figure}
+        \centering
+        \includegraphics[width = 0.5 \linewidth]{../../plots/colors.pdf}
+    \end{figure}
+
 \end{frame}
 
 \begin{frame}{Star: central demand shock simulation}
@@ -465,13 +482,7 @@
         \item ``Flatten the policy function'' \pause
     \end{itemize}
 
-    Let the spread of bargaining power be defined as
-
-    \begin{equation*}
-        \rho = \left(\frac{\sigma}{\mu}\right)_{(2\I + \G)^{-1}}
-    \end{equation*}
-
-    A low $\rho$ implies diffuse bargaining power and ``flat'' policy function
+    Let $\rho$ be the concentration of bargaining power. High $\rho$ implies concentrated bargaining power and ``steep'' policy function
 \end{frame}
 
 \begin{frame}[allowframebreaks]{More path, less star}
@@ -508,7 +519,7 @@
         \item Model improvements: \pause
               \begin{itemize} \setlength\itemsep{1em}
                   \item Bipartite graphs of buyers and seller \pause
-                  \item Simplify producers further and focus on providers bargaining procedure \pause
+                  \item Simpler production to focus on providers bargaining procedure \pause
               \end{itemize}
         \item Model calibration
     \end{itemize}

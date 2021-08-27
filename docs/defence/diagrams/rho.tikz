@@ -22,7 +22,7 @@ minimum size=10pt]
     (one) edge (four);
 
     \path
-    (five) edge [dashed] node [below] {$\rho$ decreases} (four)
-    (five) edge [dashed] node [above left] {$\rho$ increases} (one);
+    (four) edge [dashed] node [below] {$\rho$ decreases} (five)
+    (one) edge [dashed] node [above left] {$\rho$ increases} (five);
 
 \end{tikzpicture}
